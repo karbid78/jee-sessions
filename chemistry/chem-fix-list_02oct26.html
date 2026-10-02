@@ -1,0 +1,694 @@
+<title>Chemistry Fix List</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+  /* Layout: one reading column. Hero with a titration sketch, six fix sections (each: why, shortcut box, one worked example), then a practice grid. */
+  :root{
+    --bg:#F1F5F3; --surface:#FFFFFF; --surface-2:#E6EEEA;
+    --ink:#15231F; --ink-soft:#4B5F58; --border:#CBD8D2;
+    --accent:#0E6B63; --accent-soft:#DDEFEA;
+    --hl-bg:#F7F1CC; --hl-ink:#46400F; --hl-border:#E4D88A;
+    --good:#1F7A4D; --good-bg:#E0F2E8;
+    --trap:#A32D5C; --trap-bg:#F9E4EC;
+    --c1:#0E6B63; --c1-bg:#DDEFEA;
+    --c2:#2A5FA8; --c2-bg:#E1EBF8;
+    --c3:#8A5A00; --c3-bg:#F8EBCF;
+    --c4:#A32D5C; --c4-bg:#F9E4EC;
+    --c5:#5B4B9A; --c5-bg:#E9E5F6;
+    --c6:#3C6B1F; --c6-bg:#E5F0D9;
+    --shadow:0 1px 2px rgba(21,35,31,.05), 0 8px 24px -14px rgba(21,35,31,.25);
+    --display:"Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+    --body:"Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0C1512; --surface:#131F1B; --surface-2:#1A2A25;
+      --ink:#E3EFEA; --ink-soft:#9FB5AD; --border:#28403A;
+      --accent:#5FC7B8; --accent-soft:#16312C;
+      --hl-bg:#3A3512; --hl-ink:#F1E8A8; --hl-border:#5C5421;
+      --good:#62C98F; --good-bg:#12301F;
+      --trap:#F08AB1; --trap-bg:#3B1827;
+      --c1:#5FC7B8; --c1-bg:#16312C;
+      --c2:#8DB5EC; --c2-bg:#192B44;
+      --c3:#E7B558; --c3-bg:#3A2D12;
+      --c4:#F08AB1; --c4-bg:#3B1827;
+      --c5:#B9A8F0; --c5-bg:#2A2344;
+      --c6:#9CD27A; --c6-bg:#1F3315;
+      --shadow:0 1px 2px rgba(0,0,0,.35), 0 8px 24px -14px rgba(0,0,0,.6);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0C1512; --surface:#131F1B; --surface-2:#1A2A25;
+    --ink:#E3EFEA; --ink-soft:#9FB5AD; --border:#28403A;
+    --accent:#5FC7B8; --accent-soft:#16312C;
+    --hl-bg:#3A3512; --hl-ink:#F1E8A8; --hl-border:#5C5421;
+    --good:#62C98F; --good-bg:#12301F;
+    --trap:#F08AB1; --trap-bg:#3B1827;
+    --c1:#5FC7B8; --c1-bg:#16312C;
+    --c2:#8DB5EC; --c2-bg:#192B44;
+    --c3:#E7B558; --c3-bg:#3A2D12;
+    --c4:#F08AB1; --c4-bg:#3B1827;
+    --c5:#B9A8F0; --c5-bg:#2A2344;
+    --c6:#9CD27A; --c6-bg:#1F3315;
+    --shadow:0 1px 2px rgba(0,0,0,.35), 0 8px 24px -14px rgba(0,0,0,.6);
+    color-scheme: dark;
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    background:var(--bg); color:var(--ink); font-family:var(--body); font-size:16px; line-height:1.55;
+    padding-inline:16px; padding-block:24px 64px;
+  }
+  .wrap{ max-width:780px; margin:0 auto; }
+  h1,h2,h3{ font-family:var(--display); font-weight:700; margin:0; text-wrap:balance; letter-spacing:-.01em; }
+  p{ margin:10px 0; }
+  a{ color:var(--accent); }
+  .eyebrow{ font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; font-weight:700; color:var(--accent); }
+  .m{ font-weight:600; }
+  .eq{ display:block; margin:10px 0; padding:10px 14px; background:var(--surface-2); border-radius:8px; overflow-x:auto; font-weight:600; }
+
+  /* hero */
+  .hero{ padding-block:6px 22px; }
+  .hero h1{ font-size:clamp(1.7rem,5.5vw,2.45rem); margin-top:8px; line-height:1.1; }
+  .hero p{ color:var(--ink-soft); max-width:62ch; }
+  .stats{ display:flex; flex-wrap:wrap; gap:10px; margin:16px 0 4px; }
+  .stat{ flex:1 1 120px; min-width:0; padding:10px 14px; background:var(--surface); border:1px solid var(--border); border-radius:10px; }
+  .stat b{ display:block; font-family:var(--display); font-size:1.5rem; font-variant-numeric:tabular-nums; }
+  .stat span{ font-size:.82rem; color:var(--ink-soft); }
+  .fig{ margin-top:18px; padding:12px 12px 8px; background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow-x:auto; }
+  .fig svg{ display:block; width:100%; min-width:320px; height:auto; }
+  .fig figcaption, .figcap{ font-size:.82rem; color:var(--ink-soft); margin-top:4px; }
+  .note{ margin-top:14px; padding:12px 14px; border-radius:10px; background:var(--accent-soft); border:1px solid var(--border); font-size:.93rem; }
+  .note + .note{ margin-top:10px; }
+
+  /* sections */
+  .pattern{ background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:20px 18px 22px; margin-block:18px; box-shadow:var(--shadow); }
+  .pattern-head{ display:flex; align-items:baseline; gap:8px 10px; flex-wrap:wrap; margin-bottom:4px; }
+  .pattern-head h2{ font-size:1.25rem; }
+  .chip{ font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; padding:3px 9px; border-radius:999px; font-weight:700; white-space:nowrap; }
+  .chip-1{ color:var(--c1); background:var(--c1-bg); } .chip-2{ color:var(--c2); background:var(--c2-bg); }
+  .chip-3{ color:var(--c3); background:var(--c3-bg); } .chip-4{ color:var(--c4); background:var(--c4-bg); }
+  .chip-5{ color:var(--c5); background:var(--c5-bg); } .chip-6{ color:var(--c6); background:var(--c6-bg); }
+  .why{ color:var(--ink-soft); }
+  .came-back{ margin-top:12px; border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+  .came-back h3{ font-size:.82rem; letter-spacing:.08em; text-transform:uppercase; padding:8px 12px; background:var(--surface-2); font-family:var(--body); }
+  .cols{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); }
+  .col{ padding:10px 12px; font-size:.93rem; min-width:0; }
+  .col + .col{ border-left:1px solid var(--border); }
+  @media (max-width:560px){ .col + .col{ border-left:none; border-top:1px solid var(--border); } }
+  .col b.lbl{ display:block; font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:4px; }
+  .verdict{ padding:10px 12px; border-top:1px solid var(--border); background:var(--trap-bg); color:var(--trap); font-weight:600; font-size:.93rem; }
+  .rule{ margin-top:14px; padding:12px 14px; border-radius:10px; background:var(--hl-bg); border:1px solid var(--hl-border); color:var(--hl-ink); }
+  .rule-label{ font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; display:block; margin-bottom:4px; }
+  .rule ul{ margin:4px 0 0; padding-left:20px; }
+  .rule li{ margin:4px 0; }
+  .stepper{ margin-top:16px; border-top:1px dashed var(--border); padding-top:14px; }
+  .stepper-label{ font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); font-weight:700; display:block; margin-bottom:6px; }
+  .yours{ font-size:.92rem; color:var(--ink-soft); }
+  .step{ padding:9px 0; border-bottom:1px solid var(--border); }
+  .step:last-of-type{ border-bottom:none; }
+  .step .tag{ font-weight:700; font-size:.84rem; color:var(--accent); display:block; margin-bottom:3px; }
+  .step-btn{ margin-top:10px; font:inherit; font-weight:700; font-size:.88rem; background:var(--accent); color:var(--surface); border:none; border-radius:8px; padding:9px 14px; cursor:pointer; }
+  .step-btn:hover{ filter:brightness(1.1); }
+  .final{ background:var(--good-bg); color:var(--good); border-radius:8px; padding:9px 12px; font-weight:700; margin-top:6px; }
+  .trap-note{ background:var(--trap-bg); color:var(--trap); border-radius:8px; padding:9px 12px; font-size:.9rem; margin-top:10px; }
+  .also{ margin-top:14px; padding:10px 14px; border:1px solid var(--border); border-radius:10px; font-size:.92rem; }
+  .also b{ display:block; font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:4px; }
+  .also ul{ margin:4px 0 0; padding-left:20px; } .also li{ margin:5px 0; }
+  .ask-row{ margin-top:12px; display:flex; flex-wrap:wrap; gap:8px; }
+  a.ask{ display:inline-flex; align-items:center; gap:6px; font-size:.84rem; font-weight:700; text-decoration:none; color:var(--accent); border:1.4px solid var(--accent); border-radius:999px; padding:5px 12px; }
+  a.ask:hover{ background:var(--accent-soft); }
+  a.ask:focus-visible, button:focus-visible{ outline:3px solid var(--accent); outline-offset:2px; }
+
+  /* practice */
+  .practice-head{ padding-block:10px 4px; }
+  .mode-row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:14px 0 8px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 14px; box-shadow:var(--shadow); }
+  .mode-btn{ font:inherit; font-weight:700; font-size:.9rem; padding:8px 14px; border-radius:999px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); cursor:pointer; }
+  .mode-btn[aria-pressed="true"]{ background:var(--accent); color:var(--surface); border-color:var(--accent); }
+  .timer-bar{ display:flex; align-items:center; gap:10px; margin-left:auto; flex-wrap:wrap; }
+  .time{ font-size:1.3rem; font-weight:700; font-variant-numeric:tabular-nums; min-width:64px; }
+  .timer-btn{ font:inherit; font-size:.85rem; font-weight:700; border-radius:8px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); padding:7px 12px; cursor:pointer; }
+  .mode-help{ font-size:.86rem; color:var(--ink-soft); margin:6px 2px 0; }
+  .grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr)); gap:14px; margin-top:16px; }
+  .card{ background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:14px 14px 12px; box-shadow:var(--shadow); display:flex; flex-direction:column; min-width:0; }
+  .card-head{ display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:6px; flex-wrap:wrap; }
+  .qnum{ font-family:var(--display); font-weight:700; font-size:1.05rem; color:var(--accent); }
+  .tags{ display:flex; gap:6px; flex-wrap:wrap; }
+  .lvl{ font-size:.68rem; font-weight:700; letter-spacing:.06em; padding:3px 8px; border-radius:999px; border:1px solid var(--border); color:var(--ink-soft); }
+  .card ol, .card ul.opts{ padding-left:20px; margin:6px 0; }
+  .card li{ margin:3px 0; }
+  .data{ font-size:.88rem; color:var(--ink-soft); }
+  .reveal-btn{ align-self:flex-start; margin-top:10px; font:inherit; font-weight:700; font-size:.85rem; background:none; border:1.4px solid var(--accent); color:var(--accent); border-radius:8px; padding:6px 12px; cursor:pointer; }
+  .reveal-btn:hover{ background:var(--accent-soft); }
+  .answer{ margin-top:10px; padding:10px 12px; background:var(--good-bg); border-radius:8px; }
+  .answer .val{ color:var(--good); font-weight:700; }
+  .answer .why{ margin-top:4px; font-size:.9rem; color:var(--ink); }
+  details.scope{ margin-top:22px; border:1px solid var(--border); border-radius:10px; padding:10px 14px; background:var(--surface); font-size:.9rem; }
+  details.scope summary{ cursor:pointer; font-weight:700; }
+  details.scope li{ margin:4px 0; }
+  footer{ margin-top:26px; color:var(--ink-soft); font-size:.88rem; text-align:center; }
+</style>
+
+<div class="wrap">
+  <section class="hero">
+    <span class="eyebrow">Chemistry · Focus Session · Level 4</span>
+    <h1>Where Chemistry cost you marks in CTA16, CTA17 and CTA18</h1>
+    <p>Chemistry fell from about 25% to 11% to 9% over the three Sunday tests. Of 54 questions, 16 were fully right. 22 were wrong, 6 partial and 10 skipped, and every skipped one could be done in under ten lines. This page works through the six topics behind those marks, each with the real question you saw.</p>
+    <div class="stats" aria-label="Chemistry results, three tests combined">
+      <div class="stat"><b>16</b><span>fully right</span></div>
+      <div class="stat"><b>22</b><span>wrong</span></div>
+      <div class="stat"><b>6</b><span>partial</span></div>
+      <div class="stat"><b>10</b><span>skipped</span></div>
+    </div>
+    <figure class="fig" style="margin-inline:0">
+      <svg id="curve" viewBox="0 0 340 200" role="img" aria-label="Titration curve of 100 mL of 0.10 M sodium carbonate with 0.10 M hydrochloric acid, pH against mL of acid"></svg>
+      <figcaption>Na₂CO₃ (100 mL, 0.10 M) titrated with 0.10 M HCl. Dots are computed pH values; the line joins them. The two flat stretches are buffers: pH = pKa₂ = 10.3 at 50 mL and pH = pKa₁ = 6.4 at 150 mL. Practice problem 7 asks you to work with this curve.</figcaption>
+    </figure>
+    <div class="note"><strong>How to use this page:</strong> read a section, click through its worked example one step at a time, then do that topic's problems in the practice set. Do them untimed first. Timed mode is for a second pass.</div>
+    <div class="note"><strong>Skip rule:</strong> before you skip, write the given data and the first equation. If 90 seconds later you still have no next line, skip. In your three tests the skips were mostly long stems and list-match questions, and each had a short route.</div>
+    <div class="note"><strong>Ask Claude links:</strong> every section, worked example and practice problem has an Ask Claude link. It opens a new claude.ai chat with that item already typed in, so you must be signed in to claude.ai. Nothing is sent until you press send.</div>
+    <div class="note"><strong>Not on this page:</strong> Thermodynamics and real gases. You had no errors there in CTA18, so it stays off until a test shows it again.</div>
+  </section>
+
+  <div id="sections"></div>
+
+  <section class="practice-head">
+    <span class="eyebrow">Practice set</span>
+    <h2 style="margin-top:8px; font-size:1.4rem;">18 new problems at Level 4</h2>
+    <p style="color:var(--ink-soft)">Same techniques as the sections above, new problems. Electrochemistry, ionic equilibrium, stoichiometry, solutions and kinetics, and bonding each get three or four, because they came back in more than one test. Atomic structure gets two.</p>
+  </section>
+
+  <div class="mode-row">
+    <button class="mode-btn" data-mode="practice" aria-pressed="true" onclick="setMode('practice', this)">Practice (untimed)</button>
+    <button class="mode-btn" data-mode="timed" aria-pressed="false" onclick="setMode('timed', this)">Timed, 40 min</button>
+    <div class="timer-bar" id="timerBar" hidden>
+      <span class="time" id="timeDisplay">40:00</span>
+      <button class="timer-btn" id="startBtn" onclick="startTimer()">Start</button>
+      <button class="timer-btn" id="resetBtn" onclick="resetTimer()">Reset</button>
+    </div>
+  </div>
+  <p class="mode-help">First pass: stay in Practice mode. The Chemistry section of a real paper gives about 40 minutes, so for a timed pass choose 8 to 10 problems, not all 18.</p>
+
+  <div class="grid" id="grid"></div>
+
+  <details class="scope">
+    <summary>Scope check: where each method comes from</summary>
+    <p>references/class-scope.md has no Chemistry rows, so every method below comes from the official syllabus in references/syllabus.md.</p>
+    <ul>
+      <li>Nernst equation, Faraday's laws, specific and molar conductivity, Kohlrausch's law: Electrochemistry. Solubility product and stability of a complex: Chemical and Ionic Equilibrium, Coordination Compounds.</li>
+      <li>Hydrolysis of salts, buffers, common ion effect, Ksp, polyprotic acids: Chemical and Ionic Equilibrium.</li>
+      <li>Mole concept, redox and neutralisation calculations, limiting reagent, normality: General topics. Graham's law and partial pressures: States of Matter.</li>
+      <li>Raoult's law, ideal solutions: Solutions. Order, half-life, first-order integrated rate law: Chemical Kinetics.</li>
+      <li>Bohr model, de Broglie hypothesis: Atomic Structure.</li>
+      <li>Molecular orbital diagrams up to Ne₂, dipole moment, polarity: Chemical Bonding and Molecular Structure.</li>
+    </ul>
+  </details>
+
+  <footer>Built from the CTA16 (13 Sep), CTA17 (20 Sep) and CTA18 (27 Sep) results · Chemistry only. Answer options for multiple-choice questions were worked out by hand because the portal does not print them.</footer>
+</div>
+
+<script>
+/* ---------------- content ---------------- */
+var SECTIONS = [
+{
+  id:'s1', title:'Electrochemistry', chip:'Recurring · 6 questions', chipClass:'chip-1',
+  why:'Electrochemistry cost you two questions in every one of the three tests. Nearly every problem is one idea in disguise: each half-cell just has some concentration of Ag⁺ or Cu²⁺, and Ksp, Kf or pH are only ways to find it. Find that concentration first. Then use Nernst or Faraday.',
+  before:'CTA16 Q43 (Ag₂S, you answered 0.17, correct 0.8) and Q46 (Cu electrolysis, 250 vs 118.75). CTA17 Q47 (you answered 2.66, correct 60) and Q49 (0.05 vs 0.3). You tried these, and the link between two pieces broke: a Ksp or Kf dropped out, or too few electrons were counted.',
+  now:'CTA18 Q43 (conductivity of two salts): 6 min 06 s, then skipped. CTA18 Q45 (Nernst with pH): skipped in 31 s. Both are solved at the bottom of this section.',
+  verdict:'Different behaviour, same topic. Earlier you attempted and mis-linked; now you skip. It is not the same slip repeating, but it has not improved: still two lost every test.',
+  rules:[
+    '<b>Concentration first.</b> For Ag₂X: [Ag⁺] = √(Ksp/[X²⁻]). With a complex: [Ag⁺] = [complex]/(Kf·[L]ⁿ). From pH: [H⁺] = 10⁻ᵖᴴ.',
+    '<b>Two silver electrodes:</b> E° cancels, so E<sub>cell</sub> = 0.06 log([Ag⁺]<sub>cathode</sub>/[Ag⁺]<sub>anode</sub>). At equilibrium E<sub>cell</sub> = 0, so [Ag⁺] is the same on both sides.',
+    '<b>pH slope:</b> a half-reaction with m H⁺ and n electrons changes by 0.06 × m/n volts per pH unit. Cr₂O₇²⁻: 14 H⁺, 6 e⁻, so 0.14 V per pH. MnO₄⁻: 8 H⁺, 5 e⁻, so 0.096 V per pH.',
+    '<b>Electrons per molecule:</b> (change in oxidation number) × (atoms that change). Each –NO₂ to –NH₂ is 6 e⁻, because N goes from +3 to −3.',
+    '<b>Saturated solution conductivity:</b> κ = Σ λ·c, with c in mol cm⁻³ (that is mol L⁻¹ divided by 1000).'
+  ],
+  example:{
+    id:'st1',
+    q:'Cell: Ag(s) | Ag₂CrO₄(s) | K₂CrO₄(aq) ∥ NH₃(aq), [Ag(NH₃)₂]⁺(aq) | Ag(s). The cell is at equilibrium. Find x = [[Ag(NH₃)₂]⁺] / ([NH₃]² √[CrO₄²⁻]). Given: Ksp(Ag₂CrO₄) = 9×10⁻¹², Kf of [Ag(NH₃)₂]⁺ = 2×10⁷. (CTA17 Q47)',
+    yours:'2.66', correct:'60',
+    steps:[
+      ['Step 1: same metal on both sides','Both electrodes are silver touching Ag⁺, so both have the same E°. Each has E = E° + 0.06 log[Ag⁺].'],
+      ['Step 2: what equilibrium means','At equilibrium E<sub>cell</sub> = 0, so [Ag⁺] must be equal on the left and on the right. This is the whole trick. No E° is needed.'],
+      ['Step 3: [Ag⁺] on the left, from Ksp','Ksp = [Ag⁺]²[CrO₄²⁻], so [Ag⁺] = √Ksp / √[CrO₄²⁻].'],
+      ['Step 4: [Ag⁺] on the right, from Kf','Kf = [complex] / ([Ag⁺][NH₃]²), so [Ag⁺] = [complex] / (Kf [NH₃]²).'],
+      ['Step 5: set them equal','[complex] / (Kf [NH₃]²) = √Ksp / √[CrO₄²⁻]. Rearranged: [complex] / ([NH₃]² √[CrO₄²⁻]) = Kf·√Ksp. The left side is exactly x.'],
+      ['Step 6: finish','x = 2×10⁷ × √(9×10⁻¹²) = 2×10⁷ × 3×10⁻⁶ = 60.','final:Answer: 60']
+    ],
+    trap:'I cannot tell from 2.66 which step slipped. Check steps 3 and 4: the square root on Ksp and the square on [NH₃] are the two places an exponent usually gets lost.'
+  },
+  also:[
+    '<b>CTA18 Q45 (skipped in 31 s):</b> E(Cr₂O₇²⁻) = 1.33 − 0.14 pH. At pH 0 it is 1.33, above 1.07 (Br₂) and 0.54 (I₂), so both are oxidised. At pH 3 it is 0.91: above 0.54 but below 1.07, so only I⁻. Answer B and C.',
+    '<b>CTA18 Q43 (6 min, then skipped):</b> the two salts share Ag⁺, so a = 3b and [Ag⁺] = a + b = 4b. Then b(a+b) = 4b² = 1×10⁻¹⁴ gives b = 5×10⁻⁸ M, a = 1.5×10⁻⁷ M, [Ag⁺] = 2×10⁻⁷ M. In mol cm⁻³ these are 2×10⁻¹⁰, 1.5×10⁻¹⁰ and 0.5×10⁻¹⁰. κ: 2×10⁻¹⁰×60 + 1.5×10⁻¹⁰×80 + 0.5×10⁻¹⁰×Y = 3.75×10⁻⁸, so Y = 270 and Y/54 = 5.'
+  ]
+},
+{
+  id:'s2', title:'Ionic equilibrium', chip:'Recurring · 6 questions', chipClass:'chip-2',
+  why:'This is your longest list of unfinished questions: six in three tests, four skipped and two partial, and none because the maths was too hard. Two causes. The stems are long (list-match), and once you solve one option you stop checking the rest. Most options come from one number (Kh, pH or Ksp). Work it out once, then read every option off it.',
+  before:'CTA16 Q37 (partial): you marked C and D and missed A, because the salt of the weakest acid hydrolyses the most. CTA16 Q45 and Q54 skipped. CTA17 Q53 and Q54 skipped; they share one data set, so one solution would have earned both.',
+  now:'CTA18 Q49 (partial): you marked A and D and missed B and C. All four options are true.',
+  verdict:'The same error is repeating. You work out the main number, tick the options it answers directly, and do not test the options that follow from the same number. The skipping is repeating too.',
+  rules:[
+    '<b>Salt of a weak acid HA:</b> Kh = Kw/Ka, [OH⁻] = √(Kh·c), degree of hydrolysis h = √(Kh/c). A smaller Ka gives a larger Kh, so more hydrolysis.',
+    '<b>Buffer:</b> pH = pKa + log([A⁻]/[HA]). When volumes differ, use moles; the volume cancels.',
+    '<b>Dilution:</b> a buffer keeps its pH (the ratio is unchanged). A salt solution moves by √2 for each doubling of volume. A saturated solution with solid still present does not change.',
+    '<b>Ksp in a buffer:</b> [OH⁻] is fixed, so for M(OH)₂ the solubility is s = Ksp/[OH⁻]².',
+    '<b>Several options:</b> write true or false next to every option, with one line each. Never stop at the first match.'
+  ],
+  example:{
+    id:'st2',
+    q:'12.2 g of the sodium salt NaA of a weak monobasic acid HA (Ka = 10⁻⁶) is dissolved in 100 mL of water. The pH is 10 at 25 °C. Which are correct? A) Molar mass of the salt is 122 g/mol. B) The pH when 1 g of the same acid is dissolved in 1 L of water is 4. C) Kb of the conjugate base is 10⁻⁸. D) Molar mass of the conjugate base is 99. (CTA18 Q49)',
+    yours:'A, D', correct:'A, B, C, D',
+    steps:[
+      ['Step 1: pH to [OH⁻]','pH 10 means pOH 4, so [OH⁻] = 10⁻⁴ M.'],
+      ['Step 2: Kh, and option C','Kh = Kw/Ka = 10⁻¹⁴/10⁻⁶ = 10⁻⁸. This is also Kb of A⁻, so C is true. It took one line.'],
+      ['Step 3: concentration of the salt','[OH⁻]² = Kh·c gives 10⁻⁸ = 10⁻⁸ × c, so c = 1 M.'],
+      ['Step 4: molar mass of the salt','100 mL × 1 M = 0.1 mol. 12.2 g / 0.1 mol = 122 g/mol, so A is true.'],
+      ['Step 5: conjugate base, and the acid','A⁻ = NaA − Na = 122 − 23 = 99, so D is true. The acid HA is 99 + 1 = 100 g/mol.'],
+      ['Step 6: option B','1 g of HA is 0.01 mol, so c = 0.01 M in 1 L. [H⁺] = √(Ka·c) = √(10⁻⁶ × 10⁻²) = 10⁻⁴, so pH = 4 and B is true.','final:Answer: A, B, C and D']
+    ],
+    trap:'Steps 2 and 6 are the two options you missed. Each needed one line, using a number you already had (Kh) and a molar mass you had just found (HA = 100).'
+  },
+  also:[
+    '<b>CTA16 Q45 (skipped):</b> pH = pKa + log(salt/acid): 4.5 − 4.199 = 0.301, so salt:acid = 2 in moles. Salt is 0.2 M and acid is 0.1 M, so the volume ratio is 2 × 0.1/0.2 = 1.',
+    '<b>CTA16 Q54 (skipped):</b> P is a buffer (1 mmol acid, 1 mmol salt), so [H⁺] is unchanged. Q is a salt of a weak acid at half the concentration, so [H⁺] goes up by √2. R is a salt of a weak base, so [H⁺] goes down to 1/√2. S is saturated with solid, so unchanged. Option D.'
+  ]
+},
+{
+  id:'s3', title:'Stoichiometry and titrations', chip:'Recurring · 6 wrong', chipClass:'chip-3',
+  why:'In these questions the setup is right and the last step is wrong: a diprotic acid counted once, a fraction of the reaction forgotten, a mole fraction reported as a mass percent. Six wrong answers in three tests (2, then 3, then 1). They are the cheapest marks to win back.',
+  before:'CTA16 Q44 (H₂SO₄ counted as monobasic: 120 vs 103.5) and Q47 (forgot the unreacted CaO: 1875 vs 920). CTA17 Q45 (stopped at 7.16 and never multiplied by 28), Q46 (limiting reagent: 1049.2 vs 81.92) and Q50 (iodometry: 10 vs 0.6).',
+  now:'CTA18 Q51: you gave the mole percent (50) when the question asked for the mass percent (60).',
+  verdict:'A different slip in the same topic. Three wrong last time, one now, so there is partial progress. Every one of the six is "answered a nearby quantity".',
+  rules:[
+    '<b>Limiting reagent:</b> divide each amount (mol) by its coefficient. The smallest number limits.',
+    '<b>n-factor:</b> write the half-reaction once. H₂SO₄ gives 2 H⁺. Cr₂O₇²⁻ takes 6 e⁻. One BrO₃⁻ or one Cr₂O₇²⁻ frees 3 I₂, which equals 6 S₂O₃²⁻.',
+    '<b>Graham:</b> rate ∝ 1/√M. A mixture\'s M is the mole-fraction average, never the mass-fraction average.',
+    '<b>Back titration:</b> reacted = total added − left over.',
+    '<b>Last line:</b> reread the question and underline the quantity: mole or mass, % by mole or % by mass, per gram or per mole.'
+  ],
+  example:{
+    id:'st3',
+    q:'A sample of ozonised oxygen (O₂ and O₃) diffuses √2 times faster than pure SO₃ under identical conditions. What is the mass percentage of O₃ in the sample? (CTA18 Q51; options 50, 40, 60, 30)',
+    yours:'50', correct:'60',
+    steps:[
+      ['Step 1: Graham\'s law','Rate ∝ 1/√M, so rate(mix)/rate(SO₃) = √(M(SO₃)/M(mix)) = √2.'],
+      ['Step 2: molar mass of the mixture','M(SO₃) = 80, so 80/M(mix) = 2 and M(mix) = 40.'],
+      ['Step 3: mole fraction of O₃','Let x be the mole fraction of O₃: 32(1 − x) + 48x = 40, so x = 0.5.'],
+      ['Step 4: switch to mass','This 0.5 is a mole fraction. Take 1 mol of mixture: 0.5 mol O₃ = 24 g, and the total mass is 40 g.'],
+      ['Step 5: mass percent','24/40 × 100 = 60.','final:Answer: 60']
+    ],
+    trap:'50 is the mole percent. The question says mass percentage, so each mole has to be weighted by its molar mass.'
+  },
+  also:[
+    '<b>CTA17 Q45:</b> (n₁/n₂)² = M/28, and (0.4/0.1495)² = 7.16, so M = 28 × 7.16 = 200. Stopping at 7.16 loses the question.',
+    '<b>CTA17 Q50:</b> 1 mmol BrO₃⁻ gives 6 mmol S₂O₃²⁻ in 50 mL, so hypo is 0.12 M. I₂ added = 1.2 mmol. Left over needs 10 mL × 0.12 = 1.2 mmol hypo, which is 0.6 mmol I₂. Reacted with sulphite = 1.2 − 0.6 = 0.6 mmol.'
+  ]
+},
+{
+  id:'s4', title:'Solutions and kinetics', chip:'Recurring · 4 questions', chipClass:'chip-4',
+  why:'Raoult\'s law and first-order kinetics often appear in one question: one part gives the stoichiometry and the other gives the rate. Long stems like this were skipped in CTA17 and again in CTA18. Each step is one line, so the trick is to take the lines in order.',
+  before:'CTA17 Q38 (partial): you missed option A, the overall composition from a mass balance. CTA17 Q42 (sucrose inversion with polarimeter readings): skipped.',
+  now:'CTA18 Q37 (Raoult plus association plus kinetics): skipped after 56 s. CTA18 Q38 (order from half-lives): answered 1, correct 2.',
+  verdict:'The skipping is repeating, with the same cause (a long stem). Q38 is a new slip in the same topic: reading the trend of t½ against pressure.',
+  rules:[
+    '<b>Ideal solution:</b> P = Σ xᵢPᵢ°. A non-volatile solute adds nothing to P, but its moles still count in the mole fractions.',
+    '<b>Association xA → Aₓ:</b> if n mol of A remain out of n₀, then (n₀ − n)/x mol of Aₓ have formed.',
+    '<b>First order:</b> k = (1/t) ln(c₀/c) and t½ = 0.693/k. A property that changes in a straight line with conversion (pressure, rotation) works like concentration if you use (value − final value).',
+    '<b>Order from t½ against P₀:</b> t½ ∝ P₀^(1−n). If t½ halves when P₀ doubles, n = 2. If t½ stays the same, n = 1.',
+    '<b>Given logs:</b> build every ratio from the given log 2 and log 3, for example log(4/3) = 2 log 2 − log 3.'
+  ],
+  example:{
+    id:'st4',
+    q:'Liquids A and B have pure vapour pressures 340 and 420 mm Hg at 25 °C. 5.0 mol of B is added to 8.0 mol of A. A then associates by xA → Aₓ (Aₓ non-volatile, soluble in both), first order in unassociated A, going to completion. Total vapour pressure is 360 mm Hg after 1.0 h and 300 mm Hg after a very long time. The half-life of association is y hours. Find xy/2.5. (log 2 = 0.30, log 3 = 0.48) (CTA18 Q37)',
+    yours:'skipped in 56 s', correct:'4',
+    steps:[
+      ['Step 1: use the "very long time" data','All A has become Aₓ, so the solution holds 5 mol B and 8/x mol Aₓ. Only B is volatile: P = 5/(5 + 8/x) × 420 = 300.'],
+      ['Step 2: x','5 + 8/x = 7, so x = 4.'],
+      ['Step 3: moles at 1 h','Let n mol of A remain. Aₓ = (8 − n)/4. Total moles = n + (8 − n)/4 + 5 = 7 + 0.75n.'],
+      ['Step 4: use P = 360','(340n + 420 × 5)/(7 + 0.75n) = 360, so 340n + 2100 = 2520 + 270n and n = 6.'],
+      ['Step 5: rate constant','A fell from 8 to 6 in 1 h, so k = ln(8/6) = ln(4/3). With the given logs, log(4/3) = 0.60 − 0.48 = 0.12.'],
+      ['Step 6: half-life','y = log 2 / log(4/3) = 0.30/0.12 = 2.5 h.'],
+      ['Step 7: finish','xy/2.5 = 4 × 2.5/2.5 = 4.','final:Answer: 4']
+    ],
+    trap:'The stem is long, but the "very long time" number gives x without any kinetics. Starting there turns it into seven short lines.'
+  },
+  also:[
+    '<b>CTA18 Q38:</b> t½ was 3.64, 1.82 and 0.91 min at 50, 100 and 200 mm Hg. Doubling P halves t½, so t½ ∝ 1/P and the order is 2. You answered 1; first order would have a constant t½.'
+  ]
+},
+{
+  id:'s5', title:'Bohr model and de Broglie', chip:'Recurring · 3 tests', chipClass:'chip-5',
+  why:'These look like formula recall, but each has a scaling trap: r ∝ n²/Z, v ∝ Z/n, E ∝ Z²/n², and λ = h/mv. One wrong power or a missing mass changes the answer completely. You lost one question per test here, and a different slip each time.',
+  before:'CTA16 Q48: you answered 2, correct 4, by using a radius that grows as n instead of n². CTA17 Q37: on a stem asking for INCORRECT statements, you marked the two true statements.',
+  now:'CTA18 Q39: you answered 1, correct 5. The mass was dropped when going from speed to wavelength.',
+  verdict:'A different error each time, in the same topic. The common thread is a scaling rule applied only partly.',
+  rules:[
+    '<b>Hydrogen-like species:</b> r = 0.529 n²/Z Å, v = 2.18×10⁶ × Z/n m s⁻¹, E = −13.6 Z²/n² eV.',
+    '<b>Wavelength:</b> λ = h/(mv) = 2πr/n, because n whole wavelengths fit around the orbit.',
+    '<b>Gas atoms:</b> v(rms) = √(3RT/M), so mv = √(3mkT) and λ ∝ 1/√(mT). Never compare speeds alone when the masses differ.',
+    '<b>Absorbed photon:</b> E(final) = E(initial) + E(photon). Then find n from E = −13.6 Z²/n².',
+    '<b>INCORRECT stems:</b> mark every option T or F first. Only then answer the stem.'
+  ],
+  example:{
+    id:'st5',
+    q:'The atomic masses of He and Ne are 4 u and 20 u. The de Broglie wavelength for the rms speed of He atoms at −73 °C is M times that for the rms speed of Ne atoms at 727 °C. Find M. (CTA18 Q39)',
+    yours:'1', correct:'5',
+    steps:[
+      ['Step 1: temperatures','−73 °C = 200 K and 727 °C = 1000 K.'],
+      ['Step 2: compare the speeds','v(rms) ∝ √(T/m). He: √(200/4) = √50. Ne: √(1000/20) = √50. The speeds are equal. Answer 1 is what you get if you stop here.'],
+      ['Step 3: wavelength needs momentum','λ = h/(mv). The speeds are equal but the masses are not, so λ(He)/λ(Ne) = (20 × v)/(4 × v) = 5.'],
+      ['Step 4: cross-check','λ ∝ 1/√(mT): √(20×1000 / (4×200)) = √25 = 5.','final:Answer: 5']
+    ],
+    trap:'Equal speeds do not mean equal wavelengths. Wavelength depends on momentum, and the heavier atom carries more of it at the same speed.'
+  },
+  also:[]
+},
+{
+  id:'s6', title:'Chemical bonding', chip:'Recurring · 4 questions', chipClass:'chip-6',
+  why:'Bonding questions test facts and trends that you cannot derive fresh in the exam: MO labels, nodal planes, bond energy exceptions, dipole directions. You lost four in two tests. A few short MO rules cover most of them, and so does one habit: read whether the stem says CORRECT or INCORRECT, bonding or antibonding.',
+  before:'CTA17 Q51 asked for an antibonding combination and you marked a bonding pair. CTA17 Q52 asked for bonding and you marked an antibonding pair. So the two answers were swapped.',
+  now:'CTA18 Q52 (order of dipole moments) and Q53 (the INCORRECT statement about B₂, O₂, F₂, C₂, N₂). In Q53 you marked D, which is a true statement.',
+  verdict:'Different errors in the same topic. CTA17 mixed up bonding and antibonding; CTA18 missed facts (NH₃ against HCl, B₂ against F₂ bond energy). Q53 may also be the CTA17 slip again, since a true statement was marked on an INCORRECT stem.',
+  rules:[
+    '<b>Bonding MOs</b> (σ, π) have no nodal plane between the nuclei. <b>Antibonding MOs</b> (σ*, π*) have one. π and π* also keep a nodal plane that contains the axis.',
+    '<b>g and u:</b> σ is g, σ* is u, π is u, π* is g.',
+    '<b>Bond order</b> = (bonding − antibonding electrons)/2. With the same bond order, the smaller atom has the shorter bond. But F₂ is weaker than B₂, because lone pairs on two small atoms repel.',
+    '<b>MO energy order:</b> up to N₂, π2p lies below σ2p. From O₂ on, σ2p lies below π2p.',
+    '<b>Dipole moments:</b> draw the bond vectors. NH₃ (1.47 D) is larger than NF₃ (0.23 D), because the N–F dipoles oppose the lone pair.'
+  ],
+  example:{
+    id:'st6',
+    q:'Which statement about the molecules B₂, C₂, N₂, O₂ and F₂ in their ground states is INCORRECT? A) B₂ and O₂ are paramagnetic. B) Bond length in B₂ is greater than in F₂. C) Bond energy of B₂ is lower than that of F₂. D) Bond length decreases in the order B₂ > F₂ > C₂ > O₂ > N₂. (CTA18 Q53)',
+    yours:'D', correct:'C',
+    steps:[
+      ['Step 1: set up','The stem says INCORRECT. Mark each option T or F first, then pick the F.'],
+      ['Step 2: option A','B₂ has one electron in each π2p orbital, and O₂ has two unpaired electrons in π*2p. Both are paramagnetic. True.'],
+      ['Step 3: option B','B₂ and F₂ both have bond order 1, but B is the larger atom, so B₂ is longer (159 pm against 142 pm). True.'],
+      ['Step 4: option C','Bond energy of B₂ is about 290 kJ/mol and of F₂ about 159 kJ/mol. F₂ is weak because the lone pairs on two small atoms repel. "B₂ lower than F₂" is False.'],
+      ['Step 5: option D','B₂ 159 > F₂ 142 > C₂ 124 > O₂ 121 > N₂ 110 pm. This follows bond order and atom size. True.','final:Answer: C']
+    ],
+    trap:'D is a true statement. On an INCORRECT stem, circle the false options, not the true ones.'
+  },
+  also:[
+    '<b>CTA18 Q52:</b> only option D keeps NH₃ above HCl (1.47 D against 1.08 D) and CHCl₃ above H₂S. Answer D.',
+    '<b>CTA17 Q51 and Q52:</b> out-of-phase side-on overlap of two p orbitals is π* (antibonding), with a nodal plane perpendicular to the axis between the nuclei. In-phase overlap is bonding. Check this label before you read List-II.'
+  ]
+}
+];
+
+var PROBLEMS = [
+ {n:1, sec:'s1', topic:'Electrochemistry', chip:'chip-1', lvl:'L4',
+  q:'Cell: Ag | Ag₂CrO₄(s), K₂CrO₄ (0.010 M) ∥ NH₃ (0.50 M), [Ag(NH₃)₂]⁺ (0.050 M) | Ag. Ksp(Ag₂CrO₄) = 4×10⁻¹²; Kf of [Ag(NH₃)₂]⁺ = 1×10⁷; 2.303RT/F = 0.06 V. Find the magnitude of the cell emf in mV.',
+  ans:'180 mV',
+  why:'Left: [Ag⁺] = √(4×10⁻¹²/0.010) = 2×10⁻⁵ M. Right: [Ag⁺] = 0.050/(10⁷ × 0.50²) = 2×10⁻⁸ M. Both are Ag electrodes, so E = 0.06 log(2×10⁻⁵/2×10⁻⁸) = 0.06 × 3 = 0.18 V. Trap: forgetting the square root on Ksp or the square on [NH₃].'},
+ {n:2, sec:'s1', topic:'Electrochemistry', chip:'chip-1', lvl:'L4',
+  q:'A current of 10.0 A, with 90% current efficiency for this reaction, reduces 2.13 g of 1,3,5-trinitrobenzene (C₆H₃N₃O₆) completely to 1,3,5-triaminobenzene. For how many seconds must it flow? (F = 96500 C/mol; C = 12, H = 1, N = 14, O = 16)',
+  ans:'1930 s',
+  why:'M = 213, so 2.13 g = 0.0100 mol. Each –NO₂ to –NH₂ takes 6 e⁻ (N: +3 to −3), and there are 3 groups, so 18 e⁻ per molecule: 0.18 mol e⁻ = 17370 C. Only 90% of the charge does this job, so total charge = 17370/0.9 = 19300 C. t = 19300/10 = 1930 s. Trap: multiplying by 0.9 instead of dividing, or using 6 e⁻ per molecule.'},
+ {n:3, sec:'s1', topic:'Electrochemistry', chip:'chip-1', lvl:'L4', multi:true,
+  q:'E° (MnO₄⁻ + 8H⁺ + 5e⁻ → Mn²⁺ + 4H₂O) = 1.51 V. E° (Cl₂/Cl⁻) = 1.36 V, E° (Br₂/Br⁻) = 1.07 V, E° (I₂/I⁻) = 0.54 V. All species except H⁺ are at 1 M; 2.303RT/F = 0.06 V. Select the CORRECT statement(s).',
+  opts:['At pH 0, MnO₄⁻ can oxidise Cl⁻, Br⁻ and I⁻.','At pH 2, MnO₄⁻ can oxidise Br⁻ and I⁻ but not Cl⁻.','At pH 5, MnO₄⁻ can oxidise Br⁻ but not Cl⁻.','The highest pH at which MnO₄⁻ can still oxidise I⁻ is above 10.'],
+  ans:'A, B, D',
+  why:'E = 1.51 − (0.06/5) × 8 × pH = 1.51 − 0.096 pH. pH 0: 1.51, above 1.36, so all three are oxidised (A true). pH 2: 1.318, above 1.07 and below 1.36 (B true). pH 5: 1.03, below 1.07, so Br⁻ is not oxidised (C false). 1.51 − 0.096 pH = 0.54 gives pH = 10.1 (D true).'},
+ {n:4, sec:'s1', topic:'Electrochemistry', chip:'chip-1', lvl:'L4',
+  q:'A solution saturated with both AgX (Ksp = 2.4×10⁻¹⁴) and AgY (Ksp = 1.6×10⁻¹⁴) has conductivity 3.0×10⁻⁸ S cm⁻¹. Limiting molar conductivities in S cm² mol⁻¹: Ag⁺ = 60, X⁻ = 80. Find the limiting molar conductivity of Y⁻. Ignore the conductivity of water.',
+  ans:'105 S cm² mol⁻¹',
+  why:'Let [X⁻] = a, [Y⁻] = b, [Ag⁺] = a + b. Then a(a+b) = 2.4×10⁻¹⁴ and b(a+b) = 1.6×10⁻¹⁴. Adding: (a+b)² = 4×10⁻¹⁴, so [Ag⁺] = 2×10⁻⁷ M, a = 1.2×10⁻⁷ M, b = 0.8×10⁻⁷ M. Divide by 1000 for mol cm⁻³: 2×10⁻¹⁰, 1.2×10⁻¹⁰, 0.8×10⁻¹⁰. κ = 12×10⁻⁹ + 9.6×10⁻⁹ + 0.8×10⁻¹⁰ × λ = 3.0×10⁻⁸, so λ = 8.4×10⁻⁹ / 0.8×10⁻¹⁰ = 105.'},
+ {n:5, sec:'s2', topic:'Ionic equilibrium', chip:'chip-2', lvl:'L4', multi:true,
+  q:'A weak base BOH has Kb = 1×10⁻⁵ at 25 °C (log 2 = 0.3). Select the CORRECT statement(s).',
+  opts:['The pH of 0.20 M BCl is 4.85.','Mixing 100 mL of 0.20 M BOH with 50 mL of 0.20 M HCl gives pH 9.0.','Mixing 100 mL of 0.20 M BOH with 100 mL of 0.20 M HCl gives pH 4.85.','The degree of hydrolysis of 0.10 M BCl is 1×10⁻⁴.'],
+  ans:'A, B, D',
+  why:'Kh = Kw/Kb = 10⁻⁹. A: [H⁺] = √(10⁻⁹ × 0.2) = √(2×10⁻¹⁰), so pH = 5 − ½ log 2 = 4.85 (true). B: 20 mmol BOH and 10 mmol HCl leave 10 mmol BOH and 10 mmol BCl, a buffer with pOH = pKb = 5, so pH 9 (true). C: equal moles give 0.10 M BCl (the mixing halves the concentration), so [H⁺] = √(10⁻⁹ × 0.1) = 10⁻⁵ and pH = 5.0, not 4.85 (false). D: h = √(Kh/c) = √(10⁻⁹/0.1) = 10⁻⁴ (true).'},
+ {n:6, sec:'s2', topic:'Ionic equilibrium', chip:'chip-2', lvl:'L4',
+  q:'Data: Kw = 1×10⁻¹⁴; Ka(HCN) = 5×10⁻¹⁰; Ksp(Mg(OH)₂) = 4×10⁻¹²; Ksp(AgCl) = 2×10⁻¹⁰; Ka(CH₃COOH) = 1×10⁻⁵. List-I: I) [OH⁻] in 0.05 M NaCN. II) Molar solubility of Mg(OH)₂ in a buffer of pH 10. III) Smallest [Cl⁻] that starts precipitating AgCl from 1×10⁻⁴ M Ag⁺. IV) [CH₃COO⁻] in 0.1 M CH₃COOH that also contains 0.1 M HCl. List-II: p) 1×10⁻³ M, q) 4×10⁻⁴ M, r) 2×10⁻⁶ M, s) 1×10⁻⁵ M, t) 2×10⁻³ M. Which is a CORRECT combination?',
+  opts:['I–p; III–q','I–t; IV–s','II–p; III–r','II–q; III–r'],
+  ans:'D (II–q; III–r)',
+  why:'I: Kh = 10⁻¹⁴/(5×10⁻¹⁰) = 2×10⁻⁵, [OH⁻] = √(2×10⁻⁵ × 0.05) = 10⁻³, so p. II: [OH⁻] = 10⁻⁴, s = 4×10⁻¹²/10⁻⁸ = 4×10⁻⁴, so q. III: 2×10⁻¹⁰/10⁻⁴ = 2×10⁻⁶, so r. IV: [H⁺] ≈ 0.1 from HCl, so [A⁻] = Ka × 0.1/0.1 = 10⁻⁵, so s. Full match: I–p, II–q, III–r, IV–s. Only D has both pairs right. Solving all four takes about four minutes. Do it before you skip.'},
+ {n:7, sec:'s2', topic:'Ionic equilibrium', chip:'chip-2', lvl:'L4',
+  q:'100 mL of 0.10 M Na₂CO₃ is titrated with 0.10 M HCl (see the curve at the top). Ka1 = 4×10⁻⁷, Ka2 = 5×10⁻¹¹; log 2 = 0.3, log 3 = 0.48, log 5 = 0.7. Find the pH after 125 mL of acid has been added.',
+  ans:'pH = 6.88',
+  why:'pKa1 = 7 − 0.6 = 6.4 (and pKa2 = 11 − 0.7 = 10.3). Na₂CO₃ is 10 mmol; HCl is 12.5 mmol. The first 10 mmol turns all CO₃²⁻ into HCO₃⁻. The last 2.5 mmol makes 2.5 mmol H₂CO₃, leaving 7.5 mmol HCO₃⁻. The pair HCO₃⁻/H₂CO₃ is a buffer with pKa1: pH = 6.4 + log(7.5/2.5) = 6.4 + 0.48 = 6.88. Trap: using the CO₃²⁻/HCO₃⁻ pair (pKa2).'},
+ {n:8, sec:'s3', topic:'Stoichiometry', chip:'chip-3', lvl:'L4',
+  q:'A mixture of CH₄ and SO₂ effuses twice as fast as Br₂ vapour (Br = 80) under identical conditions. 20 g of the mixture is kept in an 8.2 L vessel at 400 K. Find the partial pressure of SO₂ in atm. (R = 0.082 L atm K⁻¹ mol⁻¹; C = 12, H = 1, S = 32, O = 16)',
+  ans:'1.0 atm',
+  why:'Rate ∝ 1/√M, so √(160/M(mix)) = 2 and M(mix) = 40. With x as the mole fraction of SO₂: 16 + 48x = 40, so x = 0.5. n = 20/40 = 0.5 mol, so P(total) = 0.5 × 0.082 × 400/8.2 = 2.0 atm, and p(SO₂) = 0.5 × 2.0 = 1.0 atm. Trap: using the mass fraction (0.8) as the mole fraction gives 1.6 atm.'},
+ {n:9, sec:'s3', topic:'Stoichiometry', chip:'chip-3', lvl:'L4',
+  q:'0.49 g of K₂Cr₂O₇ (M = 294) is treated with excess KI in acid; the iodine liberated needs 50 mL of a sodium thiosulphate (hypo) solution. Then 2.84 g of bleaching powder is treated with excess KI in acid, and the iodine liberated needs 50 mL of the same hypo. Find the percentage of available chlorine (as Cl₂, Cl = 35.5) in the bleaching powder.',
+  ans:'12.5%',
+  why:'0.49 g is 1.667 mmol Cr₂O₇²⁻. Each gives 3 I₂, so 5 mmol I₂, which needs 10 mmol S₂O₃²⁻. So hypo = 10 mmol/50 mL = 0.2 M. For the sample, 50 mL of hypo is 10 mmol, so 5 mmol I₂ and 5 mmol Cl₂ (Cl₂ + 2I⁻ gives I₂). Mass = 5 × 71 = 355 mg = 0.355 g. 0.355/2.84 × 100 = 12.5%. Trap: using 3 hypo per Cr₂O₇²⁻ instead of 6.'},
+ {n:10, sec:'s3', topic:'Stoichiometry', chip:'chip-3', lvl:'L4',
+  q:'20 g of 90% pure CaCO₃ is treated with 100 mL of 2.0 M HCl. The CO₂ evolved is absorbed completely in 200 mL of 0.50 M NaOH. Find the mass of the sodium salt formed. (Na = 23, H = 1, C = 12, O = 16)',
+  ans:'8.4 g (NaHCO₃)',
+  why:'Pure CaCO₃ = 18 g = 0.18 mol, which needs 0.36 mol HCl (CaCO₃ + 2HCl). Only 0.20 mol HCl is present, so HCl limits and CO₂ = 0.10 mol. NaOH = 0.20 L × 0.50 = 0.10 mol. NaOH : CO₂ = 1 : 1 gives NaHCO₃, M = 84, so 0.10 × 84 = 8.4 g. Trap: taking CaCO₃ as limiting, or assuming Na₂CO₃.'},
+ {n:11, sec:'s4', topic:'Solutions and kinetics', chip:'chip-4', lvl:'L4',
+  q:'Liquids P (pure vapour pressure 350 mm Hg) and Q (600 mm Hg) form an ideal solution. 4 mol of P is mixed with 2 mol of Q. P then associates by xP → Pₓ (non-volatile, soluble), first order in P, going to completion. The total vapour pressure is 380 mm Hg after 20 min and 300 mm Hg after a very long time. Find the time in minutes for 87.5% of the P to associate.',
+  ans:'60 min',
+  why:'Long time: 2/(2 + 4/x) × 600 = 300, so 2 + 4/x = 4 and x = 2. At 20 min let n mol of P remain: moles = n + (4 − n)/2 + 2 = 4 + n/2. (350n + 1200)/(4 + n/2) = 380 gives 350n + 1200 = 1520 + 190n, so n = 2. Half of P went in 20 min, so t½ = 20 min. 87.5% means 3 half-lives: 60 min.'},
+ {n:12, sec:'s4', topic:'Solutions and kinetics', chip:'chip-4', lvl:'L4',
+  q:'The gas-phase reaction A → 2B + C is first order in A. Pure A at 100 mm Hg is held at constant volume and temperature, and the total pressure is 200 mm Hg after 20 min. Find the total pressure in mm Hg after 60 min.',
+  ans:'275 mm Hg',
+  why:'If x mm Hg of A has reacted, A = 100 − x and total = 100 + 2x. At 20 min: 200 = 100 + 2x, so x = 50 and A has fallen from 100 to 50, which is one half-life: t½ = 20 min. At 60 min (3 half-lives) A = 12.5, so x = 87.5 and total = 100 + 175 = 275. Trap: treating the total pressure as if it were the concentration of A.'},
+ {n:13, sec:'s4', topic:'Solutions and kinetics', chip:'chip-4', lvl:'L4', multi:true,
+  q:'A sucrose solution is inverted by acid (first order). The observed rotation is +60° at t = 0, +20° at 20 min and −20° after a very long time. Select the CORRECT statement(s).',
+  opts:['The half-life is 20 min.','The observed rotation is zero at 40 min.','The observed rotation at 60 min is +5°.','After 80 min, 93.75% of the sucrose has been inverted.'],
+  ans:'A, B, D',
+  why:'Sucrose left is proportional to (rotation − final) = (rotation + 20). At 0 it is 80; at 20 min it is 40, so t½ = 20 min (A true). Zero rotation needs 20, which is 80/4, so 2 half-lives = 40 min (B true). At 60 min: 80/8 = 10, so rotation = −20 + 10 = −10°, not +5° (C false). At 80 min: 80/16 means 1/16 is left, so 93.75% is inverted (D true).'},
+ {n:14, sec:'s5', topic:'Bohr model', chip:'chip-5', lvl:'L4',
+  q:'The photon of the n = 3 → n = 1 line of hydrogen is absorbed by the electron of He⁺ in the n = 2 level, which moves to a higher orbit. Let z = λ/(0.529π), where λ is the de Broglie wavelength (in Å) of the electron in the final orbit. Find z. (Bohr radius 0.529 Å; E = −13.6 Z²/n² eV)',
+  ans:'6',
+  why:'Photon = 13.6 × (1 − 1/9) = 12.09 eV. He⁺ at n = 2 has E = −13.6 eV, so the final E = −1.51 eV = −54.4/n², giving n² = 36 and n = 6. Radius = 0.529 × 36/2 = 9.52 Å. λ = 2πr/n = 2π × 9.52/6 ≈ 9.97 Å. So z = 9.97/(0.529π) = 6. Shortcut: z = 2n/Z = 12/2 = 6. Trap: using r ∝ n instead of n², or Z = 1.'},
+ {n:15, sec:'s5', topic:'Bohr model', chip:'chip-5', lvl:'L4', multi:true,
+  q:'For hydrogen-like species (Bohr radius a₀ = 0.529 Å), select the INCORRECT statement(s).',
+  opts:['The radius of He⁺ in n = 2 is twice the radius of H in n = 1.','The speed of the electron in Li²⁺ (n = 3) equals its speed in H (n = 1).','The de Broglie wavelength of the electron in Li²⁺ (n = 3) is 1.5 times that in H (n = 1).','The energy of the electron in Be³⁺ (n = 2) equals its energy in H (n = 1).'],
+  ans:'C, D',
+  why:'A: r = 0.529 × 4/2 = 1.058 Å, which is 2 × 0.529 (true). B: v ∝ Z/n = 3/3 = 1 (true). C: λ = 2πr/n; for Li²⁺ r = 0.529 × 9/3 = 1.587 Å, so λ = 2π × 1.587/3 = 2π × 0.529, the same as H in n = 1. The ratio is 1, not 1.5 (so C is incorrect). D: E ∝ Z²/n² = 16/4 = 4 times that of H, not equal (so D is incorrect).'},
+ {n:16, sec:'s6', topic:'Chemical bonding', chip:'chip-6', lvl:'L4', multi:true,
+  q:'The internuclear axis is z. For molecular orbitals of homonuclear diatomic molecules, select the INCORRECT statement(s).',
+  opts:['π*2pₓ is gerade and has two nodal planes: one containing the axis and one perpendicular to it between the nuclei.','σ2s has one nodal plane perpendicular to the axis between the nuclei.','σ*2p_z is ungerade and has a nodal plane perpendicular to the axis between the nuclei.','π2p_y is gerade.'],
+  ans:'B, D',
+  why:'A is true: π* is g, with a plane through the axis and one between the nuclei. B is false: σ2s is bonding, so it has no nodal plane between the nuclei (σ*2s has one). C is true: σ* is u with a nodal plane between the nuclei. D is false: π (bonding) is u. Rule: σ is g, σ* is u, π is u, π* is g.'},
+ {n:17, sec:'s6', topic:'Chemical bonding', chip:'chip-6', lvl:'L4',
+  q:'For how many of the molecules Be₂, B₂, C₂, N₂, O₂ and F₂ does the bond order increase when one electron is removed from the ground-state molecule?',
+  ans:'3',
+  why:'Remove the highest-energy electron and compare. Be₂: σ2s² σ*2s², bond order 0, removing from σ*2s gives 0.5 (up). B₂: π2p², bond order 1, removing from π gives 0.5 (down). C₂: π2p⁴, bond order 2, gives 1.5 (down). N₂: σ2p² is the highest, bond order 3, gives 2.5 (down). O₂: π*2p², bond order 2, removing from π* gives 2.5 (up). F₂: π*2p⁴, bond order 1, gives 1.5 (up). Up for Be₂, O₂ and F₂: 3.'},
+ {n:18, sec:'s6', topic:'Chemical bonding', chip:'chip-6', lvl:'L4',
+  q:'Take the dipole moment of chlorobenzene as 1.5 D, treat each C–Cl group moment as the same vector along its bond, and ignore interactions between groups. Find μ² (in D²) for o-dichlorobenzene + m-dichlorobenzene + p-dichlorobenzene + 1,2,4-trichlorobenzene, added together.',
+  ans:'11.25 D²',
+  why:'The C–Cl vectors point outward at 60° steps around the ring. Ortho (60° apart): μ = 2 × 1.5 × cos 30° = 2.60 D, so μ² = 6.75. Meta (120° apart): μ = 2 × 1.5 × cos 60° = 1.5 D, so μ² = 2.25. Para (180°): 0. For 1,2,4-trichloro, positions 1 and 4 are para and cancel, leaving one 1.5 D vector: μ² = 2.25. Total = 6.75 + 2.25 + 0 + 2.25 = 11.25.'}
+];
+
+/* ---------------- Ask Claude helper (one function builds every link from the item's own content) ---------------- */
+var TUTOR = "I'm a JEE aspirant preparing for JEE Advanced. Please act as a patient tutor. Use simple language. Reply in chunks of under 10 lines. Explain why, not just how. Wait for my reply before moving on.";
+var MAXURL = 3300;
+function plain(html){
+  var d = document.createElement('div'); d.innerHTML = html;
+  d.querySelectorAll('sub').forEach(function(e){ e.replaceWith('_' + e.textContent); });
+  d.querySelectorAll('br').forEach(function(e){ e.replaceWith(' '); });
+  return d.textContent.replace(/\s+/g,' ').trim();
+}
+function stepText(st){ return st[0] + ': ' + plain(st[1]).slice(0,230); }
+function askLink(parts){
+  /* parts: [{label, text}] ; trims the longest text first until the URL fits */
+  parts = parts.map(function(p){ return {label:p.label, text:p.text}; });
+  function build(){
+    return TUTOR + '\n\n' + parts.map(function(p){ return p.label + ': ' + p.text; }).join('\n');
+  }
+  var url = 'https://claude.ai/new?q=' + encodeURIComponent(build());
+  while(url.length > MAXURL){
+    var longest = parts[0];
+    parts.forEach(function(p){ if(p.text.length > longest.text.length) longest = p; });
+    if(longest.text.length < 60) break;
+    longest.text = longest.text.slice(0, Math.floor(longest.text.length * 0.85)).replace(/\s+\S*$/, '') + '…';
+    url = 'https://claude.ai/new?q=' + encodeURIComponent(build());
+  }
+  var a = document.createElement('a');
+  a.className = 'ask'; a.href = url; a.target = '_blank'; a.rel = 'noopener';
+  a.textContent = 'Ask Claude';
+  return a;
+}
+function askRow(parts){
+  var row = document.createElement('div'); row.className = 'ask-row'; row.appendChild(askLink(parts)); return row;
+}
+function sectionAsk(s){
+  return askRow([
+    {label:'Topic', text:s.title + ' (a weak area from my Chemistry tests)'},
+    {label:'Why it matters', text:plain(s.why)},
+    {label:'Shortcut rules', text:s.rules.map(plain).join(' | ')},
+    {label:'What I want', text:'Check my understanding of this topic by asking me one question first.'}
+  ]);
+}
+function exampleAsk(s){
+  var e = s.example;
+  return askRow([
+    {label:'Worked example I want to understand', text:s.title},
+    {label:'Question', text:plain(e.q)},
+    {label:'My answer on the test', text:e.yours},
+    {label:'Correct answer', text:e.correct},
+    {label:'Steps', text:e.steps.map(function(st,i){ return (i+1) + '. ' + stepText(st); }).join(' ')},
+    {label:'What I want', text:'Ask me which step I do not follow, then explain only that step.'}
+  ]);
+}
+function problemAsk(p){
+  var q = plain(p.q) + (p.opts ? ' Options: ' + p.opts.map(function(o,i){ return String.fromCharCode(65+i) + ') ' + plain(o); }).join(' ') : '');
+  return askRow([
+    {label:'Practice problem (' + p.topic + ', ' + p.lvl + ')', text:q},
+    {label:'For your reference only, do not reveal unless I ask or I have made a real attempt. Answer', text:p.ans},
+    {label:'Reasoning (for your reference only)', text:plain(p.why)},
+    {label:'What I want', text:'Ask me what I have tried so far, then give one hint at a time.'}
+  ]);
+}
+
+/* ---------------- render ---------------- */
+function el(tag, cls, html){ var e = document.createElement(tag); if(cls) e.className = cls; if(html != null) e.innerHTML = html; return e; }
+
+function renderSection(s, idx){
+  var sec = el('section', 'pattern'); sec.id = s.id;
+  var head = el('div', 'pattern-head');
+  head.appendChild(el('h2', null, (idx+1) + ' · ' + s.title));
+  head.appendChild(el('span', 'chip ' + s.chipClass, s.chip));
+  sec.appendChild(head);
+  sec.appendChild(el('p', 'why', s.why));
+
+  var cb = el('div', 'came-back');
+  cb.appendChild(el('h3', null, 'This one came back'));
+  var cols = el('div', 'cols');
+  cols.appendChild(el('div', 'col', '<b class="lbl">Before (CTA16, CTA17)</b>' + s.before));
+  cols.appendChild(el('div', 'col', '<b class="lbl">Now (CTA18)</b>' + s.now));
+  cb.appendChild(cols);
+  cb.appendChild(el('div', 'verdict', s.verdict));
+  sec.appendChild(cb);
+
+  var rule = el('div', 'rule');
+  rule.appendChild(el('span', 'rule-label', 'Shortcuts'));
+  var ul = el('ul'); s.rules.forEach(function(r){ ul.appendChild(el('li', null, r)); }); rule.appendChild(ul);
+  sec.appendChild(rule);
+  sec.appendChild(sectionAsk(s));
+
+  var e = s.example;
+  var st = el('div', 'stepper'); st.id = e.id;
+  st.appendChild(el('span', 'stepper-label', 'Worked example: the question you saw'));
+  st.appendChild(el('p', null, e.q));
+  st.appendChild(el('p', 'yours', 'Your answer: <strong>' + e.yours + '</strong>. Correct answer: <strong>' + e.correct + '</strong>.'));
+  e.steps.forEach(function(stp, i){
+    var d = el('div', 'step');
+    if(i > 0) d.hidden = true;
+    var body = stp[1];
+    d.appendChild(el('span', 'tag', stp[0]));
+    d.appendChild(el('span', null, body));
+    if(stp[2]){
+      d.appendChild(el('div', 'final', stp[2].replace(/^final:/, '')));
+      d.appendChild(el('div', 'trap-note', e.trap));
+    }
+    st.appendChild(d);
+  });
+  var btn = el('button', 'step-btn', 'Show next step →'); btn.type = 'button';
+  btn.addEventListener('click', function(){ stepNext(e.id); });
+  st.appendChild(btn);
+  st.appendChild(exampleAsk(s));
+  sec.appendChild(st);
+
+  if(s.also && s.also.length){
+    var also = el('div', 'also'); also.appendChild(el('b', null, 'Other questions from this topic, solved'));
+    var u2 = el('ul'); s.also.forEach(function(a){ u2.appendChild(el('li', null, a)); }); also.appendChild(u2);
+    sec.appendChild(also);
+  }
+  return sec;
+}
+
+function renderProblem(p){
+  var c = el('div', 'card'); c.id = 'p' + p.n;
+  var h = el('div', 'card-head');
+  h.appendChild(el('span', 'qnum', String(p.n)));
+  var tags = el('div', 'tags');
+  tags.appendChild(el('span', 'chip ' + p.chip, p.topic));
+  tags.appendChild(el('span', 'lvl', p.lvl));
+  h.appendChild(tags); c.appendChild(h);
+  c.appendChild(el('p', null, p.q));
+  if(p.opts){
+    var ol = el('ol'); ol.type = 'A';
+    p.opts.forEach(function(o){ ol.appendChild(el('li', null, o)); });
+    c.appendChild(ol);
+  }
+  var b = el('button', 'reveal-btn', 'Show answer'); b.type = 'button';
+  var a = el('div', 'answer'); a.hidden = true;
+  a.appendChild(el('span', 'val', 'Answer: ' + p.ans));
+  a.appendChild(el('div', 'why', p.why));
+  b.addEventListener('click', function(){
+    var hide = !a.hidden; a.hidden = hide; b.textContent = hide ? 'Show answer' : 'Hide answer';
+  });
+  c.appendChild(b); c.appendChild(a);
+  c.appendChild(problemAsk(p));
+  return c;
+}
+
+function stepNext(id){
+  var root = document.getElementById(id);
+  var steps = root.querySelectorAll('.step');
+  var btn = root.querySelector('.step-btn');
+  var shown = 0;
+  steps.forEach(function(s){ if(!s.hidden) shown++; });
+  if(shown < steps.length){ steps[shown].hidden = false; shown++; }
+  if(shown >= steps.length){ btn.hidden = true; }
+}
+
+/* titration sketch, drawn to scale from computed points */
+function drawCurve(){
+  var pts = [[0,11.65],[25,10.78],[50,10.30],[75,9.82],[100,8.35],[125,6.88],[150,6.40],[175,5.92],[200,3.94],[250,1.85]];
+  var x0 = 44, x1 = 324, y0 = 14, y1 = 160, vmax = 250, phHi = 12, phLo = 1;
+  function X(v){ return x0 + (x1 - x0) * v / vmax; }
+  function Y(p){ return y0 + (y1 - y0) * (phHi - p) / (phHi - phLo); }
+  var s = '';
+  [2,4,6,8,10,12].forEach(function(p){
+    s += '<line x1="'+x0+'" x2="'+x1+'" y1="'+Y(p)+'" y2="'+Y(p)+'" stroke="var(--border)" stroke-width="1"/>';
+    s += '<text x="'+(x0-6)+'" y="'+(Y(p)+3)+'" text-anchor="end" font-size="9" fill="var(--ink-soft)">'+p+'</text>';
+  });
+  [0,50,100,150,200,250].forEach(function(v){
+    s += '<line x1="'+X(v)+'" x2="'+X(v)+'" y1="'+y1+'" y2="'+(y1+4)+'" stroke="var(--ink-soft)" stroke-width="1"/>';
+    s += '<text x="'+X(v)+'" y="'+(y1+15)+'" text-anchor="middle" font-size="9" fill="var(--ink-soft)">'+v+'</text>';
+  });
+  s += '<line x1="'+x0+'" x2="'+x1+'" y1="'+y1+'" y2="'+y1+'" stroke="var(--ink-soft)" stroke-width="1.2"/>';
+  s += '<line x1="'+x0+'" x2="'+x0+'" y1="'+y0+'" y2="'+y1+'" stroke="var(--ink-soft)" stroke-width="1.2"/>';
+  s += '<text x="'+((x0+x1)/2)+'" y="'+(y1+30)+'" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">mL of 0.10 M HCl added</text>';
+  s += '<text x="10" y="'+((y0+y1)/2)+'" font-size="9.5" fill="var(--ink-soft)" transform="rotate(-90 10 '+((y0+y1)/2)+')" text-anchor="middle">pH</text>';
+  var d = pts.map(function(p,i){ return (i ? 'L' : 'M') + X(p[0]).toFixed(1) + ',' + Y(p[1]).toFixed(1); }).join(' ');
+  s += '<path d="'+d+'" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>';
+  pts.forEach(function(p){ s += '<circle cx="'+X(p[0]).toFixed(1)+'" cy="'+Y(p[1]).toFixed(1)+'" r="2.8" fill="var(--accent)"/>'; });
+  s += '<circle cx="'+X(50)+'" cy="'+Y(10.3)+'" r="5" fill="none" stroke="var(--c4)" stroke-width="1.6"/>';
+  s += '<circle cx="'+X(150)+'" cy="'+Y(6.4)+'" r="5" fill="none" stroke="var(--c4)" stroke-width="1.6"/>';
+  s += '<text x="'+(X(50)+9)+'" y="'+(Y(10.3)-6)+'" font-size="9.5" fill="var(--c4)" font-weight="700">pKa₂ = 10.3</text>';
+  s += '<text x="'+(X(150)+9)+'" y="'+(Y(6.4)-6)+'" font-size="9.5" fill="var(--c4)" font-weight="700">pKa₁ = 6.4</text>';
+  s += '<text x="'+(X(100)+6)+'" y="'+(Y(8.35)+14)+'" font-size="9" fill="var(--ink-soft)">HCO₃⁻ only: 8.35</text>';
+  s += '<text x="'+(X(200)+6)+'" y="'+(Y(3.94)-4)+'" font-size="9" fill="var(--ink-soft)">H₂CO₃ only: 3.94</text>';
+  document.getElementById('curve').innerHTML = s;
+}
+
+/* mode + timer */
+function setMode(mode, btn){
+  document.querySelectorAll('.mode-btn').forEach(function(b){ b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+  document.getElementById('timerBar').hidden = (mode !== 'timed');
+}
+var remaining = 40 * 60, timerId = null;
+function renderTime(){
+  var m = String(Math.floor(remaining/60)).padStart(2,'0'), s = String(remaining%60).padStart(2,'0');
+  document.getElementById('timeDisplay').textContent = m + ':' + s;
+}
+function startTimer(){
+  if(timerId) return;
+  timerId = setInterval(function(){
+    remaining--;
+    if(remaining <= 0){ clearInterval(timerId); timerId = null; document.getElementById('timeDisplay').textContent = "Time's up"; }
+    else renderTime();
+  }, 1000);
+}
+function resetTimer(){ clearInterval(timerId); timerId = null; remaining = 40*60; renderTime(); }
+
+(function init(){
+  var host = document.getElementById('sections');
+  SECTIONS.forEach(function(s, i){ host.appendChild(renderSection(s, i)); });
+  var grid = document.getElementById('grid');
+  PROBLEMS.forEach(function(p){ grid.appendChild(renderProblem(p)); });
+  drawCurve(); renderTime();
+})();
+</script>
