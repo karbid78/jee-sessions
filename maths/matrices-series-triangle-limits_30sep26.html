@@ -239,6 +239,38 @@
   .answer ol{ margin:6px 0 0 1.2em; padding:0; font-size:.88rem; color:var(--ink-soft); }
   .answer ol li{ margin:3px 0; }
   .answer .trap-note{ margin-top:8px; }
+
+  :root{ --on-accent:#FFFFFF; }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --on-accent:#0F131C; } }
+  :root[data-theme="dark"]{ --on-accent:#0F131C; }
+  .step-btn{ color:var(--on-accent); }
+  .mode-btn[aria-pressed="true"]{ color:var(--on-accent); }
+  .qtype{ font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.05em; text-transform:uppercase; font-weight:700; padding:3px 9px; border-radius:999px; color:var(--ink-soft); background:var(--surface-2); border:1px solid var(--border); white-space:nowrap; }
+  .card-tags{ flex-wrap:wrap; justify-content:flex-end; }
+  .opts{ display:grid; gap:8px; margin:12px 0 4px; }
+  .opt{ display:flex; gap:10px; align-items:flex-start; padding:9px 12px; border:1.4px solid var(--border); border-radius:10px; background:var(--surface-2); cursor:pointer; min-width:0; overflow-wrap:anywhere; }
+  .opt:hover{ border-color:var(--accent); }
+  .opt input{ margin-top:4px; accent-color:var(--accent); flex:none; }
+  .opt .ol{ font-family:"IBM Plex Mono",monospace; font-weight:700; color:var(--accent); flex:none; }
+  .opt .ot{ min-width:0; }
+  .opt.ok{ border-color:var(--good); background:var(--good-bg); }
+  .opt.bad{ border-color:var(--trap); background:var(--trap-bg); }
+  .opt.miss{ border-color:var(--good); border-style:dashed; background:var(--good-bg); }
+  .opt .mark{ margin-left:auto; flex:none; font-weight:700; font-size:.82rem; }
+  .opt.ok .mark,.opt.miss .mark{ color:var(--good); } .opt.bad .mark{ color:var(--trap); }
+  .result{ margin-top:10px; padding:9px 12px; border-radius:8px; font-weight:600; font-size:.92rem; }
+  .result.right{ background:var(--good-bg); color:var(--good); }
+  .result.wrong{ background:var(--trap-bg); color:var(--trap); }
+  .btn-row{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:10px; }
+  .btn-row .reveal-btn{ margin-top:0; }
+  .check-btn{ font:inherit; font-weight:600; font-size:.85rem; background:var(--accent); color:var(--on-accent); border:none; border-radius:8px; padding:8px 13px; cursor:pointer; }
+  .check-btn:focus-visible,.reveal-btn:focus-visible,.opt:focus-within{ outline:2px solid var(--highlight); outline-offset:2px; }
+  .pfig{ margin:10px 0 2px; }
+  .pfig svg{ display:block; width:100%; max-width:340px; height:auto; color:var(--ink); }
+  .pfig svg text{ font-family:"IBM Plex Mono",monospace; font-size:11px; fill:currentColor; }
+  .pfig figcaption{ font-size:.8rem; color:var(--ink-soft); margin-top:4px; }
+  .mistakes{ margin:6px 0 0; padding-left:18px; font-size:.86rem; }
+  .grid{ grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr)); }
 </style>
 <div class="wrap">
 
@@ -246,8 +278,7 @@
 <span class="eyebrow">Maths · Focus Session · CTA16 · CTA17 · CTA18</span>
 <h1>Four loose ends from your last three tests</h1>
 <p>Two of these patterns cost you marks in both CTA16 and CTA17 and did not appear in CTA18, so they have not been re-tested. The other two showed up once. Fix them now, before they turn into repeat offenders. Every worked example is a real question you got wrong or skipped. Every practice problem uses the same technique in a new problem at level L4.</p>
-<svg class="hero-fig" viewBox="0 0 260 110" role="img" aria-label="Triangle ABC crossed by the line y = x + 1, which enters through BC and leaves through AC"><polygon points="91.0,18.0 47.0,84.0 223.0,62.0" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/><line x1="58.0" y1="95.0" x2="146.0" y2="7.0" stroke="var(--border)" stroke-width="2" stroke-dasharray="5 5"/><line x1="72.1" y1="80.9" x2="124.0" y2="29.0" stroke="var(--highlight)" stroke-width="3.5" stroke-linecap="round"/><circle cx="72.1" cy="80.9" r="4.5" fill="var(--highlight)"/><circle cx="124.0" cy="29.0" r="4.5" fill="var(--highlight)"/><text x="97.0" y="22.0" font-size="9" fill="var(--ink-soft)" font-family="IBM Plex Mono, monospace">A(0,3)</text><text x="43.0" y="97.0" font-size="9" fill="var(--ink-soft)" font-family="IBM Plex Mono, monospace">B(−2,0)</text><text x="201.0" y="75.0" font-size="9" fill="var(--ink-soft)" font-family="IBM Plex Mono, monospace">C(6,1)</text><text x="152.0" y="10.0" font-size="9" fill="var(--ink-soft)" font-family="IBM Plex Mono, monospace">y = x + 1</text></svg>
-<div class="hero-note"><strong>How to use this:</strong> go section by section. Read the shortcuts, click through the worked example, then do that section's practice problems (2+3+2+2 problems in the four sections, 9 in total). Do them once, untimed. Keep the 40-minute timed mode for a second pass, not today.</div>
+<div class="hero-note"><strong>How to use this:</strong> go section by section. Read the shortcuts, click through the worked example, then do that section's practice problems (2+3+2+2 problems in the four sections, 9 in total). Every practice problem is multiple choice (A to D): some have one correct option, some need every correct option ticked. Do them once, untimed. Keep the 40-minute timed mode for a second pass, not today.</div>
 <p class="note"><strong>Ask Claude links:</strong> each link opens a new claude.ai chat with the topic already typed in. You need to be signed in to claude.ai. Nothing is sent until you press send.</p>
 <p class="note level-note"><strong>Level L4.</strong> The practice problems are set at the level of your Sunday ADV-CTA papers: more than one concept, 6 or more steps, and one trap or boundary check. Every problem carries its level tag. The worked examples are your real questions, kept at their real level.</p></section>
 
@@ -255,7 +286,7 @@
 <div class="pattern-head"><h2>1 · Matrices and determinants: finish the job</h2><span class="chip chip-1">Matrices &amp; determinants</span><span class="seen">Seen in CTA16 and CTA17</span></div>
 <p class="why">In a multi-correct question every true option earns marks. In CTA16 Q6 you proved det M = 1, marked only that, and stopped. One more line gives M² = I and (adj M)² = I. In CTA17 you spent 8m32s and 4m18s on two matrix questions and skipped both, then got the determinant in Q14 wrong in 3m09s, although it has a one-line trick.</p>
 <div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this pattern ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
-<div class="rule"><span class="rule-label">The shortcuts</span><ul><li><strong>Follow-through rule:</strong> when you prove one fact, write down what else it gives before you look at the options. Then test every option. A "true" needs a proof. A "false" needs one counterexample.</li><li><strong>adj(adj M) = (det M)^(n−2) · M.</strong> For a 3×3 this is (det M)·M. Also adj M = (det M)·M⁻¹.</li><li><strong>Equal row sums or column sums in a determinant:</strong> add all columns into the first column, factor out the common sum, then subtract rows to clear zeros. Your CTA17 Q14: every row sums to 2(a+b+c), and the determinant is <span class="m">2(a+b+c)³</span>. So k = 2, α = β = γ = 1, and (2α+β+γ)^k = 4² = 16. You wrote 1024.</li></ul></div>
+<div class="rule"><span class="rule-label">The shortcuts</span><ul><li><strong>Follow-through rule:</strong> when you prove one fact, write down what else it gives before you look at the options. Then test every option. A "true" needs a proof. A "false" needs one counterexample.</li><li><strong>For a 3×3, adj(adj M) = (det M)·M.</strong> Also adj M = (det M)·M⁻¹, and M·adj M = (det M)·I.</li><li><strong>Equal row sums or column sums in a determinant:</strong> add all columns into the first column, factor out the common sum, then subtract rows to clear zeros. Your CTA17 Q14: every row sums to 2(a+b+c), and the determinant is <span class="m">2(a+b+c)³</span>. So k = 2, α = β = γ = 1, and (2α+β+γ)^k = 4² = 16. You wrote 1024.</li></ul></div>
 <div class="stepper" id="st1">
 <span class="stepper-label">Worked example · the exact problem you saw</span>
 <p>M is a 3×3 invertible real matrix with M⁻¹ = adj(adj M). Which of these are ALWAYS true? (A) M = I  (B) (adj M)² = I  (C) M² = I  (D) det M = 1</p>
@@ -275,7 +306,7 @@
 <div class="pattern-head"><h2>2 · Series: closed forms, modulus and the least term</h2><span class="chip chip-2">Sequences &amp; series</span><span class="seen">Seen in CTA16 and CTA17</span></div>
 <p class="why">Three of your wrong answers in CTA16 and CTA17 came from the last step, not from a missing method. You started the common-term AP at a later term (Q12). You dropped a negative term under a modulus (Q13). You did an alternating arithmetico-geometric series in 2 minutes and got 20 instead of 54 (CTA17 Q11). Two more questions in CTA16 (Q5, Q17) were skipped. The methods are short. A final-step checklist is what you need.</p>
 <div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this pattern ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
-<div class="rule"><span class="rule-label">The shortcuts</span><ul><li><strong>Modulus:</strong> find where the sign changes first. List the sign of every term before you add. A negative term under |·| counts as plus, not zero and not minus.</li><li><strong>Least common term:</strong> the common terms of AP(a1; d1) and AP(a2; d2) form an AP with d = lcm(d1, d2). Combine the congruences two at a time, then check that your number is really a term of each AP. Give the least one.</li><li><strong>Alternating arithmetico-geometric series:</strong> write the sum as Σ n²·y^(n−1) and use <span class="m">(1+y)/(1−y)³</span> for |y| &lt; 1. The alternating sign is just a negative y.</li><li><strong>Telescoping split:</strong> for k ≥ 3, (k−1)(k−2)/(k−1)! = 1/(k−3)!. Split the polynomial so that each piece cancels its neighbour.</li></ul></div>
+<div class="rule"><span class="rule-label">The shortcuts</span><ul><li><strong>Modulus:</strong> find where the sign changes first. List the sign of every term before you add. A negative term under |·| counts as plus, not zero and not minus.</li><li><strong>Least common term:</strong> the common terms of AP(a1; d1) and AP(a2; d2) form an AP with d = lcm(d1, d2). Combine the remainder conditions two at a time, then check that your number is really a term of each AP. Give the least one.</li><li><strong>Alternating arithmetico-geometric series:</strong> write the sum as Σ n²·y^(n−1) and use <span class="m">(1+y)/(1−y)³</span> for |y| &lt; 1. The alternating sign is just a negative y.</li><li><strong>Telescoping split:</strong> for k ≥ 3, (k−1)(k−2)/(k−1)! = 1/(k−3)!. Split the polynomial so that each piece cancels its neighbour.</li></ul></div>
 <div class="stepper" id="st2">
 <span class="stepper-label">Worked example · the exact problem you saw</span>
 <p>For k = 1, 2, …, 100, S_k is the sum of the infinite GP with first term (k−1)/k! and common ratio 1/k. Find 100²/100! + Σ |(k²−3k+1)·S_k|, summed for k = 1 to 100.</p>
@@ -288,7 +319,7 @@
 <button class="step-btn" onclick="stepNext('st2')">Show next step →</button>
 <div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
 </div>
-<div class="note"><strong>Your CTA16 Q12, solved:</strong> x ≡ 1 (mod 3), 2 (mod 5), 3 (mod 7). The first two give x = 7 + 15j. Put that in the third: 7 + 15j ≡ 3 (mod 7), so j ≡ 3 and x = 52. Check that 52 is a term of each AP: 1 + 3·17, 2 + 5·10, 3 + 7·7. So a = 52 and d = 105, and a + d = <strong>157</strong>. Your 262 is 157 + 105: it starts from 157, which is the second common term.</div>
+<div class="note"><strong>Your CTA16 Q12, solved:</strong> x leaves remainder 1 when divided by 3, remainder 2 when divided by 5, and remainder 3 when divided by 7. The first two give x = 7 + 15j. Put that in the third: 7 + 15j leaves remainder 3 when divided by 7, so j leaves remainder 3 when divided by 7 and x = 52. Check that 52 is a term of each AP: 1 + 3·17, 2 + 5·10, 3 + 7·7. So a = 52 and d = 105, and a + d = <strong>157</strong>. Your 262 is 157 + 105: it starts from 157, which is the second common term.</div>
 <div class="note"><strong>Your CTA17 Q11, solved:</strong> the sum is Σ n²·y^(n−1) with y = −1/5. So it equals (1+y)/(1−y)³ = (4/5)/(6/5)³ = (4/5)·(125/216) = 25/54. Then 25/k = 25/54 and k = <strong>54</strong>.</div>
 </section>
 
@@ -300,7 +331,7 @@
 <div class="stepper" id="st3">
 <span class="stepper-label">Worked example · the exact problem you saw</span>
 <p>The point (l, l+1) lies strictly inside the triangle with vertices A(0, 3), B(−2, 0), C(6, 1), for l in (p, q). Find q − p.</p>
-<p class="scoreline">Your answer: <strong>2.19</strong>. Correct answer: <strong>33/14 ≈ 2.357</strong>.</p>
+<p class="scoreline">Your answer: <strong>2.19</strong>. Correct answer: <strong>33/14 ≈ 2.357</strong>.</p><figure class="pfig" data-desc="Diagram: triangle with vertices A(0, 3), B(−2, 0) and C(6, 1). The dashed line y = x + 1 crosses side BC and side AC; the part of the line inside the triangle is drawn thick."><svg viewBox="0 0 300 190" role="img" aria-label="Triangle A(0, 3), B(−2, 0), C(6, 1) crossed by the line y = x + 1"><polygon points="92.0,51.5 34.0,138.5 266.0,109.5" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/><line x1="17.5" y1="184.0" x2="195.5" y2="6.0" stroke="currentColor" stroke-opacity=".45" stroke-width="1.5" stroke-dasharray="5 4"/><line x1="67.1" y1="134.4" x2="135.5" y2="66.0" stroke="var(--highlight)" stroke-width="4" stroke-linecap="round"/><circle cx="67.1" cy="134.4" r="4" fill="var(--highlight)"/><circle cx="135.5" cy="66.0" r="4" fill="var(--highlight)"/><text x="86.4" y="48.5" text-anchor="end">A(0, 3)</text><circle cx="92.0" cy="51.5" r="2.5" fill="currentColor"/><text x="25.6" y="145.8" text-anchor="end">B(−2, 0)</text><circle cx="34.0" cy="138.5" r="2.5" fill="currentColor"/><text x="275.0" y="114.1" text-anchor="start">C(6, 1)</text><circle cx="266.0" cy="109.5" r="2.5" fill="currentColor"/><text x="195.5" y="11.0" text-anchor="middle" fill="currentColor" opacity=".8">y = x + 1</text></svg><figcaption>The line y = x + 1 enters through BC and leaves through AC. It never crosses AB itself, only the extended side.</figcaption></figure>
 <div class="step" data-n="1"><span class="tag">Step 1 · turn the point into a line</span>The point (l, l+1) has y = x + 1, so it slides along the line y = x + 1. We need the stretch of that line that is strictly inside triangle ABC.</div>
 <div class="step" data-n="2" hidden><span class="tag">Step 2 · write the three sides</span><span class="eq m">AB: y = 3(x+2)/2     BC: y = (x+2)/8     AC: y = 3 − x/3</span> Check each with its two vertices. AB gives 3 at x = 0 and 0 at x = −2. BC gives 0 at x = −2 and 1 at x = 6. AC gives 3 at x = 0 and 1 at x = 6.</div>
 <div class="step" data-n="3" hidden><span class="tag">Step 3 · intersect with y = x + 1, then check the segment</span>AB: x + 1 = 3(x+2)/2 gives x = −4. AB runs from x = −2 to 0, so this is off the segment. The line never crosses AB.<br>BC: x + 1 = (x+2)/8 gives 8x + 8 = x + 2, so x = −6/7. It is between −2 and 6. ✓<br>AC: x + 1 = 3 − x/3 gives 4x/3 = 2, so x = 3/2. It is between 0 and 6. ✓</div>
@@ -334,12 +365,12 @@
 <section class="practice-head">
 <span class="eyebrow">Practice Set</span>
 <h2 style="margin-top:8px; font-size:1.4rem;">9 fresh problems, same four patterns</h2>
-<p style="color:var(--ink-soft)">Same techniques, new problems, all at level L4. Series gets three problems because it caused three different slips. The others get two.</p>
+<p style="color:var(--ink-soft)">Same techniques, new problems, all at level L4. Series gets three problems because it caused three different slips. The others get two. Each problem is multiple choice with options A to D, and every wrong option is a mistake you could really make. Single-correct problems mark themselves as soon as you pick. In multi-correct problems you must tick all the correct options, then press Check answer.</p>
 </section>
 
 <div class="mode-row">
 <button class="mode-btn" data-mode="practice" aria-pressed="true" onclick="setMode('practice', this)">Practice (untimed)</button>
-<button class="mode-btn" data-mode="timed" aria-pressed="false" onclick="setMode('timed', this)">Timed · 40 min</button>
+<button class="mode-btn" data-mode="timed" aria-pressed="false" onclick="setMode('timed', this)">Timed — 40 min</button>
 <div class="timer-bar" id="timerBar" hidden>
 <span class="time" id="timeDisplay">40:00</span>
 <button class="timer-btn" id="startBtn" onclick="startTimer()">Start</button>
@@ -349,67 +380,94 @@
 <p class="mode-help">First pass: stay in Practice mode. Save Timed mode for a second attempt.</p>
 
 <div class="grid">
-<div class="card">
-<div class="card-head"><span class="qnum">1</span><span class="card-tags"><span class="lvl">L4</span><span class="chip chip-1">Matrices &amp; determinants</span></span></div>
-<p>M is a 4×4 real invertible matrix with adj(adj M) = M⁻¹. Which are ALWAYS true? (A) det M = 1  (B) M² = I  (C) (det M)² = 1  (D) M = I or M = −I</p>
-<button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
-<div class="answer" hidden><span class="val">Answer: B and C</span><div class="why"><ol><li>For a 4×4, adj(adj M) = (det M)²·M. Write d = det M.</li><li>The condition becomes d²M = M⁻¹. Multiply by M: d²M² = I.</li><li>Take determinants: det(d²M²) = d⁸·d² = d¹⁰ = 1.</li><li>d is real, so d = ±1 and d² = 1. Option C is true.</li><li>Then M² = I. Option B is true.</li><li>Test A and D with M = diag(1, 1, 1, −1): det = −1, adj(adj M) = d²M = M = M⁻¹. It meets the condition, but det M ≠ 1 and M ≠ ±I. So A and D are false.</li></ol><div class="trap-note"><strong>Trap:</strong> copying the 3×3 worked example and deciding d = 1. For a 4×4 the power of d is even, so d = −1 is allowed.</div></div></div>
+<div class="card" id="q1" data-kind="multi" data-correct="AC">
+<div class="card-head"><span class="qnum">1</span><span class="card-tags"><span class="qtype">Multi-correct</span><span class="chip chip-1">Matrices &amp; determinants</span><span class="lvl">L4</span></span></div>
+<p class="stem">M is a 3×3 real matrix with <span class='m'>det M ≠ 0</span> and <span class='m'>adj M = Mᵀ</span>. Select all statements that are ALWAYS true.</p>
+<p class="note" style="margin:6px 0 0">Select every correct option. It counts only if your set matches exactly.</p>
+<div class="opts" role="group" aria-label="Options for problem 1"><label class="opt"><input type="checkbox" name="q1" value="A"><span class="ol">A</span><span class="ot"><span class='m'>det M = 1</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q1" value="B"><span class="ol">B</span><span class="ot">M is symmetric.</span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q1" value="C"><span class="ol">C</span><span class="ot"><span class='m'>M Mᵀ = I</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q1" value="D"><span class="ol">D</span><span class="ot"><span class='m'>(adj M)² = I</span></span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="check-btn" type="button" onclick="checkCard(this)">Check answer</button><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: A, C</span><div class="why"><ol><li>Use M · adj M = (det M)·I. Write d = det M. With adj M = Mᵀ this becomes M Mᵀ = d·I.</li><li>Take determinants of both sides: det M · det Mᵀ = d², and det(dI) = d³ for a 3×3. So d² = d³.</li><li>M is invertible, so d ≠ 0. Divide by d²: d = 1. Option A is true.</li><li>Put d = 1 back: M Mᵀ = I. Option C is true. (So M is orthogonal and adj M = Mᵀ = M⁻¹.)</li><li>Test B and D with a rotation, M = [[0, −1, 0], [1, 0, 0], [0, 0, 1]]. Its det is 1 and adj M = M⁻¹ = Mᵀ, so it meets the condition.</li><li>But this M is not symmetric (B false), and (adj M)² = (Mᵀ)² turns the plane by 180°, which is diag(−1, −1, 1), not I (D false).</li></ol></div><ul class="mistakes"><li><strong>B</strong>: read adj M = Mᵀ as if M equalled its own transpose; one rotation matrix refutes it</li><li><strong>D</strong>: copied the M² = I conclusion from the worked example; here the condition gives orthogonal, not self-inverse</li></ul></div>
 <div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
 </div>
-<div class="card">
-<div class="card-head"><span class="qnum">2</span><span class="card-tags"><span class="lvl">L4</span><span class="chip chip-1">Matrices &amp; determinants</span></span></div>
-<p>A = <span class="mat" data-t="[[a, b, c], [c, a, b], [b, c, a]]" style="--cols:3"><span>a</span><span>b</span><span>c</span><span>c</span><span>a</span><span>b</span><span>b</span><span>c</span><span>a</span></span>, where a + b + c = 3 and ab + bc + ca = 0. Find det(2·adj A) / det A.</p>
-<button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
-<div class="answer" hidden><span class="val">Answer: 216</span><div class="why"><ol><li>Every row of A sums to a + b + c. Add columns 2 and 3 into column 1 and take the common factor out: det A = (a + b + c)·det[[1, b, c], [1, a, b], [1, c, a]].</li><li>Expand the remaining determinant: it equals a² + b² + c² − ab − bc − ca.</li><li>a² + b² + c² = (a + b + c)² − 2(ab + bc + ca) = 9 − 0 = 9.</li><li>So det A = 3·(9 − 0) = 27.</li><li>For a 3×3: det(adj A) = (det A)² and det(2B) = 2³·det B. So det(2·adj A) = 8·(det A)².</li><li>Divide by det A: 8·det A = 8 × 27 = 216. (Check: A = [[0, 0, 3], [3, 0, 0], [0, 3, 0]] meets the conditions and has det 27.)</li></ol><div class="trap-note"><strong>Trap:</strong> writing det(2B) = 2·det B. For a 3×3 the factor is 2³ = 8. Using 2 gives 54.</div></div></div>
+<div class="card" id="q2" data-kind="single" data-correct="C">
+<div class="card-head"><span class="qnum">2</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-1">Matrices &amp; determinants</span><span class="lvl">L4</span></span></div>
+<p class="stem">A = <span class="mat" data-t="[[a, b, c], [c, a, b], [b, c, a]]" style="--cols:3"><span>a</span><span>b</span><span>c</span><span>c</span><span>a</span><span>b</span><span>b</span><span>c</span><span>a</span></span>, where <span class='m'>a + b + c = 3</span> and <span class='m'>ab + bc + ca = 0</span>. Then <span class='m'>det(2·adj A) / det A</span> equals:</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 2"><label class="opt"><input type="radio" name="q2" value="A"><span class="ol">A</span><span class="ot"><span class='m'>54</span></span><span class="mark"></span></label><label class="opt"><input type="radio" name="q2" value="B"><span class="ol">B</span><span class="ot"><span class='m'>5832</span></span><span class="mark"></span></label><label class="opt"><input type="radio" name="q2" value="C"><span class="ol">C</span><span class="ot"><span class='m'>216</span></span><span class="mark"></span></label><label class="opt"><input type="radio" name="q2" value="D"><span class="ol">D</span><span class="ot"><span class='m'>8</span></span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: C · 216</span><div class="why"><ol><li>Every row of A sums to a + b + c. Add columns 2 and 3 into column 1 and take the common factor out: det A = (a + b + c)·det[[1, b, c], [1, a, b], [1, c, a]].</li><li>Expand the remaining determinant: it equals a² + b² + c² − ab − bc − ca.</li><li>a² + b² + c² = (a + b + c)² − 2(ab + bc + ca) = 9 − 0 = 9.</li><li>So det A = 3·(9 − 0) = 27.</li><li>For a 3×3: det(adj A) = (det A)² and det(2B) = 2³·det B. So det(2·adj A) = 8·(det A)².</li><li>Divide by det A: 8·det A = 8 × 27 = 216. (Check: A = [[0, 0, 3], [3, 0, 0], [0, 3, 0]] meets the conditions and has det 27.)</li></ol></div><ul class="mistakes"><li><strong>A</strong>: wrote det(2B) = 2·det B; for a 3×3 the factor is 2³ = 8</li><li><strong>B</strong>: found det(2·adj A) = 8 × 27² but forgot to divide by det A</li><li><strong>D</strong>: used det(adj A) = det A instead of (det A)², so the ratio collapses to 8</li></ul></div>
 <div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
 </div>
-<div class="card">
-<div class="card-head"><span class="qnum">3</span><span class="card-tags"><span class="lvl">L4</span><span class="chip chip-2">Sequences &amp; series</span></span></div>
-<p>For k = 1, 2, …, 40, T_k is the sum of the infinite GP with first term k/(k+1)! and common ratio 1/(k+1). Find 82/40! + Σ |2(k²−k−1)·T_k|, summed for k = 1 to 40.</p>
-<button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
-<div class="answer" hidden><span class="val">Answer: 6</span><div class="why"><ol><li>T_k = [k/(k+1)!] / [k/(k+1)] = 1/k!.</li><li>The multiplier k²−k−1 is −1 at k = 1, then 1 at k = 2 and positive after. Only k = 1 is negative.</li><li>The k = 1 term under the modulus is |2·(−1)·1| = 2.</li><li>For k ≥ 2: k²−k−1 = k(k−1) − 1, so 2(k²−k−1)/k! = 2/(k−2)! − 2/k!.</li><li>Telescope k = 2 to 40: 2(1/0! + 1/1!) − 2(1/39! + 1/40!) = 4 − 2·41/40! = 4 − 82/40!.</li><li>Total = 2 + (4 − 82/40!) + 82/40! = 6.</li></ol><div class="trap-note"><strong>Trap:</strong> reading |…| as "ignore the negative term". The k = 1 term counts as +2.</div></div></div>
+<div class="card" id="q3" data-kind="single" data-correct="B">
+<div class="card-head"><span class="qnum">3</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-2">Sequences &amp; series</span><span class="lvl">L4</span></span></div>
+<p class="stem">For k = 1, 2, …, 40, <span class='m'>T_k</span> is the sum of the infinite GP with first term <span class='m'>k/(k+1)!</span> and common ratio <span class='m'>1/(k+1)</span>. Find <span class='m'>82/40! + Σ |2(k²−k−1)·T_k|</span>, summed for k = 1 to 40.</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 3"><label class="opt"><input type="radio" name="q3" value="A"><span class="ol">A</span><span class="ot"><span class='m'>4</span></span><span class="mark"></span></label><label class="opt"><input type="radio" name="q3" value="B"><span class="ol">B</span><span class="ot"><span class='m'>6</span></span><span class="mark"></span></label><label class="opt"><input type="radio" name="q3" value="C"><span class="ol">C</span><span class="ot"><span class='m'>2</span></span><span class="mark"></span></label><label class="opt"><input type="radio" name="q3" value="D"><span class="ol">D</span><span class="ot"><span class='m'>5</span></span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: B · 6</span><div class="why"><ol><li>T_k = [k/(k+1)!] / [k/(k+1)] = 1/k!.</li><li>The multiplier k²−k−1 is −1 at k = 1, then 1 at k = 2 and positive after. Only k = 1 is negative.</li><li>The k = 1 term under the modulus is |2·(−1)·1| = 2.</li><li>For k ≥ 2: k²−k−1 = k(k−1) − 1, so 2(k²−k−1)/k! = 2/(k−2)! − 2/k!.</li><li>Telescope k = 2 to 40: 2(1/0! + 1/1!) − 2(1/39! + 1/40!) = 4 − 2·41/40! = 4 − 82/40!.</li><li>Total = 2 + (4 − 82/40!) + 82/40! = 6.</li></ol></div><ul class="mistakes"><li><strong>A</strong>: dropped the k = 1 term, reading |…| as "ignore the negative one"</li><li><strong>C</strong>: kept the k = 1 term as −2 instead of |−2| = +2</li><li><strong>D</strong>: took the k = 1 term as |−1| = 1 and lost the factor 2</li></ul></div>
 <div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
 </div>
-<div class="card">
-<div class="card-head"><span class="qnum">4</span><span class="card-tags"><span class="lvl">L4</span><span class="chip chip-2">Sequences &amp; series</span></span></div>
-<p>S = Σ (−1)^(n+1) · (n² + n − 1) / 3^n, summed for n = 1 to ∞. Find 1/S.</p>
-<button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
-<div class="answer" hidden><span class="val">Answer: 32</span><div class="why"><ol><li>Let y = −1/3. Then (−1)^(n+1)/3^n = −y^n, so S = −Σ (n² + n − 1)·y^n.</li><li>Split into three sums, all from n = 1, with |y| &lt; 1.</li><li>Σ y^n = y/(1−y) = (−1/3)/(4/3) = −1/4.</li><li>Σ n·y^n = y/(1−y)² = (−1/3)/(16/9) = −3/16.</li><li>Σ n²·y^n = y(1+y)/(1−y)³ = (−1/3)(2/3)/(64/27) = −3/32.</li><li>Σ (n² + n − 1)·y^n = −3/32 − 3/16 + 1/4 = (−3 − 6 + 8)/32 = −1/32.</li><li>S = −(−1/32) = 1/32, so 1/S = 32. (Check: the partial sums swing around 0.03.)</li></ol><div class="trap-note"><strong>Trap:</strong> the sign flip in step 1 and the −1 term. It is Σ y^n from n = 1, so it is y/(1−y), not 1/(1−y).</div></div></div>
+<div class="card" id="q4" data-kind="single" data-correct="C">
+<div class="card-head"><span class="qnum">4</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-2">Sequences &amp; series</span><span class="lvl">L4</span></span></div>
+<p class="stem"><span class='m'>S = Σ (−1)^(n+1) · (n² + n − 1) / 3^n</span>, summed for n = 1 to ∞. Then <span class='m'>1/S</span> equals:</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 4"><label class="opt"><input type="radio" name="q4" value="A"><span class="ol">A</span><span class="ot"><span class='m'>−32</span></span><span class="mark"></span></label><label class="opt"><input type="radio" name="q4" value="B"><span class="ol">B</span><span class="ot"><span class='m'>4/7</span></span><span class="mark"></span></label><label class="opt"><input type="radio" name="q4" value="C"><span class="ol">C</span><span class="ot"><span class='m'>32</span></span><span class="mark"></span></label><label class="opt"><input type="radio" name="q4" value="D"><span class="ol">D</span><span class="ot"><span class='m'>32/33</span></span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: C · 32</span><div class="why"><ol><li>Let y = −1/3. Then (−1)^(n+1)/3^n = −y^n, so S = −Σ (n² + n − 1)·y^n.</li><li>Split into three sums, all from n = 1, with |y| &lt; 1.</li><li>Σ y^n = y/(1−y) = (−1/3)/(4/3) = −1/4.</li><li>Σ n·y^n = y/(1−y)² = (−1/3)/(16/9) = −3/16.</li><li>Σ n²·y^n = y(1+y)/(1−y)³ = (−1/3)(2/3)/(64/27) = −3/32.</li><li>Σ (n² + n − 1)·y^n = −3/32 − 3/16 + 1/4 = (−3 − 6 + 8)/32 = −1/32.</li><li>S = −(−1/32) = 1/32, so 1/S = 32. (Check: the partial sums swing around 0.03.)</li></ol></div><ul class="mistakes"><li><strong>A</strong>: lost the minus sign from (−1)^(n+1) = −y^n, so S came out as −1/32</li><li><strong>B</strong>: ignored the alternating sign and used y = +1/3, which gives S = 7/4</li><li><strong>D</strong>: used 1/(1−y) for Σ y^n starting at n = 1, instead of y/(1−y)</li></ul></div>
 <div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
 </div>
-<div class="card">
-<div class="card-head"><span class="qnum">5</span><span class="card-tags"><span class="lvl">L4</span><span class="chip chip-2">Sequences &amp; series</span></span></div>
-<p>AP(2; 3) ∩ AP(30; 4) ∩ AP(1; 5) = AP(a; d), where AP(first term; common difference). Find a + d.</p>
-<button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
-<div class="answer" hidden><span class="val">Answer: 146</span><div class="why"><ol><li>Write each AP as a condition: x ≡ 2 (mod 3); x ≡ 2 (mod 4) with x ≥ 30; x ≡ 1 (mod 5).</li><li>The first two give x ≡ 2 (mod 12), so x = 2 + 12j.</li><li>Put that in the third: 2 + 12j ≡ 1 (mod 5), so 2j ≡ 4 and j ≡ 2 (mod 5). Hence x ≡ 26 (mod 60).</li><li>The candidates are 26, 86, 146, …</li><li>Boundary check: AP(30; 4) starts at 30, so 26 is not one of its terms.</li><li>The least common term is a = 86. Check: 86 = 2 + 3·28 = 30 + 4·14 = 1 + 5·17.</li><li>d = lcm(3, 4, 5) = 60, so a + d = 146.</li></ol><div class="trap-note"><strong>Trap:</strong> taking 26, the first solution of the congruences, without checking that it is a term of every AP.</div></div></div>
+<div class="card" id="q5" data-kind="multi" data-correct="ABD">
+<div class="card-head"><span class="qnum">5</span><span class="card-tags"><span class="qtype">Multi-correct</span><span class="chip chip-2">Sequences &amp; series</span><span class="lvl">L4</span></span></div>
+<p class="stem">The common terms of AP(2; 3), AP(30; 4) and AP(1; 5) form an AP (first term; common difference). Select all correct statements.</p>
+<p class="note" style="margin:6px 0 0">Select every correct option. It counts only if your set matches exactly.</p>
+<div class="opts" role="group" aria-label="Options for problem 5"><label class="opt"><input type="checkbox" name="q5" value="A"><span class="ol">A</span><span class="ot"><span class='m'>d = 60</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q5" value="B"><span class="ol">B</span><span class="ot"><span class='m'>a = 86</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q5" value="C"><span class="ol">C</span><span class="ot"><span class='m'>a = 26</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q5" value="D"><span class="ol">D</span><span class="ot"><span class='m'>266</span> is a common term.</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="check-btn" type="button" onclick="checkCard(this)">Check answer</button><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: A, B, D</span><div class="why"><ol><li>Terms of the three APs: x = 2 + 3p, x = 30 + 4q and x = 1 + 5r.</li><li>The first two: x leaves remainder 2 when divided by 3, and remainder 2 when divided by 4 (30 = 28 + 2), with x ≥ 30. So x leaves remainder 2 when divided by 12: x = 2 + 12j.</li><li>Put that in the third: x leaves remainder 1 when divided by 5. 2 + 12j: j = 0, 1, 2 give 2, 14, 26, and 26 = 1 + 5·5. So x = 26 is the first solution of the conditions, and the next are 26 + 60 = 86, 146, …</li><li>Boundary check: AP(30; 4) starts at 30, so 26 is not one of its terms. The least common term is a = 86. Check: 86 = 2 + 3·28 = 30 + 4·14 = 1 + 5·17.</li><li>d = lcm(3, 4, 5) = 60. A and B are true, C is false.</li><li>The common terms are 86, 146, 206, 266, …, so 266 = 86 + 3·60 is one. D is true.</li></ol></div><ul class="mistakes"><li><strong>C</strong>: took 26, the first solution of the remainder conditions, without checking that it is a term of AP(30; 4)</li></ul></div>
 <div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
 </div>
-<div class="card">
-<div class="card-head"><span class="qnum">6</span><span class="card-tags"><span class="lvl">L4</span><span class="chip chip-3">Coordinate geometry</span></span></div>
-<p>The point (l, l−2) lies strictly inside the triangle A(1, 1), B(7, 2), C(3, 6), for l in (p, q). Find q − p.</p>
-<button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
-<div class="answer" hidden><span class="val">Answer: 21/10 = 2.1</span><div class="why"><ol><li>The point slides along y = x − 2. We need the stretch of this line inside the triangle.</li><li>Sides: AB: y = 1 + (x−1)/6. BC: y = 9 − x. CA: y = 1 + 5(x−1)/2.</li><li>AB: x − 2 = 1 + (x−1)/6 gives 5x = 17, so x = 17/5. AB spans x from 1 to 7, so keep it.</li><li>BC: x − 2 = 9 − x gives x = 11/2. BC spans x from 3 to 7, so keep it.</li><li>CA: x − 2 = 1 + 5(x−1)/2 gives x = −1/3. CA spans x from 1 to 3, so this crossing is off the triangle. Ignore it.</li><li>Test l = 4: the point (4, 2) is inside, so the interval is (17/5, 11/2).</li><li>q − p = 11/2 − 17/5 = 55/10 − 34/10 = 21/10.</li></ol><div class="trap-note"><strong>Trap:</strong> using the third crossing. A crossing outside its own segment is not a crossing of the triangle.</div></div></div>
+<div class="card" id="q6" data-kind="single" data-correct="D">
+<div class="card-head"><span class="qnum">6</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-3">Coordinate geometry</span><span class="lvl">L4</span></span></div>
+<p class="stem">The point <span class='m'>(l, l − 2)</span> lies strictly inside the triangle <span class='m'>A(1, 1), B(7, 2), C(3, 6)</span>, for l in (p, q). Find <span class='m'>q − p</span>.</p>
+<figure class="pfig" data-desc="Diagram: triangle with vertices A(1, 1), B(7, 2) and C(3, 6). The dashed line y = x − 2 crosses side AB and side BC; the part of the line inside the triangle is drawn thick."><svg viewBox="0 0 300 190" role="img" aria-label="Triangle A(1, 1), B(7, 2), C(3, 6) crossed by the line y = x − 2"><polygon points="76.8,156.0 223.2,131.6 125.6,34.0" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/><line x1="97.6" y1="184.0" x2="275.6" y2="6.0" stroke="currentColor" stroke-opacity=".45" stroke-width="1.5" stroke-dasharray="5 4"/><line x1="135.4" y1="146.2" x2="186.6" y2="95.0" stroke="var(--highlight)" stroke-width="4" stroke-linecap="round"/><circle cx="135.4" cy="146.2" r="4" fill="var(--highlight)"/><circle cx="186.6" cy="95.0" r="4" fill="var(--highlight)"/><text x="69.6" y="165.4" text-anchor="end">A(1, 1)</text><circle cx="76.8" cy="156.0" r="2.5" fill="currentColor"/><text x="231.8" y="138.2" text-anchor="start">B(7, 2)</text><circle cx="223.2" cy="131.6" r="2.5" fill="currentColor"/><text x="123.6" y="26.0" text-anchor="middle">C(3, 6)</text><circle cx="125.6" cy="34.0" r="2.5" fill="currentColor"/><text x="260.0" y="11.0" text-anchor="middle" fill="currentColor" opacity=".8">y = x − 2</text></svg><figcaption>The line y = x − 2 enters the triangle through one side and leaves through another; the thick part is the stretch inside.</figcaption></figure><p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 6"><label class="opt"><input type="radio" name="q6" value="A"><span class="ol">A</span><span class="ot"><span class='m'>35/6</span></span><span class="mark"></span></label><label class="opt"><input type="radio" name="q6" value="B"><span class="ol">B</span><span class="ot"><span class='m'>56/15</span></span><span class="mark"></span></label><label class="opt"><input type="radio" name="q6" value="C"><span class="ol">C</span><span class="ot"><span class='m'>9/2</span></span><span class="mark"></span></label><label class="opt"><input type="radio" name="q6" value="D"><span class="ol">D</span><span class="ot"><span class='m'>21/10</span></span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: D · 21/10 = 2.1</span><div class="why"><ol><li>The point slides along y = x − 2. We need the stretch of this line inside the triangle.</li><li>Sides: AB: y = 1 + (x−1)/6. BC: y = 9 − x. CA: y = 1 + 5(x−1)/2.</li><li>AB: x − 2 = 1 + (x−1)/6 gives 5x = 17, so x = 17/5. AB spans x from 1 to 7, so keep it.</li><li>BC: x − 2 = 9 − x gives x = 11/2. BC spans x from 3 to 7, so keep it.</li><li>CA: x − 2 = 1 + 5(x−1)/2 gives x = −1/3. CA spans x from 1 to 3, so this crossing is off the triangle. Ignore it.</li><li>Test l = 4: the point (4, 2) is inside, so the interval is (17/5, 11/2).</li><li>q − p = 11/2 − 17/5 = 55/10 − 34/10 = 21/10.</li></ol></div><ul class="mistakes"><li><strong>A</strong>: used the crossing with BC and the crossing with the extended side CA (x = −1/3): 11/2 + 1/3</li><li><strong>B</strong>: used the crossing with AB and the crossing with the extended side CA: 17/5 + 1/3</li><li><strong>C</strong>: took the interval to start at x = 1 (vertex A) instead of at the crossing with AB: 11/2 − 1</li></ul></div>
 <div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
 </div>
-<div class="card">
-<div class="card-head"><span class="qnum">7</span><span class="card-tags"><span class="lvl">L4</span><span class="chip chip-3">Coordinate geometry</span></span></div>
-<p>The point (l, 2l−3) lies strictly inside the triangle O(0, 0), P(8, 0), Q(2, 6), for l in (p, q). Find q − p.</p>
-<button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
-<div class="answer" hidden><span class="val">Answer: 13/6 ≈ 2.167</span><div class="why"><ol><li>The point slides along y = 2x − 3.</li><li>Sides: OP: y = 0. PQ: y = 8 − x. QO: y = 3x.</li><li>OP: 2x − 3 = 0 gives x = 3/2. OP spans x from 0 to 8, so keep it.</li><li>PQ: 2x − 3 = 8 − x gives x = 11/3. PQ spans x from 2 to 8, so keep it.</li><li>QO: 2x − 3 = 3x gives x = −3. QO spans x from 0 to 2, so this crossing is off the triangle. Ignore it.</li><li>Test l = 2: the point (2, 1) is inside, so the interval is (3/2, 11/3).</li><li>q − p = 11/3 − 3/2 = 22/6 − 9/6 = 13/6.</li></ol><div class="trap-note"><strong>Trap:</strong> again the third crossing. Always check the crossing against the two end-points of its side.</div></div></div>
+<div class="card" id="q7" data-kind="single" data-correct="B">
+<div class="card-head"><span class="qnum">7</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-3">Coordinate geometry</span><span class="lvl">L4</span></span></div>
+<p class="stem">The point <span class='m'>(l, 2l − 3)</span> lies strictly inside the triangle <span class='m'>O(0, 0), P(8, 0), Q(2, 6)</span>, for l in (p, q). Find <span class='m'>q − p</span>.</p>
+<figure class="pfig" data-desc="Diagram: triangle with vertices O(0, 0), P(8, 0) and Q(2, 6). The dashed line y = 2x − 3 crosses side OP and side PQ; the part of the line inside the triangle is drawn thick."><svg viewBox="0 0 300 190" role="img" aria-label="Triangle O(0, 0), P(8, 0), Q(2, 6) crossed by the line y = 2x − 3"><polygon points="68.7,156.0 231.3,156.0 109.3,34.0" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/><line x1="85.2" y1="184.0" x2="174.2" y2="6.0" stroke="currentColor" stroke-opacity=".45" stroke-width="1.5" stroke-dasharray="5 4"/><line x1="99.2" y1="156.0" x2="143.2" y2="67.9" stroke="var(--highlight)" stroke-width="4" stroke-linecap="round"/><circle cx="99.2" cy="156.0" r="4" fill="var(--highlight)"/><circle cx="143.2" cy="67.9" r="4" fill="var(--highlight)"/><text x="60.9" y="164.6" text-anchor="end">O(0, 0)</text><circle cx="68.7" cy="156.0" r="2.5" fill="currentColor"/><text x="239.6" y="163.5" text-anchor="start">P(8, 0)</text><circle cx="231.3" cy="156.0" r="2.5" fill="currentColor"/><text x="106.5" y="29.5" text-anchor="end">Q(2, 6)</text><circle cx="109.3" cy="34.0" r="2.5" fill="currentColor"/><text x="174.2" y="11.0" text-anchor="middle" fill="currentColor" opacity=".8">y = 2x − 3</text></svg><figcaption>The line y = 2x − 3 enters through the base and leaves through the right side; the thick part is the stretch inside.</figcaption></figure><p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 7"><label class="opt"><input type="radio" name="q7" value="A"><span class="ol">A</span><span class="ot"><span class='m'>20/3</span></span><span class="mark"></span></label><label class="opt"><input type="radio" name="q7" value="B"><span class="ol">B</span><span class="ot"><span class='m'>13/6</span></span><span class="mark"></span></label><label class="opt"><input type="radio" name="q7" value="C"><span class="ol">C</span><span class="ot"><span class='m'>11/3</span></span><span class="mark"></span></label><label class="opt"><input type="radio" name="q7" value="D"><span class="ol">D</span><span class="ot"><span class='m'>9/2</span></span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: B · 13/6 ≈ 2.167</span><div class="why"><ol><li>The point slides along y = 2x − 3.</li><li>Sides: OP: y = 0. PQ: y = 8 − x. QO: y = 3x.</li><li>OP: 2x − 3 = 0 gives x = 3/2. OP spans x from 0 to 8, so keep it.</li><li>PQ: 2x − 3 = 8 − x gives x = 11/3. PQ spans x from 2 to 8, so keep it.</li><li>QO: 2x − 3 = 3x gives x = −3. QO spans x from 0 to 2, so this crossing is off the triangle. Ignore it.</li><li>Test l = 2: the point (2, 1) is inside, so the interval is (3/2, 11/3).</li><li>q − p = 11/3 − 3/2 = 22/6 − 9/6 = 13/6.</li></ol></div><ul class="mistakes"><li><strong>A</strong>: used the crossing with PQ and the crossing with the extended side QO (x = −3): 11/3 + 3</li><li><strong>C</strong>: took the interval to start at x = 0 (vertex O) instead of at the crossing with OP: 11/3 − 0</li><li><strong>D</strong>: used the crossing with OP and the crossing with the extended side QO: 3/2 + 3</li></ul></div>
 <div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
 </div>
-<div class="card">
-<div class="card-head"><span class="qnum">8</span><span class="card-tags"><span class="lvl">L4</span><span class="chip chip-4">Limits</span></span></div>
-<p>lim(x→0) (a·x + b·x cos x − 3 sin x) / x⁵ exists and is finite. Find a, b and the limit.</p>
-<button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
-<div class="answer" hidden><span class="val">Answer: a = 2, b = 1, limit = 1/60</span><div class="why"><ol><li>Expand: sin x = x − x³/6 + x⁵/120 and x cos x = x − x³/2 + x⁵/24.</li><li>Collect the top: (a + b − 3)·x + (−b/2 + 1/2)·x³ + (b/24 − 1/40)·x⁵ + …</li><li>The bottom is x⁵, so for a finite limit every lower power must vanish. That is two conditions: the x and the x³ coefficients are 0.</li><li>x³: −b/2 + 1/2 = 0, so b = 1.</li><li>x: a + 1 − 3 = 0, so a = 2.</li><li>The limit is the x⁵ coefficient: 1/24 − 1/40 = 5/120 − 3/120 = 1/60.</li></ol><div class="trap-note"><strong>Trap:</strong> stopping after one vanishing condition. A bottom of x⁵ needs both the x and the x³ coefficients to be 0.</div></div></div>
+<div class="card" id="q8" data-kind="multi" data-correct="AC">
+<div class="card-head"><span class="qnum">8</span><span class="card-tags"><span class="qtype">Multi-correct</span><span class="chip chip-4">Limits</span><span class="lvl">L4</span></span></div>
+<p class="stem"><span class='m'>lim(x→0) (a·x + b·x cos x − 3 sin x) / x⁵</span> exists and is finite. Select all correct statements.</p>
+<p class="note" style="margin:6px 0 0">Select every correct option. It counts only if your set matches exactly.</p>
+<div class="opts" role="group" aria-label="Options for problem 8"><label class="opt"><input type="checkbox" name="q8" value="A"><span class="ol">A</span><span class="ot"><span class='m'>a = 2</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q8" value="B"><span class="ol">B</span><span class="ot"><span class='m'>a·b = 3</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q8" value="C"><span class="ol">C</span><span class="ot">The limit equals <span class='m'>1/60</span>.</span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q8" value="D"><span class="ol">D</span><span class="ot">The limit equals <span class='m'>1/24</span>.</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="check-btn" type="button" onclick="checkCard(this)">Check answer</button><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: A, C</span><div class="why"><ol><li>Expand: sin x = x − x³/6 + x⁵/120 and x cos x = x − x³/2 + x⁵/24.</li><li>Collect the top: (a + b − 3)·x + (−b/2 + 1/2)·x³ + (b/24 − 1/40)·x⁵ + …</li><li>The bottom is x⁵, so for a finite limit every lower power must vanish. That is two conditions: the x and the x³ coefficients are 0.</li><li>x³: −b/2 + 1/2 = 0, so b = 1.</li><li>x: a + 1 − 3 = 0, so a = 2. A is true. Also a·b = 2 and a + b = 3, so B is false.</li><li>The limit is the x⁵ coefficient: 1/24 − 1/40 = 5/120 − 3/120 = 1/60. C is true, D is false.</li></ol></div><ul class="mistakes"><li><strong>B</strong>: mixed up the condition a + b = 3 with a product; here a·b = 2</li><li><strong>D</strong>: took only the x⁵ term of b·x cos x (1/24) and forgot −3 sin x also has an x⁵ term</li></ul></div>
 <div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
 </div>
-<div class="card">
-<div class="card-head"><span class="qnum">9</span><span class="card-tags"><span class="lvl">L4</span><span class="chip chip-4">Limits</span></span></div>
-<p>lim(x→0) f(x)/x = 1, and lim(x→0) [a·x + x cos x + b sin x] / f(x)³ = 1/2. Find a·b.</p>
-<button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
-<div class="answer" hidden><span class="val">Answer: −30</span><div class="why"><ol><li>Since f(x)/x → 1, f(x)³ behaves like x³. The limit is unchanged with x³ in the bottom.</li><li>Expand the top: (a + 1 + b)·x + (−1/2 − b/6)·x³ + …</li><li>The bottom is x³, so the x coefficient must be 0: a + b = −1.</li><li>The limit is the x³ coefficient: −1/2 − b/6 = 1/2.</li><li>So b = −6, and then a = −1 − b = 5.</li><li>a·b = 5 × (−6) = −30.</li></ol><div class="trap-note"><strong>Trap:</strong> forgetting the sign: the x³ coefficient of x cos x is −1/2 and of b sin x is −b/6.</div></div></div>
+<div class="card" id="q9" data-kind="single" data-correct="C">
+<div class="card-head"><span class="qnum">9</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-4">Limits</span><span class="lvl">L4</span></span></div>
+<p class="stem"><span class='m'>lim(x→0) f(x)/x = 1</span>, and <span class='m'>lim(x→0) [a·x + x cos x + b sin x] / f(x)³ = 1/2</span>. Find <span class='m'>a·b</span>.</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 9"><label class="opt"><input type="radio" name="q9" value="A"><span class="ol">A</span><span class="ot"><span class='m'>−15/2</span></span><span class="mark"></span></label><label class="opt"><input type="radio" name="q9" value="B"><span class="ol">B</span><span class="ot"><span class='m'>−42</span></span><span class="mark"></span></label><label class="opt"><input type="radio" name="q9" value="C"><span class="ol">C</span><span class="ot"><span class='m'>−30</span></span><span class="mark"></span></label><label class="opt"><input type="radio" name="q9" value="D"><span class="ol">D</span><span class="ot"><span class='m'>−72</span></span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: C · −30</span><div class="why"><ol><li>Since f(x)/x → 1, f(x)³ behaves like x³. The limit is unchanged with x³ in the bottom.</li><li>Expand the top: (a + 1 + b)·x + (−1/2 − b/6)·x³ + …</li><li>The bottom is x³, so the x coefficient must be 0: a + b = −1.</li><li>The limit is the x³ coefficient: −1/2 − b/6 = 1/2.</li><li>So b = −6, and then a = −1 − b = 5.</li><li>a·b = 5 × (−6) = −30.</li></ol></div><ul class="mistakes"><li><strong>A</strong>: set the x coefficient equal to the limit 1/2 and the x³ coefficient to 0, which has the roles reversed</li><li><strong>B</strong>: used +b/6 for the x³ coefficient of b sin x; the sign is −b/6</li><li><strong>D</strong>: matched the x³ coefficient to 1 instead of the stated limit 1/2</li></ul></div>
 <div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
 </div>
 </div>
@@ -433,11 +491,42 @@
   }
 
   function toggleAnswer(btn){
-    var ans = btn.nextElementSibling;
-    var isHidden = ans.hidden;
-    ans.hidden = !isHidden;
-    btn.textContent = isHidden ? 'Hide answer' : 'Show answer';
+    var ans = btn.closest('.card').querySelector('.answer');
+    ans.hidden = !ans.hidden;
+    btn.textContent = ans.hidden ? 'Show answer and why' : 'Hide answer and why';
   }
+  function checkCard(el){
+    var card = el.closest('.card');
+    var correct = card.dataset.correct.split('');
+    var chosen = [].slice.call(card.querySelectorAll('input:checked')).map(function(i){return i.value;});
+    if(!chosen.length) return;
+    var exact = chosen.length === correct.length && chosen.every(function(c){return correct.indexOf(c) > -1;});
+    card.querySelectorAll('.opt').forEach(function(o){
+      var v = o.querySelector('input').value, isC = correct.indexOf(v) > -1, isS = chosen.indexOf(v) > -1;
+      o.classList.remove('ok','bad','miss');
+      var m = o.querySelector('.mark');
+      if(isC && isS){ o.classList.add('ok'); m.textContent = '✓ correct'; }
+      else if(isC){ o.classList.add('miss'); m.textContent = '✓ also correct'; }
+      else if(isS){ o.classList.add('bad'); m.textContent = '✗ wrong'; }
+      else { m.textContent = ''; }
+      o.querySelector('input').disabled = true;
+    });
+    var r = card.querySelector('.result');
+    r.hidden = false;
+    r.className = 'result ' + (exact ? 'right' : 'wrong');
+    r.textContent = exact ? 'Right. Correct: ' + correct.join(', ') + '.' : 'Not quite. Correct: ' + correct.join(', ') + '.';
+  }
+  function resetCard(el){
+    var card = el.closest('.card');
+    card.querySelectorAll('.opt').forEach(function(o){
+      o.classList.remove('ok','bad','miss'); o.querySelector('.mark').textContent = '';
+      var i = o.querySelector('input'); i.checked = false; i.disabled = false;
+    });
+    var r = card.querySelector('.result'); r.hidden = true;
+  }
+  document.querySelectorAll('.card[data-kind="single"] input').forEach(function(i){
+    i.addEventListener('change', function(){ checkCard(i); });
+  });
 
   function setMode(mode, btn){
     document.querySelectorAll('.mode-btn').forEach(function(b){
@@ -472,20 +561,23 @@
   }
   renderTime();
 
-
   (function buildAskLinks(){
     var TUTOR = "I'm a JEE aspirant preparing for JEE Advanced. Please act as a patient Maths tutor. Use simple language. Reply in chunks of under 10 lines. Explain why, not just how. Wait for my reply before moving on.";
     var MAXLEN = 3300;
     function clean(el){
       var c = el.cloneNode(true);
       c.querySelectorAll('.mat').forEach(function(m){ m.replaceWith(document.createTextNode(m.getAttribute('data-t') || '[matrix]')); });
-      c.querySelectorAll('.ask-row,.step-btn,.reveal-btn,svg').forEach(function(x){ x.remove(); });
+      c.querySelectorAll('.ask-row,.step-btn,.reveal-btn,.check-btn,.pfig,svg').forEach(function(x){ x.remove(); });
       c.querySelectorAll('br').forEach(function(b){ b.replaceWith(document.createTextNode(' ')); });
       c.querySelectorAll('li,p,div,.tag,.eq,.val,.final').forEach(function(x){ x.appendChild(document.createTextNode(' ')); });
       c.querySelectorAll('.final,.trap-note,.eq').forEach(function(x){ x.insertBefore(document.createTextNode(' '), x.firstChild); });
       return c.textContent.replace(/\s+/g,' ').trim();
     }
     function cut(s, n){ return s.length <= n ? s : s.slice(0, n - 1).trim() + '…'; }
+    function diagram(root){
+      var f = root.querySelector('.pfig');
+      return f ? ' ' + f.getAttribute('data-desc') : '';
+    }
     function fit(parts){
       for (var guard = 0; guard < 400; guard++){
         var url = 'https://claude.ai/new?q=' + encodeURIComponent(parts.map(function(p){ return p.t; }).join(' '));
@@ -516,7 +608,7 @@
       return [
         {t: TUTOR, fixed: true},
         {t: "I'm going through a worked example from my own test. Topic: " + clean(sec.querySelector('h2')) + '.', fixed: true},
-        {t: 'Question: ' + clean(ps[0]), fixed: false},
+        {t: 'Question: ' + clean(ps[0]) + diagram(box), fixed: true},
         {t: 'My result: ' + (ps[1] ? clean(ps[1]) : ''), fixed: false},
         {t: 'Steps in the solution: ' + steps, fixed: false},
         {t: 'Please ask me which step I find hardest, then explain it and give me a similar example to try.', fixed: true}
@@ -524,10 +616,15 @@
     }
     function problemPrompt(card){
       var lvl = card.querySelector('.lvl');
+      var multi = card.getAttribute('data-kind') === 'multi';
+      var opts = Array.prototype.map.call(card.querySelectorAll('.opt'), function(o){
+        return '(' + o.querySelector('.ol').textContent.trim() + ') ' + clean(o.querySelector('.ot'));
+      }).join(' ');
       var ans = card.querySelector('.answer');
       return [
         {t: TUTOR, fixed: true},
-        {t: 'I want to practise this problem' + (lvl ? ' (level ' + lvl.textContent.trim() + ')' : '') + ': ' + clean(card.querySelector('p')), fixed: false},
+        {t: 'I want to practise this problem' + (lvl ? ' (level ' + lvl.textContent.trim() + ')' : '') + ': ' + clean(card.querySelector('.stem')) + diagram(card), fixed: true},
+        {t: 'Type: ' + (multi ? 'multi-correct (one or more options are correct; I must pick all of them).' : 'single-correct (exactly one option is correct).') + ' Options: ' + opts, fixed: true},
         {t: 'For your reference only, do not reveal unless the student asks or has made a real attempt: ' + clean(ans), fixed: false},
         {t: 'Please ask me what I have tried so far, then give me one hint at a time.', fixed: true}
       ];
