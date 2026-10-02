@@ -1,0 +1,721 @@
+<title>CTA Repair Kit</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&amp;family=IBM+Plex+Mono:wght@400;600;700&amp;family=IBM+Plex+Sans:wght@400;600&amp;display=swap">
+<style>
+  :root{
+    --bg:#F5F7FB;
+    --surface:#FFFFFF;
+    --surface-2:#EDF1F8;
+    --ink:#1B2436;
+    --ink-soft:#535F76;
+    --border:#DBE1ED;
+    --accent:#2F5A8A;
+    --accent-soft:#E7EEF7;
+    --highlight:#D99A12;
+    --highlight-ink:#5C4008;
+    --highlight-bg:#FFF6DE;
+    --highlight-border:#F0D796;
+    --good:#2F8F5B;
+    --good-bg:#E5F5EC;
+    --trap:#B8503F;
+    --trap-bg:#FBEAE6;
+    --chip-1:#2F5A8A;
+    --chip-1-bg:#E7EEF7;
+    --chip-2:#7C4FBF;
+    --chip-2-bg:#F0E9FA;
+    --chip-3:#2F8F5B;
+    --chip-3-bg:#E5F5EC;
+    --chip-4:#B4681F;
+    --chip-4-bg:#FBEEDF;
+    --chip-5:#535F76;
+    --chip-5-bg:#EDF1F8;
+    --shadow: 0 1px 2px rgba(27,36,54,.04), 0 8px 24px -12px rgba(27,36,54,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0F131C;
+      --surface:#161C29;
+      --surface-2:#1E2635;
+      --ink:#E7ECF6;
+      --ink-soft:#A6B1C6;
+      --border:#2B3448;
+      --accent:#7BAAE0;
+      --accent-soft:#1B2A3E;
+      --highlight:#E8B84B;
+      --highlight-ink:#FBE8B8;
+      --highlight-bg:#3A2E10;
+      --highlight-border:#5C4A1B;
+      --good:#5FC98C;
+      --good-bg:#12301F;
+      --trap:#E1897A;
+      --trap-bg:#3A1E19;
+      --chip-1:#7BAAE0; --chip-1-bg:#1B2A3E;
+      --chip-2:#C0A2EC; --chip-2-bg:#2A2140;
+      --chip-3:#5FC98C; --chip-3-bg:#12301F;
+      --chip-4:#E3A768; --chip-4-bg:#3A2A14;
+      --chip-5:#A6B1C6; --chip-5-bg:#1E2635;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0F131C;
+    --surface:#161C29;
+    --surface-2:#1E2635;
+    --ink:#E7ECF6;
+    --ink-soft:#A6B1C6;
+    --border:#2B3448;
+    --accent:#7BAAE0;
+    --accent-soft:#1B2A3E;
+    --highlight:#E8B84B;
+    --highlight-ink:#FBE8B8;
+    --highlight-bg:#3A2E10;
+    --highlight-border:#5C4A1B;
+    --good:#5FC98C;
+    --good-bg:#12301F;
+    --trap:#E1897A;
+    --trap-bg:#3A1E19;
+    --chip-1:#7BAAE0; --chip-1-bg:#1B2A3E;
+    --chip-2:#C0A2EC; --chip-2-bg:#2A2140;
+    --chip-3:#5FC98C; --chip-3-bg:#12301F;
+    --chip-4:#E3A768; --chip-4-bg:#3A2A14;
+    --chip-5:#A6B1C6; --chip-5-bg:#1E2635;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+
+  * { box-sizing: border-box; }
+  body{
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    padding-inline: 20px;
+    padding-block: 28px 64px;
+    line-height: 1.55;
+  }
+  .wrap{ max-width: 760px; margin: 0 auto; }
+  h1,h2,h3{ font-family: "Fraunces", Georgia, serif; font-weight: 600; text-wrap: balance; margin: 0; }
+  a { color: var(--accent); }
+  .eyebrow{
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+
+  /* ---------- math helpers ---------- */
+  .m{ font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .97em; }
+  .f{ display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; font-size:.88em; line-height:1.15; margin:0 .15em; }
+  .f .fn{ border-bottom:1.4px solid currentColor; padding:0 .22em .04em; }
+  .f .fd{ padding:.04em .22em 0; }
+  .lim{ display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; font-style:italic; line-height:1.05; margin-right:.18em; }
+  .lim .sub{ font-size:.66em; font-style:normal; color: var(--ink-soft); }
+  .eq{ display:block; margin: 14px 0; padding: 14px 16px; background: var(--surface-2); border-radius: 10px; overflow-x:auto; }
+
+  /* ---------- hero ---------- */
+  .hero{ padding-block: 8px 30px; }
+  .hero h1{ font-size: clamp(1.7rem, 5vw, 2.35rem); margin-top: 10px; }
+  .hero p{ color: var(--ink-soft); max-width: 60ch; }
+  .hero-note{
+    margin-top: 18px; padding: 14px 16px; border-radius: 12px;
+    background: var(--accent-soft); border: 1px solid var(--border);
+    font-size: .93rem;
+  }
+  .asymptote-fig{ width: 100%; max-width: 420px; height: auto; display:block; margin: 18px 0 4px; }
+  @media (prefers-reduced-motion: no-preference){
+    .dot{ animation: approach 3.2s ease-in-out infinite; }
+    @keyframes approach{
+      0%{ transform: translateX(0); }
+      55%{ transform: translateX(190px); }
+      100%{ transform: translateX(190px); }
+    }
+  }
+
+  /* ---------- pattern sections ---------- */
+  .pattern{
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 22px 22px 24px; margin-block: 18px; box-shadow: var(--shadow);
+  }
+  .pattern-head{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom: 6px; }
+  .pattern-head h2{ font-size: 1.28rem; }
+  .chip{
+    font-family:"IBM Plex Mono", monospace; font-size:.68rem; letter-spacing:.05em; text-transform:uppercase;
+    padding: 3px 9px; border-radius: 999px; font-weight: 600; white-space:nowrap;
+  }
+  .chip-1{ color:var(--chip-1); background:var(--chip-1-bg); }
+  .chip-2{ color:var(--chip-2); background:var(--chip-2-bg); }
+  .chip-3{ color:var(--chip-3); background:var(--chip-3-bg); }
+  .chip-4{ color:var(--chip-4); background:var(--chip-4-bg); }
+  .chip-5{ color:var(--chip-5); background:var(--chip-5-bg); }
+  .pattern p{ margin: 10px 0; }
+  .why{ color: var(--ink-soft); font-size: .95rem; }
+
+  .rule{
+    margin-top: 14px; padding: 14px 16px; border-radius: 10px;
+    background: var(--highlight-bg); border: 1px solid var(--highlight-border); color: var(--highlight-ink);
+  }
+  .rule-label{ font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; margin-bottom:6px; display:block; }
+  .rule ul{ margin: 6px 0 0; padding-left: 20px; }
+  .rule li{ margin: 3px 0; }
+
+  /* ---------- stepper (worked examples) ---------- */
+  .stepper{ margin-top: 16px; border-top: 1px dashed var(--border); padding-top: 14px; }
+  .stepper-label{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color: var(--ink-soft); margin-bottom: 8px; display:block; }
+  .step{ padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .step:last-of-type{ border-bottom: none; }
+  .step .tag{ font-weight:600; font-size:.82rem; color: var(--accent); display:block; margin-bottom: 4px; }
+  .step-btn{
+    margin-top: 10px; font: inherit; font-weight: 600; font-size: .88rem;
+    background: var(--accent); color: white; border: none; border-radius: 8px;
+    padding: 9px 14px; cursor: pointer;
+  }
+  .step-btn:hover{ filter: brightness(1.08); }
+  .final{ background: var(--good-bg); color: var(--good); border-radius: 8px; padding: 10px 12px; font-weight: 700; margin-top: 6px; }
+  .trap-note{ background: var(--trap-bg); color: var(--trap); border-radius: 8px; padding: 10px 12px; font-size: .9rem; margin-top: 10px; }
+
+  /* ---------- practice section ---------- */
+  .practice-head{ padding-block: 6px 4px; }
+  .mode-row{
+    display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin: 14px 0 8px;
+    background: var(--surface); border:1px solid var(--border); border-radius: 14px; padding: 14px 16px;
+    box-shadow: var(--shadow);
+  }
+  .mode-btn{
+    font: inherit; font-weight:600; font-size:.9rem; padding: 8px 14px; border-radius: 999px;
+    border:1px solid var(--border); background: var(--surface-2); color: var(--ink); cursor:pointer;
+  }
+  .mode-btn[aria-pressed="true"]{ background: var(--accent); color: white; border-color: var(--accent); }
+  .timer-bar{ display:flex; align-items:center; gap:12px; margin-left:auto; flex-wrap:wrap; }
+  .time{ font-family:"IBM Plex Mono",monospace; font-size:1.3rem; font-variant-numeric: tabular-nums; min-width: 64px; }
+  .timer-btn{ font: inherit; font-size:.85rem; font-weight:600; border-radius:8px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); padding:7px 12px; cursor:pointer; }
+  .mode-help{ font-size:.85rem; color: var(--ink-soft); margin: 6px 2px 0; }
+
+  .grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin-top: 16px; }
+  .card{
+    background: var(--surface); border:1px solid var(--border); border-radius: 14px; padding: 16px 16px 14px;
+    box-shadow: var(--shadow); display:flex; flex-direction:column;
+  }
+  .card-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom: 8px; }
+  .qnum{ font-family:"Fraunces",serif; font-weight:700; font-size:1.05rem; color: var(--accent); }
+  .card ol{ padding-left: 20px; margin: 6px 0; }
+  .card li{ margin: 3px 0; }
+  .reveal-btn{
+    align-self:flex-start; margin-top:10px; font: inherit; font-weight:600; font-size:.85rem;
+    background: none; border: 1.4px solid var(--accent); color: var(--accent); border-radius: 8px;
+    padding: 7px 12px; cursor: pointer;
+  }
+  .reveal-btn:hover{ background: var(--accent-soft); }
+  .answer{ margin-top: 10px; padding: 10px 12px; background: var(--good-bg); border-radius: 8px; }
+  .answer .val{ color: var(--good); font-weight: 700; font-family:"IBM Plex Mono",monospace; }
+  .answer .why{ margin-top: 4px; font-size: .88rem; }
+
+  footer{ margin-top: 26px; color: var(--ink-soft); font-size: .88rem; text-align:center; }
+
+  .hero-fig{ width:100%; max-width:440px; height:auto; display:block; margin:18px 0 4px; }
+  .cmp{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px; margin:14px 0 6px; }
+  .cmp .box{ background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:11px 13px; font-size:.9rem; min-width:0; }
+  .cmp .box.now{ background:var(--trap-bg); border-color:var(--trap); }
+  .cmp .box .tagline{ display:block; font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; font-weight:700; color:var(--ink-soft); margin-bottom:5px; }
+  .cmp .box.now .tagline{ color:var(--trap); }
+  .verdict{ font-size:.93rem; margin:10px 0 4px; padding:10px 13px; border-left:3px solid var(--highlight); background:var(--highlight-bg); color:var(--highlight-ink); border-radius:0 8px 8px 0; }
+  .back{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; font-weight:700; color:var(--trap); background:var(--trap-bg); padding:3px 9px; border-radius:999px; white-space:nowrap; }
+  .note{ font-size:.88rem; color:var(--ink-soft); margin-top:8px; }
+  .step, .rule, .cmp, .answer, .eq { overflow-wrap:anywhere; }
+  .eq{ font-size:.93rem; }
+  .ask-row{ margin-top:14px; display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; }
+  .ask{ display:inline-flex; align-items:center; gap:6px; font:inherit; font-weight:600; font-size:.85rem; color:var(--accent); background:var(--accent-soft); border:1.4px solid var(--accent); border-radius:8px; padding:7px 12px; text-decoration:none; }
+  .ask:hover{ filter:brightness(.97); text-decoration:underline; }
+  .ask:focus-visible{ outline:2px solid var(--highlight); outline-offset:2px; }
+  .ask-hint{ font-size:.8rem; color:var(--ink-soft); }
+  .card .ask-row{ margin-top:10px; }
+
+  .card-tags{ display:flex; align-items:center; gap:6px; }
+  .lvl{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; font-weight:700; letter-spacing:.06em; color:var(--highlight-ink); background:var(--highlight-bg); border:1px solid var(--highlight-border); padding:2px 8px; border-radius:999px; }
+  .answer ol{ margin:6px 0 0 1.2em; padding:0; font-size:.88rem; color:var(--ink-soft); }
+  .answer ol li{ margin:3px 0; }
+  .answer .trap-note{ margin-top:8px; }
+</style>
+<div class="wrap">
+<section class="hero">
+<span class="eyebrow">Maths · Focus Session · CTA16 · CTA17 · CTA18</span>
+<h1>Five repeat offenders from your last three Sunday tests</h1>
+<p>Each of these five patterns cost you marks in more than one test (13, 20 and 27 Sep). Every worked example below is a real question you got wrong or skipped. Every practice problem uses the same technique in a new problem at level L4.</p>
+<svg class="hero-fig" viewBox="0 0 260 110" role="img" aria-label="A sine curve crossed by a horizontal line at height k, marking two solutions">
+<line x1="10" y1="55" x2="250" y2="55" stroke="var(--border)" stroke-width="1.5"/>
+<path d="M10,55 C 45,-5 75,-5 130,55 C 185,115 215,115 250,55" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
+<line x1="10" y1="22" x2="250" y2="22" stroke="var(--highlight)" stroke-width="2" stroke-dasharray="5 5"/>
+<circle cx="57" cy="22" r="5" fill="var(--highlight)"/><circle cx="83" cy="22" r="5" fill="var(--highlight)"/>
+<text x="12" y="16" font-size="9" fill="var(--ink-soft)" font-family="IBM Plex Mono, monospace">k</text>
+<text x="12" y="103" font-size="9" fill="var(--ink-soft)" font-family="IBM Plex Mono, monospace">one value of k, two solutions</text>
+</svg>
+<div class="hero-note"><strong>How to use this:</strong> go section by section. Read the comparison, click through the worked example, then do that section's three practice problems. Do all 15 once, untimed. The 40-minute timed mode is for a later pass, on a 10-problem subset.<br><br><strong>Stuck on something?</strong> Every section, worked example and practice problem has an <em>Ask Claude</em> link. It opens a new claude.ai chat with that topic already typed in, set up so Claude explains step by step and does not just hand over answers. You need to be signed in to claude.ai.</div>
+<p class="note level-note"><strong>Level L4.</strong> The practice problems are set at the level of your Sunday ADV-CTA papers: more than one concept, 6 or more steps, and one trap or boundary check. Every problem carries its level tag. The worked examples are your real questions, kept at their real level.</p></section>
+<section class="pattern">
+<div class="pattern-head"><h2>1 · Counting solutions of trig equations</h2><span class="chip chip-1">Trigonometry</span><span class="back">Came back</span></div>
+<p class="why">You need this on almost every Sunday paper. The count depends on two things: which values the equation can actually take, and how many angles give each value. Missing one boundary value or one option changes the whole answer.</p>
+<div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
+<div class="cmp">
+<div class="box"><span class="tagline">Before</span><strong>CTA17 Q4</strong> (7m29s): a multi-correct question on <span class="m">cot(3α−7β)·tan(5β−α)=1</span>. You marked only B and got partial marks.</div>
+<div class="box now"><span class="tagline">Now</span><strong>CTA18 Q7</strong> (3m55s): you answered <strong>4</strong>, the key is <strong>8</strong>. Same test: Q11 was partial again (marked only B) and Q2 was skipped.</div>
+</div>
+<p class="verdict"><strong>Partly the same, partly new.</strong> Q4 and Q11 are the same habit: you marked one true option and stopped. Q7 is a different error, on a numeric count. Your 4 means 24 solutions, which is what you get if the ±13 case is dropped. I can't confirm that from the portal.</p>
+<div class="stepper" id="st1">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p>If <span class="m">n</span> is the number of solutions of <span class="m">tan(5π cosθ) = cot(5π sinθ)</span>, <span class="m">θ ∈ (0, 2π)</span>, find <span class="m">n − 20</span>.</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">Your answer was <strong>4</strong>. Correct answer: <strong>8</strong> (so n = 28).</p>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · turn cot into tan</span>
+Write <span class="m">cot B = tan(π/2 − B)</span>. The equation becomes <span class="m">tan(5π cosθ) = tan(π/2 − 5π sinθ)</span>. Two tangents are equal when the angles differ by a multiple of π.
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · get one linear equation</span>
+<span class="eq m">5π cosθ = π/2 − 5π sinθ + nπ</span>Divide by 5π:<span class="eq m">cosθ + sinθ = (2n+1)/10</span>
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · what values can cosθ + sinθ take?</span>
+<span class="m">cosθ + sinθ = √2 sin(θ+π/4)</span>, so it lies in <span class="m">[−√2, √2] ≈ [−1.414, 1.414]</span>. The bound is √2, not 1.<span class="eq m">|2n+1|/10 ≤ 1.414 ⟹ |2n+1| ≤ 14.14</span>So 2n+1 can be any odd number from −13 to 13: ±1, ±3, ±5, ±7, ±9, ±11, ±13. That is <strong>14 values</strong> of k. Write them out. Do not stop at ±11.
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · 2 angles per value</span>
+For each k with <span class="m">|k| &lt; √2</span>, <span class="m">√2 sin(θ+π/4) = k</span> has 2 solutions in a full turn. The special case is <span class="m">k = ±1</span>, where θ = 0 and θ = 2π land on the excluded ends. Here k = ±1 would need 2n+1 = ±10, which is even, so it never happens.<span class="eq m">14 values × 2 = 28</span>
+</div>
+<div class="step" data-n="5" hidden>
+<span class="tag">Step 5 · are tan and cot defined?</span>
+A "solution" is spoiled if tan or cot is undefined. That needs <span class="m">5π cosθ = π/2 + mπ</span>, so <span class="m">cosθ = (2m+1)/10</span>, and then also <span class="m">sinθ = j/5</span>. Then <span class="m">(2m+1)² + 4j² = 100</span>. But (2m+1)² is odd and 4j² is even, so the left side is odd while 100 is even. That is impossible, so none are spoiled. <span class="eq m">n = 28, n − 20 = 8</span>
+<div class="final">Answer: 8</div>
+<div class="trap-note">The trap: stopping the list of odd numbers early. Whenever a bound like <span class="m">|2n+1| ≤ 14.14</span> appears, write the values out and check the last one against √2.</div>
+</div>
+<button class="step-btn" onclick="stepNext('st1')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<div class="rule">
+<span class="rule-label">The shortcuts</span>
+<ul>
+<li><strong>tan = cot, or sin = cos:</strong> turn it into one linear equation in the angles. It usually ends as <span class="m">cosθ ± sinθ = k</span>.</li>
+<li><strong>cosθ ± sinθ</strong> ranges over <span class="m">[−√2, √2]</span>, not [−1, 1]. Each interior k gives 2 angles in a full turn. Check <span class="m">k = ±1</span> if the interval is open at 0 and 2π.</li>
+<li><strong>Parameter questions:</strong> isolate m as a function of <span class="m">s = sin x</span>. Sketch it on [−1, 1]. Then count x-values per s: for x in [0, 2π], s in (−1,1) with s≠0 gives 2, s = ±1 gives 1, and s = 0 gives 3 (0, π, 2π).</li>
+<li><strong>Multi-correct:</strong> test every option before you lock in. Your CTA18 Q11 is the example below.</li>
+</ul>
+</div>
+<div class="note"><strong>Your CTA18 Q11, solved:</strong> <span class="m">m sin²x + (m−1) sin x + (m−2) = 0</span> gives <span class="m">m = (s+2)/(s²+s+1)</span>. On [−1, 1] this is 1 at s = ±1, 2 at s = 0, and peaks at <span class="m">1 + 2/√3</span> at <span class="m">s = √3 − 2</span>. So: no roots for m &lt; 1 or m &gt; 1+2/√3 (A true); 5 roots only at m = 2 (B true, the one you marked); 4 roots on (1,2) ∪ (2, 1+2/√3) (C true); 2 roots at m = 1 and m = 1+2/√3, but m = −1 is impossible (D false). Correct: A, B, C.</div>
+</section>
+<section class="pattern">
+<div class="pattern-head"><h2>2 · Trig identities: telescoping and ratios</h2><span class="chip chip-2">Trigonometry</span><span class="back">Came back</span></div>
+<p class="why">These questions look like brute force. They are set so that one standard identity collapses the whole thing. If you don't recognise the identity, you lose the question or guess. The test gives you the tell: a step of 2 in the angles, a symmetric range around 90°, a product with 3<sup>k</sup> in it, or a ratio of sines.</p>
+<div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
+<div class="cmp">
+<div class="box"><span class="tagline">Before</span><strong>CTA16 Q10</strong>: answered <strong>1</strong>, key 3. <strong>CTA16 Q8</strong>: answered 2, key 4.</div>
+<div class="box now"><span class="tagline">Now</span><strong>CTA17 Q12</strong>: answered <strong>1</strong>, key 4.8. <strong>CTA18 Q12</strong>: skipped after 37 seconds.</div>
+</div>
+<p class="verdict"><strong>Different error each time, same root.</strong> The identity changed (cot-difference, product telescoping, ratio), and each time you didn't find it. Also note that two of these answers were exactly 1. If that was a guess, skipping is safer than an unexplained 1.</p>
+<div class="stepper" id="st2">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p>Let <span class="m">α = 1/(sin60° sin61°) + 1/(sin62° sin63°) + … + 1/(sin118° sin119°)</span>. Find <span class="m">(cosec 1° / α)²</span>.</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">Your answer was <strong>1</strong>. Correct answer: <strong>3</strong>.</p>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · the identity</span>
+<span class="eq m">cot n − cot(n+1) = sin1° / (sin n · sin(n+1))</span>So <span class="m">1/(sin n sin(n+1)) = (cot n − cot(n+1)) / sin1°</span>. Every term of α has this shape.
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · write the sum out</span>
+The angles start at 60 and jump by 2: n = 60, 62, …, 118 (30 terms).<span class="eq m">sin1°·α = (cot60 − cot61) + (cot62 − cot63) + … + (cot118 − cot119)</span>This is not an ordinary telescope, because cot61 is never followed by a +cot61. The cancellation comes from somewhere else.
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · use cot(180° − x) = −cot x</span>
+The negative terms are cot61, cot63, …, cot119. Pair 61 with 119, 63 with 117, …, 89 with 91: each pair sums to 0. So all the negative terms vanish.<br><br>The positive terms are cot60, cot62, …, cot118. Pair 62 with 118, 64 with 116, …, 88 with 92: each pair sums to 0. The middle one is cot90° = 0. Only cot60° has no partner (its partner would be cot120°, which isn't in the list).
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · finish</span>
+<span class="eq m">sin1°·α = cot60° = 1/√3</span><span class="eq m">cosec1°/α = (1/sin1°) · (√3 sin1°) = √3</span><span class="eq m">(cosec1°/α)² = 3</span>
+<div class="final">Answer: 3</div>
+<div class="trap-note">The trap: treating it as "everything cancels except the ends", which gives a clean-looking but wrong number. A step of 2, or a range symmetric about 90°, means the cancellation comes from <span class="m">cot(180°−x) = −cot x</span>.</div>
+</div>
+<button class="step-btn" onclick="stepNext('st2')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<div class="rule">
+<span class="rule-label">Three identities to recognise on sight</span>
+<ul>
+<li><strong>Cot difference:</strong> <span class="m">1/(sin a · sin(a+d)) = (cot a − cot(a+d)) / sin d</span>. Then look for pairing with <span class="m">cot(180°−x) = −cot x</span>.</li>
+<li><strong>Product with 3<sup>k</sup>:</strong> <span class="m">1 + 2cosθ = sin(3θ/2)/sin(θ/2)</span> and <span class="m">1 − 2cosθ = −cos(3θ/2)/cos(θ/2)</span>. The product over θ, 3θ, 9θ, … telescopes. Your CTA16 Q8: the five factors collapse to <span class="m">−cos(243π/22)/cos(π/22) = 1</span>, so <span class="m">α = 1</span> and <span class="m">5 − α² = 4</span>.</li>
+<li><strong>Ratio of sines:</strong> if <span class="m">p·sinα = q·sinβ</span>, then <span class="m">(sinα + sinβ)/(sinα − sinβ) = (q+p)/(q−p)</span> and this equals <span class="m">tan((α+β)/2) / tan((α−β)/2)</span>. Your CTA17 Q12: <span class="m">(29+19)/(29−19) = 4.8</span>.</li>
+</ul>
+</div>
+</section>
+<section class="pattern">
+<div class="pattern-head"><h2>3 · Inverse trig: reduce it to algebra</h2><span class="chip chip-3">Inverse trig</span><span class="back">Came back</span></div>
+<p class="why">You skipped inverse trig in both tests where it appeared. It feels like there is no formula to reach for. In fact almost every question here has one of four moves, and each turns it into ordinary algebra: equate the arguments, telescope the tan⁻¹ terms, mind the range, or check a few integers.</p>
+<div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
+<div class="cmp">
+<div class="box"><span class="tagline">Before</span><strong>CTA17 Q17</strong>: a four-part list-match on cot⁻¹ and tan⁻¹ sums. You spent 2m03s and skipped it.</div>
+<div class="box now"><span class="tagline">Now</span><strong>CTA18 Q6</strong>: a system of two inverse-trig equations in integers. You spent 2m10s and skipped it.</div>
+</div>
+<p class="verdict"><strong>The same behaviour both times</strong>, not a knowledge slip you can pinpoint. Last time the fix would have been "spot the telescoping". This time it is "the equation collapses to argument = argument". The habit to change: after 30 seconds without a formula, look for the collapse before you skip.</p>
+<div class="stepper" id="st3">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p><span class="m">E₁: sin⁻¹(x² − x⁴) + cos⁻¹(y² + 2xy) = π/2</span><br><span class="m">E₂: tan⁻¹(x² + 8x − 2xy + 16) + cot⁻¹(−y⁴ + 7y² + 8y − 15) = π/2</span><br>x, y are integers, principal ranges. Find the number of ordered pairs satisfying both.</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">You skipped this one. Correct answer: <strong>1</strong>.</p>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · collapse E₁</span>
+Since <span class="m">cos⁻¹v = π/2 − sin⁻¹v</span>, E₁ says <span class="m">sin⁻¹u = sin⁻¹v</span> with <span class="m">u = x²−x⁴</span> and <span class="m">v = y²+2xy</span>. So <span class="eq m">u = v, and both in [−1, 1]</span>
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · use "integers" to shrink x</span>
+For integer x, <span class="m">u = x²(1−x²)</span> is 0 at x = 0, ±1, and −12 at x = ±2 (already outside [−1,1]). So <span class="eq m">x ∈ {0, 1, −1}, u = 0</span>
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · solve for y</span>
+Now <span class="m">v = 0</span>: <span class="m">y² + 2xy = y(y+2x) = 0</span>. This gives (0,0), (1,0), (1,−2), (−1,0), (−1,2). Five candidates from E₁.
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · collapse E₂</span>
+With principal cot⁻¹ in (0, π), <span class="m">tan⁻¹P + cot⁻¹P = π/2</span> always. So E₂ says <span class="m">cot⁻¹Q = cot⁻¹P</span>, which means <span class="eq m">P = Q</span> where <span class="m">P = x²+8x−2xy+16</span>, <span class="m">Q = −y⁴+7y²+8y−15</span>.
+</div>
+<div class="step" data-n="5" hidden>
+<span class="tag">Step 5 · test the five</span>
+<span class="eq m">(0,0): P=16, Q=−15 ✗<br>(1,0): P=25, Q=−15 ✗<br>(1,−2): P=29, Q=−19 ✗<br>(−1,0): P=9, Q=−15 ✗<br>(−1,2): P=13, Q=13 ✓</span>Only one pair works.
+<div class="final">Answer: 1</div>
+<div class="trap-note">The trap: reading E₁ and E₂ as two hard equations. Each is one line of algebra once you equate the arguments, and "integers" cuts x down to three values.</div>
+</div>
+<button class="step-btn" onclick="stepNext('st3')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<div class="rule">
+<span class="rule-label">Four moves for inverse-trig questions</span>
+<ul>
+<li><span class="m">sin⁻¹A + cos⁻¹B = π/2</span> means <span class="m">A = B</span> (with |A| ≤ 1). Likewise <span class="m">tan⁻¹A + cot⁻¹B = π/2</span> means <span class="m">A = B</span>.</li>
+<li><strong>Telescoping:</strong> <span class="m">tan⁻¹(1/(1 + k(k+1))) = tan⁻¹(k+1) − tan⁻¹k</span>. Check that each denominator has the form k²+k+1: 3, 7, 13, 21, … are k = 1, 2, 3, 4.</li>
+<li><strong>Range:</strong> <span class="m">cot⁻¹(−x) = π − cot⁻¹x</span>, because cot⁻¹ lives in (0, π). Watch when a sum of tan⁻¹ terms crosses 1 in product: you add π.</li>
+<li><strong>"x, y integers":</strong> first use the bounds |argument| ≤ 1 to shrink to a handful of values, then test them.</li>
+</ul>
+</div>
+<div class="note"><strong>Your CTA17 Q17, my derivation</strong> (the portal didn't show the key): (a) the four cot⁻¹ terms are tan⁻¹2−tan⁻¹1, …, so the sum is tan⁻¹5 − tan⁻¹1 and <span class="m">2cot(sum) = 2 × 3/2 = 3</span>. (b) <span class="m">tan[tan⁻¹20 − tan⁻¹1] = 19/21</span>, so the least m+n is 40, divisible by 4, 5, 8 and 10. (c) <span class="m">(x−10)(y−10) = 101</span> gives 4 pairs. (d) <span class="m">sin⁻¹(sin12) + cos⁻¹(cos12) = 0</span>, and the least positive n with the quadratic positive is 5. Only option B (a→p, b→q) fits.</div>
+</section>
+<section class="pattern">
+<div class="pattern-head"><h2>4 · Functions: domains and piecewise inverses</h2><span class="chip chip-4">Functions</span><span class="back">Came back</span></div>
+<p class="why">Both questions cost you 6 to 8 minutes and ended wrong. Neither needs heavy algebra. Each needs one careful set-up: a number-line intersection, or a check of what each piece maps onto.</p>
+<div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
+<div class="cmp">
+<div class="box"><span class="tagline">Before</span><strong>CTA17 Q9</strong> (8m04s): domain of <span class="m">√(sin x + cos x) + √(7x − x² − 6)</span>. You answered <strong>18.56</strong>, the key is 14.80–14.90.</div>
+<div class="box now"><span class="tagline">Now</span><strong>CTA18 Q14</strong> (6m08s): a piecewise function on <span class="m">⋃(6k, 6k+6) − {6k+2}</span>. You marked A and C, the correct set is A and B.</div>
+</div>
+<p class="verdict"><strong>Different errors, same story.</strong> A long time spent, then an answer with no cross-check. I can't tell where 18.56 came from. On Q14 the 10-second test below would have caught it.</p>
+<div class="stepper" id="st4">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p><span class="m">f: ⋃ₖ(6k, 6k+6) − ⋃ₖ{6k+2} → Y</span>, with <span class="m">f(x) = 2x + 2 − 6k</span> on <span class="m">(6k, 6k+2)</span> and <span class="m">f(x) = (x − 2 + 6k)/2</span> on <span class="m">(6k+2, 6k+6)</span>. Which are TRUE? A) f is one-one B) if range = Y, f equals its own inverse C) if range = Y, f is invertible but its inverse ≠ f D) f is many-one.</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">You marked <strong>A and C</strong>. Correct: <strong>A and B</strong>.</p>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · where does each piece land?</span>
+Write <span class="m">x = 6k + t</span> with <span class="m">t ∈ (0, 2)</span>: <span class="eq m">f(x) = 6k + 2t + 2 ∈ (6k+2, 6k+6)</span>Write <span class="m">x = 6k + u</span> with <span class="m">u ∈ (2, 6)</span>: <span class="eq m">f(x) = 6k + (u−2)/2 ∈ (6k, 6k+2)</span>
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · one-one and onto</span>
+The first piece fills the upper part, the second fills the lower part. They don't overlap and together they cover the whole domain. So f is one-one (A true, D false) and its range equals the domain.
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · the involution test</span>
+Take the first piece: <span class="m">y = f(x) = 6k + 2t + 2</span>, so <span class="m">u = 2t+2 ∈ (2,6)</span>. Apply f again with the second rule: <span class="eq m">f(y) = 6k + (2t+2−2)/2 = 6k + t = x</span>So <span class="m">f(f(x)) = x</span>. f is its own inverse: B true, C false.
+<div class="final">Answer: A and B</div>
+<div class="trap-note">The trap: C sounds more "careful" than B. It is refuted in ten seconds with one number: <span class="m">x = 1 → f(1) = 4 → f(4) = (4−2)/2 = 1</span>. It came back to 1, so f is its own inverse.</div>
+</div>
+<button class="step-btn" onclick="stepNext('st4')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<div class="rule">
+<span class="rule-label">Two rules</span>
+<ul>
+<li><strong>Domain of a sum of pieces:</strong> solve each condition alone, draw a number line, then intersect. For a periodic condition, list only the windows that touch the interval. Your Q9: <span class="m">7x − x² − 6 ≥ 0</span> gives [1, 6]; <span class="m">sin x + cos x ≥ 0</span> gives <span class="m">[−π/4, 3π/4] + 2πn</span>. The windows that touch [1, 6] are [1, 3π/4] and [7π/4, 6]. Sum = <span class="m">7 + 5π/2 ≈ 14.85</span>.</li>
+<li><strong>Piecewise function questions:</strong> find where each piece lands, then run one number through f twice. If it comes back, f is an involution. That settles "invertible", "own inverse" and "many-one" at once.</li>
+</ul>
+</div>
+</section>
+<section class="pattern">
+<div class="pattern-head"><h2>5 · Quadratics: linked roots and what Vieta tells you</h2><span class="chip chip-5">Algebra</span><span class="back">Came back</span></div>
+<p class="why">When two quadratics share letters, the sums and products of roots give you relations before you solve anything. The quadratics in these questions are never meant to be solved directly.</p>
+<div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
+<div class="cmp">
+<div class="box"><span class="tagline">Before</span><strong>CTA16 Q9</strong>: answered <strong>220</strong>, key 1210.</div>
+<div class="box now"><span class="tagline">Now</span><strong>CTA18 Q13</strong>: skipped after 2m46s. A quadratic with <span class="m">|a| &lt; |b|</span> feeds a logarithm equation.</div>
+</div>
+<p class="verdict"><strong>Different outcome, same gap.</strong> One was wrong, one was skipped, and both start with the same step: read the sign and size facts off Vieta before doing anything else. I solved Q13 in the note under this section's shortcut box.</p>
+<div class="stepper" id="st5">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p><span class="m">x² − 10ax − 11b = 0</span> has roots c and d. <span class="m">x² − 10cx − 11d = 0</span> has roots a and b. If <span class="m">a ≠ c</span>, find <span class="m">a + b + c + d</span>.</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">Your answer was <strong>220</strong>. Correct answer: <strong>1210</strong>.</p>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · Vieta on both</span>
+<span class="eq m">c + d = 10a,  cd = −11b<br>a + b = 10c,  ab = −11d</span>
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · solve the linear ones for b and d</span>
+<span class="eq m">b = 10c − a,  d = 10a − c</span>
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · use the shared roots</span>
+c is a root of the first: <span class="m">c² − 10ac − 11b = 0</span>. a is a root of the second: <span class="m">a² − 10ac − 11d = 0</span>. Subtract: <span class="eq m">c² − a² − 11(b − d) = 0</span>
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · cancel the non-zero factor</span>
+<span class="eq m">b − d = (10c − a) − (10a − c) = 11(c − a)</span><span class="eq m">(c − a)(c + a) = 121 (c − a)</span>Since a ≠ c, divide by (c − a): <span class="eq m">a + c = 121</span>
+</div>
+<div class="step" data-n="5" hidden>
+<span class="tag">Step 5 · finish</span>
+<span class="eq m">a + b + c + d = (a + b) + (c + d) = 10c + 10a = 10 × 121 = 1210</span>
+<div class="final">Answer: 1210</div>
+<div class="trap-note">The trap: solving for the roots directly. The condition <span class="m">a ≠ c</span> is the hint that a division by <span class="m">(c − a)</span> is coming.</div>
+</div>
+<button class="step-btn" onclick="stepNext('st5')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<div class="rule">
+<span class="rule-label">The shortcut</span>
+<ul>
+<li><strong>Swapped-root systems:</strong> Vieta for both, express the leftover letters, plug the shared root into its own equation, subtract, cancel the non-zero difference. In general, for <span class="m">x² − pax − qb</span> and <span class="m">x² − pcx − qd</span>, you get <span class="m">a + c = q(p + 1)</span> and the total is <span class="m">pq(p+1)</span>.</li>
+<li><strong>Sign facts first:</strong> <span class="m">x² − |α|x − |β| = 0</span> has a product ≤ 0, so its roots are on opposite sides of 0. The one with bigger magnitude is positive.</li>
+</ul>
+</div>
+<div class="note"><strong>Your skipped CTA18 Q13, solved</strong> (my derivation; the portal didn't show the key): the roots a, b have <span class="m">a + b = |α| ≥ 0</span> and <span class="m">ab ≤ 0</span>, and <span class="m">|a| &lt; |b|</span>, so b &gt; 0 and <span class="m">a = |α| − b &lt; −1</span> (using 1+|α| &lt; b). Then <span class="m">log_|a|((x/b)²) = 1</span> gives <span class="m">x = ±b√|a|</span>. Since |a| &gt; 1, the positive root exceeds b: one root in (b, ∞). Since b &gt; |a| &gt; √|a|, the negative root is below a: one root in (−∞, a). Nothing in (a, b). So A, B and D are correct; C is not.</div>
+</section>
+<section class="practice-head">
+<span class="eyebrow">Practice Set</span>
+<h2 style="margin-top:8px; font-size:1.4rem;">15 fresh problems, same five patterns</h2>
+<p style="color:var(--ink-soft)">Not copies of the test questions: same technique, new problems at level L4. All five patterns came back, so each gets three problems. Every answer here was solved by hand and checked twice.</p>
+</section>
+<div class="mode-row">
+<button class="mode-btn" data-mode="practice" aria-pressed="true" onclick="setMode('practice', this)">Practice (untimed)</button>
+<button class="mode-btn" data-mode="timed" aria-pressed="false" onclick="setMode('timed', this)">Timed — 40 min</button>
+<div class="timer-bar" id="timerBar" hidden>
+<span class="time" id="timeDisplay">40:00</span>
+<button class="timer-btn" id="startBtn" onclick="startTimer()">Start</button>
+<button class="timer-btn" id="resetBtn" onclick="resetTimer()">Reset</button>
+</div>
+</div>
+<p class="mode-help">First pass: stay in Practice mode. In Timed mode, do 10 of the 15 (two per pattern is a good split). Fifteen problems in 40 minutes is too tight.</p>
+<div class="grid">
+<div class="card">
+<div class="card-head"><span class="qnum">1</span><span class="card-tags"><span class="lvl">L4</span><span class="chip chip-1">Trig root counting</span></span></div>
+<p>The number of solutions of <span class="m">tan(3π cosθ) = cot(3π sinθ)</span>, <span class="m">θ ∈ (0, 2π)</span>, is:</p>
+<button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+<div class="answer" hidden><span class="val">Answer: 16</span><div class="why"><ol><li>cot B = tan(π/2 − B), so the equation is tan(3π cosθ) = tan(π/2 − 3π sinθ).</li><li>Equal tangents: 3π cosθ = π/2 − 3π sinθ + nπ, so cosθ + sinθ = (2n+1)/6.</li><li>cosθ + sinθ = √2 sin(θ + π/4) lies in [−√2, √2]. The bound is √2, not 1, so |2n+1| ≤ 8.48.</li><li>The odd values are ±1, ±3, ±5, ±7: 8 values. The largest, 7/6 ≈ 1.17, is below √2.</li><li>Boundary check: k = ±1 would need 2n+1 = ±6, which is even, so it never happens. Every k here gives 2 angles in (0, 2π).</li><li>Count: 8 × 2 = 16.</li><li>Undefined points: tan or cot undefined needs cosθ = (2m+1)/6 and sinθ = j/3, so (2m+1)² + 4j² = 36. Odd = even is impossible, so none are spoiled.</li></ol><div class="trap-note"><strong>Trap:</strong> stopping the list of odd numbers early, or using the bound 1 instead of √2.</div></div></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card">
+<div class="card-head"><span class="qnum">2</span><span class="card-tags"><span class="lvl">L4</span><span class="chip chip-1">Trig root counting</span></span></div>
+<p>For how many integers m with <span class="m">|m| ≤ 7</span> does <span class="m">m sin x = 1 + sin²x</span> have exactly two distinct solutions in <span class="m">[0, 2π]</span>?</p>
+<button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+<div class="answer" hidden><span class="val">Answer: 10</span><div class="why"><ol><li>Let s = sin x. If s = 0 the equation says 0 = 1, so s ≠ 0.</li><li>Divide by s: m = s + 1/s, with s in [−1, 1] and s ≠ 0.</li><li>For s in (0, 1], s + 1/s ≥ 2, with equality only at s = 1. For s in [−1, 0), s + 1/s ≤ −2. So |m| &lt; 2 gives no solutions.</li><li>m = ±2 means s = ±1: x = π/2 or 3π/2. That is only 1 solution, not 2.</li><li>For m &gt; 2, s + 1/s = m has two positive roots with product 1, so exactly one lies in (0, 1). For m &lt; −2 exactly one lies in (−1, 0).</li><li>That one s in (0, 1) or (−1, 0) gives 2 values of x in [0, 2π].</li><li>So m ∈ {3, 4, 5, 6, 7} and {−3, …, −7}: 10 integers.</li></ol><div class="trap-note"><strong>Trap:</strong> counting m = ±2. There s = ±1 gives one solution, not two.</div></div></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card">
+<div class="card-head"><span class="qnum">3</span><span class="card-tags"><span class="lvl">L4</span><span class="chip chip-1">Trig root counting</span></span></div>
+<p>For <span class="m">x ∈ [0, 2π]</span>, find the sum of all integers m for which <span class="m">m(cos²x + cos x + 1) = cos x + 3</span> has at least one solution.</p>
+<button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+<div class="answer" hidden><span class="val">Answer: 5</span><div class="why"><ol><li>Let c = cos x. As x runs over [0, 2π], c takes every value in [−1, 1]. Also c² + c + 1 &gt; 0, so we can divide: m = (c+3)/(c²+c+1).</li><li>Endpoints: c = −1 gives 2, and c = 1 gives 4/3.</li><li>Turning points: dm/dc = 0 gives −(c² + 6c + 2) = 0, so c = −3 ± √7. Only c = √7 − 3 ≈ −0.35 is in [−1, 1].</li><li>At c = √7 − 3: c² + c + 1 = 14 − 5√7, so m = √7/(14 − 5√7) = (5 + 2√7)/3 ≈ 3.43.</li><li>So m ranges over [4/3, 3.43] (m is continuous).</li><li>The integers in that range are 2 and 3. Sum = 5.</li></ol><div class="trap-note"><strong>Trap:</strong> using only the endpoint values. The peak 3.43 in the middle is what puts 3 in the range.</div></div></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card">
+<div class="card-head"><span class="qnum">4</span><span class="card-tags"><span class="lvl">L4</span><span class="chip chip-2">Identities</span></span></div>
+<p>Let <span class="m">α = 1/(sin30° sin31°) + 1/(sin32° sin33°) + … + 1/(sin148° sin149°)</span>. Find <span class="m">(α sin1°)⁴</span>.</p>
+<button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+<div class="answer" hidden><span class="val">Answer: 9</span><div class="why"><ol><li>Identity: 1/(sin n·sin(n+1)) = (cot n − cot(n+1)) / sin1°.</li><li>α sin1° = Σ (cot n − cot(n+1)) for n = 30, 32, …, 148 (60 terms).</li><li>It is not an ordinary telescope: the cot(n+1) terms are odd angles 31, 33, …, 149, and nothing cancels them directly.</li><li>Use cot(180° − x) = −cot x. The negative terms cot31 … cot149 pair off: 31↔149, …, 89↔91. Each pair sums to 0.</li><li>The positive terms cot30, cot32, …, cot148 pair off: 32↔148, …, 88↔92, and cot90° = 0.</li><li>Only cot30° = √3 has no partner (cot150° is not in the list). So α sin1° = √3.</li><li>(√3)⁴ = 9.</li></ol><div class="trap-note"><strong>Trap:</strong> expecting everything to cancel except the ends. With a step of 2 the cancellation comes from cot(180° − x) = −cot x.</div></div></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card">
+<div class="card-head"><span class="qnum">5</span><span class="card-tags"><span class="lvl">L4</span><span class="chip chip-2">Identities</span></span></div>
+<p>If <span class="m">3 sinα = 7 sinβ</span> and <span class="m">α + β = π/2</span>, find <span class="m">21·tan(α − β)</span>.</p>
+<button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+<div class="answer" hidden><span class="val">Answer: 20</span><div class="why"><ol><li>sinα / sinβ = 7/3.</li><li>Componendo–dividendo: (sinα + sinβ)/(sinα − sinβ) = (7 + 3)/(7 − 3) = 5/2.</li><li>Sum-to-product: the left side equals tan((α+β)/2) / tan((α−β)/2).</li><li>(α+β)/2 = π/4, so tan((α+β)/2) = 1. Then tan((α−β)/2) = 2/5.</li><li>This is the HALF angle. Double it: tan(α−β) = 2t/(1 − t²) with t = 2/5, which is (4/5)/(21/25) = 20/21.</li><li>21 × 20/21 = 20.</li><li>Check: α + β = π/2 gives sinβ = cosα, so tanα = 7/3 and tan(α−β) = −cot2α = 20/21.</li></ol><div class="trap-note"><strong>Trap:</strong> stopping at tan((α−β)/2) = 2/5. The question asks for the whole angle.</div></div></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card">
+<div class="card-head"><span class="qnum">6</span><span class="card-tags"><span class="lvl">L4</span><span class="chip chip-2">Identities</span></span></div>
+<p>Evaluate <span class="m">P = (1 − 2cos(2π/5))(1 − 2cos(6π/5))(1 − 2cos(18π/5))</span>.</p>
+<button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+<div class="answer" hidden><span class="val">Answer: (3 − √5)/2</span><div class="why"><ol><li>Identity: 1 − 2cosθ = −cos(3θ/2) / cos(θ/2).</li><li>The three angles are θ, 3θ, 9θ with θ = 2π/5, so the factors are −cos(3π/5)/cos(π/5), −cos(9π/5)/cos(3π/5), −cos(27π/5)/cos(9π/5).</li><li>The product telescopes: P = (−1)³ · cos(27π/5) / cos(π/5).</li><li>Reduce: 27π/5 = 4π + 7π/5, and cos(7π/5) = cos(π + 2π/5) = −cos(2π/5).</li><li>So P = cos(2π/5) / cos(π/5) = cos72° / cos36°. The minus signs cancel.</li><li>Exact values: cos36° = (√5 + 1)/4 and cos72° = (√5 − 1)/4.</li><li>P = (√5 − 1)/(√5 + 1) = (√5 − 1)²/4 = (6 − 2√5)/4 = (3 − √5)/2 ≈ 0.382.</li></ol><div class="trap-note"><strong>Trap:</strong> the sign. Dropping the minus in cos(7π/5) = −cos(2π/5) gives −P.</div></div></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card">
+<div class="card-head"><span class="qnum">7</span><span class="card-tags"><span class="lvl">L4</span><span class="chip chip-3">Inverse trig</span></span></div>
+<p>Let <span class="m">S = Σ tan⁻¹(2/k²)</span> for k = 1 to 5. If <span class="m">tan S = −p/q</span> in lowest terms (p, q > 0), find p + q.</p>
+<button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+<div class="answer" hidden><span class="val">Answer: 29</span><div class="why"><ol><li>tan(tan⁻¹(k+1) − tan⁻¹(k−1)) = 2/(1 + (k²−1)) = 2/k², so tan⁻¹(2/k²) = tan⁻¹(k+1) − tan⁻¹(k−1).</li><li>Write k = 1 to 5: (tan⁻¹2 − tan⁻¹0) + (tan⁻¹3 − tan⁻¹1) + (tan⁻¹4 − tan⁻¹2) + (tan⁻¹5 − tan⁻¹3) + (tan⁻¹6 − tan⁻¹4).</li><li>The terms with 2, 3 and 4 cancel: S = tan⁻¹5 + tan⁻¹6 − tan⁻¹1 (tan⁻¹0 = 0).</li><li>tan(tan⁻¹5 + tan⁻¹6) = 11/(1 − 30) = −11/29. Since 5 · 6 &gt; 1 the angle is past π/2, so the tangent is negative. The tan formula still holds.</li><li>tan S = (−11/29 − 1)/(1 + (−11/29)·1) = (−40/29)/(18/29) = −20/9.</li><li>p + q = 20 + 9 = 29.</li></ol><div class="trap-note"><strong>Trap:</strong> turning tan⁻¹5 + tan⁻¹6 into one tan⁻¹ of (11/−29) as an angle. When ab &gt; 1 the angle gains π. Taking tangents avoids this.</div></div></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card">
+<div class="card-head"><span class="qnum">8</span><span class="card-tags"><span class="lvl">L4</span><span class="chip chip-3">Inverse trig</span></span></div>
+<p>x, y are integers. How many ordered pairs satisfy both?<br><span class="m">E₁: sin⁻¹(x² − 2x) + cos⁻¹(y² − 2y) = π/2</span><br><span class="m">E₂: tan⁻¹(x² + 3y) + cot⁻¹(y² + 3x) = π/2</span></p>
+<button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+<div class="answer" hidden><span class="val">Answer: 3</span><div class="why"><ol><li>E₁: cos⁻¹v = π/2 − sin⁻¹v, so sin⁻¹u = sin⁻¹v with u = x²−2x and v = y²−2y. Hence u = v and both lie in [−1, 1].</li><li>x² − 2x = (x−1)² − 1 ≤ 1 forces (x−1)² ≤ 2. For an integer x that gives x = 0, 1, 2, with u = 0, −1, 0.</li><li>The same list works for y, with v = 0, −1, 0.</li><li>u = v: value 0 gives x, y ∈ {0, 2}, 4 pairs. Value −1 gives (1, 1), 1 pair. Five candidates.</li><li>E₂: cot⁻¹Q = π/2 − tan⁻¹P = cot⁻¹P, so P = Q, that is x² + 3y = y² + 3x.</li><li>Test: (0,0): 0 = 0 ✓. (0,2): 6 vs 4 ✗. (2,0): 4 vs 6 ✗. (2,2): 10 = 10 ✓. (1,1): 4 = 4 ✓.</li><li>Three pairs survive.</li></ol><div class="trap-note"><strong>Trap:</strong> treating E₁ and E₂ as two hard equations. Each is one line of algebra, and "integers" cuts x and y to three values each.</div></div></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card">
+<div class="card-head"><span class="qnum">9</span><span class="card-tags"><span class="lvl">L4</span><span class="chip chip-3">Inverse trig</span></span></div>
+<p>All angles in radians, principal values. If <span class="m">sin⁻¹(sin 15) + cos⁻¹(cos 15) + tan⁻¹(tan 15) = a − bπ</span> with integers a and b, find a + b.</p>
+<button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+<div class="answer" hidden><span class="val">Answer: 19</span><div class="why"><ol><li>Let θ = 15 − 4π ≈ 2.434, which lies in (π/2, π). Sine and cosine have period 2π and tangent has period π, so sin 15 = sinθ, cos 15 = cosθ, tan 15 = tanθ.</li><li>sin⁻¹(sinθ): the range is [−π/2, π/2] and θ &gt; π/2, so the answer is π − θ = 5π − 15.</li><li>cos⁻¹(cosθ): the range is [0, π] and θ is inside it, so the answer is θ = 15 − 4π.</li><li>tan⁻¹(tanθ): the range is (−π/2, π/2) and θ is in (π/2, 3π/2), so the answer is θ − π = 15 − 5π.</li><li>Add: (5π − 15) + (15 − 4π) + (15 − 5π) = 15 − 4π.</li><li>So a = 15, b = 4, and a + b = 19.</li></ol><div class="trap-note"><strong>Trap:</strong> assuming sin⁻¹(sin x) = x. That is true only when x is already in the principal range.</div></div></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card">
+<div class="card-head"><span class="qnum">10</span><span class="card-tags"><span class="lvl">L4</span><span class="chip chip-4">Functions</span></span></div>
+<p>The domain of <span class="m">y = √(sin x − cos x) + √(9x − x² − 8)</span> is <span class="m">[p, q] ∪ [r, s]</span>. Find <span class="m">p + q + r + s</span>.</p>
+<button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+<div class="answer" hidden><span class="val">Answer: 9 + 7π/2 ≈ 20.0</span><div class="why"><ol><li>9x − x² − 8 ≥ 0 means (x − 1)(8 − x) ≥ 0, so x ∈ [1, 8].</li><li>sin x − cos x = √2 sin(x − π/4) ≥ 0, so x − π/4 ∈ [0, π] + 2πn.</li><li>That gives windows [π/4, 5π/4] + 2πn: [0.79, 3.93], [7.07, 10.21], … The window before the first ends below 0.</li><li>Cut by [1, 8]: the first window starts at 0.79 &lt; 1, so it becomes [1, 5π/4].</li><li>The second window starts at 9π/4 ≈ 7.07 &lt; 8 and ends at 10.21 &gt; 8, so it becomes [9π/4, 8].</li><li>Sum = 1 + 5π/4 + 9π/4 + 8 = 9 + 7π/2 ≈ 19.996.</li></ol><div class="trap-note"><strong>Trap:</strong> keeping π/4 as the left end. It is below 1, so the quadratic's end-point 1 takes over.</div></div></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card">
+<div class="card-head"><span class="qnum">11</span><span class="card-tags"><span class="lvl">L4</span><span class="chip chip-4">Functions</span></span></div>
+<p>Let <span class="m">D = ⋃ₖ(4k, 4k+4) − ⋃ₖ{4k+1}</span> and <span class="m">f: D → D</span> with <span class="m">f(x) = 3x + 1 − 8k</span> on <span class="m">(4k, 4k+1)</span> and <span class="m">f(x) = (x − 1 + 8k)/3</span> on <span class="m">(4k+1, 4k+4)</span>. How many of these are TRUE? (i) f is one-one (ii) f is onto D (iii) f(f(x)) = x for all x in D (iv) f is many-one</p>
+<button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+<div class="answer" hidden><span class="val">Answer: 3</span><div class="why"><ol><li>First piece: x = 4k + t with t in (0, 1) gives f(x) = 4k + 3t + 1, which lies in (4k+1, 4k+4).</li><li>Second piece: x = 4k + u with u in (1, 4) gives f(x) = 4k + (u − 1)/3, which lies in (4k, 4k+1).</li><li>The two images do not overlap and together fill D. So f is one-one (i true) and onto D (ii true), and not many-one (iv false).</li><li>Involution: y = 4k + 3t + 1 is in (4k+1, 4k+4), so use the second rule: f(y) = 4k + (3t + 1 − 1)/3 = 4k + t = x. So (iii) is true.</li><li>Number check: f(0.4) = 2.2 and f(2.2) = (2.2 − 1)/3 = 0.4.</li><li>(i), (ii), (iii) are true and (iv) is false: 3.</li></ol><div class="trap-note"><strong>Trap:</strong> checking only one-one and onto. Run one number through f twice: it settles (iii) in ten seconds.</div></div></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card">
+<div class="card-head"><span class="qnum">12</span><span class="card-tags"><span class="lvl">L4</span><span class="chip chip-4">Functions</span></span></div>
+<p>Find the total length of the domain of <span class="m">y = √(2 sin x − 1) + √(16 − x²)</span>.</p>
+<button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+<div class="answer" hidden><span class="val">Answer: 4 − π/2 ≈ 2.43</span><div class="why"><ol><li>16 − x² ≥ 0 gives x ∈ [−4, 4].</li><li>2 sin x − 1 ≥ 0 gives sin x ≥ 1/2, so x ∈ [π/6, 5π/6] + 2πn.</li><li>Windows that touch [−4, 4]: n = 0 gives [0.52, 2.62], fully inside. n = −1 gives [−5.76, −3.67], which is cut by −4. n = 1 starts at 6.8 &gt; 4, so it is out.</li><li>n = 0 has length 5π/6 − π/6 = 2π/3.</li><li>n = −1 is [−11π/6, −7π/6] ≈ [−5.76, −3.67]. Cut at −4: [−4, −7π/6], length 4 − 7π/6 ≈ 0.335.</li><li>Total = 2π/3 + 4 − 7π/6 = 4 − π/2 ≈ 2.43.</li></ol><div class="trap-note"><strong>Trap:</strong> forgetting the negative window. A periodic condition has windows on both sides of 0.</div></div></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card">
+<div class="card-head"><span class="qnum">13</span><span class="card-tags"><span class="lvl">L4</span><span class="chip chip-5">Quadratics</span></span></div>
+<p><span class="m">x² − 6ax − 7b = 0</span> has roots c, d and <span class="m">x² − 6cx − 7d = 0</span> has roots a, b, with <span class="m">a ≠ c</span>. Find <span class="m">a + b + c + d</span>.</p>
+<button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+<div class="answer" hidden><span class="val">Answer: 294</span><div class="why"><ol><li>Vieta on the first: c + d = 6a, cd = −7b. On the second: a + b = 6c, ab = −7d.</li><li>Solve the linear ones: b = 6c − a and d = 6a − c.</li><li>c is a root of the first: c² − 6ac − 7b = 0. a is a root of the second: a² − 6ac − 7d = 0.</li><li>Subtract: c² − a² − 7(b − d) = 0.</li><li>b − d = (6c − a) − (6a − c) = 7(c − a).</li><li>(c − a)(c + a) = 49(c − a). Since a ≠ c, divide: a + c = 49.</li><li>a + b + c + d = (a + b) + (c + d) = 6c + 6a = 6 × 49 = 294.</li></ol><div class="trap-note"><strong>Trap:</strong> solving for the roots directly. The condition a ≠ c is the hint that a division by (c − a) is coming.</div></div></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card">
+<div class="card-head"><span class="qnum">14</span><span class="card-tags"><span class="lvl">L4</span><span class="chip chip-5">Quadratics</span></span></div>
+<p>For how many integers k are both roots of <span class="m">x² − 2(k+1)x + k² + k + 6 = 0</span> real and less than 10?</p>
+<button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+<div class="answer" hidden><span class="val">Answer: 3</span><div class="why"><ol><li>Let f(x) = x² − 2(k+1)x + k² + k + 6. Both roots real and below 10 needs three conditions: D ≥ 0, axis &lt; 10, f(10) &gt; 0.</li><li>D = 4(k+1)² − 4(k² + k + 6) = 4(k − 5) ≥ 0, so k ≥ 5.</li><li>Axis x = k + 1 &lt; 10 gives k &lt; 9.</li><li>f(10) = 100 − 20(k+1) + k² + k + 6 = k² − 19k + 86 &gt; 0, so k &lt; (19 − √17)/2 ≈ 7.44 or k &gt; 11.56.</li><li>Combine: 5 ≤ k &lt; 7.44 (the k &lt; 9 condition is weaker). So k = 5, 6, 7.</li><li>Boundary check: k = 8 gives f(10) = 64 − 152 + 86 = −2 &lt; 0, so 10 sits between the roots. Rejected.</li><li>Count = 3.</li></ol><div class="trap-note"><strong>Trap:</strong> checking only D ≥ 0 and the axis. Without f(10) &gt; 0, k = 8 slips in.</div></div></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card">
+<div class="card-head"><span class="qnum">15</span><span class="card-tags"><span class="lvl">L4</span><span class="chip chip-5">Quadratics</span></span></div>
+<p><span class="m">x² − 8ax − 9b = 0</span> has roots c, d and <span class="m">x² − 8cx − 9d = 0</span> has roots a, b, with <span class="m">a ≠ c</span>. Find <span class="m">ab + cd</span>.</p>
+<button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+<div class="answer" hidden><span class="val">Answer: −5103</span><div class="why"><ol><li>Vieta: c + d = 8a, cd = −9b, a + b = 8c, ab = −9d.</li><li>So ab + cd = −9d − 9b = −9(b + d).</li><li>Solve the linear ones: b = 8c − a and d = 8a − c, so b + d = 7(a + c).</li><li>Shared roots: c² − 8ac − 9b = 0 and a² − 8ac − 9d = 0. Subtract: c² − a² = 9(b − d).</li><li>b − d = 9(c − a), so (c − a)(c + a) = 81(c − a). Since a ≠ c, a + c = 81.</li><li>ab + cd = −9 × 7 × 81 = −5103.</li></ol><div class="trap-note"><strong>Trap:</strong> asking for ab + cd and solving for a, b, c, d one by one. Reduce it to b + d first.</div></div></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+</div>
+
+<footer>Built from CTA16 (13 Sep), CTA17 (20 Sep) and CTA18 (27 Sep) · Maths only · Physics and Chemistry need their own review.</footer>
+</div>
+<script>
+  function stepNext(id){
+    var root = document.getElementById(id);
+    var steps = root.querySelectorAll('.step');
+    var btn = root.querySelector('.step-btn');
+    var shown = 0;
+    steps.forEach(function(s){ if(!s.hidden) shown++; });
+    if(shown < steps.length){
+      steps[shown].hidden = false;
+      shown++;
+    }
+    if(shown >= steps.length){ btn.hidden = true; }
+  }
+
+  function toggleAnswer(btn){
+    var ans = btn.nextElementSibling;
+    var isHidden = ans.hidden;
+    ans.hidden = !isHidden;
+    btn.textContent = isHidden ? 'Hide answer' : 'Show answer';
+  }
+
+  function setMode(mode, btn){
+    document.querySelectorAll('.mode-btn').forEach(function(b){
+      b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+    });
+    document.getElementById('timerBar').hidden = (mode !== 'timed');
+  }
+
+  var remaining = 40 * 60;
+  var timerId = null;
+  function renderTime(){
+    var m = String(Math.floor(remaining/60)).padStart(2,'0');
+    var s = String(remaining%60).padStart(2,'0');
+    document.getElementById('timeDisplay').textContent = m + ':' + s;
+  }
+  function startTimer(){
+    if(timerId) return;
+    timerId = setInterval(function(){
+      remaining--;
+      if(remaining <= 0){
+        clearInterval(timerId); timerId = null;
+        document.getElementById('timeDisplay').textContent = "Time's up";
+      } else {
+        renderTime();
+      }
+    }, 1000);
+  }
+  function resetTimer(){
+    clearInterval(timerId); timerId = null;
+    remaining = 40*60;
+    renderTime();
+  }
+  renderTime();
+
+  (function buildAskLinks(){
+    var TUTOR = "I'm a JEE aspirant preparing for JEE Advanced. Please act as a patient Maths tutor. Use simple language. Reply in chunks of under 10 lines. Explain why, not just how. Wait for my reply before moving on.";
+    var MAXLEN = 3300;
+    function clean(el){
+      var c = el.cloneNode(true);
+      c.querySelectorAll('.mat').forEach(function(m){ m.replaceWith(document.createTextNode(m.getAttribute('data-t') || '[matrix]')); });
+      c.querySelectorAll('.ask-row,.step-btn,.reveal-btn,svg').forEach(function(x){ x.remove(); });
+      c.querySelectorAll('br').forEach(function(b){ b.replaceWith(document.createTextNode(' ')); });
+      c.querySelectorAll('li,p,div,.tag,.eq,.val,.final').forEach(function(x){ x.appendChild(document.createTextNode(' ')); });
+      c.querySelectorAll('.final,.trap-note,.eq').forEach(function(x){ x.insertBefore(document.createTextNode(' '), x.firstChild); });
+      return c.textContent.replace(/\s+/g,' ').trim();
+    }
+    function cut(s, n){ return s.length <= n ? s : s.slice(0, n - 1).trim() + '…'; }
+    function fit(parts){
+      for (var guard = 0; guard < 400; guard++){
+        var url = 'https://claude.ai/new?q=' + encodeURIComponent(parts.map(function(p){ return p.t; }).join(' '));
+        if (url.length <= MAXLEN) return url;
+        var longest = null;
+        parts.forEach(function(p){ if (!p.fixed && (!longest || p.t.length > longest.t.length)) longest = p; });
+        if (!longest || longest.t.length < 60) return url;
+        longest.t = cut(longest.t, Math.floor(longest.t.length * 0.9));
+      }
+    }
+    function sectionPrompt(sec){
+      var rules = Array.prototype.map.call(sec.querySelectorAll('.rule li'), clean).join(' | ');
+      var why = sec.querySelector('.why');
+      return [
+        {t: TUTOR, fixed: true},
+        {t: 'Topic: ' + clean(sec.querySelector('h2')) + '.', fixed: true},
+        {t: 'Why it matters: ' + (why ? clean(why) : ''), fixed: false},
+        {t: 'Key shortcuts: ' + rules, fixed: false},
+        {t: 'Please start by asking which part I want to understand better.', fixed: true}
+      ];
+    }
+    function examplePrompt(box){
+      var sec = box.closest('section.pattern');
+      var ps = box.querySelectorAll(':scope > p');
+      var steps = Array.prototype.map.call(box.querySelectorAll('.step'), function(s, i){
+        return 'Step ' + (i + 1) + ' · ' + cut(clean(s).replace(/^Step \d+\s*·\s*/, ''), 230);
+      }).join(' ');
+      return [
+        {t: TUTOR, fixed: true},
+        {t: "I'm going through a worked example from my own test. Topic: " + clean(sec.querySelector('h2')) + '.', fixed: true},
+        {t: 'Question: ' + clean(ps[0]), fixed: false},
+        {t: 'My result: ' + (ps[1] ? clean(ps[1]) : ''), fixed: false},
+        {t: 'Steps in the solution: ' + steps, fixed: false},
+        {t: 'Please ask me which step I find hardest, then explain it and give me a similar example to try.', fixed: true}
+      ];
+    }
+    function problemPrompt(card){
+      var lvl = card.querySelector('.lvl');
+      var ans = card.querySelector('.answer');
+      return [
+        {t: TUTOR, fixed: true},
+        {t: 'I want to practise this problem' + (lvl ? ' (level ' + lvl.textContent.trim() + ')' : '') + ': ' + clean(card.querySelector('p')), fixed: false},
+        {t: 'For your reference only, do not reveal unless the student asks or has made a real attempt: ' + clean(ans), fixed: false},
+        {t: 'Please ask me what I have tried so far, then give me one hint at a time.', fixed: true}
+      ];
+    }
+    document.querySelectorAll('a.ask').forEach(function(a){
+      var kind = a.getAttribute('data-ask'), parts;
+      if (kind === 'section') parts = sectionPrompt(a.closest('section.pattern'));
+      else if (kind === 'example') parts = examplePrompt(a.closest('.stepper'));
+      else parts = problemPrompt(a.closest('.card'));
+      a.href = fit(parts);
+    });
+  })();
+</script>
