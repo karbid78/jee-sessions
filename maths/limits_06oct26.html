@@ -1,0 +1,776 @@
+<title>Limits Repair Kit</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&amp;family=IBM+Plex+Mono:wght@400;600;700&amp;family=IBM+Plex+Sans:wght@400;600&amp;display=swap">
+<style>
+  :root{
+    --bg:#F5F7FB;
+    --surface:#FFFFFF;
+    --surface-2:#EDF1F8;
+    --ink:#1B2436;
+    --ink-soft:#535F76;
+    --border:#DBE1ED;
+    --accent:#2F5A8A;
+    --accent-soft:#E7EEF7;
+    --highlight:#D99A12;
+    --highlight-ink:#5C4008;
+    --highlight-bg:#FFF6DE;
+    --highlight-border:#F0D796;
+    --good:#2F8F5B;
+    --good-bg:#E5F5EC;
+    --trap:#B8503F;
+    --trap-bg:#FBEAE6;
+    --chip-1:#2F5A8A;
+    --chip-1-bg:#E7EEF7;
+    --chip-2:#7C4FBF;
+    --chip-2-bg:#F0E9FA;
+    --chip-3:#2F8F5B;
+    --chip-3-bg:#E5F5EC;
+    --chip-4:#B4681F;
+    --chip-4-bg:#FBEEDF;
+    --chip-5:#535F76;
+    --chip-5-bg:#EDF1F8;
+    --shadow: 0 1px 2px rgba(27,36,54,.04), 0 8px 24px -12px rgba(27,36,54,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0F131C;
+      --surface:#161C29;
+      --surface-2:#1E2635;
+      --ink:#E7ECF6;
+      --ink-soft:#A6B1C6;
+      --border:#2B3448;
+      --accent:#7BAAE0;
+      --accent-soft:#1B2A3E;
+      --highlight:#E8B84B;
+      --highlight-ink:#FBE8B8;
+      --highlight-bg:#3A2E10;
+      --highlight-border:#5C4A1B;
+      --good:#5FC98C;
+      --good-bg:#12301F;
+      --trap:#E1897A;
+      --trap-bg:#3A1E19;
+      --chip-1:#7BAAE0; --chip-1-bg:#1B2A3E;
+      --chip-2:#C0A2EC; --chip-2-bg:#2A2140;
+      --chip-3:#5FC98C; --chip-3-bg:#12301F;
+      --chip-4:#E3A768; --chip-4-bg:#3A2A14;
+      --chip-5:#A6B1C6; --chip-5-bg:#1E2635;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0F131C;
+    --surface:#161C29;
+    --surface-2:#1E2635;
+    --ink:#E7ECF6;
+    --ink-soft:#A6B1C6;
+    --border:#2B3448;
+    --accent:#7BAAE0;
+    --accent-soft:#1B2A3E;
+    --highlight:#E8B84B;
+    --highlight-ink:#FBE8B8;
+    --highlight-bg:#3A2E10;
+    --highlight-border:#5C4A1B;
+    --good:#5FC98C;
+    --good-bg:#12301F;
+    --trap:#E1897A;
+    --trap-bg:#3A1E19;
+    --chip-1:#7BAAE0; --chip-1-bg:#1B2A3E;
+    --chip-2:#C0A2EC; --chip-2-bg:#2A2140;
+    --chip-3:#5FC98C; --chip-3-bg:#12301F;
+    --chip-4:#E3A768; --chip-4-bg:#3A2A14;
+    --chip-5:#A6B1C6; --chip-5-bg:#1E2635;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+
+  * { box-sizing: border-box; }
+  body{
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    padding-inline: 20px;
+    padding-block: 28px 64px;
+    line-height: 1.55;
+  }
+  .wrap{ max-width: 760px; margin: 0 auto; }
+  h1,h2,h3{ font-family: "Fraunces", Georgia, serif; font-weight: 600; text-wrap: balance; margin: 0; }
+  a { color: var(--accent); }
+  .eyebrow{
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+
+  /* ---------- math helpers ---------- */
+  .m{ font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .97em; }
+  .f{ display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; font-size:.88em; line-height:1.15; margin:0 .15em; }
+  .f .fn{ border-bottom:1.4px solid currentColor; padding:0 .22em .04em; }
+  .f .fd{ padding:.04em .22em 0; }
+  .lim{ display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; font-style:italic; line-height:1.05; margin-right:.18em; }
+  .lim .sub{ font-size:.66em; font-style:normal; color: var(--ink-soft); }
+  .eq{ display:block; margin: 14px 0; padding: 14px 16px; background: var(--surface-2); border-radius: 10px; overflow-x:auto; }
+
+  /* ---------- hero ---------- */
+  .hero{ padding-block: 8px 30px; }
+  .hero h1{ font-size: clamp(1.7rem, 5vw, 2.35rem); margin-top: 10px; }
+  .hero p{ color: var(--ink-soft); max-width: 60ch; }
+  .hero-note{
+    margin-top: 18px; padding: 14px 16px; border-radius: 12px;
+    background: var(--accent-soft); border: 1px solid var(--border);
+    font-size: .93rem;
+  }
+  .asymptote-fig{ width: 100%; max-width: 420px; height: auto; display:block; margin: 18px 0 4px; }
+  @media (prefers-reduced-motion: no-preference){
+    .dot{ animation: approach 3.2s ease-in-out infinite; }
+    @keyframes approach{
+      0%{ transform: translateX(0); }
+      55%{ transform: translateX(190px); }
+      100%{ transform: translateX(190px); }
+    }
+  }
+
+  /* ---------- pattern sections ---------- */
+  .pattern{
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 22px 22px 24px; margin-block: 18px; box-shadow: var(--shadow);
+  }
+  .pattern-head{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom: 6px; }
+  .pattern-head h2{ font-size: 1.28rem; }
+  .chip{
+    font-family:"IBM Plex Mono", monospace; font-size:.68rem; letter-spacing:.05em; text-transform:uppercase;
+    padding: 3px 9px; border-radius: 999px; font-weight: 600; white-space:nowrap;
+  }
+  .chip-1{ color:var(--chip-1); background:var(--chip-1-bg); }
+  .chip-2{ color:var(--chip-2); background:var(--chip-2-bg); }
+  .chip-3{ color:var(--chip-3); background:var(--chip-3-bg); }
+  .chip-4{ color:var(--chip-4); background:var(--chip-4-bg); }
+  .chip-5{ color:var(--chip-5); background:var(--chip-5-bg); }
+  .pattern p{ margin: 10px 0; }
+  .why{ color: var(--ink-soft); font-size: .95rem; }
+
+  .rule{
+    margin-top: 14px; padding: 14px 16px; border-radius: 10px;
+    background: var(--highlight-bg); border: 1px solid var(--highlight-border); color: var(--highlight-ink);
+  }
+  .rule-label{ font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; margin-bottom:6px; display:block; }
+  .rule ul{ margin: 6px 0 0; padding-left: 20px; }
+  .rule li{ margin: 3px 0; }
+
+  /* ---------- stepper (worked examples) ---------- */
+  .stepper{ margin-top: 16px; border-top: 1px dashed var(--border); padding-top: 14px; }
+  .stepper-label{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color: var(--ink-soft); margin-bottom: 8px; display:block; }
+  .step{ padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .step:last-of-type{ border-bottom: none; }
+  .step .tag{ font-weight:600; font-size:.82rem; color: var(--accent); display:block; margin-bottom: 4px; }
+  .step-btn{
+    margin-top: 10px; font: inherit; font-weight: 600; font-size: .88rem;
+    background: var(--accent); color: white; border: none; border-radius: 8px;
+    padding: 9px 14px; cursor: pointer;
+  }
+  .step-btn:hover{ filter: brightness(1.08); }
+  .final{ background: var(--good-bg); color: var(--good); border-radius: 8px; padding: 10px 12px; font-weight: 700; margin-top: 6px; }
+  .trap-note{ background: var(--trap-bg); color: var(--trap); border-radius: 8px; padding: 10px 12px; font-size: .9rem; margin-top: 10px; }
+
+  /* ---------- practice section ---------- */
+  .practice-head{ padding-block: 6px 4px; }
+  .mode-row{
+    display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin: 14px 0 8px;
+    background: var(--surface); border:1px solid var(--border); border-radius: 14px; padding: 14px 16px;
+    box-shadow: var(--shadow);
+  }
+  .mode-btn{
+    font: inherit; font-weight:600; font-size:.9rem; padding: 8px 14px; border-radius: 999px;
+    border:1px solid var(--border); background: var(--surface-2); color: var(--ink); cursor:pointer;
+  }
+  .mode-btn[aria-pressed="true"]{ background: var(--accent); color: white; border-color: var(--accent); }
+  .timer-bar{ display:flex; align-items:center; gap:12px; margin-left:auto; flex-wrap:wrap; }
+  .time{ font-family:"IBM Plex Mono",monospace; font-size:1.3rem; font-variant-numeric: tabular-nums; min-width: 64px; }
+  .timer-btn{ font: inherit; font-size:.85rem; font-weight:600; border-radius:8px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); padding:7px 12px; cursor:pointer; }
+  .mode-help{ font-size:.85rem; color: var(--ink-soft); margin: 6px 2px 0; }
+
+  .grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin-top: 16px; }
+  .card{
+    background: var(--surface); border:1px solid var(--border); border-radius: 14px; padding: 16px 16px 14px;
+    box-shadow: var(--shadow); display:flex; flex-direction:column;
+  }
+  .card-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom: 8px; }
+  .qnum{ font-family:"Fraunces",serif; font-weight:700; font-size:1.05rem; color: var(--accent); }
+  .card ol{ padding-left: 20px; margin: 6px 0; }
+  .card li{ margin: 3px 0; }
+  .reveal-btn{
+    align-self:flex-start; margin-top:10px; font: inherit; font-weight:600; font-size:.85rem;
+    background: none; border: 1.4px solid var(--accent); color: var(--accent); border-radius: 8px;
+    padding: 7px 12px; cursor: pointer;
+  }
+  .reveal-btn:hover{ background: var(--accent-soft); }
+  .answer{ margin-top: 10px; padding: 10px 12px; background: var(--good-bg); border-radius: 8px; }
+  .answer .val{ color: var(--good); font-weight: 700; font-family:"IBM Plex Mono",monospace; }
+  .answer .why{ margin-top: 4px; font-size: .88rem; }
+
+  footer{ margin-top: 26px; color: var(--ink-soft); font-size: .88rem; text-align:center; }
+
+  .hero-fig{ width:100%; max-width:440px; height:auto; display:block; margin:18px 0 4px; }
+  .cmp{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px; margin:14px 0 6px; }
+  .cmp .box{ background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:11px 13px; font-size:.9rem; min-width:0; }
+  .cmp .box.now{ background:var(--trap-bg); border-color:var(--trap); }
+  .cmp .box .tagline{ display:block; font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; font-weight:700; color:var(--ink-soft); margin-bottom:5px; }
+  .cmp .box.now .tagline{ color:var(--trap); }
+  .verdict{ font-size:.93rem; margin:10px 0 4px; padding:10px 13px; border-left:3px solid var(--highlight); background:var(--highlight-bg); color:var(--highlight-ink); border-radius:0 8px 8px 0; }
+  .back{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; font-weight:700; color:var(--trap); background:var(--trap-bg); padding:3px 9px; border-radius:999px; white-space:nowrap; }
+  .note{ font-size:.88rem; color:var(--ink-soft); margin-top:8px; }
+  .step, .rule, .cmp, .answer, .eq { overflow-wrap:anywhere; }
+  .eq{ font-size:.93rem; }
+  .ask-row{ margin-top:14px; display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; }
+  .ask{ display:inline-flex; align-items:center; gap:6px; font:inherit; font-weight:600; font-size:.85rem; color:var(--accent); background:var(--accent-soft); border:1.4px solid var(--accent); border-radius:8px; padding:7px 12px; text-decoration:none; }
+  .ask:hover{ filter:brightness(.97); text-decoration:underline; }
+  .ask:focus-visible{ outline:2px solid var(--highlight); outline-offset:2px; }
+  .ask-hint{ font-size:.8rem; color:var(--ink-soft); }
+  .card .ask-row{ margin-top:10px; }
+
+  .card-tags{ display:flex; align-items:center; gap:6px; }
+  .lvl{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; font-weight:700; letter-spacing:.06em; color:var(--highlight-ink); background:var(--highlight-bg); border:1px solid var(--highlight-border); padding:2px 8px; border-radius:999px; }
+  .answer ol{ margin:6px 0 0 1.2em; padding:0; font-size:.88rem; color:var(--ink-soft); }
+  .answer ol li{ margin:3px 0; }
+  .answer .trap-note{ margin-top:8px; }
+
+  :root{ --on-accent:#FFFFFF; }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --on-accent:#0F131C; } }
+  :root[data-theme="dark"]{ --on-accent:#0F131C; }
+  .step-btn{ color:var(--on-accent); }
+  .mode-btn[aria-pressed="true"]{ color:var(--on-accent); }
+  .qtype{ font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.05em; text-transform:uppercase; font-weight:700; padding:3px 9px; border-radius:999px; color:var(--ink-soft); background:var(--surface-2); border:1px solid var(--border); white-space:nowrap; }
+  .card-tags{ flex-wrap:wrap; justify-content:flex-end; }
+  .opts{ display:grid; gap:8px; margin:12px 0 4px; }
+  .opt{ display:flex; gap:10px; align-items:flex-start; padding:9px 12px; border:1.4px solid var(--border); border-radius:10px; background:var(--surface-2); cursor:pointer; min-width:0; overflow-wrap:anywhere; }
+  .opt:hover{ border-color:var(--accent); }
+  .opt input{ margin-top:4px; accent-color:var(--accent); flex:none; }
+  .opt .ol{ font-family:"IBM Plex Mono",monospace; font-weight:700; color:var(--accent); flex:none; }
+  .opt .ot{ min-width:0; }
+  .opt.ok{ border-color:var(--good); background:var(--good-bg); }
+  .opt.bad{ border-color:var(--trap); background:var(--trap-bg); }
+  .opt.miss{ border-color:var(--good); border-style:dashed; background:var(--good-bg); }
+  .opt .mark{ margin-left:auto; flex:none; font-weight:700; font-size:.82rem; }
+  .opt.ok .mark,.opt.miss .mark{ color:var(--good); } .opt.bad .mark{ color:var(--trap); }
+  .result{ margin-top:10px; padding:9px 12px; border-radius:8px; font-weight:600; font-size:.92rem; }
+  .result.right{ background:var(--good-bg); color:var(--good); }
+  .result.wrong{ background:var(--trap-bg); color:var(--trap); }
+  .btn-row{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:10px; }
+  .btn-row .reveal-btn{ margin-top:0; }
+  .check-btn{ font:inherit; font-weight:600; font-size:.85rem; background:var(--accent); color:var(--on-accent); border:none; border-radius:8px; padding:8px 13px; cursor:pointer; }
+  .check-btn:focus-visible,.reveal-btn:focus-visible,.opt:focus-within{ outline:2px solid var(--highlight); outline-offset:2px; }
+  .pfig{ margin:10px 0 2px; }
+  .pfig svg{ display:block; width:100%; max-width:340px; height:auto; color:var(--ink); }
+  .pfig svg text{ font-family:"IBM Plex Mono",monospace; font-size:11px; fill:currentColor; }
+  .pfig figcaption{ font-size:.8rem; color:var(--ink-soft); margin-top:4px; }
+  .mistakes{ margin:6px 0 0; padding-left:18px; font-size:.86rem; }
+  .grid{ grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr)); }
+  .mat{display:inline-block;vertical-align:middle;border-left:1.6px solid currentColor;border-right:1.6px solid currentColor;border-radius:5px;padding:2px 8px;margin:0 3px;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.88em;max-width:100%;overflow-x:auto}
+  .mat .mr{display:grid;grid-template-columns:repeat(var(--c),auto);gap:1px 14px;text-align:center}
+  .pattern > .pfig{margin:14px 0 4px}
+</style>
+<div class="wrap">
+<section class="hero">
+<span class="eyebrow">Maths · Focus Session · WTA19 · CTA18</span>
+<h1>Limits: five patterns from your WTA19 week</h1>
+<p>WTA19 (3 Oct) was a Limits-only test, and it came one day after Maclaurin series was taught in class. Every worked example below is a real question you got wrong. Every practice problem uses the same technique in a new problem at level L4. This is session 2 of 2; trig and matrices are in session 1.</p>
+<div class="hero-note"><strong>How to use this:</strong> go section by section. Read the comparison, click through the worked example, then do that section's practice problems. Every practice problem is multiple choice (A to D): some have one correct option, some need every correct option ticked. Do all 12 once, untimed. The 40-minute timed mode is for a later pass, on 8 of the 12.<br><br><strong>Stuck on something?</strong> Every section, worked example and practice problem has an <em>Ask Claude</em> link. It opens a new claude.ai chat with that topic already typed in, set up so Claude explains step by step and does not just hand over answers. You need to be signed in to claude.ai.</div>
+<p class="note level-note"><strong>Level L4.</strong> The practice problems are set at the level of your Sunday ADV-CTA papers: more than one concept, 6 or more steps, and one trap or boundary check. Every problem carries its level tag. The worked examples are your real questions, kept at their real level. Series expansions use Maclaurin series, which your class covered on 2 Oct. Everything else comes from the JEE Advanced syllabus.</p>
+</section>
+<section class="pattern">
+<div class="pattern-head"><h2>1 · Series and standard limits: expand, match, test every case</h2><span class="chip chip-1">Limits</span><span class="back">Came back</span></div>
+<p class="why">When a limit gives 0/0, you have two tools. For products and quotients, replace each factor by its first term. For sums and differences, expand to the power the bottom needs, because the first terms usually cancel. Mixing these up, or stopping one term early, is where WTA19 cost you marks in Q8, Q9, Q18 and Q7.</p>
+<div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this pattern ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
+<div class="cmp">
+<div class="box"><span class="tagline">Before</span><strong>CTA18 Q17</strong>: a limit with unknown constants, skipped after 23 seconds.</div>
+<div class="box now"><span class="tagline">Now</span><strong>WTA19 Q8</strong> and <strong>Q18</strong>: wrong. <strong>Q9</strong>: partial. Q7 and Q12 (standard limits with several options) were wrong and partial too.</div>
+</div>
+<p class="verdict"><strong>Partial progress.</strong> Before, you skipped within seconds. Now you attempt these, which is the right direction, and the errors are now about method. For Q18 the key is 8 and you answered 2. I can't see your working, but 2 is what you get if the √2 in 2√2 is dropped. The portal does not show the correct options for Q8, Q9, Q7 and Q12, so I can't say more about those.</p>
+<div class="stepper" id="st1">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p><span class='m'>lim (x→0)</span> <span class='m'>[ ln(1 + sin³x cos²x) · cot(ln³(1+x)) · tan⁴x ] / [ sin(√(x²+2) − √2) · ln(1+x²) ] = √n</span>. Find <span class='m'>n</span>.</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">Your answer was <strong>2</strong>. Correct answer: <strong>8</strong> (the limit is 2√2).</p>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · pick the right tool</span>
+Every piece is a product or a quotient, so each factor can be replaced by its first term. Useful ones as <span class='m'>u → 0</span>: <span class='m'>ln(1+u) ≈ u</span>, <span class='m'>tan u ≈ u</span>, <span class='m'>sin u ≈ u</span>. This would be wrong inside a sum or a difference, but there is none here.
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · the numerator, factor by factor</span>
+<span class='m'>ln(1 + sin³x cos²x) ≈ sin³x cos²x ≈ x³</span> (because <span class='m'>cos²x → 1</span>). Next, <span class='m'>cot(ln³(1+x)) = 1/tan(ln³(1+x)) ≈ 1/ln³(1+x) ≈ 1/x³</span>. And <span class='m'>tan⁴x ≈ x⁴</span>. Numerator ≈ <span class='m'>x³ · x⁻³ · x⁴ = x⁴</span>.
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · the root: rationalise first</span>
+<span class='m'>√(x²+2) − √2 = x² / (√(x²+2) + √2) ≈ x² / (2√2)</span>. Only now use <span class='m'>sin u ≈ u</span>: <span class='m'>sin(√(x²+2) − √2) ≈ x²/(2√2)</span>.
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · the denominator</span>
+<span class='m'>ln(1+x²) ≈ x²</span>. So the denominator ≈ <span class='m'>x²/(2√2) · x² = x⁴/(2√2)</span>.
+</div>
+<div class="step" data-n="5" hidden>
+<span class="tag">Step 5 · divide</span>
+<span class="eq m">limit = x⁴ / (x⁴/(2√2)) = 2√2 = √8</span>So <span class='m'>n = 8</span>.<div class="final">Answer: 8</div><div class="trap-note">I can't see your working. A 2 is what you get if the √2 is lost: the constant <span class='m'>1/(2√2)</span> is part of the denominator and must be carried to the end. The √ rationalising step is the one to slow down on.</div>
+</div>
+<button class="step-btn" onclick="stepNext('st1')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<div class="rule">
+<span class="rule-label">The shortcuts</span>
+<ul>
+<li><strong>Match the order.</strong> If the bottom is <span class='m'>xⁿ</span>, the top must be known to <span class='m'>xⁿ</span>. For a finite limit every lower power must have coefficient 0, and the <span class='m'>xⁿ</span> coefficient is the limit.</li>
+<li><strong>Products and quotients only:</strong> replace by first terms. <span class='m'>sin u ≈ u</span>, <span class='m'>tan u ≈ u</span>, <span class='m'>ln(1+u) ≈ u</span>, <span class='m'>e^u − 1 ≈ u</span>, <span class='m'>1 − cos u ≈ u²/2</span>, <span class='m'>a^u − 1 ≈ u ln a</span>. Watch the <span class='m'>u</span>: for <span class='m'>1 − cos 2x</span> it is <span class='m'>2x</span>, so the answer is <span class='m'>2x²</span>.</li>
+<li><strong>Sums and differences:</strong> never use first terms. Expand fully. Example: <span class='m'>e^(x²) − cos x = (3/2)x² + (11/24)x⁴ + …</span>, and the <span class='m'>x²</span> term may cancel against something else.</li>
+<li><strong>Rationalise a root difference:</strong> <span class='m'>√(x²+c) − √c = x² / (√(x²+c) + √c)</span>.</li>
+<li><strong>Several options or cases (multi-correct):</strong> treat each option or each value of <span class='m'>k</span> as its own limit and test it. Do not stop at the first one that works.</li>
+</ul>
+</div>
+<div class="note"><strong>Your WTA19 Q7, first statement, solved:</strong> ‹x⁶⁰⁰⁰ − sin⁶⁰⁰⁰x = x⁶⁰⁰⁰(1 − (sin x/x)⁶⁰⁰⁰)›. Since ‹sin x/x ≈ 1 − x²/6›, ‹(sin x/x)⁶⁰⁰⁰ ≈ 1 − 1000x²›. So the top ≈ ‹1000x⁶⁰⁰²› and the bottom ≈ ‹x² · x⁶⁰⁰⁰›. The limit is <strong>1000</strong>, not 3000. The second statement is the same idea: ‹1 − cos x cos 2x cos 3x ≈ (1² + 2² + 3²)x²/2 = 7x²›.</div>
+</section>
+<section class="pattern">
+<div class="pattern-head"><h2>2 · The 1^∞ form</h2><span class="chip chip-2">Limits</span><span class="chip chip-5">New</span></div>
+<p class="why">A base that goes to 1, raised to a power that goes to infinity, cannot be done by plugging in. One rule handles all of them. You got the sin/cos parameter version right (Q3) and missed Q5, Q8 and Q10.</p>
+<div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this pattern ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
+<div class="cmp">
+<div class="box"><span class="tagline">Right</span><strong>Q3</strong>: a 1^∞ limit with sin and cos parameters.</div>
+<div class="box now"><span class="tagline">Wrong</span><strong>Q5</strong>, <strong>Q8</strong>, <strong>Q10</strong>. The portal does not show the correct options for these.</div>
+</div>
+<div class="stepper" id="st2">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p>A cubic polynomial <span class='m'>f</span> satisfies <span class='m'>lim (x→0) (1 + f(x))^(1/x) = e⁻¹</span> and <span class='m'>lim (x→0) (x³ f(1/x))^(1/x) = e²</span>. Find <span class='m'>f(x)</span>.</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">Your answer was option <strong>C</strong>. The portal shows neither the options nor what was asked at the end, so this finds <strong>f</strong> completely. Use it on the final part from your paper.</p>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · name the unknowns</span>
+Write <span class='m'>f(x) = ax³ + bx² + cx + d</span>.
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · first limit: the base must go to 1</span>
+As <span class='m'>x → 0</span>, the base <span class='m'>1 + f(x) → 1 + d</span>. If <span class='m'>1 + d</span> is not 1, then <span class='m'>(1+d)^(1/x)</span> blows up, goes to 0, or does not exist. So <span class='m'>d = 0</span>.
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · first limit: the exponent rule</span>
+With <span class='m'>d = 0</span>: <span class='m'>(1+f)^(1/x) = e^(ln(1+f)/x)</span>, and <span class='m'>ln(1+f) ≈ f ≈ cx</span>. So the limit is <span class='m'>e^c</span>. Given <span class='m'>e⁻¹</span>, <span class='m'>c = −1</span>.
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · second limit: flip the polynomial</span>
+<span class='m'>x³ f(1/x) = x³(a/x³ + b/x² + c/x + d) = a + bx + cx² + dx³</span>. The coefficients come out in reverse order, and <span class='m'>x → 0</span> again. With <span class='m'>d = 0</span>, the base → <span class='m'>a</span>, so as before <span class='m'>a = 1</span>.
+</div>
+<div class="step" data-n="5" hidden>
+<span class="tag">Step 5 · second limit: the exponent rule</span>
+Now the base is <span class='m'>1 + bx − x²</span>. So <span class='m'>(1 + bx − x²)^(1/x) → e^b</span>. Given <span class='m'>e²</span>, <span class='m'>b = 2</span>.
+</div>
+<div class="step" data-n="6" hidden>
+<span class="tag">Step 6 · assemble</span>
+<span class="eq m">f(x) = x³ + 2x² − x</span>Check: <span class='m'>f(0) = 0</span> and <span class='m'>f(x)/x → −1</span>. ✓<div class="final">f(x) = x³ + 2x² − x</div><div class="trap-note">The trap is the second limit. <span class='m'>x³ f(1/x)</span> reverses the order of the coefficients, so the leading coefficient <span class='m'>a</span> of <span class='m'>f</span> becomes the constant term. Before using the exponent rule, always ask whether the base really goes to 1.</div>
+</div>
+<button class="step-btn" onclick="stepNext('st2')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<div class="rule">
+<span class="rule-label">The shortcuts</span>
+<ul>
+<li><strong>Check it is really 1^∞:</strong> the base must go to 1 and the exponent to ∞. If the base has a free constant, choose it first so the base goes to 1 (your Q8 has a constant that must be fixed this way).</li>
+<li><strong>Then:</strong> <span class='m'>lim f^g = e^(lim (f − 1)·g)</span>. Compute <span class='m'>(f − 1)</span> with series (it is a difference, so use full expansions): <span class='m'>cos x − 1 ≈ −x²/2</span>, <span class='m'>tan x − sin x ≈ x³/2</span>.</li>
+<li><strong>Limits at ∞:</strong> put <span class='m'>t = 1/x</span> so that <span class='m'>t → 0</span>. Then <span class='m'>x sin(1/x) = sin t / t = 1 − t²/6 + …</span>.</li>
+<li><strong>A limit as n → ∞ of <span class='m'>(…)ⁿ</span></strong> works the same way: <span class='m'>(1 + A/n)ⁿ → e^A</span>.</li>
+</ul>
+</div>
+</section>
+<section class="pattern">
+<div class="pattern-head"><h2>3 · Telescoping sums inside limits</h2><span class="chip chip-3">Limits</span><span class="chip chip-5">New</span></div>
+<p class="why">These give you a sum or a product of many terms. The idea is always the same: write each term as a difference or a ratio so that almost everything cancels, then take the limit of what is left. You got the determinant-sum question right (Q6) and missed both telescoping questions (Q14 and Q17).</p>
+<div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this pattern ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
+<div class="cmp">
+<div class="box"><span class="tagline">Right</span><strong>Q6</strong>: the limit of a sum of determinants.</div>
+<div class="box now"><span class="tagline">Wrong</span><strong>Q14</strong> (answered 3, key 1) and <strong>Q17</strong> (answered 3, key 5).</div>
+</div>
+<div class="stepper" id="st3">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p><span class='m'>f(n) = ln(n² − 1) − ln(n² + 2n)</span>, <span class='m'>S_m = Σ f(n)</span> for <span class='m'>n = 2</span> to <span class='m'>m</span>, and <span class='m'>L = lim (m→∞) (e^(e^(S_m)) − 1) · m^α</span>, where <span class='m'>α</span> makes <span class='m'>L</span> finite and non-zero. Find <span class='m'>α + L</span>.</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">Your answer was <strong>3</strong>. Correct answer: <strong>5</strong> (α = 2, L = 3). The portal does not show the sum's limits. I took <span class='m'>n = 2</span> to <span class='m'>m</span>, which gives the key.</p>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · factor each term</span>
+<span class='m'>n² − 1 = (n−1)(n+1)</span> and <span class='m'>n² + 2n = n(n+2)</span>. So <span class="eq m">f(n) = ln[(n−1)/n] + ln[(n+1)/(n+2)]</span>
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · add the first part</span>
+<span class='m'>ln(1/2) + ln(2/3) + … + ln((m−1)/m)</span>. Each numerator cancels the next denominator, leaving <span class='m'>ln(1/m)</span>.
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · add the second part</span>
+<span class='m'>ln(3/4) + ln(4/5) + … + ln((m+1)/(m+2))</span>. This leaves <span class='m'>ln(3/(m+2))</span>.
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · put the sum together</span>
+<span class="eq m">S_m = ln(3 / (m(m+2)))</span>So <span class='m'>e^(S_m) = 3/(m(m+2))</span>, which → 0, and is about <span class='m'>3/m²</span>.
+</div>
+<div class="step" data-n="5" hidden>
+<span class="tag">Step 5 · the outer layer</span>
+<span class='m'>e^u − 1 ≈ u</span> when <span class='m'>u → 0</span>. With <span class='m'>u = e^(S_m)</span>: <span class='m'>e^(e^(S_m)) − 1 ≈ 3/(m(m+2)) ≈ 3/m²</span>. Seen directly, it is "0 × ∞", so the rate matters.
+</div>
+<div class="step" data-n="6" hidden>
+<span class="tag">Step 6 · choose α and finish</span>
+Times <span class='m'>m^α</span>: finite and non-zero needs <span class='m'>α = 2</span>, and then <span class='m'>L = 3</span>. So <span class='m'>α + L = 5</span>.<div class="final">Answer: 5</div><div class="trap-note">I can't see your working. A 3 is the value of <span class='m'>L</span>, so <span class='m'>α</span> may have been left out. The question asks for the sum <span class='m'>α + L</span>. Also check the rate: <span class='m'>e^(e^S) − 1</span> has to be replaced by <span class='m'>e^S</span>, not by 0.</div>
+</div>
+<button class="step-btn" onclick="stepNext('st3')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<div class="rule">
+<span class="rule-label">The shortcuts</span>
+<ul>
+<li><strong>Factor, then split into ratios:</strong> <span class='m'>ln[(n−1)(n+1) / (n(n+2))] = ln[(n−1)/n] + ln[(n+1)/(n+2)]</span>. Each ratio telescopes alone.</li>
+<li><strong>Sum of logs = log of a product.</strong> Telescoping a product: the top of each factor cancels the bottom of a later one. Write the first three and last three factors to see what survives.</li>
+<li><strong>Partial fractions:</strong> <span class='m'>1/(k(k+2)) = ½(1/k − 1/(k+2))</span>. Two terms survive at each end, not one.</li>
+<li><strong>Terms going to 0 does not mean the sum converges:</strong> <span class='m'>Σ ln(1 + 1/k) = ln(n+1) → ∞</span>.</li>
+<li><strong>Outer layers:</strong> <span class='m'>e^u − 1 ≈ u</span> for small <span class='m'>u</span>. Then the rate (a power of <span class='m'>m</span>) decides <span class='m'>α</span> and <span class='m'>L</span>.</li>
+</ul>
+</div>
+<div class="note"><strong>Your WTA19 Q14, solved with the same idea</strong> (the portal does not show the sum's limits; I took ‹r = 0› to ‹n›, which gives the key 1): the term ‹(t + t³)/(1 − t²)› with ‹t = tan θ› and ‹θ = x/2^(r+1)› equals ‹tan θ · sec 2θ = tan 2θ − tan θ›, which is ‹tan(x/2^r) − tan(x/2^(r+1))›. The sum telescopes to ‹tan x − tan(x/2^(n+1)) → tan x›, so ‹λ = lim tan x / x = 1›.</div>
+</section>
+<section class="pattern">
+<div class="pattern-head"><h2>4 · Floor of a limit, and one-sided limits</h2><span class="chip chip-4">Limits</span><span class="chip chip-5">New</span></div>
+<p class="why">The floor function jumps at integers. So a limit can equal an integer and still give different floors on the two sides. For each term you must know which side of the integer the value is on. You got the one-sided inverse-cot limit right (Q11) and missed Q16.</p>
+<div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this pattern ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
+<figure class="pfig" data-desc="Diagram: the graph of (e^x - 1)/x for x between -1.5 and 1.5, with a dashed horizontal line at height 1 and an open circle at x = 0. The curve is below the line for x less than 0, so its floor is 0, and above the line for x greater than 0, so its floor is 1."><svg viewBox="0 0 400 195" role="img" aria-label="Graph of (e^x - 1)/x crossing the level 1 at x = 0: below it on the left, above it on the right"><line x1="40" y1="118.0" x2="360" y2="118.0" stroke="var(--highlight)" stroke-width="1.5" stroke-dasharray="5 4"/><line x1="200" y1="14" x2="200" y2="170" stroke="var(--border)" stroke-width="1.2"/><polyline points="40.0,151.7 43.2,151.3 46.4,150.9 49.6,150.5 52.8,150.0 56.0,149.6 59.2,149.1 62.4,148.7 65.6,148.2 68.8,147.7 72.0,147.2 75.2,146.7 78.4,146.2 81.6,145.7 84.8,145.2 88.0,144.7 91.2,144.1 94.4,143.6 97.6,143.0 100.8,142.4 104.0,141.8 107.2,141.2 110.4,140.6 113.6,140.0 116.8,139.4 120.0,138.8 123.2,138.1 126.4,137.4 129.6,136.8 132.8,136.1 136.0,135.4 139.2,134.6 142.4,133.9 145.6,133.2 148.8,132.4 152.0,131.6 155.2,130.8 158.4,130.0 161.6,129.2 164.8,128.4 168.0,127.5 171.2,126.7 174.4,125.8 177.6,124.9 180.8,123.9 184.0,123.0 187.2,122.0 190.4,121.1 193.6,120.1 196.8,119.0 200.0,118.0 203.2,116.9 206.4,115.9 209.6,114.8 212.8,113.6 216.0,112.5 219.2,111.3 222.4,110.1 225.6,108.9 228.8,107.6 232.0,106.4 235.2,105.1 238.4,103.7 241.6,102.4 244.8,101.0 248.0,99.6 251.2,98.2 254.4,96.7 257.6,95.2 260.8,93.7 264.0,92.1 267.2,90.5 270.4,88.9 273.6,87.2 276.8,85.5 280.0,83.7 283.2,82.0 286.4,80.2 289.6,78.3 292.8,76.4 296.0,74.5 299.2,72.5 302.4,70.5 305.6,68.4 308.8,66.3 312.0,64.2 315.2,62.0 318.4,59.7 321.6,57.4 324.8,55.1 328.0,52.7 331.2,50.2 334.4,47.7 337.6,45.1 340.8,42.5 344.0,39.8 347.2,37.1 350.4,34.3 353.6,31.4 356.8,28.5 360.0,25.5" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/><circle cx="200" cy="118.0" r="4.5" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/><text x="44" y="109.0">x &lt; 0: below 1, floor 0</text><text x="206" y="140.0">x &gt; 0: above 1, floor 1</text><text x="362" y="113.0" text-anchor="end" font-size="10">level 1</text><line x1="93.3" y1="170" x2="93.3" y2="175" stroke="currentColor"/><text x="93.3" y="188" text-anchor="middle">−1</text><line x1="200.0" y1="170" x2="200.0" y2="175" stroke="currentColor"/><text x="200.0" y="188" text-anchor="middle">0</text><line x1="306.7" y1="170" x2="306.7" y2="175" stroke="currentColor"/><text x="306.7" y="188" text-anchor="middle">1</text></svg><figcaption>y = (e^x − 1)/x. The limit at 0 is 1 from both sides, but the floor is 0 on the left and 1 on the right.</figcaption></figure>
+<div class="cmp">
+<div class="box"><span class="tagline">Right</span><strong>Q11</strong>: one-sided limits of an inverse cot.</div>
+<div class="box now"><span class="tagline">Wrong</span><strong>Q16</strong>: answered 40, key 51.</div>
+</div>
+<div class="stepper" id="st4">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p><span class='m'>λ = lim (x→0) [ ⌊sin⁻¹(10x)/x⌋ + ⌊10x/sin x⌋ + ⌊20x/tan⁻¹x⌋ + ⌊10x/tan⁻¹(20x)⌋ ]</span>. The question also has a second limit <span class='m'>μ</span>, which the portal did not keep. The final answer is built from <span class='m'>λ</span> and <span class='m'>μ</span>.</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">Your answer was <strong>40</strong>. Correct answer: <strong>51</strong>. This solves only the part I have (<span class='m'>λ</span>).</p>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · how a floor sees a limit</span>
+<span class='m'>⌊g(x)⌋</span> as <span class='m'>x → 0</span>: if <span class='m'>g</span> approaches an integer <span class='m'>N</span> from above, the floor is <span class='m'>N</span>. From below it is <span class='m'>N − 1</span>. If <span class='m'>g</span> approaches a non-integer, the floor is just the integer part.
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · first term</span>
+<span class='m'>sin⁻¹(u) = u + u³/6 + …</span>, so <span class='m'>sin⁻¹(10x)/x = 10 + 1000x²/6 + …</span>. It goes to 10 from above. Floor: <span class='m'>10</span>.
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · second term</span>
+<span class='m'>sin x = x − x³/6</span>, so <span class='m'>10x/sin x = 10(1 + x²/6 + …)</span>. From above. Floor: <span class='m'>10</span>.
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · third term</span>
+<span class='m'>tan⁻¹x = x − x³/3</span>, so <span class='m'>x/tan⁻¹x = 1 + x²/3 + …</span>. So <span class='m'>20x/tan⁻¹x</span> goes to 20 from above. Floor: <span class='m'>20</span>.
+</div>
+<div class="step" data-n="5" hidden>
+<span class="tag">Step 5 · fourth term</span>
+<span class='m'>tan⁻¹(20x) ≈ 20x</span>, so <span class='m'>10x/tan⁻¹(20x) → 1/2</span>. That is not an integer, so the floor is <span class='m'>0</span>.
+</div>
+<div class="step" data-n="6" hidden>
+<span class="tag">Step 6 · add up and compare</span>
+<span class="eq m">λ = 10 + 10 + 20 + 0 = 40</span>This is exactly your answer. So if the final answer is <span class='m'>λ + μ</span>, the missing <span class='m'>11</span> comes from <span class='m'>μ</span>, which I can't see.<div class="final">λ = 40 (the rest is in μ)</div><div class="trap-note">I can't confirm what the final question asked, so I can't tell you where the 11 went. Bring <span class='m'>μ</span> to me from your paper and ask the same two questions of each floor: which side of an integer is the value on, and is the limit an integer at all?</div>
+</div>
+<button class="step-btn" onclick="stepNext('st4')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<div class="rule">
+<span class="rule-label">The shortcuts</span>
+<ul>
+<li><strong>For each floor, ask two things:</strong> is the limit an integer, and if so, does the value approach it from above or from below? Test both sides <span class='m'>x → 0⁺</span> and <span class='m'>x → 0⁻</span> separately when the function is not even.</li>
+<li><strong>Series tell you the side.</strong> <span class='m'>sin x / x = 1 − x²/6</span> is below 1. <span class='m'>tan x / x = 1 + x²/3</span> is above 1. <span class='m'>(eˣ − 1)/x = 1 + x/2</span> is above 1 for <span class='m'>x &gt; 0</span> and below for <span class='m'>x &lt; 0</span>.</li>
+<li><strong>Principal values:</strong> <span class='m'>tan⁻¹</span> takes values in <span class='m'>(−π/2, π/2)</span>. <span class='m'>tan⁻¹(1/x) → +π/2</span> as <span class='m'>x → 0⁺</span> and <span class='m'>−π/2</span> as <span class='m'>x → 0⁻</span>. The limit at 0 does not exist.</li>
+<li><strong>Bounded × null → 0:</strong> <span class='m'>x · tan⁻¹(1/x) → 0</span>.</li>
+</ul>
+</div>
+</section>
+<section class="practice-head">
+<span class="eyebrow">Practice Set</span>
+<h2 style="margin-top:8px; font-size:1.4rem;">12 fresh problems, same patterns</h2>
+<p style="color:var(--ink-soft)">Not copies of the test questions: same technique, new problems at level L4. Section 1 came back, so it gets four problems; sections 2 and 3 got three each because WTA19 got most of those wrong; section 4 gets two. Each problem is multiple choice with options A to D, and every wrong option is a mistake you could really make. Single-correct problems mark themselves as soon as you pick. In multi-correct problems you must tick all the correct options, then press Check answer. Every answer here was solved by hand and checked twice, and also checked by computer.</p>
+</section>
+<div class="mode-row">
+<button class="mode-btn" data-mode="practice" aria-pressed="true" onclick="setMode('practice', this)">Practice (untimed)</button>
+<button class="mode-btn" data-mode="timed" aria-pressed="false" onclick="setMode('timed', this)">Timed — 40 min</button>
+<div class="timer-bar" id="timerBar" hidden>
+<span class="time" id="timeDisplay">40:00</span>
+<button class="timer-btn" id="startBtn" onclick="startTimer()">Start</button>
+<button class="timer-btn" id="resetBtn" onclick="resetTimer()">Reset</button>
+</div>
+</div>
+<p class="mode-help">First pass: stay in Practice mode. In Timed mode, do 8 of the 12 (a good split is Q1, Q2, Q3, Q5, Q6, Q8, Q9, Q11). Twelve problems in 40 minutes is too tight.</p>
+<div class="grid">
+<div class="card" id="q1" data-kind="single" data-correct="B">
+<div class="card-head"><span class="qnum">1</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-1">Series expansion</span><span class="lvl">L4</span></span></div>
+<p class="stem"><span class='m'>lim (x→0) [ ln(1 + x² sin x) · (e^(3x) − 1) · tan x ] / [ (1 − cos 2x) · sin x · (√(x²+9) − 3) ]</span> equals:</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 1"><label class="opt"><input type="radio" name="q1" value="A"><span class="ol">A</span><span class="ot">3</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q1" value="B"><span class="ol">B</span><span class="ot">9</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q1" value="C"><span class="ol">C</span><span class="ot">18</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q1" value="D"><span class="ol">D</span><span class="ot">36</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: B · 9</span><div class="why"><ol><li>Everything is a product or quotient, so each factor can be replaced by its first term. Useful ones: <span class='m'>ln(1+u) ≈ u</span>, <span class='m'>e^u − 1 ≈ u</span>, <span class='m'>tan u ≈ u</span>, <span class='m'>sin u ≈ u</span>, <span class='m'>1 − cos u ≈ u²/2</span>.</li><li><span class='m'>ln(1 + x² sin x) ≈ x² sin x ≈ x³</span>.</li><li><span class='m'>e^(3x) − 1 ≈ 3x</span> and <span class='m'>tan x ≈ x</span>. So the numerator ≈ <span class='m'>x³ · 3x · x = 3x⁵</span>.</li><li><span class='m'>1 − cos 2x ≈ (2x)²/2 = 2x²</span>, and <span class='m'>sin x ≈ x</span>.</li><li>Rationalise: <span class='m'>√(x²+9) − 3 = x²/(√(x²+9) + 3) ≈ x²/6</span>.</li><li>Denominator ≈ <span class='m'>2x² · x · x²/6 = x⁵/3</span>.</li><li><span class='m'>L = 3x⁵ / (x⁵/3) = 9</span>.</li></ol></div><ul class="mistakes"><li><strong>A</strong>: used <span class='m'>√(x²+9) − 3 ≈ x²/2</span>, which forgets the divisor <span class='m'>√(x²+9) + 3 ≈ 6</span></li><li><strong>C</strong>: wrote <span class='m'>1 − cos 2x ≈ x²</span></li><li><strong>D</strong>: wrote <span class='m'>1 − cos 2x ≈ x²/2</span>, putting <span class='m'>u = x</span> instead of <span class='m'>u = 2x</span></li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q2" data-kind="single" data-correct="C">
+<div class="card-head"><span class="qnum">2</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-1">Series expansion</span><span class="lvl">L4</span></span></div>
+<p class="stem"><span class='m'>lim (x→0) [ e^(x²) − cos x − (3/2)x² ] / [ x² · ln(1 + x²) ]</span> equals:</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 2"><label class="opt"><input type="radio" name="q2" value="A"><span class="ol">A</span><span class="ot">0</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q2" value="B"><span class="ol">B</span><span class="ot">13/24</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q2" value="C"><span class="ol">C</span><span class="ot">11/24</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q2" value="D"><span class="ol">D</span><span class="ot">1/2</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: C · 11/24</span><div class="why"><ol><li>The bottom is a product, so <span class='m'>x² ln(1+x²) ≈ x² · x² = x⁴</span>. The top must be known to <span class='m'>x⁴</span>.</li><li><span class='m'>e^(x²) = 1 + x² + x⁴/2 + …</span>. Put <span class='m'>u = x²</span> in <span class='m'>e^u = 1 + u + u²/2</span>.</li><li><span class='m'>cos x = 1 − x²/2 + x⁴/24 − …</span>.</li><li><span class='m'>e^(x²) − cos x = (3/2)x² + (1/2 − 1/24)x⁴ + … = (3/2)x² + (11/24)x⁴ + …</span>.</li><li>Subtract <span class='m'>(3/2)x²</span>: the numerator is <span class='m'>(11/24)x⁴ + …</span>. The <span class='m'>x²</span> terms cancel, which is where it is tempting to say 0.</li><li><span class='m'>L = (11/24)x⁴ / x⁴ = 11/24</span>.</li></ol></div><ul class="mistakes"><li><strong>A</strong>: stopped when the <span class='m'>x²</span> terms cancelled and said 0</li><li><strong>B</strong>: added the <span class='m'>x⁴</span> terms (<span class='m'>1/2 + 1/24</span>) instead of subtracting <span class='m'>cos x</span>'s</li><li><strong>D</strong>: left out the <span class='m'>x⁴/24</span> term of <span class='m'>cos x</span></li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q3" data-kind="multi" data-correct="ABC">
+<div class="card-head"><span class="qnum">3</span><span class="card-tags"><span class="qtype">Multi-correct</span><span class="chip chip-1">Series expansion</span><span class="lvl">L4</span></span></div>
+<p class="stem"><span class='m'>lim (x→0) (a cos x + b cos 2x + c) / x⁴</span> exists and equals 1. Select all correct statements.</p>
+<p class="note" style="margin:6px 0 0">Select every correct option. It counts only if your set matches exactly.</p>
+<div class="opts" role="group" aria-label="Options for problem 3"><label class="opt"><input type="checkbox" name="q3" value="A"><span class="ol">A</span><span class="ot"><span class='m'>a + b + c = 0</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q3" value="B"><span class="ol">B</span><span class="ot"><span class='m'>a = −4b</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q3" value="C"><span class="ol">C</span><span class="ot"><span class='m'>b = 2</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q3" value="D"><span class="ol">D</span><span class="ot"><span class='m'>c = 3</span></span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="check-btn" type="button" onclick="checkCard(this)">Check answer</button><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: A, B, C</span><div class="why"><ol><li>Expand: <span class='m'>cos x = 1 − x²/2 + x⁴/24</span> and <span class='m'>cos 2x = 1 − 2x² + (2/3)x⁴</span>.</li><li>The numerator is <span class='m'>(a+b+c) + (−a/2 − 2b)x² + (a/24 + 2b/3)x⁴ + …</span>.</li><li>The bottom is <span class='m'>x⁴</span>, so for a finite limit the constant term and the <span class='m'>x²</span> coefficient must be 0: <span class='m'>a + b + c = 0</span> (A true) and <span class='m'>a/2 + 2b = 0</span>, so <span class='m'>a = −4b</span> (B true).</li><li>The limit is the <span class='m'>x⁴</span> coefficient: <span class='m'>(a + 16b)/24 = 1</span>. With <span class='m'>a = −4b</span>: <span class='m'>12b/24 = b/2 = 1</span>, so <span class='m'>b = 2</span> (C true).</li><li>Then <span class='m'>a = −8</span> and <span class='m'>c = −a − b = 6</span>. So <span class='m'>c = 3</span> is false (D).</li><li>Check: <span class='m'>a + 16b = −8 + 32 = 24</span>, and <span class='m'>24/24 = 1</span>. ✓</li></ol></div><ul class="mistakes"><li><strong>D</strong>: <span class='m'>c = 3b</span> is right, but <span class='m'>b = 2</span>, so <span class='m'>c = 6</span>. The value 3 would need <span class='m'>b = 1</span></li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q4" data-kind="multi" data-correct="AD">
+<div class="card-head"><span class="qnum">4</span><span class="card-tags"><span class="qtype">Multi-correct</span><span class="chip chip-1">Standard forms</span><span class="lvl">L4</span></span></div>
+<p class="stem">For <span class='m'>a &gt; 0</span> and an integer <span class='m'>k ≥ 1</span>, let <span class='m'>L(k, a) = lim (n→∞) n^k (a^(1/n) − 1)(√(1+1/n) − √(1−1/n))</span>. Select all correct statements.</p>
+<p class="note" style="margin:6px 0 0">Select every correct option. It counts only if your set matches exactly.</p>
+<div class="opts" role="group" aria-label="Options for problem 4"><label class="opt"><input type="checkbox" name="q4" value="A"><span class="ol">A</span><span class="ot"><span class='m'>L(2, e) = 1</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q4" value="B"><span class="ol">B</span><span class="ot"><span class='m'>L(1, a) = ln a</span> for every <span class='m'>a &gt; 0</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q4" value="C"><span class="ol">C</span><span class="ot"><span class='m'>L(3, 1/2) = +∞</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q4" value="D"><span class="ol">D</span><span class="ot"><span class='m'>L(k, 1) = 0</span> for every <span class='m'>k</span></span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="check-btn" type="button" onclick="checkCard(this)">Check answer</button><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: A, D</span><div class="why"><ol><li>Put <span class='m'>h = 1/n → 0</span>. Then <span class='m'>a^h − 1 = e^(h ln a) − 1 ≈ h ln a</span>.</li><li><span class='m'>√(1+h) − √(1−h) ≈ (1 + h/2) − (1 − h/2) = h</span>. The <span class='m'>h²</span> terms cancel (the next term is <span class='m'>h³/8</span>).</li><li>So the product ≈ <span class='m'>h² ln a</span>, and <span class='m'>n^k · h² ln a = n^(k−2) ln a</span>.</li><li>A: <span class='m'>k = 2</span>, <span class='m'>a = e</span>: the limit is <span class='m'>ln e = 1</span>. True.</li><li>B: for <span class='m'>k = 1</span> the term is <span class='m'>n⁻¹ ln a → 0</span>, not <span class='m'>ln a</span>. False.</li><li>C: <span class='m'>k = 3</span>, <span class='m'>a = 1/2</span>: <span class='m'>n · ln(1/2) = −n ln 2 → −∞</span>, not <span class='m'>+∞</span>. False.</li><li>D: <span class='m'>a = 1</span> makes <span class='m'>a^h − 1 = 0</span> exactly, so every term is 0 and the limit is 0 for every <span class='m'>k</span>. True.</li></ol></div><ul class="mistakes"><li><strong>B</strong>: forgot that the square-root factor also shrinks like <span class='m'>1/n</span>, so the whole thing is <span class='m'>1/n²</span>, not <span class='m'>1/n</span></li><li><strong>C</strong>: took <span class='m'>ln(1/2)</span> as positive</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q5" data-kind="single" data-correct="C">
+<div class="card-head"><span class="qnum">5</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-2">1^∞ form</span><span class="lvl">L4</span></span></div>
+<p class="stem"><span class='m'>lim (x→0) ((1 + tan x)/(1 + sin x))^(1/x³)</span> equals:</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 5"><label class="opt"><input type="radio" name="q5" value="A"><span class="ol">A</span><span class="ot">1</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q5" value="B"><span class="ol">B</span><span class="ot">e^(1/3)</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q5" value="C"><span class="ol">C</span><span class="ot">e^(1/2)</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q5" value="D"><span class="ol">D</span><span class="ot">e^(1/6)</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: C · e^(1/2)</span><div class="why"><ol><li>Check the form: the base <span class='m'>→ 1</span> and the exponent <span class='m'>→ ∞</span>. It is 1^∞, so the limit is <span class='m'>e^(lim (base − 1)·exponent)</span>.</li><li><span class='m'>base − 1 = (tan x − sin x)/(1 + sin x)</span>.</li><li><span class='m'>tan x = x + x³/3 + …</span> and <span class='m'>sin x = x − x³/6 + …</span>. The <span class='m'>x</span> terms cancel, and <span class='m'>tan x − sin x = (1/3 + 1/6)x³ = x³/2 + …</span>.</li><li>The denominator <span class='m'>1 + sin x → 1</span>.</li><li><span class='m'>(base − 1) · (1/x³) → (x³/2)/x³ = 1/2</span>.</li><li>The limit is <span class='m'>e^(1/2)</span>.</li></ol></div><ul class="mistakes"><li><strong>A</strong>: saw "base → 1" and answered 1, forgetting the exponent blows up</li><li><strong>B</strong>: used <span class='m'>tan x − sin x ≈ x³/3</span>, leaving out the cubic term of <span class='m'>sin x</span></li><li><strong>D</strong>: used only <span class='m'>sin x</span>'s cubic term, <span class='m'>x³/6</span></li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q6" data-kind="multi" data-correct="ABD">
+<div class="card-head"><span class="qnum">6</span><span class="card-tags"><span class="qtype">Multi-correct</span><span class="chip chip-2">1^∞ form</span><span class="lvl">L4</span></span></div>
+<p class="stem">For real <span class='m'>a</span>, let <span class='m'>L(a) = lim (x→0) (cos x + a x sin x)^(1/x²)</span>. Select all correct statements.</p>
+<p class="note" style="margin:6px 0 0">Select every correct option. It counts only if your set matches exactly.</p>
+<div class="opts" role="group" aria-label="Options for problem 6"><label class="opt"><input type="checkbox" name="q6" value="A"><span class="ol">A</span><span class="ot"><span class='m'>L(0) = e^(−1/2)</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q6" value="B"><span class="ol">B</span><span class="ot"><span class='m'>L(a) = 1</span> only for <span class='m'>a = 1/2</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q6" value="C"><span class="ol">C</span><span class="ot"><span class='m'>L(a) = e^a</span> for every <span class='m'>a</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q6" value="D"><span class="ol">D</span><span class="ot"><span class='m'>L(1) = e^(1/2)</span></span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="check-btn" type="button" onclick="checkCard(this)">Check answer</button><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: A, B, D</span><div class="why"><ol><li>The base <span class='m'>→ 1</span> and the exponent <span class='m'>→ ∞</span>: a 1^∞ form. <span class='m'>L = e^(lim (base − 1)/x²)</span>.</li><li><span class='m'>cos x = 1 − x²/2 + …</span> and <span class='m'>x sin x = x² − …</span>. So <span class='m'>base − 1 = (a − 1/2)x² + …</span>.</li><li><span class='m'>(base − 1)/x² → a − 1/2</span>. So <span class='m'>L(a) = e^(a − 1/2)</span>.</li><li>A: <span class='m'>a = 0</span> gives <span class='m'>e^(−1/2)</span>. True.</li><li>B: <span class='m'>e^(a − 1/2) = 1</span> exactly when <span class='m'>a = 1/2</span>. True.</li><li>C: <span class='m'>L(a) = e^(a − 1/2)</span>, not <span class='m'>e^a</span>. False.</li><li>D: <span class='m'>a = 1</span> gives <span class='m'>e^(1/2)</span>. True.</li></ol></div><ul class="mistakes"><li><strong>C</strong>: took <span class='m'>cos x ≈ 1</span>, which loses the <span class='m'>−x²/2</span> that shifts the exponent by <span class='m'>−1/2</span></li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q7" data-kind="single" data-correct="A">
+<div class="card-head"><span class="qnum">7</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-2">1^∞ form</span><span class="lvl">L4</span></span></div>
+<p class="stem"><span class='m'>lim (x→∞) (x sin(1/x))^(x²)</span> equals:</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 7"><label class="opt"><input type="radio" name="q7" value="A"><span class="ol">A</span><span class="ot">e^(−1/6)</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q7" value="B"><span class="ol">B</span><span class="ot">e^(1/6)</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q7" value="C"><span class="ol">C</span><span class="ot">e^(−1/2)</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q7" value="D"><span class="ol">D</span><span class="ot">1</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: A · e^(−1/6)</span><div class="why"><ol><li>Put <span class='m'>t = 1/x</span>, so <span class='m'>t → 0⁺</span>. The expression is <span class='m'>(sin t / t)^(1/t²)</span>.</li><li>The base <span class='m'>→ 1</span> and the exponent <span class='m'>→ ∞</span>: a 1^∞ form.</li><li><span class='m'>sin t / t = 1 − t²/6 + t⁴/120 − …</span>. So <span class='m'>base − 1 ≈ −t²/6</span>.</li><li><span class='m'>(base − 1) · (1/t²) → −1/6</span>.</li><li>The limit is <span class='m'>e^(−1/6)</span>.</li><li>Sanity check: <span class='m'>sin t / t &lt; 1</span>, so the base is below 1, and a number below 1 raised to a large power is below 1. That rules out <span class='m'>e^(1/6)</span>.</li></ol></div><ul class="mistakes"><li><strong>B</strong>: wrong sign: forgot that <span class='m'>sin t / t</span> is below 1</li><li><strong>C</strong>: used the cosine expansion <span class='m'>1 − t²/2</span> for the base</li><li><strong>D</strong>: used <span class='m'>sin t ≈ t</span>, which makes the base exactly 1 and loses the second term</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q8" data-kind="single" data-correct="D">
+<div class="card-head"><span class="qnum">8</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-3">Telescoping</span><span class="lvl">L4</span></span></div>
+<p class="stem"><span class='m'>f(k) = ln(k² − 4) − ln(k² + 3k)</span> and <span class='m'>S_m = Σ f(k)</span> for <span class='m'>k = 3</span> to <span class='m'>m</span>. Let <span class='m'>L = lim (m→∞) (e^(e^(S_m)) − 1) · m^α</span>, where <span class='m'>α</span> is the value that makes <span class='m'>L</span> finite and non-zero. Then <span class='m'>α + L</span> equals:</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 8"><label class="opt"><input type="radio" name="q8" value="A"><span class="ol">A</span><span class="ot">3</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q8" value="B"><span class="ol">B</span><span class="ot">7</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q8" value="C"><span class="ol">C</span><span class="ot">10</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q8" value="D"><span class="ol">D</span><span class="ot">13</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: D · 13</span><div class="why"><ol><li><span class='m'>k² − 4 = (k−2)(k+2)</span> and <span class='m'>k² + 3k = k(k+3)</span>. So <span class='m'>e^(f(k)) = [(k−2)/k] · [(k+2)/(k+3)]</span>.</li><li><span class='m'>e^(S_m) = Π (k−2)/k × Π (k+2)/(k+3)</span>, with <span class='m'>k = 3</span> to <span class='m'>m</span>.</li><li>First product: <span class='m'>(1/3)(2/4)(3/5)⋯((m−2)/m)</span>. The numerators <span class='m'>3, …, m−2</span> cancel the denominators <span class='m'>3, …, m−2</span>, leaving <span class='m'>(1·2)/((m−1)m)</span>.</li><li>Second product: <span class='m'>(5/6)(6/7)⋯((m+2)/(m+3)) = 5/(m+3)</span>.</li><li><span class='m'>e^(S_m) = 10 / ((m−1) m (m+3)) → 0</span>, and it is about <span class='m'>10/m³</span>.</li><li><span class='m'>e^u − 1 ≈ u</span> for small <span class='m'>u</span>, so <span class='m'>e^(e^(S_m)) − 1 ≈ 10/m³</span>.</li><li>Times <span class='m'>m^α</span>: finite and non-zero needs <span class='m'>α = 3</span>, and then <span class='m'>L = 10</span>. So <span class='m'>α + L = 13</span>.</li></ol></div><ul class="mistakes"><li><strong>A</strong>: gave only <span class='m'>α</span></li><li><strong>B</strong>: treated the first product as telescoping to <span class='m'>1/m</span>, so <span class='m'>e^S ≈ 5/m²</span>, <span class='m'>α = 2</span>, <span class='m'>L = 5</span></li><li><strong>C</strong>: gave only <span class='m'>L</span></li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q9" data-kind="multi" data-correct="ABC">
+<div class="card-head"><span class="qnum">9</span><span class="card-tags"><span class="qtype">Multi-correct</span><span class="chip chip-3">Telescoping</span><span class="lvl">L4</span></span></div>
+<p class="stem">Select all correct statements.</p>
+<p class="note" style="margin:6px 0 0">Select every correct option. It counts only if your set matches exactly.</p>
+<div class="opts" role="group" aria-label="Options for problem 9"><label class="opt"><input type="checkbox" name="q9" value="A"><span class="ol">A</span><span class="ot"><span class='m'>Σ 1/(k(k+2))</span>, summed for <span class='m'>k = 1</span> to ∞, equals <span class='m'>3/4</span>.</span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q9" value="B"><span class="ol">B</span><span class="ot"><span class='m'>Σ 1/(k(k+1)(k+2))</span>, summed for <span class='m'>k = 1</span> to ∞, equals <span class='m'>1/4</span>.</span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q9" value="C"><span class="ol">C</span><span class="ot"><span class='m'>lim (n→∞) Π (1 − 1/k²)</span>, taken for <span class='m'>k = 2</span> to <span class='m'>n</span>, equals <span class='m'>1/2</span>.</span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q9" value="D"><span class="ol">D</span><span class="ot"><span class='m'>Σ ln(1 + 1/k)</span>, summed for <span class='m'>k = 1</span> to <span class='m'>n</span>, has a finite limit as <span class='m'>n → ∞</span>.</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="check-btn" type="button" onclick="checkCard(this)">Check answer</button><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: A, B, C</span><div class="why"><ol><li>A: <span class='m'>1/(k(k+2)) = ½(1/k − 1/(k+2))</span>. The sum to <span class='m'>n</span> is <span class='m'>½(1 + 1/2 − 1/(n+1) − 1/(n+2))</span>, which → <span class='m'>½ · 3/2 = 3/4</span>. True.</li><li>B: <span class='m'>1/(k(k+1)(k+2)) = ½[1/(k(k+1)) − 1/((k+1)(k+2))]</span>. It telescopes to <span class='m'>½ · 1/(1·2) = 1/4</span>. True.</li><li>C: <span class='m'>1 − 1/k² = (k−1)(k+1)/k²</span>. The product is <span class='m'>[Π (k−1)/k]·[Π (k+1)/k] = (1/n)·((n+1)/2) = (n+1)/(2n) → 1/2</span>. True.</li><li>D: <span class='m'>Σ ln((k+1)/k) = ln(n+1) → ∞</span>. It has no finite limit. False.</li><li>Habit used: each statement was its own small question.</li></ol></div><ul class="mistakes"><li><strong>D</strong>: thought "the terms go to 0, so the sum converges". <span class='m'>ln(1 + 1/k) → 0</span>, but the sum still grows without bound</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q10" data-kind="single" data-correct="C">
+<div class="card-head"><span class="qnum">10</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-3">Telescoping</span><span class="lvl">L4</span></span></div>
+<p class="stem"><span class='m'>lim (n→∞) Π (k³ − 1)/(k³ + 1)</span>, with the product taken for <span class='m'>k = 2</span> to <span class='m'>n</span>, equals:</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 10"><label class="opt"><input type="radio" name="q10" value="A"><span class="ol">A</span><span class="ot">0</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q10" value="B"><span class="ol">B</span><span class="ot">1/3</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q10" value="C"><span class="ol">C</span><span class="ot">2/3</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q10" value="D"><span class="ol">D</span><span class="ot">1</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: C · 2/3</span><div class="why"><ol><li><span class='m'>k³ − 1 = (k−1)(k² + k + 1)</span> and <span class='m'>k³ + 1 = (k+1)(k² − k + 1)</span>.</li><li>Insight: <span class='m'>k² + k + 1 = (k+1)² − (k+1) + 1</span>. So with <span class='m'>g(k) = k² − k + 1</span>, we have <span class='m'>k² + k + 1 = g(k+1)</span>.</li><li>Each term is <span class='m'>[(k−1)/(k+1)] · [g(k+1)/g(k)]</span>.</li><li><span class='m'>Π (k−1)/(k+1)</span> for <span class='m'>k = 2</span> to <span class='m'>n</span>: <span class='m'>(1/3)(2/4)(3/5)⋯((n−1)/(n+1)) = (1·2)/(n(n+1)) = 2/(n(n+1))</span>.</li><li><span class='m'>Π g(k+1)/g(k) = g(n+1)/g(2) = (n² + n + 1)/3</span>.</li><li>The product is <span class='m'>2(n² + n + 1) / (3n(n+1)) → 2/3</span>.</li></ol></div><ul class="mistakes"><li><strong>A</strong>: kept only the <span class='m'>(k−1)/(k+1)</span> product, which → 0</li><li><strong>B</strong>: wrote <span class='m'>Π (k−1)/(k+1) = 1/(n(n+1))</span>, missing the 2 from the <span class='m'>k = 2</span> start</li><li><strong>D</strong>: said "each factor → 1, so the product → 1"</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q11" data-kind="single" data-correct="B">
+<div class="card-head"><span class="qnum">11</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-4">Floor / one-sided</span><span class="lvl">L4</span></span></div>
+<p class="stem"><span class='m'>F(x) = ⌊(e^x − 1)/x⌋ + ⌊sin x / x⌋ + ⌊tan x / x⌋ + ⌊x / sin⁻¹x⌋</span>. Let <span class='m'>L⁺</span> and <span class='m'>L⁻</span> be the limits of <span class='m'>F(x)</span> as <span class='m'>x → 0⁺</span> and <span class='m'>x → 0⁻</span>. Then <span class='m'>10L⁺ + L⁻</span> equals:</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 11"><label class="opt"><input type="radio" name="q11" value="A"><span class="ol">A</span><span class="ot">12</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q11" value="B"><span class="ol">B</span><span class="ot">21</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q11" value="C"><span class="ol">C</span><span class="ot">22</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q11" value="D"><span class="ol">D</span><span class="ot">32</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: B · 21</span><div class="why"><ol><li>A floor is decided by which side of an integer the value is on. Check each term for <span class='m'>x → 0⁺</span> and for <span class='m'>x → 0⁻</span>.</li><li><span class='m'>(e^x − 1)/x = 1 + x/2 + …</span>: above 1 for <span class='m'>x &gt; 0</span> (floor 1), below 1 for <span class='m'>x &lt; 0</span> (floor 0).</li><li><span class='m'>sin x / x = 1 − x²/6</span>: below 1 on both sides. Floor 0.</li><li><span class='m'>tan x / x = 1 + x²/3</span>: above 1 on both sides. Floor 1.</li><li><span class='m'>sin⁻¹x = x + x³/6</span>, so <span class='m'>x / sin⁻¹x = 1 − x²/6</span>: below 1 on both sides. Floor 0.</li><li><span class='m'>L⁺ = 1 + 0 + 1 + 0 = 2</span> and <span class='m'>L⁻ = 0 + 0 + 1 + 0 = 1</span>. So <span class='m'>10L⁺ + L⁻ = 21</span>.</li></ol></div><ul class="mistakes"><li><strong>A</strong>: swapped the two sides: <span class='m'>10 · 1 + 2</span></li><li><strong>C</strong>: took <span class='m'>(e^x − 1)/x</span> as above 1 on both sides, so <span class='m'>L⁻ = 2</span></li><li><strong>D</strong>: took <span class='m'>sin x / x</span> as above 1, so <span class='m'>L⁺ = 3</span> and <span class='m'>L⁻ = 2</span></li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q12" data-kind="multi" data-correct="ACD">
+<div class="card-head"><span class="qnum">12</span><span class="card-tags"><span class="qtype">Multi-correct</span><span class="chip chip-4">Floor / one-sided</span><span class="lvl">L4</span></span></div>
+<p class="stem">All inverse trigonometric functions take principal values. Select all correct statements.</p>
+<p class="note" style="margin:6px 0 0">Select every correct option. It counts only if your set matches exactly.</p>
+<div class="opts" role="group" aria-label="Options for problem 12"><label class="opt"><input type="checkbox" name="q12" value="A"><span class="ol">A</span><span class="ot"><span class='m'>lim (x→0⁺) tan⁻¹(1/x) = π/2</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q12" value="B"><span class="ol">B</span><span class="ot"><span class='m'>lim (x→0⁻) tan⁻¹(1/x) = π/2</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q12" value="C"><span class="ol">C</span><span class="ot"><span class='m'>lim (x→0) x · tan⁻¹(1/x) = 0</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q12" value="D"><span class="ol">D</span><span class="ot"><span class='m'>lim (x→0⁻) ⌊(2/π) tan⁻¹(1/x)⌋ = −1</span>, and <span class='m'>lim (x→0⁺) ⌊(2/π) tan⁻¹(1/x)⌋ = 0</span></span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="check-btn" type="button" onclick="checkCard(this)">Check answer</button><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: A, C, D</span><div class="why"><ol><li>A: as <span class='m'>x → 0⁺</span>, <span class='m'>1/x → +∞</span>, so <span class='m'>tan⁻¹(1/x) → π/2</span>. True.</li><li>B: as <span class='m'>x → 0⁻</span>, <span class='m'>1/x → −∞</span>, so <span class='m'>tan⁻¹(1/x) → −π/2</span>, not <span class='m'>+π/2</span>. False. (The two sides differ, so the limit at 0 does not exist.)</li><li>C: <span class='m'>|tan⁻¹(1/x)| &lt; π/2</span> is bounded and <span class='m'>x → 0</span>. Bounded × null → 0. True.</li><li>D, right side: <span class='m'>(2/π) tan⁻¹(1/x)</span> is always below 1 and approaches 1. From below, the floor is 0.</li><li>D, left side: it is always above <span class='m'>−1</span> and approaches <span class='m'>−1</span>. From above, the floor is <span class='m'>−1</span>. So D is true.</li></ol></div><ul class="mistakes"><li><strong>B</strong>: treated <span class='m'>tan⁻¹</span> of a large number as <span class='m'>π/2</span> whatever its sign</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+</div>
+<footer>Built from WTA19 (3 Oct) and CTA18 (27 Sep) · Maths only · Trig and matrices are in session 1.</footer>
+</div>
+<script>
+
+  function stepNext(id){
+    var root = document.getElementById(id);
+    var steps = root.querySelectorAll('.step');
+    var btn = root.querySelector('.step-btn');
+    var shown = 0;
+    steps.forEach(function(s){ if(!s.hidden) shown++; });
+    if(shown < steps.length){
+      steps[shown].hidden = false;
+      shown++;
+    }
+    if(shown >= steps.length){ btn.hidden = true; }
+  }
+
+  function toggleAnswer(btn){
+    var ans = btn.closest('.card').querySelector('.answer');
+    ans.hidden = !ans.hidden;
+    btn.textContent = ans.hidden ? 'Show answer and why' : 'Hide answer and why';
+  }
+  function checkCard(el){
+    var card = el.closest('.card');
+    var correct = card.dataset.correct.split('');
+    var chosen = [].slice.call(card.querySelectorAll('input:checked')).map(function(i){return i.value;});
+    if(!chosen.length) return;
+    var exact = chosen.length === correct.length && chosen.every(function(c){return correct.indexOf(c) > -1;});
+    card.querySelectorAll('.opt').forEach(function(o){
+      var v = o.querySelector('input').value, isC = correct.indexOf(v) > -1, isS = chosen.indexOf(v) > -1;
+      o.classList.remove('ok','bad','miss');
+      var m = o.querySelector('.mark');
+      if(isC && isS){ o.classList.add('ok'); m.textContent = '✓ correct'; }
+      else if(isC){ o.classList.add('miss'); m.textContent = '✓ also correct'; }
+      else if(isS){ o.classList.add('bad'); m.textContent = '✗ wrong'; }
+      else { m.textContent = ''; }
+      o.querySelector('input').disabled = true;
+    });
+    var r = card.querySelector('.result');
+    r.hidden = false;
+    r.className = 'result ' + (exact ? 'right' : 'wrong');
+    r.textContent = exact ? 'Right. Correct: ' + correct.join(', ') + '.' : 'Not quite. Correct: ' + correct.join(', ') + '.';
+  }
+  function resetCard(el){
+    var card = el.closest('.card');
+    card.querySelectorAll('.opt').forEach(function(o){
+      o.classList.remove('ok','bad','miss'); o.querySelector('.mark').textContent = '';
+      var i = o.querySelector('input'); i.checked = false; i.disabled = false;
+    });
+    var r = card.querySelector('.result'); r.hidden = true;
+  }
+  document.querySelectorAll('.card[data-kind="single"] input').forEach(function(i){
+    i.addEventListener('change', function(){ checkCard(i); });
+  });
+
+  function setMode(mode, btn){
+    document.querySelectorAll('.mode-btn').forEach(function(b){
+      b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+    });
+    document.getElementById('timerBar').hidden = (mode !== 'timed');
+  }
+
+  var remaining = 40 * 60;
+  var timerId = null;
+  function renderTime(){
+    var m = String(Math.floor(remaining/60)).padStart(2,'0');
+    var s = String(remaining%60).padStart(2,'0');
+    document.getElementById('timeDisplay').textContent = m + ':' + s;
+  }
+  function startTimer(){
+    if(timerId) return;
+    timerId = setInterval(function(){
+      remaining--;
+      if(remaining <= 0){
+        clearInterval(timerId); timerId = null;
+        document.getElementById('timeDisplay').textContent = "Time's up";
+      } else {
+        renderTime();
+      }
+    }, 1000);
+  }
+  function resetTimer(){
+    clearInterval(timerId); timerId = null;
+    remaining = 40*60;
+    renderTime();
+  }
+  renderTime();
+
+  (function buildAskLinks(){
+    var TUTOR = "I'm a JEE aspirant preparing for JEE Advanced. Please act as a patient Maths tutor. Use simple language. Reply in chunks of under 10 lines. Explain why, not just how. Wait for my reply before moving on.";
+    var MAXLEN = 3300;
+    function clean(el){
+      var c = el.cloneNode(true);
+      c.querySelectorAll('.mat').forEach(function(m){ m.replaceWith(document.createTextNode(m.getAttribute('data-t') || '[matrix]')); });
+      c.querySelectorAll('.ask-row,.step-btn,.reveal-btn,.check-btn,.pfig,svg').forEach(function(x){ x.remove(); });
+      c.querySelectorAll('br').forEach(function(b){ b.replaceWith(document.createTextNode(' ')); });
+      c.querySelectorAll('li,p,div,.tag,.eq,.val,.final').forEach(function(x){ x.appendChild(document.createTextNode(' ')); });
+      c.querySelectorAll('.final,.trap-note,.eq').forEach(function(x){ x.insertBefore(document.createTextNode(' '), x.firstChild); });
+      return c.textContent.replace(/\s+/g,' ').trim();
+    }
+    function cut(s, n){ return s.length <= n ? s : s.slice(0, n - 1).trim() + '…'; }
+    function diagram(root){
+      var f = root.querySelector('.pfig');
+      return f ? ' ' + f.getAttribute('data-desc') : '';
+    }
+    function fit(parts){
+      for (var guard = 0; guard < 400; guard++){
+        var url = 'https://claude.ai/new?q=' + encodeURIComponent(parts.map(function(p){ return p.t; }).join(' '));
+        if (url.length <= MAXLEN) return url;
+        var longest = null;
+        parts.forEach(function(p){ if (!p.fixed && (!longest || p.t.length > longest.t.length)) longest = p; });
+        if (!longest || longest.t.length < 60) return url;
+        longest.t = cut(longest.t, Math.floor(longest.t.length * 0.9));
+      }
+    }
+    function sectionPrompt(sec){
+      var rules = Array.prototype.map.call(sec.querySelectorAll('.rule li'), clean).join(' | ');
+      var why = sec.querySelector('.why');
+      return [
+        {t: TUTOR, fixed: true},
+        {t: 'Topic: ' + clean(sec.querySelector('h2')) + '.', fixed: true},
+        {t: 'Why it matters: ' + (why ? clean(why) : ''), fixed: false},
+        {t: 'Key shortcuts: ' + rules, fixed: false},
+        {t: 'Please start by asking which part I want to understand better.', fixed: true}
+      ];
+    }
+    function examplePrompt(box){
+      var sec = box.closest('section.pattern');
+      var ps = box.querySelectorAll(':scope > p');
+      var steps = Array.prototype.map.call(box.querySelectorAll('.step'), function(s, i){
+        return 'Step ' + (i + 1) + ' · ' + cut(clean(s).replace(/^Step \d+\s*·\s*/, ''), 230);
+      }).join(' ');
+      return [
+        {t: TUTOR, fixed: true},
+        {t: "I'm going through a worked example from my own test. Topic: " + clean(sec.querySelector('h2')) + '.', fixed: true},
+        {t: 'Question: ' + clean(ps[0]) + diagram(box), fixed: true},
+        {t: 'My result: ' + (ps[1] ? clean(ps[1]) : ''), fixed: false},
+        {t: 'Steps in the solution: ' + steps, fixed: false},
+        {t: 'Please ask me which step I find hardest, then explain it and give me a similar example to try.', fixed: true}
+      ];
+    }
+    function problemPrompt(card){
+      var lvl = card.querySelector('.lvl');
+      var multi = card.getAttribute('data-kind') === 'multi';
+      var opts = Array.prototype.map.call(card.querySelectorAll('.opt'), function(o){
+        return '(' + o.querySelector('.ol').textContent.trim() + ') ' + clean(o.querySelector('.ot'));
+      }).join(' ');
+      var ans = card.querySelector('.answer');
+      return [
+        {t: TUTOR, fixed: true},
+        {t: 'I want to practise this problem' + (lvl ? ' (level ' + lvl.textContent.trim() + ')' : '') + ': ' + clean(card.querySelector('.stem')) + diagram(card), fixed: true},
+        {t: 'Type: ' + (multi ? 'multi-correct (one or more options are correct; I must pick all of them).' : 'single-correct (exactly one option is correct).') + ' Options: ' + opts, fixed: true},
+        {t: 'For your reference only, do not reveal unless the student asks or has made a real attempt: ' + clean(ans), fixed: false},
+        {t: 'Please ask me what I have tried so far, then give me one hint at a time.', fixed: true}
+      ];
+    }
+    document.querySelectorAll('a.ask').forEach(function(a){
+      var kind = a.getAttribute('data-ask'), parts;
+      if (kind === 'section') parts = sectionPrompt(a.closest('section.pattern'));
+      else if (kind === 'example') parts = examplePrompt(a.closest('.stepper'));
+      else parts = problemPrompt(a.closest('.card'));
+      a.href = fit(parts);
+    });
+  })();
+</script>

@@ -1,0 +1,588 @@
+<title>Chemistry Fix List 6 Oct</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one column. Hero, six pattern sections (worked example + rule), then a 16-problem MCQ practice grid. */
+  :root{
+    --bg:#F3F8F7;
+    --surface:#FFFFFF;
+    --surface-2:#E8F1EF;
+    --ink:#14262B;
+    --ink-soft:#4A6168;
+    --border:#D3E2DF;
+    --accent:#0F6E7A;
+    --accent-ink:#FFFFFF;
+    --accent-soft:#DDEFF0;
+    --highlight-ink:#53390A;
+    --highlight-bg:#FFF4D6;
+    --highlight-border:#EBCF86;
+    --good:#217A4B;
+    --good-bg:#E2F4EA;
+    --trap:#B24A38;
+    --trap-bg:#FBE9E5;
+    --warn-bg:#FFF4D6;
+    --chip-1:#0F6E7A; --chip-1-bg:#DDEFF0;
+    --chip-2:#7A4FB5; --chip-2-bg:#EEE7F8;
+    --chip-3:#217A4B; --chip-3-bg:#E2F4EA;
+    --chip-4:#A9631A; --chip-4-bg:#FBEBD9;
+    --chip-5:#B24A38; --chip-5-bg:#FBE9E5;
+    --chip-6:#3F5BA9; --chip-6-bg:#E4EAF8;
+    --atom-a:#0F6E7A; --atom-b:#C2841B;
+    --shadow: 0 1px 2px rgba(20,38,43,.05), 0 8px 24px -12px rgba(20,38,43,.2);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0D1A1D; --surface:#13252A; --surface-2:#1B3036; --ink:#E4F0EF; --ink-soft:#9FB7BC; --border:#27424A;
+      --accent:#5CC4D0; --accent-ink:#06191C; --accent-soft:#16363C;
+      --highlight-ink:#FBE8B8; --highlight-bg:#3A2E10; --highlight-border:#5C4A1B;
+      --good:#5FCB8E; --good-bg:#12301F; --trap:#E58E7E; --trap-bg:#3A1E19; --warn-bg:#3A2E10;
+      --chip-1:#5CC4D0; --chip-1-bg:#16363C; --chip-2:#C2A5EE; --chip-2-bg:#2A2140; --chip-3:#5FCB8E; --chip-3-bg:#12301F;
+      --chip-4:#E5A96B; --chip-4-bg:#3A2A14; --chip-5:#E58E7E; --chip-5-bg:#3A1E19; --chip-6:#8FA9E8; --chip-6-bg:#1B2642;
+      --atom-a:#5CC4D0; --atom-b:#E8B84B;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.55);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0D1A1D; --surface:#13252A; --surface-2:#1B3036; --ink:#E4F0EF; --ink-soft:#9FB7BC; --border:#27424A;
+    --accent:#5CC4D0; --accent-ink:#06191C; --accent-soft:#16363C;
+    --highlight-ink:#FBE8B8; --highlight-bg:#3A2E10; --highlight-border:#5C4A1B;
+    --good:#5FCB8E; --good-bg:#12301F; --trap:#E58E7E; --trap-bg:#3A1E19; --warn-bg:#3A2E10;
+    --chip-1:#5CC4D0; --chip-1-bg:#16363C; --chip-2:#C2A5EE; --chip-2-bg:#2A2140; --chip-3:#5FCB8E; --chip-3-bg:#12301F;
+    --chip-4:#E5A96B; --chip-4-bg:#3A2A14; --chip-5:#E58E7E; --chip-5-bg:#3A1E19; --chip-6:#8FA9E8; --chip-6-bg:#1B2642;
+    --atom-a:#5CC4D0; --atom-b:#E8B84B;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.55);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body{
+    background: var(--bg); color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    padding-inline: 18px; padding-block: 28px 64px; line-height: 1.55; font-size: 16px;
+  }
+  .wrap{ max-width: 780px; margin: 0 auto; }
+  h1,h2,h3{ font-family: "Fraunces", Georgia, serif; font-weight: 600; text-wrap: balance; margin: 0; }
+  a{ color: var(--accent); }
+  .eyebrow{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); font-weight:600; }
+  .m{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.93em; }
+  .eq{ display:block; margin:12px 0; padding:12px 14px; background:var(--surface-2); border-radius:10px; overflow-x:auto; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.9rem; }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  .hero{ padding-block: 6px 22px; }
+  .hero h1{ font-size: clamp(1.7rem, 5vw, 2.3rem); margin-top:10px; }
+  .hero p{ color:var(--ink-soft); max-width:62ch; }
+  .hero-note{ margin-top:14px; padding:13px 15px; border-radius:12px; background:var(--accent-soft); border:1px solid var(--border); font-size:.92rem; }
+  .meta{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .pill{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; padding:4px 10px; border-radius:999px; background:var(--surface-2); border:1px solid var(--border); color:var(--ink-soft); }
+  .pill b{ color:var(--ink); }
+
+  .pattern{ background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:22px 20px 24px; margin-block:18px; box-shadow:var(--shadow); }
+  .pattern-head{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:6px; }
+  .pattern-head h2{ font-size:1.25rem; }
+  .chip{ font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.05em; text-transform:uppercase; padding:3px 9px; border-radius:999px; font-weight:600; white-space:nowrap; }
+  .c1{ color:var(--chip-1); background:var(--chip-1-bg); } .c2{ color:var(--chip-2); background:var(--chip-2-bg); }
+  .c3{ color:var(--chip-3); background:var(--chip-3-bg); } .c4{ color:var(--chip-4); background:var(--chip-4-bg); }
+  .c5{ color:var(--chip-5); background:var(--chip-5-bg); } .c6{ color:var(--chip-6); background:var(--chip-6-bg); }
+  .pattern p{ margin:10px 0; }
+  .why{ color:var(--ink-soft); font-size:.95rem; }
+  .syl{ font-family:"IBM Plex Mono",monospace; font-size:.74rem; color:var(--ink-soft); }
+
+  .came-back{ margin:12px 0; padding:12px 14px; border-radius:10px; border:1px solid var(--border); background:var(--surface-2); font-size:.92rem; }
+  .came-back .lbl{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; color:var(--trap); display:block; margin-bottom:6px; }
+  .sbs{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin:8px 0; }
+  .sbs > div{ background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:9px 11px; min-width:0; }
+  .sbs .h{ font-weight:600; font-size:.78rem; color:var(--ink-soft); display:block; margin-bottom:3px; }
+
+  .rule{ margin-top:14px; padding:14px 16px; border-radius:10px; background:var(--highlight-bg); border:1px solid var(--highlight-border); color:var(--highlight-ink); }
+  .rule-label{ font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; margin-bottom:6px; display:block; }
+  .rule ul{ margin:6px 0 0; padding-left:20px; } .rule li{ margin:4px 0; }
+
+  .stepper{ margin-top:16px; border-top:1px dashed var(--border); padding-top:14px; }
+  .stepper-label{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:8px; display:block; }
+  .step{ padding:10px 0; border-bottom:1px solid var(--border); }
+  .step:last-of-type{ border-bottom:none; }
+  .step .tag{ font-weight:600; font-size:.82rem; color:var(--accent); display:block; margin-bottom:4px; }
+  .step-btn{ margin-top:10px; font:inherit; font-weight:600; font-size:.88rem; background:var(--accent); color:var(--accent-ink); border:none; border-radius:8px; padding:9px 14px; cursor:pointer; }
+  .final{ background:var(--good-bg); color:var(--good); border-radius:8px; padding:10px 12px; font-weight:700; margin-top:8px; }
+  .trap-note{ background:var(--trap-bg); color:var(--trap); border-radius:8px; padding:10px 12px; font-size:.9rem; margin-top:10px; }
+  .yours{ font-size:.9rem; color:var(--ink-soft); }
+  figure{ margin:14px 0 4px; }
+  figure svg{ width:100%; max-width:440px; height:auto; display:block; color:var(--ink); }
+  figcaption{ font-size:.82rem; color:var(--ink-soft); margin-top:4px; }
+  .figwrap{ overflow-x:auto; }
+
+  .ask{ display:inline-block; margin-top:10px; font-size:.82rem; font-weight:600; color:var(--accent); text-decoration:none; border:1px solid var(--border); border-radius:999px; padding:5px 11px; background:var(--surface); }
+  .ask:hover{ background:var(--accent-soft); }
+
+  .practice-head{ padding-block:10px 4px; }
+  .mode-row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:14px 0 8px; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px 16px; box-shadow:var(--shadow); }
+  .mode-btn{ font:inherit; font-weight:600; font-size:.9rem; padding:8px 14px; border-radius:999px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); cursor:pointer; }
+  .mode-btn[aria-pressed="true"]{ background:var(--accent); color:var(--accent-ink); border-color:var(--accent); }
+  .timer-bar{ display:flex; align-items:center; gap:12px; margin-left:auto; flex-wrap:wrap; }
+  .time{ font-family:"IBM Plex Mono",monospace; font-size:1.3rem; font-variant-numeric:tabular-nums; min-width:64px; }
+  .timer-btn{ font:inherit; font-size:.85rem; font-weight:600; border-radius:8px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); padding:7px 12px; cursor:pointer; }
+  .mode-help{ font-size:.85rem; color:var(--ink-soft); margin:6px 2px 0; }
+
+  .grid{ display:grid; grid-template-columns:1fr; gap:14px; margin-top:16px; }
+  .card{ background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:16px 16px 14px; box-shadow:var(--shadow); min-width:0; }
+  .card-head{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+  .qnum{ font-family:"Fraunces",serif; font-weight:700; font-size:1.05rem; color:var(--accent); }
+  .opts{ display:grid; gap:7px; margin:10px 0 4px; }
+  .opt{ display:flex; gap:10px; align-items:flex-start; padding:9px 11px; border:1px solid var(--border); border-radius:10px; background:var(--surface-2); cursor:pointer; min-width:0; }
+  .opt input{ margin-top:5px; flex:none; accent-color:var(--accent); }
+  .opt .l{ font-family:"IBM Plex Mono",monospace; font-weight:600; color:var(--accent); flex:none; }
+  .opt .t{ min-width:0; overflow-wrap:anywhere; }
+  .opt.is-right{ border-color:var(--good); background:var(--good-bg); }
+  .opt.is-miss{ border-color:var(--good); border-style:dashed; background:var(--good-bg); }
+  .opt.is-wrong{ border-color:var(--trap); background:var(--trap-bg); }
+  .check-btn, .reveal-btn{ font:inherit; font-weight:600; font-size:.85rem; border-radius:8px; padding:7px 12px; cursor:pointer; margin-top:10px; margin-right:8px; }
+  .check-btn{ background:var(--accent); color:var(--accent-ink); border:none; }
+  .reveal-btn{ background:none; border:1.4px solid var(--accent); color:var(--accent); }
+  .verdict{ margin-top:10px; padding:9px 12px; border-radius:8px; font-weight:700; font-size:.92rem; }
+  .verdict.ok{ background:var(--good-bg); color:var(--good); }
+  .verdict.no{ background:var(--trap-bg); color:var(--trap); }
+  .answer{ margin-top:10px; padding:10px 12px; background:var(--surface-2); border-radius:8px; font-size:.9rem; }
+  .answer .val{ color:var(--good); font-weight:700; font-family:"IBM Plex Mono",monospace; }
+  .answer ul{ margin:6px 0 0; padding-left:18px; } .answer li{ margin:3px 0; }
+  footer{ margin-top:26px; color:var(--ink-soft); font-size:.88rem; text-align:center; }
+</style>
+
+<div class="wrap">
+  <section class="hero">
+    <span class="eyebrow">Chemistry · Focus Session · 6 Oct 2026</span>
+    <h1>Six fixes from WTA19 and CTA19</h1>
+    <p>Built from the two tests you just diagnosed. Each section opens with a question you actually met, your real answer, and a step-by-step fix. The 16 practice problems after that use the same techniques with new numbers.</p>
+    <div class="meta">
+      <span class="pill">Level used: <b>L4</b> (multi-concept, a trap in each)</span>
+      <span class="pill">Format: <b>MCQ A–D</b>, 10 single + 6 multi-correct</span>
+      <span class="pill">Sources: <b>WTA19 · CTA19</b></span>
+    </div>
+    <div class="hero-note">
+      <strong>How to use this:</strong> read a section, click through its worked example, then do its practice problems. Multi-correct problems are right only if you pick every correct option and nothing else. <strong>Ask Claude</strong> links open a new claude.ai chat with that item preloaded. You need to be signed in to claude.ai.
+    </div>
+    <div class="hero-note" style="margin-top:10px">
+      <strong>Habit check for multi-correct:</strong> for every option you leave blank, ask “does this follow from one I ticked?” In CTA19 Q45 you ticked A, B and D but missed C, and A was false. In WTA19 Q45 you found C and D and missed B.
+    </div>
+  </section>
+
+  <div id="sections"></div>
+
+  <section class="practice-head">
+    <span class="eyebrow">Practice Set</span>
+    <h2 style="margin-top:8px; font-size:1.4rem;">16 fresh problems, level 4</h2>
+    <p style="color:var(--ink-soft)">Colligative, kinetics, equilibrium and thermodynamics (recurring patterns) get three each. The two boron patterns (new) get two each.</p>
+  </section>
+
+  <div class="mode-row">
+    <button class="mode-btn" aria-pressed="true" onclick="setMode('practice', this)">Practice (untimed)</button>
+    <button class="mode-btn" aria-pressed="false" onclick="setMode('timed', this)">Timed · 40 min</button>
+    <div class="timer-bar" id="timerBar" hidden>
+      <span class="time" id="timeDisplay">40:00</span>
+      <button class="timer-btn" onclick="startTimer()">Start</button>
+      <button class="timer-btn" onclick="resetTimer()">Reset</button>
+    </div>
+  </div>
+  <p class="mode-help">First pass: stay in Practice mode. Save Timed mode for a second pass.</p>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>Built from WTA19 (Sat 3 Oct) and CTA19 (Sun 4 Oct) · Chemistry only. Kp/Kc, Bohr scaling and s-block trends are not on this page.</footer>
+</div>
+
+<script>
+/* ---------- diagrams (inline SVG, theme tokens) ---------- */
+var FIG_DIBORANE =
+'<figure><div class="figwrap"><svg viewBox="0 0 420 230" role="img" aria-label="Diborane: two boron atoms and four terminal hydrogens lie in one plane, six atoms; the two bridging hydrogens sit above and below that plane">'
++'<polygon points="40,150 300,150 390,95 130,95" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/>'
++'<line x1="150" y1="122" x2="102" y2="106" stroke="currentColor" stroke-width="2"/>'
++'<line x1="150" y1="122" x2="104" y2="140" stroke="currentColor" stroke-width="2"/>'
++'<line x1="270" y1="122" x2="318" y2="106" stroke="currentColor" stroke-width="2"/>'
++'<line x1="270" y1="122" x2="316" y2="140" stroke="currentColor" stroke-width="2"/>'
++'<line x1="150" y1="122" x2="210" y2="42" stroke="var(--atom-b)" stroke-width="2" stroke-dasharray="5 4"/>'
++'<line x1="270" y1="122" x2="210" y2="42" stroke="var(--atom-b)" stroke-width="2" stroke-dasharray="5 4"/>'
++'<line x1="150" y1="122" x2="210" y2="198" stroke="var(--atom-b)" stroke-width="2" stroke-dasharray="5 4"/>'
++'<line x1="270" y1="122" x2="210" y2="198" stroke="var(--atom-b)" stroke-width="2" stroke-dasharray="5 4"/>'
++'<circle cx="150" cy="122" r="13" fill="var(--atom-a)"/><circle cx="270" cy="122" r="13" fill="var(--atom-a)"/>'
++'<text x="150" y="126" text-anchor="middle" font-size="12" font-weight="700" fill="var(--accent-ink)">B</text>'
++'<text x="270" y="126" text-anchor="middle" font-size="12" font-weight="700" fill="var(--accent-ink)">B</text>'
++'<g fill="var(--surface)" stroke="currentColor" stroke-width="1.5"><circle cx="100" cy="105" r="9"/><circle cx="102" cy="141" r="9"/><circle cx="320" cy="105" r="9"/><circle cx="318" cy="141" r="9"/></g>'
++'<g fill="var(--atom-b)"><circle cx="210" cy="42" r="9"/><circle cx="210" cy="198" r="9"/></g>'
++'<g font-size="11" text-anchor="middle" fill="currentColor"><text x="100" y="109">H</text><text x="102" y="145">H</text><text x="320" y="109">H</text><text x="318" y="145">H</text></g>'
++'<g font-size="11" text-anchor="middle" fill="var(--accent-ink)" font-weight="700"><text x="210" y="46">H</text><text x="210" y="202">H</text></g>'
++'<text x="228" y="38" font-size="11" fill="currentColor">bridging H, above plane</text>'
++'<text x="228" y="216" font-size="11" fill="currentColor">bridging H, below plane</text>'
++'<text x="46" y="170" font-size="11" fill="currentColor">plane: 2 B + 4 terminal H</text>'
++'</svg></div><figcaption>The four terminal H and both B lie in one plane (6 atoms). The two bridging H (dashed, three-centre bonds) are above and below it. Al₂(CH₃)₆ has the same skeleton with CH₃ in place of H.</figcaption></figure>';
+
+var FIG_BORAX =
+'<figure><div class="figwrap"><svg viewBox="0 0 440 250" role="img" aria-label="Borax anion B4O5(OH)4 2-: two sp3 boron atoms joined through a central oxygen, two sp2 boron atoms above and below, five bridging oxygens and four terminal OH groups; three oxygens cannot back-bond">'
++'<g stroke="currentColor" stroke-width="2" fill="none">'
++'<line x1="120" y1="125" x2="320" y2="125"/><line x1="220" y1="55" x2="120" y2="125"/><line x1="220" y1="55" x2="320" y2="125"/>'
++'<line x1="220" y1="195" x2="120" y2="125"/><line x1="220" y1="195" x2="320" y2="125"/>'
++'<line x1="120" y1="125" x2="70" y2="125"/><line x1="320" y1="125" x2="370" y2="125"/><line x1="220" y1="55" x2="220" y2="24"/><line x1="220" y1="195" x2="220" y2="226"/></g>'
++'<g fill="var(--surface)" stroke="currentColor" stroke-width="1.5"><circle cx="170" cy="90" r="9"/><circle cx="270" cy="90" r="9"/><circle cx="170" cy="160" r="9"/><circle cx="270" cy="160" r="9"/><circle cx="220" cy="24" r="9"/><circle cx="220" cy="226" r="9"/></g>'
++'<g fill="var(--atom-b)" stroke="var(--atom-b)"><circle cx="220" cy="125" r="10"/><circle cx="70" cy="125" r="10"/><circle cx="370" cy="125" r="10"/></g>'
++'<g fill="var(--atom-a)"><circle cx="120" cy="125" r="15"/><circle cx="320" cy="125" r="15"/></g>'
++'<g fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"><circle cx="220" cy="55" r="15"/><circle cx="220" cy="195" r="15"/></g>'
++'<g font-size="11" text-anchor="middle" font-weight="700"><text x="120" y="129" fill="var(--accent-ink)">B</text><text x="320" y="129" fill="var(--accent-ink)">B</text><text x="220" y="59" fill="var(--accent)">B</text><text x="220" y="199" fill="var(--accent)">B</text></g>'
++'<g font-size="10" text-anchor="middle" fill="currentColor"><text x="170" y="94">O</text><text x="270" y="94">O</text><text x="170" y="164">O</text><text x="270" y="164">O</text><text x="220" y="28">OH</text><text x="220" y="230">OH</text></g>'
++'<g font-size="10" text-anchor="middle" fill="var(--accent-ink)" font-weight="700"><text x="220" y="129">O</text><text x="70" y="129">OH</text><text x="370" y="129">OH</text></g>'
++'<g font-size="11" fill="currentColor"><text x="12" y="150">sp³ B</text><text x="384" y="150">sp³ B</text><text x="240" y="50">sp² B</text><text x="240" y="205">sp² B</text></g>'
++'<text x="220" y="146" font-size="10" text-anchor="middle" fill="currentColor">central O</text>'
++'</svg></div><figcaption>Amber atoms are the three oxygens attached only to sp³ boron (the two terminal OH on the sp³ B and the central O). They cannot back-bond. All other oxygens touch an sp² boron.</figcaption></figure>';
+
+/* ---------- content ---------- */
+var SECTIONS = [
+{ id:'s1', n:1, chip:'c1', chipText:'Recurring', title:'Colligative numericals',
+  pattern:'solutions-kinetics-data-interpretation',
+  syl:'Syllabus: Solutions (elevation of boiling point, osmotic pressure, van’t Hoff factor)',
+  cameBack:{ prev:'CTA18 Q38: misread how t½ changed with pressure (order of reaction). CTA18 Q37 skipped.',
+             now:'CTA19: Q38, Q52, Q53 wrong (osmotic pressure, ΔT_b) and Q48 wrong (osmosis between solutions). 6 of 7 solutions and kinetics questions failed.',
+             verdict:'This chapter came back, with a different error. Earlier it was reading data trends; now it is the molality, molarity and van’t Hoff bookkeeping inside colligative formulas.' },
+  why:'Every colligative problem is the same three moves: count the particles (van’t Hoff factor i), put the amount in the right unit (molality for ΔT_b, molarity for π), and mix moles before volumes. A slip in any one gives an answer that looks sensible and is wrong.',
+  rule:['ΔT_b = i·K_b·m, with m in mol per kg of <em>solvent</em>. Molar mass = i⁻¹·K_b·w·1000 / (ΔT_b·W) for a w g solute in W g solvent.',
+        'π = i·C·R·T, with C in mol per litre of <em>solution</em>. Molal → molar: solution mass = 1000 g + solute mass, volume = mass ÷ density.',
+        'Mixing: add moles of particles, add volumes (if ΔV_mix = 0), then divide once.',
+        'Osmosis: water moves from the lower i·C side to the higher i·C side.'],
+  ex:{ q:'60 mL of 0.3 molal urea solution (density = 1.012 g mL⁻¹ at 300 K) is mixed with 300 mL of a solution containing 0.07 g of urea. Both solutions use the same solvent. Find the osmotic pressure (in torr) of the resulting solution at 300 K. [Molar mass of urea = 60 g/mol, R = 62 L torr K⁻¹ mol⁻¹, ΔH_mix = 0, ΔV_mix = 0]',
+       src:'CTA19 Q52', yours:'592', correct:'984–985 (about 984.8)',
+       steps:[
+        {tag:'Step 1 · Why molality will not do', html:'π = CRT needs <strong>molarity</strong>. You are given 0.3 <em>molal</em> (mol per kg of solvent), so convert first.'},
+        {tag:'Step 2 · Molal to molar', html:'Per 1000 g solvent: urea = 0.3 × 60 = 18 g, so solution mass = 1018 g. Volume = 1018 / 1.012 = 1005.9 mL. Molarity = 0.3 / 1.0059 = <span class="m">0.2982 M</span>.'},
+        {tag:'Step 3 · Moles in each part', html:'First solution (60 mL): 0.2982 × 0.060 = <span class="m">0.01789 mol</span>. Second solution: 0.07 / 60 = <span class="m">0.001167 mol</span>.'},
+        {tag:'Step 4 · Mix', html:'Total moles = 0.01906 mol. Total volume = 60 + 300 = 360 mL (ΔV_mix = 0). Concentration = 0.01906 / 0.360 = <span class="m">0.05294 M</span>.'},
+        {tag:'Step 5 · Finish', html:'π = CRT = 0.05294 × 62 × 300 = 984.7 torr.<div class="final">Answer: about 985 torr</div><div class="trap-note">Trap: treating 0.3 molal as 0.3 M gives about 990 torr, which misses the key window. I cannot tell from 592 which step slipped, so compare your working with steps 2 to 4.</div>'}
+       ] } },
+{ id:'s2', n:2, chip:'c1', chipText:'Recurring', title:'Kinetics: first order and activation energy',
+  pattern:'solutions-kinetics-data-interpretation',
+  syl:'Syllabus: Chemical Kinetics (rate law, first-order integrated rate, half-life, Arrhenius equation)',
+  cameBack:{ prev:'CTA18 Q37 (first-order data, 56 s) was skipped.',
+             now:'CTA19 Q39 and Q43 skipped, Q54 wrong.',
+             verdict:'Same habit again: long-looking kinetics stems get skipped, and each of them solves in under ten lines. Q54 was wrong on units.' },
+  why:'First-order questions look long because of extra data (volume, moles, drop size). Only the ratio C₀/C and k matter. The other two traps are the stoichiometric factor in −d[X]/dt, and how activation energies combine when k is built from other k’s.',
+  rule:['First order: t = (1/k)·ln(C₀/C). The amount, volume and concentration drop out. Check the unit of k, then convert the answer.',
+        'Rate of reaction vs rate of loss: for 2X + Y → P, −d[X]/dt = 2 × (rate of reaction). Use the same factor in the half-life of X.',
+        'If k = k₁·k₂^½ / k₃, then E<sub>a</sub> = E₁ + ½E₂ − E₃ (take ln k and compare with ln A − E<sub>a</sub>/RT).',
+        'k = ln2 / t½ holds for the species whose own decay is first order. Write d[A]/dt first.'],
+  ex:{ q:'A 0.1 mL drop of a solution contains 5 × 10⁻⁸ mol of H⁺. The rate constant for the disappearance of H⁺ is 2 × 10⁻⁷ s⁻¹. The time taken for the H⁺ concentration in the drop to fall to 1/10 of its initial value is ______ hours. (ln 10 = 2.302)',
+       src:'CTA19 Q54', yours:'2', correct:'3196–3199 (about 3197)',
+       steps:[
+        {tag:'Step 1 · Order from the unit', html:'k is in s⁻¹, so the disappearance of H⁺ is <strong>first order</strong>.'},
+        {tag:'Step 2 · Throw away the extra data', html:'The 0.1 mL and 5 × 10⁻⁸ mol only set the starting concentration. For first order, time depends on the ratio C₀/C = 10 and on k, nothing else.'},
+        {tag:'Step 3 · Time in seconds', html:'t = (1/k) ln(C₀/C) = 2.302 / (2 × 10⁻⁷) = <span class="m">1.151 × 10⁷ s</span>.'},
+        {tag:'Step 4 · Convert to hours', html:'1.151 × 10⁷ / 3600 = 3197 hours.<div class="final">Answer: about 3197 hours</div><div class="trap-note">Check: k = 2 × 10⁻⁷ s⁻¹ is tiny, so the time must be huge. An answer of 2 should have rung an alarm. Always ask whether the size of your number matches the size of k.</div>'}
+       ] } },
+{ id:'s3', n:3, chip:'c1', chipText:'Recurring', title:'Ionic equilibrium: hydrolysis and buffers',
+  pattern:'ionic-equilibrium-buffers-hydrolysis-ksp-lists',
+  syl:'Syllabus: Chemical and Ionic Equilibrium (hydrolysis of salts, buffers, solubility product)',
+  cameBack:{ prev:'CTA16 Q45: buffer ratio problem (pH = pKa + log S/A) was skipped.',
+             now:'CTA19 Q40 (Ksp in a buffer) skipped again; Q51 (pH at equivalence) answered but wrong.',
+             verdict:'The skip is the same repeat. Q51 is a different error: you attempted it and used the wrong constant.' },
+  why:'Before any formula, decide what is in the beaker after the reaction: buffer (both HA and A⁻), only the salt (equivalence), or excess strong acid or base. The formula follows from that picture. Getting the picture wrong is the usual loss here.',
+  rule:['Weak acid + strong base: moles left of HA and A⁻ both non-zero → buffer, pH = pKa + log([A⁻]/[HA]). Exactly equal moles → only salt A⁻.',
+        'Salt of weak acid, concentration C: K<sub>h</sub> = K<sub>w</sub>/K<sub>a</sub>, [OH⁻] = √(K<sub>h</sub>·C), pH = 7 + ½(pKa + log C). Use the <em>diluted</em> C.',
+        'Salt of weak base: [H⁺] = √(K<sub>w</sub>·C/K<sub>b</sub>), pH = 7 − ½(pKb + log C).',
+        'Ksp with a weak-acid anion in a buffer: free anion = S·Ka/(Ka + [H⁺]), so S = √(Ksp(Ka + [H⁺])/Ka).'],
+  ex:{ q:'The pH of the solution when 0.1 M CH₃COOH (50 mL) and 0.1 M NaOH (50 mL) are mixed is: [Ka(CH₃COOH) = 10⁻⁵] (log 5 = 0.7)',
+       src:'CTA19 Q51', yours:'10.85', correct:'8.83–8.87 (about 8.85)',
+       steps:[
+        {tag:'Step 1 · What is in the beaker', html:'5 mmol acid + 5 mmol NaOH: exactly neutralised. Only <span class="m">CH₃COONa</span> remains, in 100 mL, so C = 0.005 / 0.100 = <span class="m">0.05 M</span>.'},
+        {tag:'Step 2 · Acetate is a weak base', html:'K<sub>h</sub> = K<sub>w</sub>/K<sub>a</sub> = 10⁻¹⁴ / 10⁻⁵ = <span class="m">10⁻⁹</span> (this is Kb of acetate).'},
+        {tag:'Step 3 · Find pOH', html:'[OH⁻] = √(10⁻⁹ × 0.05). pOH = ½(pKb − log C) = ½(9 + 1.3) = <span class="m">5.15</span>.'},
+        {tag:'Step 4 · Finish', html:'pH = 14 − 5.15 = 8.85.<div class="final">Answer: pH ≈ 8.85</div><div class="trap-note">Your 10.85 equals 14 − 3.15, and 3.15 = ½(5 + 1.3). So the pKa (5) went into the pOH formula where pKb (9) belongs. Probable cause, judged from your number. Fix: before using a formula, write which species is hydrolysing (here the acetate ion, a base).</div>'}
+       ] } },
+{ id:'s4', n:4, chip:'c1', chipText:'Recurring', title:'Thermodynamics: state functions and statements',
+  pattern:'thermo-entropy-work-and-real-gas-concepts',
+  syl:'Syllabus: Chemical Thermodynamics (first law, enthalpy, heat capacity, entropy, Gibbs energy)',
+  cameBack:{ prev:'CTA16 Q49: entropy over two steps; isothermal part +17.3, cooling part −51.9, total 35. You answered 3.',
+             now:'CTA19 Q45 (statements) wrong, Q50 wrong (needs a figure), Q41 (entropy of mixing) skipped.',
+             verdict:'A different error in the same chapter. Before it was a calculation across two steps. Now it is a concept rule: “isothermal means ΔU = 0” applied where it does not hold.' },
+  why:'Thermodynamics statements test when a rule applies. “Isothermal → ΔU = 0” is true for an ideal gas only. “ΔH = ΔU” holds when the volume change is negligible. Learn the condition, not just the rule.',
+  rule:['ΔH = ΔU + Δ(PV). For gases ΔH = ΔU + Δn_g·RT; for solid ↔ liquid, ΔV ≈ 0 so ΔH ≈ ΔU.',
+        'Ideal gas, any isothermal change: ΔU = 0 and ΔH = 0. Real substances and phase changes: no.',
+        'Ideal gas at constant P: V ∝ T. Compress it and T falls. Molar heat capacities generally vary with T.',
+        'Entropy of mixing ideal gases: each gas expands to the full volume, ΔS = Σ nᵢR ln(V_final/Vᵢ). Reversible adiabatic: q = 0, so ΔS = 0.'],
+  ex:{ q:'Choose the CORRECT statement(s) among the following:\n(A) Internal energy of H₂O remains constant during conversion of liquid into its vapour at constant temperature.\n(B) During fusion of ice into water, enthalpy change and internal energy change are almost the same at constant temperature.\n(C) Molar heat capacities of gases are generally temperature dependent.\n(D) During compression of an ideal gas at constant pressure, the temperature of the gas decreases.',
+       src:'CTA19 Q45', yours:'A, B, D', correct:'B, C, D',
+       steps:[
+        {tag:'Option A · test the condition', html:'Heat is absorbed to break attractions, and the system pushes the surroundings back. For water, ΔU = ΔH − PΔV = ΔH − RT ≈ 40.7 − 3.1 = 37.6 kJ mol⁻¹, which is not zero. “Constant T so constant U” works only for an ideal gas. <strong>A is false.</strong>'},
+        {tag:'Option B · volume change', html:'ΔH − ΔU = PΔV. Ice and water differ in volume by about 10%, and a liquid or solid PΔV is tiny. So ΔH ≈ ΔU. <strong>B is true.</strong>'},
+        {tag:'Option C · the one you missed', html:'For gases, C_v and C_p change with temperature (vibrational modes switch on). “Generally temperature dependent” is the textbook statement. <strong>C is true.</strong>'},
+        {tag:'Option D · ideal gas at constant P', html:'V = nRT/P. If P is fixed and the gas is compressed, V falls, so T falls. <strong>D is true.</strong><div class="final">Answer: B, C, D</div><div class="trap-note">You ticked A (false) and missed C (true). Two separate causes: applying the ideal-gas isothermal rule to a phase change, and not trusting a “generally” statement that is simply a fact.</div>'}
+       ] } },
+{ id:'s5', n:5, chip:'c5', chipText:'New', title:'Group 13: diborane, adducts and halides',
+  pattern:'boron-hydrides-diborane-and-adduct-structures; group-13-halides-oxides-and-statement-questions',
+  syl:'Syllabus: p-Block Elements, Group 13 (diborane, boron trifluoride, aluminium chloride; anomalous boron)',
+  cameBack:null,
+  why:'WTA19 asked mostly “which statement is correct or incorrect” and “count the atoms” questions on boron compounds. Counting problems need the real 3D skeleton. Statement problems need a short list of facts and a habit: mark each option T or F first, then read whether the stem wants the true or the false one.',
+  rule:['Diborane: 4 terminal B–H bonds and both B lie in one plane. The two bridging H (three-centre, two-electron bonds) are above and below it. B is sp³.',
+        'Al₂(CH₃)₆ and Al₂Cl₆ have the same skeleton. A tetrahedral C in a plane can show at most two of its bonds, so a terminal CH₃ gives C + 1 H.',
+        'Boranes are hydrolysed readily. NaAlH₄ hydrolyses faster than NaBH₄. BF₃ has the shortest B–F bond (pπ–pπ back-bonding) and is the weakest Lewis acid of BX₃. BCl₃ is monomeric, AlCl₃ dimeric.',
+        'Stem polarity: write T or F beside every option first. Then pick the ones the stem asks for (INCORRECT stems want the F’s).'],
+  ex:{ q:'If x is the maximum number of atoms present in one plane of B₂H₆ and y is the maximum number of atoms present in one plane of Al₂(CH₃)₆, then |x − y| is:',
+       src:'WTA19 Q51', yours:'0', correct:'4',
+       diag:'Diagram: diborane drawn as one plane holding the two B atoms and four terminal H (6 atoms), with two bridging H, one above and one below the plane, joined to both B by dashed lines.',
+       fig:FIG_DIBORANE,
+       steps:[
+        {tag:'Step 1 · Draw the skeleton', html:'In B₂H₆ the four terminal H and the two B share one plane. The two bridging H sit above and below it.'},
+        {tag:'Step 2 · x', html:'The best plane holds 2 B + 4 terminal H = <span class="m">x = 6</span>. A plane through the bridging H holds only 2 B + 2 H = 4.'},
+        {tag:'Step 3 · y', html:'Al₂(CH₃)₆ has the same shape: 2 Al + 4 terminal C = 6 atoms in the main plane. Each terminal C is tetrahedral. A plane through its Al–C bond can also contain exactly one of its three H. That adds 4 H: <span class="m">y = 10</span>.'},
+        {tag:'Step 4 · Finish', html:'|x − y| = |6 − 10| = 4.<div class="final">Answer: 4</div><div class="trap-note">An answer of 0 would come from counting both as 6, which ignores the H on the methyl groups. Also note Q44 (INCORRECT stem): only option A was incorrect, since NaAlH₄ hydrolyses faster than NaBH₄. You marked B, a true statement.</div>'}
+       ] } },
+{ id:'s6', n:6, chip:'c5', chipText:'New', title:'Borax and boric acid',
+  pattern:'boron-oxy-compounds-borax-and-boric-acid',
+  syl:'Syllabus: p-Block Elements, Group 13 (borax, orthoboric acid)',
+  cameBack:null,
+  why:'Borax questions are counting questions on one structure. If you know the anion exactly (which B is sp² or sp³, which O is bridging), each of K, L, M and the statements becomes a lookup. WTA19 lost Q45, Q48, Q53 and Q54 here.',
+  rule:['Borax is Na₂[B₄O₅(OH)₄]·8H₂O. The anion has 2 sp² B, 2 sp³ B, 5 bridging O (all B–O–B) and 4 terminal OH.',
+        'pπ–pπ back-bonding needs an sp² B with an empty p orbital. An O attached only to sp³ B cannot back-bond.',
+        'H₃BO₃: weak, monobasic Lewis acid (n-factor 1), planar units joined into layers by H bonds. Cis-diols (glycerol, mannitol) raise its acidity through five-membered chelates.',
+        'Borax: aqueous solution is alkaline. Heating gives NaBO₂ + B₂O₃, and B₂O₃ is acidic. NaBO₂ + H₂O₂ gives sodium perborate. Borax is a primary standard for acids.'],
+  ex:{ q:'Find the value of (K + L + M) based on the structure of borax.\ni) Number of B–O–B bonds in borax = K\nii) The hybridisation of B in borax is sp^x and sp^y. The value of (x + y) = L\niii) Number of oxygen atoms attached to B which do not form a pπ–pπ back bond = M',
+       src:'WTA19 Q54', yours:'19', correct:'13',
+       diag:'Diagram: borax anion B4O5(OH)4 2-. Two sp3 boron atoms are joined through one central oxygen. Two sp2 boron atoms (one above, one below) each link to both sp3 boron atoms through a bridging oxygen. Each boron also carries one terminal OH. The central oxygen and the two OH groups on the sp3 borons are marked as not back-bonding.',
+       fig:FIG_BORAX,
+       steps:[
+        {tag:'Step 1 · Fix the structure', html:'Anion [B₄O₅(OH)₄]²⁻. Two B are sp³ (4 O each), two are sp² (3 O each). The 5 O of B₄O₅ each bridge two B. The 4 OH are terminal, one per B.'},
+        {tag:'Step 2 · K', html:'Every bridging O is a B–O–B link. <span class="m">K = 5</span>.'},
+        {tag:'Step 3 · L', html:'Hybridisations are sp² and sp³, so x + y = 2 + 3 = <span class="m">L = 5</span>.'},
+        {tag:'Step 4 · M', html:'Back-bonding needs an sp² B next door. The O’s with no sp² neighbour: the two OH on the sp³ B and the central O between the two sp³ B. <span class="m">M = 3</span>.'},
+        {tag:'Step 5 · Finish', html:'K + L + M = 5 + 5 + 3 = 13.<div class="final">Answer: 13</div><div class="trap-note">19 = 5 + 5 + 9, and 9 is every O in the anion (5 bridging + 4 OH). So M was probably the total number of O. Judged from your number, not a certainty. Back-bonding needs an sp² boron beside the oxygen.</div>'}
+       ] } }
+];
+
+/* Practice problems. ans = array of correct indexes. mistakes[i] names the slip behind distractor i. */
+var PROBS = [
+{ sec:1, type:'single', q:'3.0 g of a salt of formula A₂B (assume 100% dissociation into 3 ions) is dissolved in 200 g of a solvent (K<sub>b</sub> = 0.52 K kg mol⁻¹). The boiling point rises by 0.26 K. The molar mass of the salt (g/mol) is:',
+  opts:['30','90','60','10'], ans:[1],
+  why:'ΔT_b = i·K_b·m → m = 0.26 / (3 × 0.52) = 0.1667 mol/kg. Moles = 0.1667 × 0.200 kg = 0.03333. M = 3.0 / 0.03333 = 90.',
+  mistakes:{0:'30: ignored i (treated the salt as a non-electrolyte).',2:'60: used i = 2.',3:'10: divided by i instead of multiplying (used i = 1/3).'} },
+{ sec:1, type:'multi', q:'Three aqueous solutions (ideal, complete dissociation): P = 0.10 M NaCl, Q = 0.15 M glucose, R = 0.06 M AlCl₃. At 300 K (R = 0.0821 L atm K⁻¹ mol⁻¹), select the correct statement(s).',
+  opts:['R has a higher osmotic pressure than both P and Q.','If P and R are separated by a semipermeable membrane, water flows from R to P.','The osmotic pressure of R at 300 K is about 5.9 atm.','If Q and P are separated by a semipermeable membrane, water flows from Q to P.'], ans:[0,2,3],
+  why:'Particle concentrations (i × C): P = 0.20, Q = 0.15, R = 0.24 mol/L. R is highest. π(R) = 0.24 × 0.0821 × 300 = 5.91 atm. Water flows from lower to higher i·C: Q → P and P → R.',
+  mistakes:{1:'B: reversed the direction of flow (water goes toward the higher i·C side, so P → R).'} },
+{ sec:1, type:'single', q:'A 0.5 molal aqueous glucose solution (M = 180 g/mol) has density 1.05 g mL⁻¹. Its osmotic pressure at 300 K, in atm, is (R = 0.082 L atm K⁻¹ mol⁻¹):',
+  opts:['12.92','12.30','11.85','11.28'], ans:[2],
+  why:'Per 1000 g water: glucose = 90 g, solution mass = 1090 g, volume = 1090 / 1.05 = 1038 mL. M = 0.5 / 1.038 = 0.4817 mol/L. π = 0.4817 × 0.082 × 300 = 11.85 atm.',
+  mistakes:{0:'12.92: used the volume of the solvent only (1000 g / 1.05) as the solution volume.',1:'12.30: treated molal as molar.',3:'11.28: used the solution mass in grams as its volume in mL (ignored density).'} },
+
+{ sec:2, type:'single', q:'The overall rate constant of a reaction is k = k₁·√k₂ / k₃. The activation energies of the three steps are E₁ = 50, E₂ = 80 and E₃ = 30 kJ mol⁻¹. The overall activation energy (kJ mol⁻¹) is:',
+  opts:['100','50','60','120'], ans:[2],
+  why:'ln k = ln k₁ + ½ ln k₂ − ln k₃. Comparing with ln A − E_a/RT gives E_a = E₁ + ½E₂ − E₃ = 50 + 40 − 30 = 60.',
+  mistakes:{0:'100: forgot the ½ on k₂ (50 + 80 − 30).',1:'50: applied the ½ to the whole sum.',3:'120: added E₃ instead of subtracting.'} },
+{ sec:2, type:'multi', q:'For the reaction 2A + B → P, the rate is d[P]/dt = k[A]. A solution has [A]₀ = 0.40 M with B in large excess. After 30 s, [A] = 0.20 M. (ln 2 = 0.693) Select the correct statement(s).',
+  opts:['The half-life of A is 30 s.','k = 2.31 × 10⁻² s⁻¹.','At 30 s, −d[A]/dt = 4.62 × 10⁻³ mol L⁻¹ s⁻¹.','At 60 s, d[P]/dt = 1.155 × 10⁻³ mol L⁻¹ s⁻¹.'], ans:[0,2,3],
+  why:'−d[A]/dt = 2k[A], so [A] = [A]₀e^(−2kt). Half-life 30 s → 2k = 0.693/30 → k = 1.155 × 10⁻² s⁻¹. At 30 s: 2k[A] = 2 × 1.155 × 10⁻² × 0.20 = 4.62 × 10⁻³. At 60 s [A] = 0.10 M, so d[P]/dt = k[A] = 1.155 × 10⁻³.',
+  mistakes:{1:'B: used k = ln2 / t½ and ignored the factor 2 in −d[A]/dt = 2k[A].'} },
+{ sec:2, type:'single', q:'A first-order reaction in a 2.0 mL sample starts with 4.0 × 10⁻⁶ mol of reactant. k = 3.465 × 10⁻⁴ min⁻¹. The time (in hours) for the amount to fall to 1/8 of its initial value is: (ln 2 = 0.693)',
+  opts:['100','33.3','267','6000'], ans:[0],
+  why:'t = ln 8 / k = 3 × 0.693 / (3.465 × 10⁻⁴) = 6000 min = 100 h. The volume and moles are not needed.',
+  mistakes:{1:'33.3: used one half-life.',2:'267: treated 1/8 as 8 half-lives.',3:'6000: left the answer in minutes.'} },
+
+{ sec:3, type:'single', q:'100 mL of 0.30 M NH₃ (K<sub>b</sub> = 1 × 10⁻⁵) is mixed with 150 mL of 0.20 M HCl. The pH of the solution is: (log 1.2 = 0.08)',
+  opts:['9.04','7.00','2.96','4.96'], ans:[3],
+  why:'Moles: NH₃ = 0.030, HCl = 0.030, so only NH₄Cl remains in 250 mL: C = 0.12 M. K_h = 10⁻⁹. [H⁺] = √(10⁻⁹ × 0.12), so pH = 7 − ½(pKb + log C) = 7 − ½(5 − 0.92) = 4.96.',
+  mistakes:{0:'9.04: gave 14 − pH (treated the salt solution as basic).',1:'7.00: assumed any equivalence point is neutral.',2:'2.96: used pKa of NH₄⁺ (9) where pKb (5) belongs.'} },
+{ sec:3, type:'multi', q:'100 mL of 0.20 M CH₃COOH is mixed with 100 mL of 0.10 M NaOH. K<sub>a</sub> = 1 × 10⁻⁵, log 3 = 0.477. Select the correct statement(s).',
+  opts:['The solution contains only CH₃COONa, so its pH is above 7.','The pH of the mixture is 5.00.','The mixture has the maximum buffer capacity.','If 50 mL of 0.10 M NaOH is added to it, the pH becomes 5.48.'], ans:[1,2,3],
+  why:'Acid 20 mmol, base 10 mmol → HA = A⁻ = 10 mmol in 200 mL: a buffer with pH = pKa = 5.00 and ratio 1 (maximum capacity). Add 5 mmol NaOH: A⁻ = 15, HA = 5, pH = 5 + log 3 = 5.48.',
+  mistakes:{0:'A: took “mixed an acid and a base” as an equivalence point (only half the acid is neutralised).'} },
+{ sec:3, type:'single', q:'AgA (K<sub>sp</sub> = 4 × 10⁻¹⁴) is the silver salt of a weak acid HA (K<sub>a</sub> = 1 × 10⁻⁵). How many times more soluble (nearest integer) is AgA in a buffer of pH 4 than in pure water? (Ignore hydrolysis of A⁻ in water.)',
+  opts:['11','10','3','1'], ans:[2],
+  why:'Free A⁻ = S·Ka/(Ka + [H⁺]). K_sp = S × S·Ka/(Ka + [H⁺]) → S = √(K_sp(Ka + [H⁺])/Ka). In water S₀ = √K_sp. Ratio = √((10⁻⁵ + 10⁻⁴)/10⁻⁵) = √11 = 3.3 ≈ 3.',
+  mistakes:{0:'11: forgot the square root.',1:'10: used [H⁺]/Ka and dropped both the +1 and the root.',3:'1: assumed pH does not matter because Ag⁺ is not affected by H⁺.'} },
+
+{ sec:4, type:'single', q:'A stopcock separates 1 mol of ideal gas A in 1 L from 2 mol of ideal gas B in 2 L, both at 298 K. The stopcock is opened and the gases mix. ΔS_mix (J K⁻¹) is: (R = 8.3 J K⁻¹ mol⁻¹, log 3 = 0.477, log 2 = 0.301)',
+  opts:['9.1','6.9','−15.8','15.8'], ans:[3],
+  why:'Final volume 3 L. A: 1 mol, 1 → 3 L: R ln 3. B: 2 mol, 2 → 3 L: 2R ln 1.5. ΔS = 2.303 × 8.3 × (0.477 + 2 × 0.176) = 15.8 J K⁻¹.',
+  mistakes:{0:'9.1: counted only gas A expanding.',1:'6.9: used log₁₀ in place of ln (forgot the factor 2.303).',2:'−15.8: wrong sign; mixing ideal gases raises entropy.'} },
+{ sec:4, type:'multi', q:'Select the correct statement(s) about ideal gases and phase changes.',
+  opts:['In any isothermal reversible expansion of an ideal gas, ΔU = 0, so q = 0.','In a reversible adiabatic expansion of an ideal gas the temperature falls and ΔS of the gas is zero.','For an ideal gas, ΔH = 0 in any isothermal process.','For vaporisation of water at 373 K and 1 atm, ΔU = ΔH.'], ans:[1,2],
+  why:'B and C are true: q_rev = 0 gives ΔS = 0, and H depends only on T for an ideal gas. In A, ΔU = 0 gives q = −w, which is not zero. In D, ΔH − ΔU = Δn_g·RT = RT for each mole of vapour formed.',
+  mistakes:{0:'A: read ΔU = 0 as q = 0 (it means q = −w).',3:'D: ignored the gas volume produced (PΔV = RT per mole).'} },
+{ sec:4, type:'single', q:'2 mol of an ideal monatomic gas (C_v = 3R/2) at 300 K and 4 atm expands adiabatically against a constant external pressure of 1 atm until its pressure is 1 atm. The final temperature (K) is:',
+  opts:['172','210','236','300'], ans:[1],
+  why:'ΔU = w for q = 0: 2 × (3R/2)(T₂ − 300) = −1 × (V₂ − V₁), with V₂ = 2RT₂/1 and V₁ = 2R × 300/4. So 3R(T₂ − 300) = −2RT₂ + 150R → 5T₂ = 1050 → T₂ = 210 K.',
+  mistakes:{0:'172: used the reversible adiabatic formula T₁(P₂/P₁)^0.4.',2:'236: used C_p in place of C_v in ΔU.',3:'300: assumed isothermal (ΔU = 0).'} },
+
+{ sec:5, type:'single', q:'p = maximum number of atoms in one plane of Al₂(CH₃)₆, and q = maximum number of atoms in one plane of Al₂Cl₆ (both have two bridging groups). p + q is:',
+  opts:['12','16','20','10'], ans:[1],
+  why:'Al₂Cl₆: 2 Al + 4 terminal Cl = 6 in the main plane (the bridging plane holds only 4). Al₂(CH₃)₆: 2 Al + 4 terminal C + 1 H from each terminal CH₃ = 10. p + q = 16.',
+  mistakes:{0:'12: counted only Al and C in the methyl compound (p = 6).',2:'20: put two H of each terminal CH₃ in the plane (p = 14).',3:'10: used p = 6 and the bridging plane (q = 4).'} },
+{ sec:5, type:'multi', q:'Select the correct statement(s) about compounds of boron and aluminium.',
+  opts:['In B₂H₆ the two bridging B–H–B units are three-centre two-electron bonds.','BF₃ is the strongest Lewis acid among the boron trihalides.','AlCl₃ exists as the dimer Al₂Cl₆ in non-polar solvents, but BCl₃ is monomeric.','The B–F bond in BF₃ is longer than in the BF₃·NH₃ adduct.'], ans:[0,2],
+  why:'A and C are true. In B, BF₃ is the weakest of BX₃ because of pπ–pπ back-bonding from F. In D, the B–F bond is shorter in planar BF₃ (about 1.30 Å) and lengthens when boron becomes sp³ in the adduct.',
+  mistakes:{1:'B: judged Lewis acidity by electronegativity of F, ignoring back-bonding.',3:'D: reversed the bond lengths (the one in WTA19 Q37 option A).'} },
+
+{ sec:6, type:'single', q:'In the anion [B₄O₅(OH)₄]²⁻, a = number of sp³ B atoms, b = number of O atoms bonded to two B atoms, c = number of OH groups. a + b + c is:',
+  opts:['7','11','13','15'], ans:[1],
+  why:'a = 2 (the two four-coordinate B). b = 5 (the five bridging O of B₄O₅). c = 4 (one OH on each B). 2 + 5 + 4 = 11.',
+  mistakes:{0:'7: left out the four OH groups.',2:'13: took all four B as sp³.',3:'15: counted all nine O atoms as bridging (b = 9).'} },
+{ sec:6, type:'multi', q:'Select the correct statement(s) about boric acid and borax.',
+  opts:['H₃BO₃ is a weak monobasic Lewis acid: B(OH)₃ + 2H₂O ⇌ [B(OH)₄]⁻ + H₃O⁺.','Solid H₃BO₃ has layers of planar B(OH)₃ units held together by hydrogen bonds.','An aqueous solution of borax is acidic because boric acid is formed.','Borax on strong heating gives NaBO₂ and B₂O₃, and the glassy mass reacts with CoO to give blue Co(BO₂)₂.'], ans:[0,1,3],
+  why:'A, B and D are standard facts. In C, borax hydrolyses to NaOH + H₃BO₃. NaOH is a strong base and H₃BO₃ is very weak, so the solution is alkaline.',
+  mistakes:{2:'C: assumed the acid formed decides the pH, ignoring that its partner is a strong base.'} }
+];
+
+/* ---------- helpers ---------- */
+var LET = ['A','B','C','D'];
+function plain(html){ var d=document.createElement('div'); d.innerHTML=html.replace(/<\/?(div|br|li|p|ul|figure)[^>]*>/g,' '); return d.textContent.replace(/\s+/g,' ').trim(); }
+var SUP={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁻':'-','⁺':'+'};
+var SUB={'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9','₊':'+','₋':'-'};
+function ascii(s){
+  return s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]+/g,function(r){return '^'+r.split('').map(function(c){return SUP[c];}).join('');})
+          .replace(/[₀-₉₊₋]+/g,function(r){return r.split('').map(function(c){return SUB[c];}).join('');})
+          .replace(/×/g,'x').replace(/→/g,'->').replace(/⇌/g,'<=>').replace(/√/g,'sqrt').replace(/≈/g,'~').replace(/−/g,'-')
+          .replace(/½/g,'1/2').replace(/Δ/g,'delta ').replace(/π/g,'pi').replace(/λ/g,'lambda').replace(/°/g,' deg')
+          .replace(/∝/g,'prop. to').replace(/Σ/g,'sum').replace(/·/g,'*').replace(/[–—]/g,'-').replace(/[“”]/g,'"').replace(/[’‘]/g,"'")
+          .replace(/ᵢ/g,'i').replace(/✓/g,'').replace(/’/g,"'");
+}
+var TUTOR = 'I am a JEE aspirant preparing for JEE Advanced. Act as a patient tutor: use simple language, reply in chunks of under 10 lines, explain why and not just how, and wait for my reply before moving on.';
+function askUrl(parts){
+  var ps = parts.map(function(p){ return ascii(p); });
+  function build(){ return 'https://claude.ai/new?q=' + encodeURIComponent(ps.join('\n\n')); }
+  var u = build(), guard = 0;
+  while(u.length > 3300 && guard++ < 200){
+    var li = 1; for(var i=2;i<ps.length;i++){ if(ps[i].length > ps[li].length) li = i; }
+    ps[li] = ps[li].slice(0, Math.max(40, Math.floor(ps[li].length*0.9))) + '...';
+    u = build();
+  }
+  return u;
+}
+function askLink(parts){
+  var a = document.createElement('a');
+  a.className='ask'; a.target='_blank'; a.rel='noopener'; a.textContent='Ask Claude about this ↗';
+  a.href = askUrl([TUTOR].concat(parts));
+  return a;
+}
+function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
+
+/* ---------- build sections ---------- */
+function buildSections(){
+  var root = document.getElementById('sections');
+  SECTIONS.forEach(function(s){
+    var sec = el('section','pattern'); sec.id = s.id;
+    var head = el('div','pattern-head');
+    head.appendChild(el('h2',null, s.n+' · '+s.title));
+    head.appendChild(el('span','chip '+s.chip, s.chipText));
+    sec.appendChild(head);
+    sec.appendChild(el('div','syl', s.syl));
+    if(s.cameBack){
+      var cb = el('div','came-back');
+      cb.innerHTML = '<span class="lbl">This one came back</span>'
+        +'<div class="sbs"><div><span class="h">Last time</span>'+s.cameBack.prev+'</div><div><span class="h">This time</span>'+s.cameBack.now+'</div></div>'
+        +'<div>'+s.cameBack.verdict+'</div>';
+      sec.appendChild(cb);
+    }
+    sec.appendChild(el('p','why', '<strong>Why this matters.</strong> '+s.why));
+    var rule = el('div','rule');
+    rule.innerHTML = '<span class="rule-label">Shortcut rules</span><ul>'+s.rule.map(function(r){return '<li>'+r+'</li>';}).join('')+'</ul>';
+    sec.appendChild(rule);
+
+    var ex = s.ex, st = el('div','stepper'); st.id = 'st-'+s.id;
+    st.appendChild(el('span','stepper-label','Worked example · your real question ('+ex.src+')'));
+    st.appendChild(el('p',null, ex.q.replace(/\n/g,'<br>')));
+    st.appendChild(el('p','yours','Your answer: <strong>'+ex.yours+'</strong>. Correct answer: <strong>'+ex.correct+'</strong>.'));
+    if(ex.fig){ var f = el('div'); f.innerHTML = ex.fig; st.appendChild(f); }
+    ex.steps.forEach(function(sp,i){
+      var d = el('div','step'); d.innerHTML='<span class="tag">'+sp.tag+'</span>'+sp.html; if(i>0) d.hidden = true; st.appendChild(d);
+    });
+    var b = el('button','step-btn','Show next step →'); b.type='button'; b.onclick=function(){ stepNext(st); }; st.appendChild(b);
+    sec.appendChild(st);
+
+    var secParts = ['Topic: '+s.title+' (JEE Advanced Chemistry). Pattern: '+s.pattern+'.',
+                    'Why it matters: '+plain(s.why),
+                    'Shortcut rules: '+s.rule.map(plain).join(' | ')];
+    var exParts = ['Worked example ('+ex.src+'). Question: '+plain(ex.q.replace(/\n/g,' ')),
+                   'My real answer was '+ex.yours+' and the correct answer is '+ex.correct+'.'
+                   + (ex.diag ? ' '+ex.diag : ''),
+                   'Steps: '+ex.steps.map(function(sp){ var t=plain(sp.tag+': '+sp.html); return t.length>230? t.slice(0,227)+'...' : t; }).join(' || ')];
+    var row = el('div');
+    row.appendChild(askLink(secParts)); row.appendChild(document.createTextNode(' '));
+    row.appendChild(askLink(exParts));
+    row.lastChild.textContent = 'Ask Claude about the worked example ↗';
+    row.firstChild.textContent = 'Ask Claude about this section ↗';
+    sec.appendChild(row);
+    root.appendChild(sec);
+  });
+}
+
+/* ---------- build practice ---------- */
+function buildGrid(){
+  var grid = document.getElementById('grid');
+  PROBS.forEach(function(p,idx){
+    var sec = SECTIONS[p.sec-1];
+    var card = el('div','card'); card.id='p'+(idx+1);
+    var head = el('div','card-head');
+    head.appendChild(el('span','qnum', String(idx+1)));
+    head.appendChild(el('span','chip '+(p.type==='multi'?'c2':'c3'), p.type==='multi'?'Multi-correct':'Single-correct'));
+    head.appendChild(el('span','chip c4','Level 4'));
+    head.appendChild(el('span','chip '+sec.chip, 'Section '+sec.n));
+    card.appendChild(head);
+    card.appendChild(el('p',null,p.q));
+    if(p.type==='multi') card.appendChild(el('div','yours','Select all that apply.'));
+    var opts = el('div','opts'); var inputs=[];
+    p.opts.forEach(function(t,i){
+      var lab = el('label','opt');
+      var inp = document.createElement('input'); inp.type = p.type==='multi'?'checkbox':'radio'; inp.name='q'+idx; inp.id='q'+idx+'o'+i; inp.value=i;
+      lab.appendChild(inp); lab.appendChild(el('span','l',LET[i])); lab.appendChild(el('span','t',t));
+      opts.appendChild(lab); inputs.push(inp);
+    });
+    card.appendChild(opts);
+    var verdict = el('div'); verdict.hidden = true;
+    var actions = el('div');
+    var chk = null;
+    function grade(){
+      var sel=[]; inputs.forEach(function(i){ if(i.checked) sel.push(+i.value); });
+      if(!sel.length){ return; }
+      var ok = sel.length===p.ans.length && sel.every(function(x){ return p.ans.indexOf(x)>-1; });
+      inputs.forEach(function(inp,i){
+        var lab = inp.parentNode; lab.classList.remove('is-right','is-wrong','is-miss');
+        var isAns = p.ans.indexOf(i)>-1;
+        if(inp.checked && isAns) lab.classList.add('is-right');
+        else if(inp.checked && !isAns) lab.classList.add('is-wrong');
+        else if(!inp.checked && isAns) lab.classList.add('is-miss');
+      });
+      verdict.className = 'verdict '+(ok?'ok':'no'); verdict.hidden=false;
+      verdict.textContent = (ok?'Correct. ':'Not quite. ')+'Correct option'+(p.ans.length>1?'s':'')+': '+p.ans.map(function(i){return LET[i];}).join(', ')+'.';
+    }
+    if(p.type==='multi'){
+      chk = el('button','check-btn','Check answer'); chk.type='button'; chk.onclick=grade; actions.appendChild(chk);
+    } else {
+      inputs.forEach(function(i){ i.addEventListener('change', grade); });
+    }
+    var rev = el('button','reveal-btn','Show why'); rev.type='button'; actions.appendChild(rev);
+    card.appendChild(actions); card.appendChild(verdict);
+    var ans = el('div','answer'); ans.hidden = true;
+    var mk = Object.keys(p.mistakes).map(function(k){ return '<li>'+p.mistakes[k]+'</li>'; }).join('');
+    ans.innerHTML = '<div>'+p.why+'</div><ul>'+mk+'</ul>';
+    card.appendChild(ans);
+    rev.onclick = function(){ ans.hidden = !ans.hidden; rev.textContent = ans.hidden ? 'Show why' : 'Hide why'; };
+
+    var parts = ['Practice problem '+(idx+1)+' ('+(p.type==='multi'?'multi-correct: pick all correct options':'single-correct')+', level 4, topic: '+sec.title+').',
+                 'Problem: '+plain(p.q),
+                 'Options: '+p.opts.map(function(t,i){return LET[i]+') '+plain(t);}).join('  '),
+                 'For your reference only, do not reveal unless I ask or have made a real attempt. Correct: '+p.ans.map(function(i){return LET[i];}).join(', ')+'. Reasoning: '+plain(p.why),
+                 'Ask me what I have tried first, then give me one hint at a time.'];
+    card.appendChild(askLink(parts));
+    grid.appendChild(card);
+  });
+}
+
+function stepNext(st){
+  var steps = st.querySelectorAll('.step'), shown = 0;
+  steps.forEach(function(s){ if(!s.hidden) shown++; });
+  if(shown < steps.length){ steps[shown].hidden = false; shown++; }
+  if(shown >= steps.length){ st.querySelector('.step-btn').hidden = true; }
+}
+function setMode(mode, btn){
+  document.querySelectorAll('.mode-btn').forEach(function(b){ b.setAttribute('aria-pressed', b===btn?'true':'false'); });
+  document.getElementById('timerBar').hidden = (mode!=='timed');
+}
+var remaining = 40*60, timerId = null;
+function renderTime(){ var m=String(Math.floor(remaining/60)).padStart(2,'0'), s=String(remaining%60).padStart(2,'0'); document.getElementById('timeDisplay').textContent=m+':'+s; }
+function startTimer(){ if(timerId) return; timerId=setInterval(function(){ remaining--; if(remaining<=0){ clearInterval(timerId); timerId=null; document.getElementById('timeDisplay').textContent="Time's up"; } else renderTime(); },1000); }
+function resetTimer(){ clearInterval(timerId); timerId=null; remaining=40*60; renderTime(); }
+
+buildSections(); buildGrid(); renderTime();
+</script>

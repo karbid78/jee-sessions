@@ -1,0 +1,723 @@
+<title>Trig and Matrices Repair Kit</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&amp;family=IBM+Plex+Mono:wght@400;600;700&amp;family=IBM+Plex+Sans:wght@400;600&amp;display=swap">
+<style>
+  :root{
+    --bg:#F5F7FB;
+    --surface:#FFFFFF;
+    --surface-2:#EDF1F8;
+    --ink:#1B2436;
+    --ink-soft:#535F76;
+    --border:#DBE1ED;
+    --accent:#2F5A8A;
+    --accent-soft:#E7EEF7;
+    --highlight:#D99A12;
+    --highlight-ink:#5C4008;
+    --highlight-bg:#FFF6DE;
+    --highlight-border:#F0D796;
+    --good:#2F8F5B;
+    --good-bg:#E5F5EC;
+    --trap:#B8503F;
+    --trap-bg:#FBEAE6;
+    --chip-1:#2F5A8A;
+    --chip-1-bg:#E7EEF7;
+    --chip-2:#7C4FBF;
+    --chip-2-bg:#F0E9FA;
+    --chip-3:#2F8F5B;
+    --chip-3-bg:#E5F5EC;
+    --chip-4:#B4681F;
+    --chip-4-bg:#FBEEDF;
+    --chip-5:#535F76;
+    --chip-5-bg:#EDF1F8;
+    --shadow: 0 1px 2px rgba(27,36,54,.04), 0 8px 24px -12px rgba(27,36,54,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0F131C;
+      --surface:#161C29;
+      --surface-2:#1E2635;
+      --ink:#E7ECF6;
+      --ink-soft:#A6B1C6;
+      --border:#2B3448;
+      --accent:#7BAAE0;
+      --accent-soft:#1B2A3E;
+      --highlight:#E8B84B;
+      --highlight-ink:#FBE8B8;
+      --highlight-bg:#3A2E10;
+      --highlight-border:#5C4A1B;
+      --good:#5FC98C;
+      --good-bg:#12301F;
+      --trap:#E1897A;
+      --trap-bg:#3A1E19;
+      --chip-1:#7BAAE0; --chip-1-bg:#1B2A3E;
+      --chip-2:#C0A2EC; --chip-2-bg:#2A2140;
+      --chip-3:#5FC98C; --chip-3-bg:#12301F;
+      --chip-4:#E3A768; --chip-4-bg:#3A2A14;
+      --chip-5:#A6B1C6; --chip-5-bg:#1E2635;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0F131C;
+    --surface:#161C29;
+    --surface-2:#1E2635;
+    --ink:#E7ECF6;
+    --ink-soft:#A6B1C6;
+    --border:#2B3448;
+    --accent:#7BAAE0;
+    --accent-soft:#1B2A3E;
+    --highlight:#E8B84B;
+    --highlight-ink:#FBE8B8;
+    --highlight-bg:#3A2E10;
+    --highlight-border:#5C4A1B;
+    --good:#5FC98C;
+    --good-bg:#12301F;
+    --trap:#E1897A;
+    --trap-bg:#3A1E19;
+    --chip-1:#7BAAE0; --chip-1-bg:#1B2A3E;
+    --chip-2:#C0A2EC; --chip-2-bg:#2A2140;
+    --chip-3:#5FC98C; --chip-3-bg:#12301F;
+    --chip-4:#E3A768; --chip-4-bg:#3A2A14;
+    --chip-5:#A6B1C6; --chip-5-bg:#1E2635;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+
+  * { box-sizing: border-box; }
+  body{
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    padding-inline: 20px;
+    padding-block: 28px 64px;
+    line-height: 1.55;
+  }
+  .wrap{ max-width: 760px; margin: 0 auto; }
+  h1,h2,h3{ font-family: "Fraunces", Georgia, serif; font-weight: 600; text-wrap: balance; margin: 0; }
+  a { color: var(--accent); }
+  .eyebrow{
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+
+  /* ---------- math helpers ---------- */
+  .m{ font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .97em; }
+  .f{ display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; font-size:.88em; line-height:1.15; margin:0 .15em; }
+  .f .fn{ border-bottom:1.4px solid currentColor; padding:0 .22em .04em; }
+  .f .fd{ padding:.04em .22em 0; }
+  .lim{ display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; font-style:italic; line-height:1.05; margin-right:.18em; }
+  .lim .sub{ font-size:.66em; font-style:normal; color: var(--ink-soft); }
+  .eq{ display:block; margin: 14px 0; padding: 14px 16px; background: var(--surface-2); border-radius: 10px; overflow-x:auto; }
+
+  /* ---------- hero ---------- */
+  .hero{ padding-block: 8px 30px; }
+  .hero h1{ font-size: clamp(1.7rem, 5vw, 2.35rem); margin-top: 10px; }
+  .hero p{ color: var(--ink-soft); max-width: 60ch; }
+  .hero-note{
+    margin-top: 18px; padding: 14px 16px; border-radius: 12px;
+    background: var(--accent-soft); border: 1px solid var(--border);
+    font-size: .93rem;
+  }
+  .asymptote-fig{ width: 100%; max-width: 420px; height: auto; display:block; margin: 18px 0 4px; }
+  @media (prefers-reduced-motion: no-preference){
+    .dot{ animation: approach 3.2s ease-in-out infinite; }
+    @keyframes approach{
+      0%{ transform: translateX(0); }
+      55%{ transform: translateX(190px); }
+      100%{ transform: translateX(190px); }
+    }
+  }
+
+  /* ---------- pattern sections ---------- */
+  .pattern{
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 22px 22px 24px; margin-block: 18px; box-shadow: var(--shadow);
+  }
+  .pattern-head{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom: 6px; }
+  .pattern-head h2{ font-size: 1.28rem; }
+  .chip{
+    font-family:"IBM Plex Mono", monospace; font-size:.68rem; letter-spacing:.05em; text-transform:uppercase;
+    padding: 3px 9px; border-radius: 999px; font-weight: 600; white-space:nowrap;
+  }
+  .chip-1{ color:var(--chip-1); background:var(--chip-1-bg); }
+  .chip-2{ color:var(--chip-2); background:var(--chip-2-bg); }
+  .chip-3{ color:var(--chip-3); background:var(--chip-3-bg); }
+  .chip-4{ color:var(--chip-4); background:var(--chip-4-bg); }
+  .chip-5{ color:var(--chip-5); background:var(--chip-5-bg); }
+  .pattern p{ margin: 10px 0; }
+  .why{ color: var(--ink-soft); font-size: .95rem; }
+
+  .rule{
+    margin-top: 14px; padding: 14px 16px; border-radius: 10px;
+    background: var(--highlight-bg); border: 1px solid var(--highlight-border); color: var(--highlight-ink);
+  }
+  .rule-label{ font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; margin-bottom:6px; display:block; }
+  .rule ul{ margin: 6px 0 0; padding-left: 20px; }
+  .rule li{ margin: 3px 0; }
+
+  /* ---------- stepper (worked examples) ---------- */
+  .stepper{ margin-top: 16px; border-top: 1px dashed var(--border); padding-top: 14px; }
+  .stepper-label{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color: var(--ink-soft); margin-bottom: 8px; display:block; }
+  .step{ padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .step:last-of-type{ border-bottom: none; }
+  .step .tag{ font-weight:600; font-size:.82rem; color: var(--accent); display:block; margin-bottom: 4px; }
+  .step-btn{
+    margin-top: 10px; font: inherit; font-weight: 600; font-size: .88rem;
+    background: var(--accent); color: white; border: none; border-radius: 8px;
+    padding: 9px 14px; cursor: pointer;
+  }
+  .step-btn:hover{ filter: brightness(1.08); }
+  .final{ background: var(--good-bg); color: var(--good); border-radius: 8px; padding: 10px 12px; font-weight: 700; margin-top: 6px; }
+  .trap-note{ background: var(--trap-bg); color: var(--trap); border-radius: 8px; padding: 10px 12px; font-size: .9rem; margin-top: 10px; }
+
+  /* ---------- practice section ---------- */
+  .practice-head{ padding-block: 6px 4px; }
+  .mode-row{
+    display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin: 14px 0 8px;
+    background: var(--surface); border:1px solid var(--border); border-radius: 14px; padding: 14px 16px;
+    box-shadow: var(--shadow);
+  }
+  .mode-btn{
+    font: inherit; font-weight:600; font-size:.9rem; padding: 8px 14px; border-radius: 999px;
+    border:1px solid var(--border); background: var(--surface-2); color: var(--ink); cursor:pointer;
+  }
+  .mode-btn[aria-pressed="true"]{ background: var(--accent); color: white; border-color: var(--accent); }
+  .timer-bar{ display:flex; align-items:center; gap:12px; margin-left:auto; flex-wrap:wrap; }
+  .time{ font-family:"IBM Plex Mono",monospace; font-size:1.3rem; font-variant-numeric: tabular-nums; min-width: 64px; }
+  .timer-btn{ font: inherit; font-size:.85rem; font-weight:600; border-radius:8px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); padding:7px 12px; cursor:pointer; }
+  .mode-help{ font-size:.85rem; color: var(--ink-soft); margin: 6px 2px 0; }
+
+  .grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin-top: 16px; }
+  .card{
+    background: var(--surface); border:1px solid var(--border); border-radius: 14px; padding: 16px 16px 14px;
+    box-shadow: var(--shadow); display:flex; flex-direction:column;
+  }
+  .card-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom: 8px; }
+  .qnum{ font-family:"Fraunces",serif; font-weight:700; font-size:1.05rem; color: var(--accent); }
+  .card ol{ padding-left: 20px; margin: 6px 0; }
+  .card li{ margin: 3px 0; }
+  .reveal-btn{
+    align-self:flex-start; margin-top:10px; font: inherit; font-weight:600; font-size:.85rem;
+    background: none; border: 1.4px solid var(--accent); color: var(--accent); border-radius: 8px;
+    padding: 7px 12px; cursor: pointer;
+  }
+  .reveal-btn:hover{ background: var(--accent-soft); }
+  .answer{ margin-top: 10px; padding: 10px 12px; background: var(--good-bg); border-radius: 8px; }
+  .answer .val{ color: var(--good); font-weight: 700; font-family:"IBM Plex Mono",monospace; }
+  .answer .why{ margin-top: 4px; font-size: .88rem; }
+
+  footer{ margin-top: 26px; color: var(--ink-soft); font-size: .88rem; text-align:center; }
+
+  .hero-fig{ width:100%; max-width:440px; height:auto; display:block; margin:18px 0 4px; }
+  .cmp{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px; margin:14px 0 6px; }
+  .cmp .box{ background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:11px 13px; font-size:.9rem; min-width:0; }
+  .cmp .box.now{ background:var(--trap-bg); border-color:var(--trap); }
+  .cmp .box .tagline{ display:block; font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; font-weight:700; color:var(--ink-soft); margin-bottom:5px; }
+  .cmp .box.now .tagline{ color:var(--trap); }
+  .verdict{ font-size:.93rem; margin:10px 0 4px; padding:10px 13px; border-left:3px solid var(--highlight); background:var(--highlight-bg); color:var(--highlight-ink); border-radius:0 8px 8px 0; }
+  .back{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; font-weight:700; color:var(--trap); background:var(--trap-bg); padding:3px 9px; border-radius:999px; white-space:nowrap; }
+  .note{ font-size:.88rem; color:var(--ink-soft); margin-top:8px; }
+  .step, .rule, .cmp, .answer, .eq { overflow-wrap:anywhere; }
+  .eq{ font-size:.93rem; }
+  .ask-row{ margin-top:14px; display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; }
+  .ask{ display:inline-flex; align-items:center; gap:6px; font:inherit; font-weight:600; font-size:.85rem; color:var(--accent); background:var(--accent-soft); border:1.4px solid var(--accent); border-radius:8px; padding:7px 12px; text-decoration:none; }
+  .ask:hover{ filter:brightness(.97); text-decoration:underline; }
+  .ask:focus-visible{ outline:2px solid var(--highlight); outline-offset:2px; }
+  .ask-hint{ font-size:.8rem; color:var(--ink-soft); }
+  .card .ask-row{ margin-top:10px; }
+
+  .card-tags{ display:flex; align-items:center; gap:6px; }
+  .lvl{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; font-weight:700; letter-spacing:.06em; color:var(--highlight-ink); background:var(--highlight-bg); border:1px solid var(--highlight-border); padding:2px 8px; border-radius:999px; }
+  .answer ol{ margin:6px 0 0 1.2em; padding:0; font-size:.88rem; color:var(--ink-soft); }
+  .answer ol li{ margin:3px 0; }
+  .answer .trap-note{ margin-top:8px; }
+
+  :root{ --on-accent:#FFFFFF; }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --on-accent:#0F131C; } }
+  :root[data-theme="dark"]{ --on-accent:#0F131C; }
+  .step-btn{ color:var(--on-accent); }
+  .mode-btn[aria-pressed="true"]{ color:var(--on-accent); }
+  .qtype{ font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.05em; text-transform:uppercase; font-weight:700; padding:3px 9px; border-radius:999px; color:var(--ink-soft); background:var(--surface-2); border:1px solid var(--border); white-space:nowrap; }
+  .card-tags{ flex-wrap:wrap; justify-content:flex-end; }
+  .opts{ display:grid; gap:8px; margin:12px 0 4px; }
+  .opt{ display:flex; gap:10px; align-items:flex-start; padding:9px 12px; border:1.4px solid var(--border); border-radius:10px; background:var(--surface-2); cursor:pointer; min-width:0; overflow-wrap:anywhere; }
+  .opt:hover{ border-color:var(--accent); }
+  .opt input{ margin-top:4px; accent-color:var(--accent); flex:none; }
+  .opt .ol{ font-family:"IBM Plex Mono",monospace; font-weight:700; color:var(--accent); flex:none; }
+  .opt .ot{ min-width:0; }
+  .opt.ok{ border-color:var(--good); background:var(--good-bg); }
+  .opt.bad{ border-color:var(--trap); background:var(--trap-bg); }
+  .opt.miss{ border-color:var(--good); border-style:dashed; background:var(--good-bg); }
+  .opt .mark{ margin-left:auto; flex:none; font-weight:700; font-size:.82rem; }
+  .opt.ok .mark,.opt.miss .mark{ color:var(--good); } .opt.bad .mark{ color:var(--trap); }
+  .result{ margin-top:10px; padding:9px 12px; border-radius:8px; font-weight:600; font-size:.92rem; }
+  .result.right{ background:var(--good-bg); color:var(--good); }
+  .result.wrong{ background:var(--trap-bg); color:var(--trap); }
+  .btn-row{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:10px; }
+  .btn-row .reveal-btn{ margin-top:0; }
+  .check-btn{ font:inherit; font-weight:600; font-size:.85rem; background:var(--accent); color:var(--on-accent); border:none; border-radius:8px; padding:8px 13px; cursor:pointer; }
+  .check-btn:focus-visible,.reveal-btn:focus-visible,.opt:focus-within{ outline:2px solid var(--highlight); outline-offset:2px; }
+  .pfig{ margin:10px 0 2px; }
+  .pfig svg{ display:block; width:100%; max-width:340px; height:auto; color:var(--ink); }
+  .pfig svg text{ font-family:"IBM Plex Mono",monospace; font-size:11px; fill:currentColor; }
+  .pfig figcaption{ font-size:.8rem; color:var(--ink-soft); margin-top:4px; }
+  .mistakes{ margin:6px 0 0; padding-left:18px; font-size:.86rem; }
+  .grid{ grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr)); }
+  .mat{display:inline-block;vertical-align:middle;border-left:1.6px solid currentColor;border-right:1.6px solid currentColor;border-radius:5px;padding:2px 8px;margin:0 3px;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.88em;max-width:100%;overflow-x:auto}
+  .mat .mr{display:grid;grid-template-columns:repeat(var(--c),auto);gap:1px 14px;text-align:center}
+  .stepper .pfig svg{max-width:400px}
+</style>
+<div class="wrap">
+<section class="hero">
+<span class="eyebrow">Maths · Focus Session · CTA16 to CTA19</span>
+<h1>Trig counting, trig identities and matrices: all three came back</h1>
+<p>Each of these three patterns cost you marks again in CTA19 (4 Oct). Every worked example below is a real question you got wrong or skipped. Every practice problem uses the same technique in a new problem at level L4. This is session 1 of 2; limits get their own session.</p>
+<div class="hero-note"><strong>How to use this:</strong> go section by section. Read the comparison, click through the worked example, then do that section's four practice problems. Every practice problem is multiple choice (A to D): some have one correct option, some need every correct option ticked. Do all 12 once, untimed. The 40-minute timed mode is for a later pass, on 8 of the 12.<br><br><strong>Stuck on something?</strong> Every section, worked example and practice problem has an <em>Ask Claude</em> link. It opens a new claude.ai chat with that topic already typed in, set up so Claude explains step by step and does not just hand over answers. You need to be signed in to claude.ai.</div>
+<p class="note level-note"><strong>Level L4.</strong> The practice problems are set at the level of your Sunday ADV-CTA papers: more than one concept, 6 or more steps, and one trap or boundary check. Every problem carries its level tag. The worked examples are your real questions, kept at their real level. Only methods from the JEE Advanced syllabus and from what your class has taught are used.</p>
+</section>
+<section class="pattern">
+<div class="pattern-head"><h2>1 · Counting trig solutions without losing any</h2><span class="chip chip-1">Trigonometry</span><span class="back">Came back</span></div>
+<p class="why">A count question is decided by two checks: which values the equation can reach, and how many angles give each value. Missing one value, one boundary or one family changes the whole answer. In CTA19 you skipped Q3 and never opened Q7 and Q11, all of this type.</p>
+<div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this pattern ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
+<div class="cmp">
+<div class="box"><span class="tagline">Before</span><strong>CTA18 Q7</strong>: answered <strong>4</strong>, key 8 (the ±13 case was dropped). Q11 was partial (marked only B) and Q2 was skipped.</div>
+<div class="box now"><span class="tagline">Now</span><strong>CTA19 Q3</strong>: skipped (key 4). <strong>Q7</strong> and <strong>Q11</strong>: not visited, so there is no attempt to look at.</div>
+</div>
+<p class="verdict"><strong>Different this time.</strong> Before, you attempted these and slipped on one boundary or one option. Now there is no attempt at all. Because Q7 and Q11 were never opened, time may be the reason, not the concept. I can't tell from the portal, so ask yourself whether you ran out of time on Sunday.</p>
+<div class="stepper" id="st1">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p>In <span class='m'>[0, π]</span>, the equation <span class='m'>sec 2x − sec x = 2</span> has three roots <span class='m'>x₁ &lt; x₂ &lt; x₃</span>. If <span class='m'>π/(x₁+x₂+x₃) = m/n</span> in lowest terms, find <span class='m'>n − m</span>.</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">You skipped this one. Correct answer: <strong>4</strong> (the roots are π/5, 3π/5 and π).</p>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · turn secants into cosines</span>
+Let <span class='m'>c = cos x</span>. Then <span class='m'>cos 2x = 2c² − 1</span>, and the equation is <span class="eq m">1/(2c² − 1) − 1/c = 2</span>Neither <span class='m'>c</span> nor <span class='m'>2c² − 1</span> may be 0. Multiply through by <span class='m'>c(2c² − 1)</span>: <span class="eq m">c − (2c² − 1) = 2c(2c² − 1)</span>
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · make it a cubic</span>
+Expand: <span class='m'>c − 2c² + 1 = 4c³ − 2c</span>, so <span class="eq m">4c³ + 2c² − 3c − 1 = 0</span>Try <span class='m'>c = −1</span>: <span class='m'>−4 + 2 + 3 − 1 = 0</span>. So <span class='m'>(c + 1)</span> is a factor: <span class="eq m">(c + 1)(4c² − 2c − 1) = 0</span>Hence <span class='m'>c = −1</span> or <span class='m'>c = (1 ± √5)/4</span>.
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · turn each c into one angle</span>
+<span class='m'>(1+√5)/4 = cos 36° = cos(π/5)</span> and <span class='m'>(1−√5)/4 = cos 108° = cos(3π/5)</span>, and <span class='m'>c = −1</span> gives <span class='m'>x = π</span>.<figure class="pfig" data-desc="Diagram: the graph of cos x for x from 0 to pi. Three horizontal dashed lines mark c = 0.809 (that is (1+sqrt5)/4), c = -0.309 (that is (1-sqrt5)/4) and c = -1. Each line meets the curve once, at x = pi/5, x = 3pi/5 and x = pi, marked with dots."><svg viewBox="0 0 400 200" role="img" aria-label="Graph of cos x on 0 to pi with three horizontal levels, each crossing the curve once"><line x1="30" y1="90" x2="300" y2="90" stroke="var(--border)" stroke-width="1.5"/><polyline points="30.0,20.0 34.5,20.1 39.0,20.4 43.5,20.9 48.0,21.5 52.5,22.4 57.0,23.4 61.5,24.6 66.0,26.1 70.5,27.6 75.0,29.4 79.5,31.3 84.0,33.4 88.5,35.6 93.0,38.0 97.5,40.5 102.0,43.2 106.5,45.9 111.0,48.9 115.5,51.9 120.0,55.0 124.5,58.2 129.0,61.5 133.5,64.9 138.0,68.4 142.5,71.9 147.0,75.4 151.5,79.0 156.0,82.7 160.5,86.3 165.0,90.0 169.5,93.7 174.0,97.3 178.5,101.0 183.0,104.6 187.5,108.1 192.0,111.6 196.5,115.1 201.0,118.5 205.5,121.8 210.0,125.0 214.5,128.1 219.0,131.1 223.5,134.1 228.0,136.8 232.5,139.5 237.0,142.0 241.5,144.4 246.0,146.6 250.5,148.7 255.0,150.6 259.5,152.4 264.0,153.9 268.5,155.4 273.0,156.6 277.5,157.6 282.0,158.5 286.5,159.1 291.0,159.6 295.5,159.9 300.0,160.0" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/><line x1="30" y1="33.4" x2="300" y2="33.4" stroke="var(--highlight)" stroke-width="1.5" stroke-dasharray="5 4"/><text x="306" y="37.4">c = 0.809</text><line x1="30" y1="111.6" x2="300" y2="111.6" stroke="var(--highlight)" stroke-width="1.5" stroke-dasharray="5 4"/><text x="306" y="115.6">c = −0.309</text><line x1="30" y1="160.0" x2="300" y2="160.0" stroke="var(--highlight)" stroke-width="1.5" stroke-dasharray="5 4"/><text x="306" y="164.0">c = −1</text><circle cx="84.0" cy="33.4" r="5" fill="var(--highlight)" stroke="var(--ink)" stroke-width="1"/><circle cx="192.0" cy="111.6" r="5" fill="var(--highlight)" stroke="var(--ink)" stroke-width="1"/><circle cx="300.0" cy="160.0" r="5" fill="var(--highlight)" stroke="var(--ink)" stroke-width="1"/><line x1="30.0" y1="90" x2="30.0" y2="95" stroke="currentColor"/><text x="30.0" y="185" text-anchor="middle">0</text><line x1="30.0" y1="95" x2="30.0" y2="176" stroke="var(--border)" stroke-dasharray="2 3"/><line x1="84.0" y1="90" x2="84.0" y2="95" stroke="currentColor"/><text x="84.0" y="185" text-anchor="middle">π/5</text><line x1="84.0" y1="95" x2="84.0" y2="176" stroke="var(--border)" stroke-dasharray="2 3"/><line x1="192.0" y1="90" x2="192.0" y2="95" stroke="currentColor"/><text x="192.0" y="185" text-anchor="middle">3π/5</text><line x1="192.0" y1="95" x2="192.0" y2="176" stroke="var(--border)" stroke-dasharray="2 3"/><line x1="300.0" y1="90" x2="300.0" y2="95" stroke="currentColor"/><text x="300.0" y="185" text-anchor="middle">π</text><line x1="300.0" y1="95" x2="300.0" y2="176" stroke="var(--border)" stroke-dasharray="2 3"/></svg><figcaption>cos x on [0, π]. Each level c gives exactly one angle, so three values of c mean three roots.</figcaption></figure>On <span class='m'>[0, π]</span> the cosine is one-to-one, so every value of <span class='m'>c</span> in <span class='m'>[−1, 1]</span> gives exactly one <span class='m'>x</span>. Three values of <span class='m'>c</span> mean three roots.
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · check the denominators</span>
+We needed <span class='m'>cos x ≠ 0</span> and <span class='m'>cos 2x ≠ 0</span>. For <span class='m'>x = π/5</span>, <span class='m'>3π/5</span>, <span class='m'>π</span> the values of <span class='m'>cos 2x</span> are <span class='m'>cos 72°</span>, <span class='m'>cos 216°</span>, <span class='m'>cos 2π</span>, none zero, and <span class='m'>cos x</span> is never zero. No root is spoiled.
+</div>
+<div class="step" data-n="5" hidden>
+<span class="tag">Step 5 · finish</span>
+<span class='m'>x₁ + x₂ + x₃ = π/5 + 3π/5 + π = 9π/5</span>. Then <span class='m'>π/(9π/5) = 5/9</span>, so <span class='m'>m = 5</span>, <span class='m'>n = 9</span>.<span class="eq m">n − m = 4</span><div class="final">Answer: 4</div><div class="trap-note">The trap: leaving it because it is a secant question. Writing <span class='m'>c = cos x</span> turns it into a cubic with a root you can guess (<span class='m'>−1</span>). Then the one-to-one check on <span class='m'>[0, π]</span> turns three values of <span class='m'>c</span> into three roots.</div>
+</div>
+<button class="step-btn" onclick="stepNext('st1')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<div class="rule">
+<span class="rule-label">The shortcuts</span>
+<ul>
+<li><strong>Two checks, always:</strong> (1) which values can the expression take, (2) how many angles give each value. On <span class='m'>[0, π]</span> cos is one-to-one: 1 angle per value. On a full turn, sin or cos gives 2 angles per interior value and 1 at <span class='m'>±1</span>.</li>
+<li><strong>Never divide by something that can be 0.</strong> Move everything to one side and factor. Cancelling <span class='m'>tan x</span> from <span class='m'>tan 2x = 3 tan x</span> loses the roots <span class='m'>0</span> and <span class='m'>π</span>.</li>
+<li><strong>sin A = cos B:</strong> write <span class='m'>cos B = sin(π/2 − B)</span>. Then <span class='m'>sin X = sin Y</span> has two families: <span class='m'>X = Y + 2nπ</span> and <span class='m'>X = π − Y + 2nπ</span>. Use both.</li>
+<li><strong>cosθ ± sinθ</strong> lies in <span class='m'>[−√2, √2]</span>, not <span class='m'>[−1, 1]</span>. List every allowed value and test the largest against <span class='m'>1.414</span> (for example <span class='m'>5/4</span> is allowed).</li>
+<li><strong>A fraction with a common factor:</strong> cancel it, but the value at the hole can never be taken. It becomes an excluded value of the whole expression.</li>
+<li><strong>Quadratic in cos x:</strong> check both roots against <span class='m'>[−1, 1]</span> before counting.</li>
+</ul>
+</div>
+<div class="note"><strong>Your CTA19 Q11, set up</strong> (the portal did not store the exact question, so I stop where the text stops): ‹(x³ − 6x² + 11x − 6)/(x³ + x² − 10x + 8) = (x−1)(x−2)(x−3) / ((x−1)(x−2)(x+4)) = (x−3)/(x+4)›, with holes at ‹x = 1› and ‹x = 2›. Now ‹(x−3)/(x+4) = 1 − 7/(x+4)›, which takes every real value except ‹1›, and the holes remove ‹−2/5› and ‹−1/6›. So the equation has no real solution exactly when ‹3 sin a› is ‹1›, ‹−2/5› or ‹−1/6›. Practice problem 4 trains this move.</div>
+</section>
+<section class="pattern">
+<div class="pattern-head"><h2>2 · Trig identities: spot the telescope</h2><span class="chip chip-2">Trigonometry</span><span class="back">Came back</span></div>
+<p class="why">A sum or product of trig terms looks like brute force. One standard identity collapses it, and the question usually shows you which one: angles that triple each time, a step in the angles, or a ratio of sines. This pattern has now cost you marks in four tests.</p>
+<div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this pattern ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
+<div class="cmp">
+<div class="box"><span class="tagline">Before</span><strong>CTA16 Q8</strong>: answered <strong>2</strong>, key 4. <strong>CTA16 Q10</strong>: answered 1, key 3. <strong>CTA17 Q12</strong>: answered 1, key 4.8.</div>
+<div class="box now"><span class="tagline">Now</span><strong>CTA18 Q12</strong>: skipped. <strong>CTA19 Q1</strong>: skipped (key 9).</div>
+</div>
+<p class="verdict"><strong>Different behaviour, same root.</strong> The wrong answers became skips. Two of the old wrong answers were exactly 1, so skipping is at least safer than guessing. But the marks only come when you recognise the identity. My notes keep only a short description of CTA19 Q1 (a sum of sine products at π/7, key 9), not the full text, so I can't walk through it. The worked example is your CTA16 Q8, which uses the same family of identities.</p>
+<div class="stepper" id="st2">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p>Let <span class='m'>α = ∏ (1 − 2cos(3ᵏπ/11))</span> for <span class='m'>k = 0, 1, 2, 3, 4</span>. Find <span class='m'>5 − α²</span>.</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">Your answer was <strong>2</strong>. Correct answer: <strong>4</strong> (so α = 1).</p>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · look for the tell</span>
+The angles are <span class='m'>π/11</span>, <span class='m'>3π/11</span>, <span class='m'>9π/11</span>, <span class='m'>27π/11</span>, <span class='m'>81π/11</span>. Each is 3 times the one before. That points to an identity with <span class='m'>3θ/2</span>, which is a triple-angle formula in disguise.
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · build the identity</span>
+Start from <span class='m'>cos 3t = 4cos³t − 3cos t = cos t (4cos²t − 3) = cos t (2cos 2t − 1)</span>. Put <span class='m'>t = θ/2</span>: <span class='m'>cos(3θ/2) = cos(θ/2)(2cos θ − 1)</span>. So <span class="eq m">1 − 2cos θ = −cos(3θ/2) / cos(θ/2)</span>Quick check at <span class='m'>θ = 0</span>: left side <span class='m'>−1</span>, right side <span class='m'>−1/1</span>.
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · write the product and let it telescope</span>
+Factor <span class='m'>k</span> has <span class='m'>θ = 3ᵏπ/11</span>, so it equals <span class='m'>−cos(3ᵏ⁺¹π/22) / cos(3ᵏπ/22)</span>. Multiply the five factors, <span class='m'>k = 0</span> to <span class='m'>4</span>. The top of each factor cancels the bottom of the next: <span class="eq m">α = (−1)⁵ · cos(3⁵π/22) / cos(π/22) = −cos(243π/22) / cos(π/22)</span>
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · reduce the big angle</span>
+<span class='m'>11π = 242π/22</span>, so <span class='m'>243π/22 = 11π + π/22</span>. Adding an odd multiple of π flips the sign: <span class='m'>cos(11π + u) = −cos u</span>. So <span class='m'>cos(243π/22) = −cos(π/22)</span>. <span class="eq m">α = −(−cos(π/22)) / cos(π/22) = 1</span>
+</div>
+<div class="step" data-n="5" hidden>
+<span class="tag">Step 5 · finish</span>
+<span class='m'>5 − α² = 5 − 1 = 4</span>.<div class="final">Answer: 4</div><div class="trap-note">I can't see your working, so I can't say where your 2 came from (it needs <span class='m'>α² = 3</span>). The usual slip here is a sign: five factors give <span class='m'>(−1)⁵</span>, and then the big angle flips the sign once more. Count both flips before you write the answer.</div>
+</div>
+<button class="step-btn" onclick="stepNext('st2')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<div class="rule">
+<span class="rule-label">Identities to recognise on sight</span>
+<ul>
+<li><strong>Cot difference:</strong> <span class='m'>1/(sin a · sin(a+d)) = (cot a − cot(a+d)) / sin d</span>. With a step of 2 or a range symmetric about 90°, pair terms using <span class='m'>cot(180° − x) = −cot x</span>.</li>
+<li><strong>Angles that triple:</strong> <span class='m'>1 − 2cosθ = −cos(3θ/2)/cos(θ/2)</span> and <span class='m'>1 + 2cosθ = sin(3θ/2)/sin(θ/2)</span>. The product over <span class='m'>θ, 3θ, 9θ, …</span> telescopes.</li>
+<li><strong>Angles that double:</strong> <span class='m'>cot t − cot 2t = cosec 2t</span> and <span class='m'>tan t = cot t − 2cot 2t</span>. Sums with <span class='m'>2ᵏ</span> or <span class='m'>1/2ᵏ</span> in front telescope.</li>
+<li><strong>Tangent of a difference:</strong> <span class='m'>tan(k+1)° − tan k° = tan 1° (1 + tan k° tan(k+1)°)</span>. Sums of <span class='m'>tan k° tan(k+1)°</span> telescope.</li>
+<li><strong>Ratio of sines:</strong> if <span class='m'>sin(α+β)/sin(α−β) = p/q</span> then <span class='m'>tanα/tanβ = (p+q)/(p−q)</span>.</li>
+<li><strong>Last step:</strong> reduce a big angle by whole multiples of <span class='m'>π</span> and track the sign. An odd multiple flips it.</li>
+</ul>
+</div>
+</section>
+<section class="pattern">
+<div class="pattern-head"><h2>3 · Matrices: test every option, use the determinant tricks</h2><span class="chip chip-3">Matrices</span><span class="back">Came back</span></div>
+<p class="why">Matrix questions on the Sunday paper are mostly multi-correct, and every true option earns marks. You lose them by proving one fact and stopping. You also lose time on determinants that factor in one line.</p>
+<div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this pattern ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
+<div class="cmp">
+<div class="box"><span class="tagline">Before</span><strong>CTA16 Q6</strong>: found det M = 1, marked only D (key B, C, D). <strong>CTA17</strong>: Q6 and Q8 skipped after 8m32s and 4m18s, Q14 wrong (<strong>1024</strong>, key 16).</div>
+<div class="box now"><span class="tagline">Now</span><strong>CTA19 Q8</strong>: partial, marked only B. <strong>Q12</strong>: partial, marked only A. <strong>Q6</strong>: skipped. The portal does not show the keys for Q8 and Q12.</div>
+</div>
+<p class="verdict"><strong>The same error, again.</strong> You mark one option and stop, now in two more questions. Last time the advice was to follow one fact through to its consequences. That did not stick, so try the opposite direction. Give every option its own 10-second verdict (true with a reason, or false with a counterexample) before you think about your own fact. The options become the checklist, so you cannot stop early.</p>
+<div class="stepper" id="st3">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p><span class='m'>Δ = </span><span class="mat" data-t="[[a+b+2c,a,b],[c,b+c+2a,b],[c,a,c+a+2b]]"><span class="mr" style="--c:3"><span>a+b+2c</span><span>a</span><span>b</span><span>c</span><span>b+c+2a</span><span>b</span><span>c</span><span>a</span><span>c+a+2b</span></span></span> <span class='m'>= k(αa + βb + γc)³</span> for integers <span class='m'>k, α, β, γ</span>. Find <span class='m'>(2α + β + γ)ᵏ</span>.</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">Your answer was <strong>1024</strong>. Correct answer: <strong>16</strong> (k = 2, α = β = γ = 1).</p>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · look at the row sums</span>
+Row 1: <span class='m'>(a+b+2c) + a + b = 2(a+b+c)</span>. Row 2: <span class='m'>c + (b+c+2a) + b = 2(a+b+c)</span>. Row 3: <span class='m'>c + a + (c+a+2b) = 2(a+b+c)</span>. Every row sums to the same thing.
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · add all columns into column 1</span>
+<span class='m'>C₁ → C₁ + C₂ + C₃</span>. Now column 1 is <span class='m'>2(a+b+c)</span> in every row. Factor it out: <span class='m'>Δ = 2(a+b+c) ×</span> <span class='m'>det</span> <span class="mat" data-t="[[1,a,b],[1,b+c+2a,b],[1,a,c+a+2b]]"><span class="mr" style="--c:3"><span>1</span><span>a</span><span>b</span><span>1</span><span>b+c+2a</span><span>b</span><span>1</span><span>a</span><span>c+a+2b</span></span></span>
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · clear column 1</span>
+<span class='m'>R₂ → R₂ − R₁</span> gives the row <span class='m'>(0, a+b+c, 0)</span>. <span class='m'>R₃ → R₃ − R₁</span> gives <span class='m'>(0, 0, a+b+c)</span>.
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · the matrix is now triangular</span>
+The determinant is the product of the diagonal: <span class='m'>1 · (a+b+c) · (a+b+c)</span>. So <span class="eq m">Δ = 2(a+b+c)³</span>
+</div>
+<div class="step" data-n="5" hidden>
+<span class="tag">Step 5 · read off and finish</span>
+<span class='m'>k = 2</span>, <span class='m'>α = β = γ = 1</span>. Then <span class='m'>(2α + β + γ)ᵏ = (2+1+1)² = 4² = 16</span>.<div class="final">Answer: 16</div><div class="trap-note">The trap: expanding the determinant term by term. That is six products of three terms, easy to slip on, and the cube is hard to see in the result. Equal row sums or column sums mean: add everything into one line, factor, then subtract. Also read the question for what the exponent is: it is <span class='m'>k = 2</span>, not 3.</div>
+</div>
+<button class="step-btn" onclick="stepNext('st3')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<div class="rule">
+<span class="rule-label">The shortcuts</span>
+<ul>
+<li><strong>Equal row or column sums:</strong> add all rows (or columns) into one, factor out the common sum, then subtract to clear zeros.</li>
+<li><strong>For a 3×3 matrix:</strong> <span class='m'>det(kA) = k³ det A</span>, <span class='m'>adj(kA) = k² adj A</span>, <span class='m'>det(adj A) = (det A)²</span>.</li>
+<li><strong>QR = RP with R invertible</strong> (your CTA19 Q6 idea): multiply by <span class='m'>R⁻¹</span> to get <span class='m'>Q = R P R⁻¹</span>. Then <span class='m'>Q − λI = R(P − λI)R⁻¹</span>, so <span class='m'>det(Q − λI) = det(P − λI)</span>. You only need <span class='m'>det(XY) = det X · det Y</span>. No eigenvalue theory.</li>
+<li><strong>A matrix equation like A² − 2A + I = 0:</strong> read it two ways, <span class='m'>A(2I − A) = I</span> (gives the inverse) and <span class='m'>(A − I)² = 0</span>. But <span class='m'>(A − I)² = 0</span> does not force <span class='m'>A = I</span>. Matrices are not numbers.</li>
+<li><strong>Linear system with parameters:</strong> find the coefficient determinant. If it is not 0, there is one solution. If it is 0, row-reduce and check consistency: that decides between none and infinitely many.</li>
+<li><strong>Multi-correct habit:</strong> write T or F beside every option with a one-line reason before you tick anything.</li>
+</ul>
+</div>
+</section>
+<section class="practice-head">
+<span class="eyebrow">Practice Set</span>
+<h2 style="margin-top:8px; font-size:1.4rem;">12 fresh problems, same three patterns</h2>
+<p style="color:var(--ink-soft)">Not copies of the test questions: same technique, new problems at level L4. All three patterns came back, so each gets four problems. Each problem is multiple choice with options A to D, and every wrong option is a mistake you could really make. Single-correct problems mark themselves as soon as you pick. In multi-correct problems you must tick all the correct options, then press Check answer. Every answer here was solved by hand and checked twice, and also checked by computer.</p>
+</section>
+<div class="mode-row">
+<button class="mode-btn" data-mode="practice" aria-pressed="true" onclick="setMode('practice', this)">Practice (untimed)</button>
+<button class="mode-btn" data-mode="timed" aria-pressed="false" onclick="setMode('timed', this)">Timed — 40 min</button>
+<div class="timer-bar" id="timerBar" hidden>
+<span class="time" id="timeDisplay">40:00</span>
+<button class="timer-btn" id="startBtn" onclick="startTimer()">Start</button>
+<button class="timer-btn" id="resetBtn" onclick="resetTimer()">Reset</button>
+</div>
+</div>
+<p class="mode-help">First pass: stay in Practice mode. In Timed mode, do 8 of the 12 (a good split is Q1, Q3, Q4, Q5, Q7, Q9, Q11, Q12). Twelve problems in 40 minutes is too tight.</p>
+<div class="grid">
+<div class="card" id="q1" data-kind="single" data-correct="C">
+<div class="card-head"><span class="qnum">1</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-1">Trig root counting</span><span class="lvl">L4</span></span></div>
+<p class="stem">The number of solutions of <span class='m'>sin(2π cosθ) = cos(2π sinθ)</span> in <span class='m'>θ ∈ [0, 2π]</span> is:</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 1"><label class="opt"><input type="radio" name="q1" value="A"><span class="ol">A</span><span class="ot">6</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q1" value="B"><span class="ol">B</span><span class="ot">8</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q1" value="C"><span class="ol">C</span><span class="ot">12</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q1" value="D"><span class="ol">D</span><span class="ot">16</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: C · 12</span><div class="why"><ol><li>Write <span class='m'>cos(2π sinθ) = sin(π/2 − 2π sinθ)</span>. Then <span class='m'>sin X = sin Y</span> has two families: <span class='m'>X = Y + 2nπ</span> and <span class='m'>X = π − Y + 2nπ</span>.</li><li>Family 1: <span class='m'>2π cosθ = π/2 − 2π sinθ + 2nπ</span>, so <span class='m'>cosθ + sinθ = 1/4 + n</span>.</li><li>Family 2: <span class='m'>2π cosθ = π/2 + 2π sinθ + 2nπ</span>, so <span class='m'>cosθ − sinθ = 1/4 + n</span>.</li><li>Both left sides lie in <span class='m'>[−√2, √2] ≈ [−1.414, 1.414]</span>. The values <span class='m'>1/4 + n</span> allowed are <span class='m'>−3/4</span>, <span class='m'>1/4</span>, <span class='m'>5/4</span>. The next ones, <span class='m'>−7/4</span> and <span class='m'>9/4</span>, are outside. So 3 values per family.</li><li>Each value with <span class='m'>|k| &lt; √2</span> gives 2 angles in one turn (<span class='m'>cosθ + sinθ = √2 sin(θ + π/4)</span> and <span class='m'>cosθ − sinθ = √2 cos(θ + π/4)</span>). So 3 × 2 = 6 angles per family.</li><li>Overlap: a θ in both families needs <span class='m'>cosθ = (k₁+k₂)/2</span>, <span class='m'>sinθ = (k₁−k₂)/2</span>, so <span class='m'>k₁² + k₂² = 2</span>. No pair from <span class='m'>{−3/4, 1/4, 5/4}</span> does that, so no angle is counted twice. The ends <span class='m'>θ = 0, 2π</span> are not roots (the left side is 0, the right side is 1).</li><li>Total: 6 + 6 = 12.</li></ol></div><ul class="mistakes"><li><strong>A</strong>: used only one family, so 6 instead of 12</li><li><strong>B</strong>: used the bound 1 instead of √2, which drops <span class='m'>k = 5/4</span> (2 values × 2 angles × 2 families)</li><li><strong>D</strong>: used the bound 2, which lets in <span class='m'>−7/4</span>, but <span class='m'>7/4 &gt; √2</span></li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q2" data-kind="single" data-correct="B">
+<div class="card-head"><span class="qnum">2</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-1">Trig root counting</span><span class="lvl">L4</span></span></div>
+<p class="stem">Let <span class='m'>S</span> be the sum of all solutions of <span class='m'>tan 2x = 3 tan x</span> in <span class='m'>[0, π]</span>. Then <span class='m'>S/π</span> equals:</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 2"><label class="opt"><input type="radio" name="q2" value="A"><span class="ol">A</span><span class="ot">1</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q2" value="B"><span class="ol">B</span><span class="ot">2</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q2" value="C"><span class="ol">C</span><span class="ot">5/2</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q2" value="D"><span class="ol">D</span><span class="ot">3</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: B · 2</span><div class="why"><ol><li>Domain first: <span class='m'>tan x</span> is undefined at <span class='m'>π/2</span>, and <span class='m'>tan 2x</span> is undefined at <span class='m'>π/4</span> and <span class='m'>3π/4</span>. None of these can be a solution.</li><li>Let <span class='m'>t = tan x</span>. Then <span class='m'>tan 2x = 2t/(1 − t²)</span>, and the equation is <span class='m'>2t/(1 − t²) = 3t</span>.</li><li>Do not divide by <span class='m'>t</span>. Clear the denominator: <span class='m'>2t = 3t(1 − t²)</span>, so <span class='m'>3t³ − t = 0</span>, so <span class='m'>t(3t² − 1) = 0</span>.</li><li><span class='m'>t = 0</span> gives <span class='m'>x = 0</span> and <span class='m'>x = π</span>. Both are in the interval, and both satisfy the original (0 = 0).</li><li><span class='m'>3t² = 1</span> gives <span class='m'>t = ±1/√3</span>, so <span class='m'>x = π/6</span> and <span class='m'>x = 5π/6</span>.</li><li>None of the four is an excluded point. <span class='m'>S = 0 + π/6 + 5π/6 + π = 2π</span>, so <span class='m'>S/π = 2</span>.</li></ol></div><ul class="mistakes"><li><strong>A</strong>: divided by <span class='m'>tan x</span>, which loses <span class='m'>x = 0</span> and <span class='m'>x = π</span> (sum <span class='m'>π/6 + 5π/6 = π</span>)</li><li><strong>C</strong>: also counted <span class='m'>x = π/2</span>, where <span class='m'>tan x</span> is undefined</li><li><strong>D</strong>: also counted <span class='m'>x = π/4</span> and <span class='m'>3π/4</span>, where <span class='m'>tan 2x</span> is undefined</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q3" data-kind="multi" data-correct="ACD">
+<div class="card-head"><span class="qnum">3</span><span class="card-tags"><span class="qtype">Multi-correct</span><span class="chip chip-1">Trig root counting</span><span class="lvl">L4</span></span></div>
+<p class="stem">For real <span class='m'>a</span>, consider <span class='m'>cos 2x = a cos x</span> on <span class='m'>x ∈ [0, π]</span>. Select all correct statements.</p>
+<p class="note" style="margin:6px 0 0">Select every correct option. It counts only if your set matches exactly.</p>
+<div class="opts" role="group" aria-label="Options for problem 3"><label class="opt"><input type="checkbox" name="q3" value="A"><span class="ol">A</span><span class="ot">For <span class='m'>a = 1</span> it has exactly two solutions.</span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q3" value="B"><span class="ol">B</span><span class="ot">For <span class='m'>a = 2</span> it has exactly two solutions.</span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q3" value="C"><span class="ol">C</span><span class="ot">For every real <span class='m'>a</span> it has at least one solution.</span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q3" value="D"><span class="ol">D</span><span class="ot">For <span class='m'>a = −3</span> it has exactly one solution.</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="check-btn" type="button" onclick="checkCard(this)">Check answer</button><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: A, C, D</span><div class="why"><ol><li>Let <span class='m'>c = cos x</span>. On <span class='m'>[0, π]</span> each <span class='m'>c ∈ [−1, 1]</span> gives exactly one <span class='m'>x</span>. Since <span class='m'>cos 2x = 2c² − 1</span>, the equation is <span class='m'>2c² − ac − 1 = 0</span>.</li><li>The roots are <span class='m'>c = (a ± √(a²+8))/4</span>. Their product is <span class='m'>−1/2</span>, so one root <span class='m'>p</span> is positive and one root <span class='m'>q</span> is negative.</li><li><span class='m'>p ≤ 1</span> means <span class='m'>√(a²+8) ≤ 4 − a</span>. Squaring (valid for <span class='m'>a ≤ 4</span>): <span class='m'>a² + 8 ≤ 16 − 8a + a²</span>, so <span class='m'>a ≤ 1</span>.</li><li><span class='m'>q ≥ −1</span> means <span class='m'>√(a²+8) ≤ a + 4</span>. Squaring: <span class='m'>8 ≤ 8a + 16</span>, so <span class='m'>a ≥ −1</span>.</li><li>So for <span class='m'>−1 ≤ a ≤ 1</span> both roots are usable: 2 solutions. For <span class='m'>a = 1</span>: <span class='m'>c = 1</span> and <span class='m'>c = −1/2</span>, so <span class='m'>x = 0</span> and <span class='m'>2π/3</span>. A is true.</li><li>For <span class='m'>a &gt; 1</span> only <span class='m'>q</span> is usable, and for <span class='m'>a &lt; −1</span> only <span class='m'>p</span>: exactly 1 solution. So <span class='m'>a = 2</span> has one solution (B false), <span class='m'>a = −3</span> has one solution (D true), and no <span class='m'>a</span> gives zero solutions (C true).</li></ol></div><ul class="mistakes"><li><strong>B</strong>: counted both roots without checking the range: <span class='m'>p = (2 + √12)/4 ≈ 1.37 &gt; 1</span> gives no angle</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q4" data-kind="single" data-correct="C">
+<div class="card-head"><span class="qnum">4</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-1">Trig root counting</span><span class="lvl">L4</span></span></div>
+<p class="stem">The equation <span class='m'>(x³ − 7x + 6)/(x² + x − 6) = 3 sin a − 1</span> has no real solution <span class='m'>x</span> for exactly how many values of <span class='m'>a</span> in <span class='m'>[0, 2π)</span>?</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 4"><label class="opt"><input type="radio" name="q4" value="A"><span class="ol">A</span><span class="ot">1</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q4" value="B"><span class="ol">B</span><span class="ot">2</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q4" value="C"><span class="ol">C</span><span class="ot">3</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q4" value="D"><span class="ol">D</span><span class="ot">4</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: C · 3</span><div class="why"><ol><li>Factor: <span class='m'>x³ − 7x + 6 = (x−1)(x−2)(x+3)</span> and <span class='m'>x² + x − 6 = (x−2)(x+3)</span>.</li><li>For <span class='m'>x ≠ 2, −3</span> the fraction equals <span class='m'>x − 1</span>. So the left side is <span class='m'>x − 1</span> with two holes, at <span class='m'>x = 2</span> and <span class='m'>x = −3</span>.</li><li>The hole at <span class='m'>x = 2</span> would have given the value <span class='m'>1</span>, and the hole at <span class='m'>x = −3</span> the value <span class='m'>−4</span>. No other <span class='m'>x</span> gives these values (each value <span class='m'>k</span> needs <span class='m'>x = k + 1</span>). So the left side takes every real value except <span class='m'>1</span> and <span class='m'>−4</span>.</li><li>No solution means <span class='m'>3 sin a − 1 ∈ {1, −4}</span>, so <span class='m'>sin a = 2/3</span> or <span class='m'>sin a = −1</span>.</li><li>In <span class='m'>[0, 2π)</span>: <span class='m'>sin a = 2/3</span> gives 2 values of <span class='m'>a</span>. <span class='m'>sin a = −1</span> gives only 1 value, <span class='m'>a = 3π/2</span>.</li><li>Total: 2 + 1 = 3.</li></ol></div><ul class="mistakes"><li><strong>A</strong>: cancelled the common factor but forgot the hole at <span class='m'>x = 2</span>, so only <span class='m'>sin a = −1</span> counted</li><li><strong>B</strong>: forgot the hole at <span class='m'>x = −3</span>, so only <span class='m'>sin a = 2/3</span> counted</li><li><strong>D</strong>: counted 2 angles for <span class='m'>sin a = −1</span>, but it has only one</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q5" data-kind="single" data-correct="C">
+<div class="card-head"><span class="qnum">5</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-2">Identities</span><span class="lvl">L4</span></span></div>
+<p class="stem"><span class='m'>Σ tan k° · tan(k+1)°</span>, summed for <span class='m'>k = 1</span> to <span class='m'>44</span>, equals:</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 5"><label class="opt"><input type="radio" name="q5" value="A"><span class="ol">A</span><span class="ot">cot 1° − 1</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q5" value="B"><span class="ol">B</span><span class="ot">cot 1° − 44</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q5" value="C"><span class="ol">C</span><span class="ot">cot 1° − 45</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q5" value="D"><span class="ol">D</span><span class="ot">cot 1° − 46</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: C · cot 1° − 45</span><div class="why"><ol><li><span class='m'>tan 1° = tan((k+1)° − k°) = (tan(k+1)° − tan k°) / (1 + tan k° tan(k+1)°)</span>.</li><li>Rearrange: <span class='m'>tan k° tan(k+1)° = (tan(k+1)° − tan k°)/tan 1° − 1</span>.</li><li>Add for <span class='m'>k = 1</span> to <span class='m'>44</span>. The first part telescopes to <span class='m'>(tan 45° − tan 1°)/tan 1°</span>.</li><li><span class='m'>tan 45° = 1</span>, so that part is <span class='m'>1/tan 1° − 1 = cot 1° − 1</span>.</li><li>The <span class='m'>−1</span> sits inside every term. There are 44 terms (<span class='m'>k = 1, …, 44</span>), so it contributes <span class='m'>−44</span>.</li><li>Total: <span class='m'>cot 1° − 1 − 44 = cot 1° − 45</span>.</li></ol></div><ul class="mistakes"><li><strong>A</strong>: dropped the <span class='m'>−1</span> that sits inside each term, keeping only the single <span class='m'>−1</span> from the ends</li><li><strong>B</strong>: forgot that <span class='m'>(1 − tan 1°)/tan 1°</span> has its own <span class='m'>−1</span></li><li><strong>D</strong>: counted 45 terms; <span class='m'>k = 1</span> to <span class='m'>44</span> is 44 terms</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q6" data-kind="single" data-correct="A">
+<div class="card-head"><span class="qnum">6</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-2">Identities</span><span class="lvl">L4</span></span></div>
+<p class="stem"><span class='m'>α</span> and <span class='m'>β</span> are acute angles with <span class='m'>sin(α+β)/sin(α−β) = 5/3</span> and <span class='m'>tan α · tan β = 1/9</span>. Then <span class='m'>16 tan(α+β)</span> equals:</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 6"><label class="opt"><input type="radio" name="q6" value="A"><span class="ol">A</span><span class="ot">15</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q6" value="B"><span class="ol">B</span><span class="ot">12</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q6" value="C"><span class="ol">C</span><span class="ot">36/5</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q6" value="D"><span class="ol">D</span><span class="ot">40/3</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: A · 15</span><div class="why"><ol><li>Divide top and bottom of the ratio by <span class='m'>cos α cos β</span>: <span class='m'>sin(α+β)/sin(α−β) = (tan α + tan β)/(tan α − tan β) = 5/3</span>.</li><li>Componendo and dividendo: <span class='m'>tan α / tan β = (5+3)/(5−3) = 4</span>.</li><li>So <span class='m'>tan α = 4 tan β</span>. With <span class='m'>tan α tan β = 1/9</span>: <span class='m'>4 tan²β = 1/9</span>, so <span class='m'>tan β = 1/6</span> (acute, so positive).</li><li><span class='m'>tan α = 4/6 = 2/3</span>. (Check: <span class='m'>sin(α−β)</span> must be positive for a positive ratio, so <span class='m'>α &gt; β</span>, which agrees.)</li><li><span class='m'>tan(α+β) = (tan α + tan β)/(1 − tan α tan β) = (2/3 + 1/6)/(1 − 1/9) = (5/6)/(8/9) = 15/16</span>.</li><li>So <span class='m'>16 tan(α+β) = 15</span>.</li></ol></div><ul class="mistakes"><li><strong>B</strong>: used <span class='m'>1 + tan α tan β</span> in the denominator of <span class='m'>tan(α+β)</span>: <span class='m'>16 · (5/6)/(10/9) = 12</span></li><li><strong>C</strong>: worked out <span class='m'>tan(α−β) = 9/20</span> instead: <span class='m'>16 · 9/20 = 36/5</span></li><li><strong>D</strong>: forgot to divide by <span class='m'>1 − tan α tan β</span>: <span class='m'>16 · 5/6 = 40/3</span></li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q7" data-kind="multi" data-correct="ACD">
+<div class="card-head"><span class="qnum">7</span><span class="card-tags"><span class="qtype">Multi-correct</span><span class="chip chip-2">Identities</span><span class="lvl">L4</span></span></div>
+<p class="stem">Select all correct statements.</p>
+<p class="note" style="margin:6px 0 0">Select every correct option. It counts only if your set matches exactly.</p>
+<div class="opts" role="group" aria-label="Options for problem 7"><label class="opt"><input type="checkbox" name="q7" value="A"><span class="ol">A</span><span class="ot"><span class='m'>cos 20° · cos 40° · cos 80° = 1/8</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q7" value="B"><span class="ol">B</span><span class="ot"><span class='m'>sin 20° · sin 40° · sin 80° = 1/8</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q7" value="C"><span class="ol">C</span><span class="ot"><span class='m'>tan 20° · tan 40° · tan 80° = √3</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q7" value="D"><span class="ol">D</span><span class="ot"><span class='m'>cos 20° + cos 40° + cos 80° = 2 cos 20°</span></span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="check-btn" type="button" onclick="checkCard(this)">Check answer</button><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: A, C, D</span><div class="why"><ol><li>A: multiply and divide by <span class='m'>sin 20°</span>. <span class='m'>sin 20° cos 20° = ½ sin 40°</span>, then × <span class='m'>cos 40°</span> gives <span class='m'>¼ sin 80°</span>, then × <span class='m'>cos 80°</span> gives <span class='m'>⅛ sin 160° = ⅛ sin 20°</span>. The product is <span class='m'>1/8</span>. A is true.</li><li>B: <span class='m'>sin(60° − θ) sin(60° + θ) = sin²60° − sin²θ = 3/4 − sin²θ</span>. Times <span class='m'>sin θ</span>: <span class='m'>(3 sin θ − 4 sin³θ)/4 = ¼ sin 3θ</span>. With <span class='m'>θ = 20°</span>: <span class='m'>sin 20° sin 40° sin 80° = ¼ sin 60° = √3/8</span>, not <span class='m'>1/8</span>. B is false.</li><li>C: divide the result of B by the result of A: <span class='m'>tan 20° tan 40° tan 80° = (√3/8)/(1/8) = √3</span>. C is true.</li><li>D: <span class='m'>cos 40° + cos 80° = 2 cos 60° cos 20° = cos 20°</span>. So the sum is <span class='m'>cos 20° + cos 20° = 2 cos 20°</span>. D is true.</li></ol></div><ul class="mistakes"><li><strong>B</strong>: mixed up the sine product with the cosine product: it is <span class='m'>√3/8</span>, not <span class='m'>1/8</span></li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q8" data-kind="single" data-correct="A">
+<div class="card-head"><span class="qnum">8</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-2">Identities</span><span class="lvl">L4</span></span></div>
+<p class="stem"><span class='m'>S = Σ (1/2ᵏ) tan(π/(4·2ᵏ))</span>, summed for <span class='m'>k = 1</span> to ∞. Then <span class='m'>S</span> equals:</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 8"><label class="opt"><input type="radio" name="q8" value="A"><span class="ol">A</span><span class="ot">4/π − 1</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q8" value="B"><span class="ol">B</span><span class="ot">4/π</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q8" value="C"><span class="ol">C</span><span class="ot">1 − 4/π</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q8" value="D"><span class="ol">D</span><span class="ot">4/π + 1</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: A · 4/π − 1</span><div class="why"><ol><li>Key identity: <span class='m'>tan t = cot t − 2 cot 2t</span>. (Check: <span class='m'>cot t − 2cot 2t = cot t − (cot²t − 1)/cot t = 1/cot t = tan t</span>.)</li><li>Put <span class='m'>x = π/4</span> and <span class='m'>t = x/2ᵏ</span>. Then <span class='m'>(1/2ᵏ) tan(x/2ᵏ) = (1/2ᵏ) cot(x/2ᵏ) − (1/2ᵏ⁻¹) cot(x/2ᵏ⁻¹)</span>.</li><li>Add for <span class='m'>k = 1</span> to <span class='m'>n</span>. Everything cancels in pairs: <span class='m'>(1/2ⁿ) cot(x/2ⁿ) − cot x</span>.</li><li>Let <span class='m'>n → ∞</span> and <span class='m'>u = x/2ⁿ → 0</span>. Then <span class='m'>(1/2ⁿ) cot(x/2ⁿ) = (1/x) · u cot u = (1/x) · (u cos u)/sin u → 1/x</span>, since <span class='m'>sin u/u → 1</span>.</li><li><span class='m'>S = 1/x − cot x = 4/π − cot(π/4) = 4/π − 1</span>.</li><li>Sanity check: the first term is <span class='m'>½ tan(π/8) ≈ 0.207</span>, and <span class='m'>4/π − 1 ≈ 0.273</span> is a little bigger. A sum of positive terms must be positive and small, which rules out <span class='m'>4/π + 1</span> and <span class='m'>1 − 4/π</span>.</li></ol></div><ul class="mistakes"><li><strong>B</strong>: forgot the <span class='m'>−cot x</span> left over from the first term of the telescope</li><li><strong>C</strong>: telescoped in the wrong direction, which flips the sign (and gives a negative sum of positive terms)</li><li><strong>D</strong>: added <span class='m'>cot x</span> instead of subtracting it</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q9" data-kind="multi" data-correct="ABD">
+<div class="card-head"><span class="qnum">9</span><span class="card-tags"><span class="qtype">Multi-correct</span><span class="chip chip-3">Matrices</span><span class="lvl">L4</span></span></div>
+<p class="stem"><span class='m'>A</span> is a 3×3 real matrix with <span class='m'>A² − 2A + I = 0</span>. Select all statements that are ALWAYS true.</p>
+<p class="note" style="margin:6px 0 0">Select every correct option. It counts only if your set matches exactly.</p>
+<div class="opts" role="group" aria-label="Options for problem 9"><label class="opt"><input type="checkbox" name="q9" value="A"><span class="ol">A</span><span class="ot"><span class='m'>A⁻¹ = 2I − A</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q9" value="B"><span class="ol">B</span><span class="ot"><span class='m'>A − I</span> is singular (its determinant is 0)</span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q9" value="C"><span class="ol">C</span><span class="ot"><span class='m'>A = I</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q9" value="D"><span class="ol">D</span><span class="ot"><span class='m'>A³ = 3A − 2I</span></span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="check-btn" type="button" onclick="checkCard(this)">Check answer</button><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: A, B, D</span><div class="why"><ol><li>Rewrite as <span class='m'>A(2I − A) = I</span>. So <span class='m'>A</span> is invertible and <span class='m'>A⁻¹ = 2I − A</span>. A is true.</li><li>Rewrite as <span class='m'>(A − I)² = 0</span>. If <span class='m'>A − I</span> were invertible, multiplying by <span class='m'>(A − I)⁻²</span> would give <span class='m'>I = 0</span>, which is impossible. So <span class='m'>A − I</span> is singular. B is true.</li><li><span class='m'>A³ = A · A² = A(2A − I) = 2A² − A = 2(2A − I) − A = 3A − 2I</span>. D is true.</li><li>Is <span class='m'>A = I</span> forced? No. Take <span class='m'>A</span> = <span class="mat" data-t="[[1,1,0],[0,1,0],[0,0,1]]"><span class="mr" style="--c:3"><span>1</span><span>1</span><span>0</span><span>0</span><span>1</span><span>0</span><span>0</span><span>0</span><span>1</span></span></span>. Then <span class='m'>A²</span> = <span class="mat" data-t="[[1,2,0],[0,1,0],[0,0,1]]"><span class="mr" style="--c:3"><span>1</span><span>2</span><span>0</span><span>0</span><span>1</span><span>0</span><span>0</span><span>0</span><span>1</span></span></span> <span class='m'>= 2A − I</span>. It satisfies the equation but is not <span class='m'>I</span>. C is false.</li><li>Habit used: each true option got a proof, and the false option got one counterexample.</li></ol></div><ul class="mistakes"><li><strong>C</strong>: treated <span class='m'>(A − I)² = 0</span> like a real-number equation, where it would force <span class='m'>A − I = 0</span></li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q10" data-kind="single" data-correct="C">
+<div class="card-head"><span class="qnum">10</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-3">Matrices</span><span class="lvl">L4</span></span></div>
+<p class="stem"><span class='m'>a, b, c</span> are the roots of <span class='m'>x³ − 7x² + 14x − 8 = 0</span>, and <span class='m'>B</span> = <span class="mat" data-t="[[1+a,1,1],[1,1+b,1],[1,1,1+c]]"><span class="mr" style="--c:3"><span>1+a</span><span>1</span><span>1</span><span>1</span><span>1+b</span><span>1</span><span>1</span><span>1</span><span>1+c</span></span></span>. Then <span class='m'>det(adj B)</span> equals:</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 10"><label class="opt"><input type="radio" name="q10" value="A"><span class="ol">A</span><span class="ot">22</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q10" value="B"><span class="ol">B</span><span class="ot">196</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q10" value="C"><span class="ol">C</span><span class="ot">484</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q10" value="D"><span class="ol">D</span><span class="ot">10648</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: C · 484</span><div class="why"><ol><li>Vieta: <span class='m'>a + b + c = 7</span>, <span class='m'>ab + bc + ca = 14</span>, <span class='m'>abc = 8</span>.</li><li>Row operations: <span class='m'>R₁ → R₁ − R₃</span> gives <span class='m'>(a, 0, −c)</span>. <span class='m'>R₂ → R₂ − R₃</span> gives <span class='m'>(0, b, −c)</span>. Row 3 stays <span class='m'>(1, 1, 1+c)</span>.</li><li>Expand along row 1: <span class='m'>det B = a[b(1+c) + c] + (−c)(0 − b) = ab + abc + ac + bc</span>.</li><li><span class='m'>det B = abc + (ab + bc + ca) = 8 + 14 = 22</span>.</li><li>For a 3×3 matrix, <span class='m'>B · adj B = (det B) I</span>. Taking determinants: <span class='m'>det B · det(adj B) = (det B)³</span>, so <span class='m'>det(adj B) = (det B)²</span>.</li><li><span class='m'>det(adj B) = 22² = 484</span>.</li></ol></div><ul class="mistakes"><li><strong>A</strong>: took <span class='m'>det(adj B) = det B</span></li><li><strong>B</strong>: dropped <span class='m'>abc</span> (used <span class='m'>det B = 14</span>) and then squared</li><li><strong>D</strong>: used <span class='m'>(det B)³ = 22³</span>, forgetting the division by <span class='m'>det B</span></li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q11" data-kind="multi" data-correct="ABC">
+<div class="card-head"><span class="qnum">11</span><span class="card-tags"><span class="qtype">Multi-correct</span><span class="chip chip-3">Matrices</span><span class="lvl">L4</span></span></div>
+<p class="stem">Consider the system <span class='m'>x + y + z = 6</span>, <span class='m'>x + 2y + 3z = 14</span>, <span class='m'>x + 2y + λz = μ</span>. Select all correct statements.</p>
+<p class="note" style="margin:6px 0 0">Select every correct option. It counts only if your set matches exactly.</p>
+<div class="opts" role="group" aria-label="Options for problem 11"><label class="opt"><input type="checkbox" name="q11" value="A"><span class="ol">A</span><span class="ot">For every <span class='m'>λ ≠ 3</span>, the system has a unique solution for every <span class='m'>μ</span>.</span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q11" value="B"><span class="ol">B</span><span class="ot">For <span class='m'>λ = 3</span> and <span class='m'>μ = 14</span>, the system has infinitely many solutions.</span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q11" value="C"><span class="ol">C</span><span class="ot">For <span class='m'>λ = 3</span> and <span class='m'>μ = 15</span>, the system has no solution.</span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q11" value="D"><span class="ol">D</span><span class="ot">For <span class='m'>λ = 3</span>, the system has infinitely many solutions for every <span class='m'>μ</span>.</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="check-btn" type="button" onclick="checkCard(this)">Check answer</button><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: A, B, C</span><div class="why"><ol><li>Coefficient determinant: <span class='m'>R₂ − R₁ = (0, 1, 2)</span> and <span class='m'>R₃ − R₁ = (0, 1, λ−1)</span>, so the determinant is <span class='m'>1·(λ−1) − 2·1 = λ − 3</span>.</li><li><span class='m'>λ ≠ 3</span>: the determinant is not 0, so there is exactly one solution, for every <span class='m'>μ</span>. A is true.</li><li><span class='m'>λ = 3</span>: equations 2 and 3 have the same left side <span class='m'>x + 2y + 3z</span>. Subtracting them gives <span class='m'>0 = μ − 14</span>.</li><li><span class='m'>μ = 14</span>: the two equations are identical, leaving two independent equations in three unknowns. Taking <span class='m'>z = t</span>: <span class='m'>y = 8 − 2t</span>, <span class='m'>x = t − 2</span>. Infinitely many solutions. B is true.</li><li><span class='m'>μ = 15</span>: subtracting gives <span class='m'>0 = 1</span>, a contradiction. No solution. C is true.</li><li>So with <span class='m'>λ = 3</span>, the answer depends on <span class='m'>μ</span>: <span class='m'>μ = 14</span> gives infinitely many, any other <span class='m'>μ</span> gives none. D is false.</li></ol></div><ul class="mistakes"><li><strong>D</strong>: read “determinant is 0” as “infinitely many solutions”. Determinant 0 means infinitely many or none, and consistency decides which</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q12" data-kind="multi" data-correct="ABD">
+<div class="card-head"><span class="qnum">12</span><span class="card-tags"><span class="qtype">Multi-correct</span><span class="chip chip-3">Matrices</span><span class="lvl">L4</span></span></div>
+<p class="stem"><span class='m'>P</span> = <span class="mat" data-t="[[1,4,0],[0,2,5],[0,0,7]]"><span class="mr" style="--c:3"><span>1</span><span>4</span><span>0</span><span>0</span><span>2</span><span>5</span><span>0</span><span>0</span><span>7</span></span></span>. <span class='m'>Q</span> and <span class='m'>R</span> are 3×3 real matrices with <span class='m'>R</span> invertible and <span class='m'>QR = RP</span>. Select all correct statements.</p>
+<p class="note" style="margin:6px 0 0">Select every correct option. It counts only if your set matches exactly.</p>
+<div class="opts" role="group" aria-label="Options for problem 12"><label class="opt"><input type="checkbox" name="q12" value="A"><span class="ol">A</span><span class="ot"><span class='m'>det Q = 14</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q12" value="B"><span class="ol">B</span><span class="ot"><span class='m'>det(Q − 6I) = 20</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q12" value="C"><span class="ol">C</span><span class="ot"><span class='m'>Q = P</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q12" value="D"><span class="ol">D</span><span class="ot"><span class='m'>Q²R = RP²</span></span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="check-btn" type="button" onclick="checkCard(this)">Check answer</button><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: A, B, D</span><div class="why"><ol><li>Multiply <span class='m'>QR = RP</span> on the right by <span class='m'>R⁻¹</span>: <span class='m'>Q = R P R⁻¹</span>.</li><li><span class='m'>det Q = det R · det P · det R⁻¹ = det P</span>. <span class='m'>P</span> is upper triangular, so <span class='m'>det P = 1 · 2 · 7 = 14</span>. A is true.</li><li><span class='m'>Q − 6I = R P R⁻¹ − 6 R R⁻¹ = R(P − 6I)R⁻¹</span>. So <span class='m'>det(Q − 6I) = det(P − 6I)</span>.</li><li><span class='m'>P − 6I</span> is upper triangular with diagonal <span class='m'>−5, −4, 1</span>, so its determinant is <span class='m'>(−5)(−4)(1) = 20</span>. B is true.</li><li>D: <span class='m'>Q²R = Q(QR) = Q(RP) = (QR)P = (RP)P = RP²</span>. D is true.</li><li>C: take <span class='m'>R = diag(1, 1, 2)</span>. Then <span class='m'>Q = R P R⁻¹</span> has second-row, third-column entry <span class='m'>5 · (1/2) = 5/2</span>, which is not <span class='m'>5</span>. So <span class='m'>Q ≠ P</span>. C is false.</li></ol></div><ul class="mistakes"><li><strong>C</strong>: saw that the determinants agree and concluded the matrices must be equal. The same determinant does not mean the same matrix</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+</div>
+<footer>Built from CTA16 (13 Sep), CTA17 (20 Sep), CTA18 (27 Sep) and CTA19 (4 Oct) · Maths only · Limits are in the second session.</footer>
+</div>
+<script>
+
+  function stepNext(id){
+    var root = document.getElementById(id);
+    var steps = root.querySelectorAll('.step');
+    var btn = root.querySelector('.step-btn');
+    var shown = 0;
+    steps.forEach(function(s){ if(!s.hidden) shown++; });
+    if(shown < steps.length){
+      steps[shown].hidden = false;
+      shown++;
+    }
+    if(shown >= steps.length){ btn.hidden = true; }
+  }
+
+  function toggleAnswer(btn){
+    var ans = btn.closest('.card').querySelector('.answer');
+    ans.hidden = !ans.hidden;
+    btn.textContent = ans.hidden ? 'Show answer and why' : 'Hide answer and why';
+  }
+  function checkCard(el){
+    var card = el.closest('.card');
+    var correct = card.dataset.correct.split('');
+    var chosen = [].slice.call(card.querySelectorAll('input:checked')).map(function(i){return i.value;});
+    if(!chosen.length) return;
+    var exact = chosen.length === correct.length && chosen.every(function(c){return correct.indexOf(c) > -1;});
+    card.querySelectorAll('.opt').forEach(function(o){
+      var v = o.querySelector('input').value, isC = correct.indexOf(v) > -1, isS = chosen.indexOf(v) > -1;
+      o.classList.remove('ok','bad','miss');
+      var m = o.querySelector('.mark');
+      if(isC && isS){ o.classList.add('ok'); m.textContent = '✓ correct'; }
+      else if(isC){ o.classList.add('miss'); m.textContent = '✓ also correct'; }
+      else if(isS){ o.classList.add('bad'); m.textContent = '✗ wrong'; }
+      else { m.textContent = ''; }
+      o.querySelector('input').disabled = true;
+    });
+    var r = card.querySelector('.result');
+    r.hidden = false;
+    r.className = 'result ' + (exact ? 'right' : 'wrong');
+    r.textContent = exact ? 'Right. Correct: ' + correct.join(', ') + '.' : 'Not quite. Correct: ' + correct.join(', ') + '.';
+  }
+  function resetCard(el){
+    var card = el.closest('.card');
+    card.querySelectorAll('.opt').forEach(function(o){
+      o.classList.remove('ok','bad','miss'); o.querySelector('.mark').textContent = '';
+      var i = o.querySelector('input'); i.checked = false; i.disabled = false;
+    });
+    var r = card.querySelector('.result'); r.hidden = true;
+  }
+  document.querySelectorAll('.card[data-kind="single"] input').forEach(function(i){
+    i.addEventListener('change', function(){ checkCard(i); });
+  });
+
+  function setMode(mode, btn){
+    document.querySelectorAll('.mode-btn').forEach(function(b){
+      b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+    });
+    document.getElementById('timerBar').hidden = (mode !== 'timed');
+  }
+
+  var remaining = 40 * 60;
+  var timerId = null;
+  function renderTime(){
+    var m = String(Math.floor(remaining/60)).padStart(2,'0');
+    var s = String(remaining%60).padStart(2,'0');
+    document.getElementById('timeDisplay').textContent = m + ':' + s;
+  }
+  function startTimer(){
+    if(timerId) return;
+    timerId = setInterval(function(){
+      remaining--;
+      if(remaining <= 0){
+        clearInterval(timerId); timerId = null;
+        document.getElementById('timeDisplay').textContent = "Time's up";
+      } else {
+        renderTime();
+      }
+    }, 1000);
+  }
+  function resetTimer(){
+    clearInterval(timerId); timerId = null;
+    remaining = 40*60;
+    renderTime();
+  }
+  renderTime();
+
+  (function buildAskLinks(){
+    var TUTOR = "I'm a JEE aspirant preparing for JEE Advanced. Please act as a patient Maths tutor. Use simple language. Reply in chunks of under 10 lines. Explain why, not just how. Wait for my reply before moving on.";
+    var MAXLEN = 3300;
+    function clean(el){
+      var c = el.cloneNode(true);
+      c.querySelectorAll('.mat').forEach(function(m){ m.replaceWith(document.createTextNode(m.getAttribute('data-t') || '[matrix]')); });
+      c.querySelectorAll('.ask-row,.step-btn,.reveal-btn,.check-btn,.pfig,svg').forEach(function(x){ x.remove(); });
+      c.querySelectorAll('br').forEach(function(b){ b.replaceWith(document.createTextNode(' ')); });
+      c.querySelectorAll('li,p,div,.tag,.eq,.val,.final').forEach(function(x){ x.appendChild(document.createTextNode(' ')); });
+      c.querySelectorAll('.final,.trap-note,.eq').forEach(function(x){ x.insertBefore(document.createTextNode(' '), x.firstChild); });
+      return c.textContent.replace(/\s+/g,' ').trim();
+    }
+    function cut(s, n){ return s.length <= n ? s : s.slice(0, n - 1).trim() + '…'; }
+    function diagram(root){
+      var f = root.querySelector('.pfig');
+      return f ? ' ' + f.getAttribute('data-desc') : '';
+    }
+    function fit(parts){
+      for (var guard = 0; guard < 400; guard++){
+        var url = 'https://claude.ai/new?q=' + encodeURIComponent(parts.map(function(p){ return p.t; }).join(' '));
+        if (url.length <= MAXLEN) return url;
+        var longest = null;
+        parts.forEach(function(p){ if (!p.fixed && (!longest || p.t.length > longest.t.length)) longest = p; });
+        if (!longest || longest.t.length < 60) return url;
+        longest.t = cut(longest.t, Math.floor(longest.t.length * 0.9));
+      }
+    }
+    function sectionPrompt(sec){
+      var rules = Array.prototype.map.call(sec.querySelectorAll('.rule li'), clean).join(' | ');
+      var why = sec.querySelector('.why');
+      return [
+        {t: TUTOR, fixed: true},
+        {t: 'Topic: ' + clean(sec.querySelector('h2')) + '.', fixed: true},
+        {t: 'Why it matters: ' + (why ? clean(why) : ''), fixed: false},
+        {t: 'Key shortcuts: ' + rules, fixed: false},
+        {t: 'Please start by asking which part I want to understand better.', fixed: true}
+      ];
+    }
+    function examplePrompt(box){
+      var sec = box.closest('section.pattern');
+      var ps = box.querySelectorAll(':scope > p');
+      var steps = Array.prototype.map.call(box.querySelectorAll('.step'), function(s, i){
+        return 'Step ' + (i + 1) + ' · ' + cut(clean(s).replace(/^Step \d+\s*·\s*/, ''), 230);
+      }).join(' ');
+      return [
+        {t: TUTOR, fixed: true},
+        {t: "I'm going through a worked example from my own test. Topic: " + clean(sec.querySelector('h2')) + '.', fixed: true},
+        {t: 'Question: ' + clean(ps[0]) + diagram(box), fixed: true},
+        {t: 'My result: ' + (ps[1] ? clean(ps[1]) : ''), fixed: false},
+        {t: 'Steps in the solution: ' + steps, fixed: false},
+        {t: 'Please ask me which step I find hardest, then explain it and give me a similar example to try.', fixed: true}
+      ];
+    }
+    function problemPrompt(card){
+      var lvl = card.querySelector('.lvl');
+      var multi = card.getAttribute('data-kind') === 'multi';
+      var opts = Array.prototype.map.call(card.querySelectorAll('.opt'), function(o){
+        return '(' + o.querySelector('.ol').textContent.trim() + ') ' + clean(o.querySelector('.ot'));
+      }).join(' ');
+      var ans = card.querySelector('.answer');
+      return [
+        {t: TUTOR, fixed: true},
+        {t: 'I want to practise this problem' + (lvl ? ' (level ' + lvl.textContent.trim() + ')' : '') + ': ' + clean(card.querySelector('.stem')) + diagram(card), fixed: true},
+        {t: 'Type: ' + (multi ? 'multi-correct (one or more options are correct; I must pick all of them).' : 'single-correct (exactly one option is correct).') + ' Options: ' + opts, fixed: true},
+        {t: 'For your reference only, do not reveal unless the student asks or has made a real attempt: ' + clean(ans), fixed: false},
+        {t: 'Please ask me what I have tried so far, then give me one hint at a time.', fixed: true}
+      ];
+    }
+    document.querySelectorAll('a.ask').forEach(function(a){
+      var kind = a.getAttribute('data-ask'), parts;
+      if (kind === 'section') parts = sectionPrompt(a.closest('section.pattern'));
+      else if (kind === 'example') parts = examplePrompt(a.closest('.stepper'));
+      else parts = problemPrompt(a.closest('.card'));
+      a.href = fit(parts);
+    });
+  })();
+</script>
