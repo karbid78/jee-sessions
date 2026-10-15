@@ -1,0 +1,666 @@
+<title>Fluid Mechanics: Bernoulli, Buoyancy, Frames</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one column. Hero, four sections (came-back box, rule, one worked example with a diagram), then a 6-problem MCQ grid. Blue-slate mechanics system, same family as the other physics pages. */
+  :root{
+    --bg:#F4F6FB;
+    --surface:#FFFFFF;
+    --surface-2:#EAEFF8;
+    --ink:#18223A;
+    --ink-soft:#4F5C78;
+    --border:#D6DEEC;
+    --accent:#2A5CAA;
+    --accent-ink:#FFFFFF;
+    --accent-soft:#DFE8F7;
+    --highlight-ink:#53390A;
+    --highlight-bg:#FFF4D6;
+    --highlight-border:#EBCF86;
+    --good:#217A4B;
+    --good-bg:#E2F4EA;
+    --trap:#B24A38;
+    --trap-bg:#FBE9E5;
+    --chip-1:#2A5CAA; --chip-1-bg:#DFE8F7;
+    --chip-2:#7A4FB5; --chip-2-bg:#EEE7F8;
+    --chip-3:#217A4B; --chip-3-bg:#E2F4EA;
+    --chip-4:#A9631A; --chip-4-bg:#FBEBD9;
+    --chip-5:#B24A38; --chip-5-bg:#FBE9E5;
+    --warm:#C2841B;
+    --shadow: 0 1px 2px rgba(24,34,58,.05), 0 8px 24px -12px rgba(24,34,58,.2);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0E1424; --surface:#151D33; --surface-2:#1D2744; --ink:#E6ECF8; --ink-soft:#A3AECA; --border:#2A3558;
+      --accent:#7FA9F0; --accent-ink:#0A1226; --accent-soft:#1B2A4D;
+      --highlight-ink:#FBE8B8; --highlight-bg:#3A2E10; --highlight-border:#5C4A1B;
+      --good:#5FCB8E; --good-bg:#12301F; --trap:#E58E7E; --trap-bg:#3A1E19;
+      --chip-1:#7FA9F0; --chip-1-bg:#1B2A4D; --chip-2:#C2A5EE; --chip-2-bg:#2A2140; --chip-3:#5FCB8E; --chip-3-bg:#12301F;
+      --chip-4:#E5A96B; --chip-4-bg:#3A2A14; --chip-5:#E58E7E; --chip-5-bg:#3A1E19;
+      --warm:#E8B84B;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.55);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0E1424; --surface:#151D33; --surface-2:#1D2744; --ink:#E6ECF8; --ink-soft:#A3AECA; --border:#2A3558;
+    --accent:#7FA9F0; --accent-ink:#0A1226; --accent-soft:#1B2A4D;
+    --highlight-ink:#FBE8B8; --highlight-bg:#3A2E10; --highlight-border:#5C4A1B;
+    --good:#5FCB8E; --good-bg:#12301F; --trap:#E58E7E; --trap-bg:#3A1E19;
+    --chip-1:#7FA9F0; --chip-1-bg:#1B2A4D; --chip-2:#C2A5EE; --chip-2-bg:#2A2140; --chip-3:#5FCB8E; --chip-3-bg:#12301F;
+    --chip-4:#E5A96B; --chip-4-bg:#3A2A14; --chip-5:#E58E7E; --chip-5-bg:#3A1E19;
+    --warm:#E8B84B;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.55);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body{
+    background: var(--bg); color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    padding-left: max(18px, env(safe-area-inset-left, 0px));
+    padding-right: max(18px, env(safe-area-inset-right, 0px));
+    padding-block: 28px 64px; line-height: 1.55; font-size: 16px;
+  }
+  .wrap{ max-width: 780px; margin: 0 auto; }
+  h1,h2,h3{ font-family: "Fraunces", Georgia, serif; font-weight: 600; text-wrap: balance; margin: 0; }
+  a{ color: var(--accent); }
+  .eyebrow{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); font-weight:600; }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  .hero{ padding-block: 6px 22px; }
+  .hero h1{ font-size: clamp(1.7rem, 5vw, 2.3rem); margin-top:10px; }
+  .hero p{ color:var(--ink-soft); max-width:62ch; }
+  .hero-note{ margin-top:14px; padding:13px 15px; border-radius:12px; background:var(--accent-soft); border:1px solid var(--border); font-size:.92rem; }
+  .meta{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .pill{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; padding:4px 10px; border-radius:999px; background:var(--surface-2); border:1px solid var(--border); color:var(--ink-soft); }
+  .pill b{ color:var(--ink); }
+
+  .pattern{ background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:22px 20px 24px; margin-block:18px; box-shadow:var(--shadow); min-width:0; }
+  .pattern-head{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:6px; }
+  .pattern-head h2{ font-size:1.25rem; }
+  .chip{ font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.05em; text-transform:uppercase; padding:3px 9px; border-radius:999px; font-weight:600; white-space:nowrap; }
+  .c1{ color:var(--chip-1); background:var(--chip-1-bg); } .c2{ color:var(--chip-2); background:var(--chip-2-bg); }
+  .c3{ color:var(--chip-3); background:var(--chip-3-bg); } .c4{ color:var(--chip-4); background:var(--chip-4-bg); }
+  .c5{ color:var(--chip-5); background:var(--chip-5-bg); }
+  .pattern p{ margin:10px 0; }
+  .why{ color:var(--ink-soft); font-size:.95rem; }
+  .syl{ font-family:"IBM Plex Mono",monospace; font-size:.74rem; color:var(--ink-soft); }
+
+  .came-back{ margin:12px 0; padding:12px 14px; border-radius:10px; border:1px solid var(--border); background:var(--surface-2); font-size:.92rem; }
+  .came-back .lbl{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; color:var(--trap); display:block; margin-bottom:6px; }
+  .came-back .lbl.new{ color:var(--accent); }
+  .sbs{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin:8px 0; }
+  .sbs > div{ background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:9px 11px; min-width:0; }
+  .sbs .h{ font-weight:600; font-size:.78rem; color:var(--ink-soft); display:block; margin-bottom:3px; }
+
+  .rule{ margin-top:14px; padding:14px 16px; border-radius:10px; background:var(--highlight-bg); border:1px solid var(--highlight-border); color:var(--highlight-ink); }
+  .rule-label{ font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; margin-bottom:6px; display:block; }
+  .rule ul, .rule ol{ margin:6px 0 0; padding-left:20px; } .rule li{ margin:4px 0; }
+
+  .stepper{ margin-top:16px; border-top:1px dashed var(--border); padding-top:14px; }
+  .stepper-label{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:8px; display:block; }
+  .step{ padding:10px 0; border-bottom:1px solid var(--border); }
+  .step:last-of-type{ border-bottom:none; }
+  .step .tag{ font-weight:600; font-size:.82rem; color:var(--accent); display:block; margin-bottom:4px; }
+  .step-btn{ margin-top:10px; font:inherit; font-weight:600; font-size:.88rem; background:var(--accent); color:var(--accent-ink); border:none; border-radius:8px; padding:9px 14px; cursor:pointer; }
+  .final{ background:var(--good-bg); color:var(--good); border-radius:8px; padding:10px 12px; font-weight:700; margin-top:8px; }
+  .trap-note{ background:var(--trap-bg); color:var(--trap); border-radius:8px; padding:10px 12px; font-size:.9rem; margin-top:10px; }
+  .yours{ font-size:.9rem; color:var(--ink-soft); }
+  .rebuilt{ font-size:.82rem; color:var(--ink-soft); font-style:italic; }
+  figure{ margin:14px 0 4px; }
+  figure svg{ width:100%; max-width:480px; height:auto; display:block; color:var(--ink); }
+  figcaption{ font-size:.82rem; color:var(--ink-soft); margin-top:4px; }
+  .figwrap{ overflow-x:auto; }
+  svg text{ font-family:"IBM Plex Sans", system-ui, sans-serif; }
+
+  .ask{ display:inline-block; margin-top:10px; font-size:.82rem; font-weight:600; color:var(--accent); text-decoration:none; border:1px solid var(--border); border-radius:999px; padding:5px 11px; background:var(--surface); }
+  .ask:hover{ background:var(--accent-soft); }
+
+  .practice-head{ padding-block:10px 4px; }
+  .mode-row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:14px 0 8px; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px 16px; box-shadow:var(--shadow); }
+  .mode-btn{ font:inherit; font-weight:600; font-size:.9rem; padding:8px 14px; border-radius:999px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); cursor:pointer; }
+  .mode-btn[aria-pressed="true"]{ background:var(--accent); color:var(--accent-ink); border-color:var(--accent); }
+  .timer-bar{ display:flex; align-items:center; gap:12px; margin-left:auto; flex-wrap:wrap; }
+  .time{ font-family:"IBM Plex Mono",monospace; font-size:1.3rem; font-variant-numeric:tabular-nums; min-width:64px; }
+  .timer-btn{ font:inherit; font-size:.85rem; font-weight:600; border-radius:8px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); padding:7px 12px; cursor:pointer; }
+  .mode-help{ font-size:.85rem; color:var(--ink-soft); margin:6px 2px 0; }
+
+  .grid{ display:grid; grid-template-columns:1fr; gap:14px; margin-top:16px; }
+  .card{ background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:16px 16px 14px; box-shadow:var(--shadow); min-width:0; }
+  .card-head{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+  .qnum{ font-family:"Fraunces",serif; font-weight:700; font-size:1.05rem; color:var(--accent); }
+  .opts{ display:grid; gap:7px; margin:10px 0 4px; }
+  .opt{ display:flex; gap:10px; align-items:flex-start; padding:9px 11px; border:1px solid var(--border); border-radius:10px; background:var(--surface-2); cursor:pointer; min-width:0; }
+  .opt input{ margin-top:5px; flex:none; accent-color:var(--accent); }
+  .opt .l{ font-family:"IBM Plex Mono",monospace; font-weight:600; color:var(--accent); flex:none; }
+  .opt .t{ min-width:0; overflow-wrap:anywhere; }
+  .opt.is-right{ border-color:var(--good); background:var(--good-bg); }
+  .opt.is-miss{ border-color:var(--good); border-style:dashed; background:var(--good-bg); }
+  .opt.is-wrong{ border-color:var(--trap); background:var(--trap-bg); }
+  .check-btn, .reveal-btn{ font:inherit; font-weight:600; font-size:.85rem; border-radius:8px; padding:7px 12px; cursor:pointer; margin-top:10px; margin-right:8px; }
+  .check-btn{ background:var(--accent); color:var(--accent-ink); border:none; }
+  .reveal-btn{ background:none; border:1.4px solid var(--accent); color:var(--accent); }
+  .verdict{ margin-top:10px; padding:9px 12px; border-radius:8px; font-weight:700; font-size:.92rem; }
+  .verdict.ok{ background:var(--good-bg); color:var(--good); }
+  .verdict.no{ background:var(--trap-bg); color:var(--trap); }
+  .answer{ margin-top:10px; padding:10px 12px; background:var(--surface-2); border-radius:8px; font-size:.9rem; }
+  .answer ul{ margin:6px 0 0; padding-left:18px; } .answer li{ margin:3px 0; }
+  footer{ margin-top:26px; color:var(--ink-soft); font-size:.88rem; text-align:center; }
+</style>
+
+<div class="wrap">
+  <section class="hero">
+    <span class="eyebrow">Physics · Focus Session · 16 Oct 2026</span>
+    <h1>Fluid Mechanics: Bernoulli setups, buoyancy, accelerated and rotating containers</h1>
+    <p>Built from WTA20 (Saturday) and CTA20 (Sunday). Four sections: a new Bernoulli pattern where the pressure or density at one end was not the usual one, and three patterns that keep coming back (accelerated and rotating containers, floating bodies, forces on an immersed body). Six practice problems follow.</p>
+    <div class="meta">
+      <span class="pill">Level used: <b>L4</b> (multi-concept, a trap in each)</span>
+      <span class="pill">Format: <b>MCQ A–D</b>, 4 single + 2 multi-correct</span>
+      <span class="pill">Sources: <b>WTA20 (Sat) · CTA20 (Sun)</b></span>
+    </div>
+    <div class="hero-note">
+      <strong>How to use this:</strong> read a section, click through its worked example, then do the matching practice problems. Multi-correct problems are right only if you pick every correct option and nothing else. <strong>Ask Claude</strong> links open a new claude.ai chat with that item preloaded. You need to be signed in to claude.ai.
+    </div>
+    <div class="hero-note" style="margin-top:10px">
+      <strong>About the worked examples:</strong> they use your real questions (WTA20 Q25, Q27, Q19 and CTA20 Q33), with the text copied from the nLearn answer key, together with your real answers. The portal shows the text but not the figures, and it does not print the key for partial or matching questions. Where a key is mine, the example says so. Q27 depends on a figure, so it describes the set-up in words. WTA20 Q22, Q29, Q30 and CTA20 Q19 appear inside the rule boxes. No number was invented to make a key come out.
+    </div>
+  </section>
+
+  <div id="sections"></div>
+
+  <section class="practice-head">
+    <span class="eyebrow">Practice Set</span>
+    <h2 style="margin-top:8px; font-size:1.4rem;">6 fresh problems, level 4</h2>
+    <p style="color:var(--ink-soft)">Two on Bernoulli with unusual set-ups (a density that changes with depth, and a sprayer with a gauge pressure and a narrowing), one on a container that is accelerating, one multi-correct on a composite floating body, one on the force on the faces of an immersed body, and one multi-correct on two stacked liquids leaking through a hole.</p>
+  </section>
+
+  <div class="mode-row">
+    <button class="mode-btn" aria-pressed="true" onclick="setMode('practice', this)">Practice (untimed)</button>
+    <button class="mode-btn" aria-pressed="false" onclick="setMode('timed', this)">Timed · 40 min</button>
+    <div class="timer-bar" id="timerBar" hidden>
+      <span class="time" id="timeDisplay">40:00</span>
+      <button class="timer-btn" onclick="startTimer()">Start</button>
+      <button class="timer-btn" onclick="resetTimer()">Reset</button>
+    </div>
+  </div>
+  <p class="mode-help">First pass: stay in Practice mode. Save Timed mode for a second pass.</p>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>Built from WTA20 (Sat 10 Oct) and CTA20 (Sun 11 Oct). Fluids was also practised on 6 Oct, from WTA19 and CTA19; this page adds only what WTA20 and CTA20 showed. Not on this page as step-by-step examples: WTA20 Q22, Q29, Q30 and CTA20 Q19 (rule boxes only).</footer>
+</div>
+
+<script>
+/* ---------- diagrams (inline SVG, theme tokens) ---------- */
+var FIG_ATOM = { svg:
+'<figure><div class="figwrap"><svg viewBox="0 0 440 240" role="img" aria-label="Perfume atomizer. A squeeze bulb A on the left feeds a horizontal tube BC. A vertical tube DE leaves BC at D and dips into a vessel of liquid of density 500 kilograms per cubic metre. Point D is 32 millimetres above the liquid surface in the vessel.">'
++'<ellipse cx="46" cy="80" rx="34" ry="28" fill="var(--accent-soft)" stroke="currentColor" stroke-width="2"/>'
++'<text x="46" y="85" text-anchor="middle" font-size="14" font-weight="600" fill="currentColor">A</text>'
++'<text x="46" y="124" text-anchor="middle" font-size="11" fill="currentColor">bulb, gauge 100 Pa</text>'
++'<g stroke="currentColor" stroke-width="2.4"><line x1="80" y1="72" x2="400" y2="72"/><line x1="80" y1="88" x2="400" y2="88"/></g>'
++'<text x="82" y="64" font-size="13" font-weight="600" fill="currentColor">B</text><text x="396" y="64" font-size="13" font-weight="600" fill="currentColor">C</text>'
++'<line x1="116" y1="80" x2="176" y2="80" stroke="var(--accent)" stroke-width="2.4"/><polygon points="184,80 174,75 174,85" fill="var(--accent)"/>'
++'<text x="120" y="62" font-size="11" fill="var(--accent)" font-weight="600">air, speed v</text>'
++'<g fill="currentColor"><circle cx="410" cy="68" r="2"/><circle cx="420" cy="78" r="2"/><circle cx="412" cy="90" r="2"/><circle cx="428" cy="70" r="2"/></g>'
++'<g stroke="currentColor" stroke-width="2.4"><line x1="244" y1="88" x2="244" y2="205"/><line x1="256" y1="88" x2="256" y2="205"/></g>'
++'<text x="262" y="104" font-size="13" font-weight="600" fill="currentColor">D</text><text x="262" y="204" font-size="13" font-weight="600" fill="currentColor">E</text>'
++'<rect x="190" y="186" width="120" height="34" fill="var(--chip-4-bg)"/>'
++'<path d="M190 168 V220 H310 V168" fill="none" stroke="currentColor" stroke-width="2"/>'
++'<line x1="190" y1="186" x2="310" y2="186" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 4"/>'
++'<g stroke="currentColor" stroke-width="2.4"><line x1="244" y1="186" x2="244" y2="205"/><line x1="256" y1="186" x2="256" y2="205"/></g>'
++'<g stroke="currentColor" stroke-width="1"><line x1="340" y1="88" x2="340" y2="186"/><line x1="335" y1="88" x2="345" y2="88"/><line x1="335" y1="186" x2="345" y2="186"/></g>'
++'<line x1="260" y1="88" x2="335" y2="88" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3"/><line x1="312" y1="186" x2="335" y2="186" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3"/>'
++'<text x="348" y="142" font-size="12" fill="currentColor" font-weight="600">h = 32 mm</text>'
++'<text x="200" y="236" font-size="11" fill="currentColor">liquid, 500 kg/m³, open vessel</text>'
++'</svg></div><figcaption>Drawn from the question text. The air is pushed from the bulb through B to C. The liquid in the vessel is at atmospheric pressure, and D is 32 mm above its surface.</figcaption></figure>',
+text:' Diagram: a squeeze bulb A on the left feeds a horizontal tube BC (air flows at speed v from B to C). A vertical tube DE leaves the tube at D and dips into an open vessel of liquid of density 500 kg/m3. D is h = 32 mm above the liquid surface in the vessel. The bulb gauge pressure is 100 Pa.' };
+
+var FIG_ROT = { svg:
+'<figure><div class="figwrap"><svg viewBox="0 0 440 262" role="img" aria-label="Right half of a closed cylindrical container full of water, seen from the side, with the rotation axis at its left edge. A thread of length 16 centimetres is tied to the bottom at 20 centimetres from the axis. Before rotation the bead floats directly above the anchor with the thread vertical. During rotation the bead moves toward the axis and sinks by 4 centimetres, so the thread tilts by an angle theta from the vertical.">'
++'<rect x="60" y="20" width="280" height="200" fill="var(--accent-soft)" stroke="currentColor" stroke-width="2"/>'
++'<line x1="60" y1="10" x2="60" y2="232" stroke="currentColor" stroke-width="1.4" stroke-dasharray="6 4"/><text x="66" y="14" font-size="11" fill="currentColor">axis of rotation</text>'
++'<line x1="180" y1="220" x2="180" y2="130" stroke="currentColor" stroke-width="1.4" stroke-dasharray="4 3"/>'
++'<circle cx="180" cy="124" r="6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="3 3"/><text x="190" y="120" font-size="11" fill="currentColor">start (at rest)</text>'
++'<line x1="180" y1="220" x2="116.5" y2="148" stroke="var(--warm)" stroke-width="2.4"/>'
++'<circle cx="116.5" cy="148" r="6" fill="var(--warm)" stroke="currentColor" stroke-width="1.6"/><text x="70" y="130" font-size="11" fill="currentColor">bead, rotating</text>'
++'<circle cx="180" cy="220" r="3.5" fill="currentColor"/>'
++'<text x="190" y="214" font-size="11" fill="currentColor">thread, l = 16 cm</text>'
++'<text x="166" y="196" text-anchor="end" font-size="12" fill="currentColor">θ</text>'
++'<g stroke="currentColor" stroke-width="1"><line x1="200" y1="124" x2="200" y2="148"/><line x1="195" y1="124" x2="205" y2="124"/><line x1="195" y1="148" x2="205" y2="148"/></g>'
++'<text x="210" y="140" font-size="11" fill="currentColor" font-weight="600">sinks h = 4 cm</text>'
++'<g stroke="currentColor" stroke-width="1"><line x1="60" y1="242" x2="180" y2="242"/><line x1="60" y1="237" x2="60" y2="247"/><line x1="180" y1="237" x2="180" y2="247"/></g>'
++'<text x="120" y="258" text-anchor="middle" font-size="12" fill="currentColor" font-weight="600">R = 20 cm</text>'
++'</svg></div><figcaption>Right half of the container, drawn from the question text; the original figure is not available. The thread is read as vertical before the rotation, with the bead directly above its anchor. Not to scale.</figcaption></figure>',
+text:' Diagram (drawn from the question text; the original figure is not available): the right half of a closed cylindrical container full of water, seen from the side, with the rotation axis at its left edge. A thread of length l = 16 cm is tied to the bottom at R = 20 cm from the axis. Before rotation the plastic bead (density 500 kg/m3) floats directly above the anchor with the thread vertical. During rotation the bead moves toward the axis and sinks by h = 4 cm, so the thread tilts by an angle theta from the vertical.' };
+
+var FIG_BALL = { svg:
+'<figure><div class="figwrap"><svg viewBox="0 0 440 240" role="img" aria-label="A ball of radius R made of two hemispheres, the upper of density rho and the lower of density 2 rho. The centre C of the ball, where buoyancy acts, lies R over 8 above the centre of mass G, through which the horizontal pivot axis passes.">'
++'<path d="M46 120 A84 84 0 0 1 214 120 Z" fill="var(--surface-2)" stroke="currentColor" stroke-width="2"/>'
++'<path d="M46 120 A84 84 0 0 0 214 120 Z" fill="var(--chip-4-bg)" stroke="currentColor" stroke-width="2"/>'
++'<text x="130" y="82" text-anchor="middle" font-size="15" fill="currentColor" font-weight="600">ρ</text>'
++'<text x="130" y="180" text-anchor="middle" font-size="15" fill="currentColor" font-weight="600">2ρ</text>'
++'<line x1="130" y1="120" x2="189.4" y2="60.6" stroke="currentColor" stroke-width="1.2"/><text x="166" y="84" font-size="12" fill="currentColor">R</text>'
++'<circle cx="130" cy="120" r="3.5" fill="var(--surface)" stroke="currentColor" stroke-width="1.6"/>'
++'<circle cx="130" cy="131" r="3.5" fill="var(--accent)"/>'
++'<line x1="134" y1="119" x2="232" y2="108" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3"/>'
++'<line x1="134" y1="132" x2="232" y2="140" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3"/>'
++'<text x="236" y="108" font-size="11" fill="currentColor">C: centre, where buoyancy acts</text>'
++'<text x="236" y="144" font-size="11" fill="var(--accent)" font-weight="600">G: centre of mass, R/8 below C</text>'
++'<text x="236" y="176" font-size="11" fill="currentColor">pivot axis: through G, horizontal</text>'
++'<text x="46" y="226" font-size="11" fill="currentColor">fully submerged, heavier half at the bottom</text>'
++'</svg></div><figcaption>Drawn from the question text. The pivot axis is horizontal and perpendicular to the page. G is 1/8 of a radius below the centre, which is worked out in step 2.</figcaption></figure>',
+text:' Diagram: a ball of radius R made of two hemispheres, the upper hemisphere of density rho and the lower one of density 2 rho, completely submerged in water. The centre C of the ball (where buoyancy acts) is R/8 above the centre of mass G. The horizontal pivot axis passes through G.' };
+
+var FIG_TET = { svg:
+'<figure><div class="figwrap"><svg viewBox="0 0 440 260" role="img" aria-label="A regular tetrahedron of edge a completely under water, apex up, with its bottom face horizontal at depth h below the water surface.">'
++'<rect x="10" y="28" width="420" height="222" fill="var(--accent-soft)"/>'
++'<line x1="10" y1="28" x2="430" y2="28" stroke="currentColor" stroke-width="2"/><text x="14" y="22" font-size="11" fill="currentColor">water surface</text>'
++'<polygon points="183,96 110,200 250,200" fill="var(--surface)" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>'
++'<polygon points="183,96 250,200 190,172" fill="var(--surface-2)" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>'
++'<line x1="110" y1="200" x2="190" y2="172" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 4"/>'
++'<text x="180" y="219" text-anchor="middle" font-size="12" fill="currentColor" font-weight="600">edge a</text>'
++'<g stroke="currentColor" stroke-width="1"><line x1="330" y1="28" x2="330" y2="200"/><line x1="325" y1="28" x2="335" y2="28"/><line x1="325" y1="200" x2="335" y2="200"/></g>'
++'<line x1="254" y1="200" x2="327" y2="200" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3"/>'
++'<text x="338" y="118" font-size="12" fill="currentColor" font-weight="600">h</text><text x="338" y="134" font-size="11" fill="currentColor">to the bottom face</text>'
++'<text x="110" y="240" font-size="11" fill="currentColor">bottom face horizontal, apex up</text>'
++'</svg></div><figcaption>Drawn from the question text. The tetrahedron is regular, so all four faces are equilateral triangles of side a. Not to scale.</figcaption></figure>',
+text:' Diagram: a regular tetrahedron of edge a completely under water, apex up, with its bottom face horizontal at depth h below the water surface.' };
+
+var FIG_SPRAY = { svg:
+'<figure><div class="figwrap"><svg viewBox="0 0 440 244" role="img" aria-label="A horizontal air tube that narrows. The wide part has area 4A and the air there moves at speed v1 with gauge pressure 45 pascals. The throat has area A. A vertical tube from the throat dips into oil of density 900 kilograms per cubic metre in an open vessel. The throat is 2.0 centimetres above the oil surface.">'
++'<g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M20 60 H130 L170 75 H270 L310 60 H420"/><path d="M20 110 H130 L170 95 H270 L310 110 H420"/></g>'
++'<line x1="40" y1="85" x2="100" y2="85" stroke="var(--accent)" stroke-width="2.4"/><polygon points="108,85 98,80 98,90" fill="var(--accent)"/>'
++'<text x="20" y="30" font-size="11" fill="currentColor">wide part: area 4A, speed v₁, gauge pressure 45 Pa</text>'
++'<text x="20" y="46" font-size="11" fill="var(--accent)" font-weight="600">air, 1.2 kg/m³</text>'
++'<text x="176" y="68" font-size="11" fill="currentColor" font-weight="600">throat, area A</text>'
++'<g stroke="currentColor" stroke-width="2.4"><line x1="214" y1="95" x2="214" y2="206"/><line x1="226" y1="95" x2="226" y2="206"/></g>'
++'<rect x="160" y="178" width="120" height="44" fill="var(--chip-4-bg)"/>'
++'<path d="M160 160 V222 H280 V160" fill="none" stroke="currentColor" stroke-width="2"/>'
++'<line x1="160" y1="178" x2="280" y2="178" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 4"/>'
++'<g stroke="currentColor" stroke-width="2.4"><line x1="214" y1="178" x2="214" y2="206"/><line x1="226" y1="178" x2="226" y2="206"/></g>'
++'<g stroke="currentColor" stroke-width="1"><line x1="330" y1="95" x2="330" y2="178"/><line x1="325" y1="95" x2="335" y2="95"/><line x1="325" y1="178" x2="335" y2="178"/></g>'
++'<line x1="230" y1="95" x2="327" y2="95" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3"/><line x1="282" y1="178" x2="327" y2="178" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3"/>'
++'<text x="340" y="141" font-size="12" fill="currentColor" font-weight="600">h = 2.0 cm</text>'
++'<text x="168" y="238" font-size="11" fill="currentColor">oil, 900 kg/m³</text><text x="288" y="200" font-size="11" fill="currentColor">open to the air</text>'
++'</svg></div><figcaption>Drawn from the problem text. The vertical tube leaves the throat and dips into the oil. Not to scale.</figcaption></figure>',
+text:' Diagram: a horizontal air tube that narrows. The wide part has area 4A, and the air there moves at speed v1 with gauge pressure 45 Pa. The throat has area A. A vertical tube from the throat dips into oil of density 900 kg/m3 in an open vessel; the throat is h = 2.0 cm above the oil surface. Air density is 1.2 kg/m3.' };
+
+var FIG_INC = { svg:
+'<figure><div class="figwrap"><svg viewBox="0 0 440 230" role="img" aria-label="A closed box full of water sliding down a smooth incline of 37 degrees. A small ball of density 400 kilograms per cubic metre is inside the box.">'
++'<polygon points="100,205 350,205 350,17.5" fill="var(--surface-2)" stroke="currentColor" stroke-width="2"/>'
++'<path d="M140 205 A40 40 0 0 0 132 181" fill="none" stroke="currentColor" stroke-width="1.2"/><text x="146" y="198" font-size="12" fill="currentColor">37°</text>'
++'<polygon points="200.8,129.4 239.2,100.6 210.4,62.2 172,91" fill="var(--accent-soft)" stroke="currentColor" stroke-width="2"/>'
++'<circle cx="205.6" cy="95.8" r="6" fill="var(--warm)" stroke="currentColor" stroke-width="1.4"/>'
++'<line x1="199" y1="94" x2="108" y2="58" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3"/>'
++'<text x="14" y="62" font-size="11" fill="currentColor">ball, 400 kg/m³</text>'
++'<text x="14" y="44" font-size="11" fill="currentColor">closed box, full of water</text>'
++'<line x1="236" y1="130" x2="202" y2="155" stroke="var(--accent)" stroke-width="2.4"/><polygon points="196,159 203,150 208,158" fill="var(--accent)"/>'
++'<text x="240" y="152" font-size="11" fill="var(--accent)" font-weight="600">slides freely</text>'
++'<text x="240" y="168" font-size="11" fill="currentColor">smooth, no friction</text>'
++'</svg></div><figcaption>Drawn from the problem text. The ball is released from rest relative to the box.</figcaption></figure>',
+text:' Diagram: a closed box full of water sliding freely down a smooth incline of 37 degrees. A small ball of density 400 kg/m3 is inside the box, released from rest relative to the box.' };
+
+var FIG_CONE = { svg:
+'<figure><div class="figwrap"><svg viewBox="0 0 440 262" role="img" aria-label="A solid cone, apex up, completely under water with its horizontal base 2.0 metres below the surface. The cone has base radius 0.30 metres and height 0.90 metres.">'
++'<rect x="10" y="28" width="420" height="224" fill="var(--accent-soft)"/>'
++'<line x1="10" y1="28" x2="430" y2="28" stroke="currentColor" stroke-width="2"/><text x="14" y="22" font-size="11" fill="currentColor">water surface</text>'
++'<path d="M170 100 L110 190 A60 14 0 0 0 230 190 Z" fill="var(--surface)" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>'
++'<path d="M110 190 A60 14 0 0 1 230 190" fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 4"/>'
++'<line x1="170" y1="190" x2="230" y2="190" stroke="currentColor" stroke-width="1.2"/><text x="200" y="232" text-anchor="middle" font-size="12" fill="currentColor" font-weight="600">r = 0.30 m</text>'
++'<g stroke="currentColor" stroke-width="1"><line x1="70" y1="100" x2="70" y2="190"/><line x1="65" y1="100" x2="75" y2="100"/><line x1="65" y1="190" x2="75" y2="190"/></g>'
++'<line x1="75" y1="100" x2="166" y2="100" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3"/>'
++'<text x="64" y="148" text-anchor="end" font-size="12" fill="currentColor" font-weight="600">H = 0.90 m</text>'
++'<g stroke="currentColor" stroke-width="1"><line x1="310" y1="28" x2="310" y2="190"/><line x1="305" y1="28" x2="315" y2="28"/><line x1="305" y1="190" x2="315" y2="190"/></g>'
++'<line x1="234" y1="190" x2="307" y2="190" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3"/>'
++'<text x="318" y="104" font-size="12" fill="currentColor" font-weight="600">2.0 m</text><text x="318" y="120" font-size="11" fill="currentColor">to the base</text>'
++'<text x="330" y="250" font-size="10" fill="currentColor">not to scale</text>'
++'</svg></div><figcaption>Drawn from the problem text. The base is horizontal, the apex points up, and the whole cone is under water.</figcaption></figure>',
+text:' Diagram: a solid cone, apex up, completely under water. Its horizontal base is 2.0 m below the surface. Base radius r = 0.30 m, height H = 0.90 m.' };
+
+var FIG_TWO = { svg:
+'<figure><div class="figwrap"><svg viewBox="0 0 440 252" role="img" aria-label="An open vessel standing on a level floor holds 1.05 metres of liquid of density 3 rho, with 0.60 metres of liquid of density rho floating on top. A small hole in the side wall is 0.45 metres above the floor, so 0.60 metres of the heavy liquid lies above it. A jet leaves the hole.">'
++'<line x1="10" y1="225" x2="430" y2="225" stroke="currentColor" stroke-width="2"/><text x="330" y="244" font-size="11" fill="currentColor">level floor</text>'
++'<rect x="61" y="60" width="138" height="60" fill="var(--accent-soft)"/><rect x="61" y="120" width="138" height="105" fill="var(--chip-4-bg)"/>'
++'<line x1="61" y1="120" x2="199" y2="120" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 4"/>'
++'<path d="M60 40 V225 H200 V40" fill="none" stroke="currentColor" stroke-width="2.4"/>'
++'<text x="130" y="94" text-anchor="middle" font-size="12" fill="currentColor" font-weight="600">ρ, 0.60 m</text>'
++'<text x="130" y="176" text-anchor="middle" font-size="12" fill="currentColor" font-weight="600">3ρ, 1.05 m</text>'
++'<rect x="197" y="177" width="6" height="6" fill="var(--bg)" stroke="currentColor" stroke-width="1.2"/>'
++'<line x1="208" y1="180" x2="256" y2="180" stroke="var(--accent)" stroke-width="2.4"/><polygon points="264,180 254,175 254,185" fill="var(--accent)"/>'
++'<text x="208" y="168" font-size="11" fill="var(--accent)" font-weight="600">jet, small hole</text>'
++'<g stroke="currentColor" stroke-width="1"><line x1="40" y1="120" x2="40" y2="180"/><line x1="35" y1="120" x2="45" y2="120"/><line x1="35" y1="180" x2="45" y2="180"/><line x1="40" y1="180" x2="40" y2="225"/><line x1="35" y1="225" x2="45" y2="225"/></g>'
++'<text x="34" y="154" text-anchor="end" font-size="11" fill="currentColor">0.60 m</text><text x="34" y="206" text-anchor="end" font-size="11" fill="currentColor">0.45 m</text>'
++'<text x="130" y="30" text-anchor="middle" font-size="11" fill="currentColor">open at the top</text>'
++'</svg></div><figcaption>Drawn from the problem text. The liquids do not mix. The vessel is wide, so the free surface falls very slowly.</figcaption></figure>',
+text:' Diagram: an open, wide vessel standing on a level floor. At the bottom is 1.05 m of liquid of density 3 rho, with 0.60 m of liquid of density rho on top of it. A small hole in the side wall is 0.45 m above the floor, so 0.60 m of the heavy liquid lies above the hole. A jet leaves the hole horizontally.' };
+
+/* ---------- content ---------- */
+var SECTIONS = [
+{ id:'s1', n:1, title:'Bernoulli with odd pressures and densities: write the pressure at each end first', chip:'c1', chipText:'New · Weak',
+  pattern:'fluid-bernoulli-nonstandard-pressure-and-density-setups',
+  syl:'Syllabus: Mechanics (pressure in a fluid; streamline flow, equation of continuity, Bernoulli’s theorem and its applications)',
+  isNew:true, lbl:'New in WTA20', leftH:'Before', rightH:'This time',
+  status:'This pattern is new (first seen in WTA20, 2 wrong and 1 partial).',
+  cameBack:{
+    prev:'Nothing earlier on this pattern. The standard Bernoulli set-ups (orifice, siphon, Venturi with manometer, syringe) were all <strong>correct</strong> in the same paper: WTA20 Q21, Q24, Q26, Q28, Q31, Q32.',
+    now:'<strong>Q25</strong> (perfume atomizer): you answered <strong>5</strong>, the key is <strong>20</strong>. <strong>Q30</strong> (efflux from a liquid whose density grows with depth): you answered <strong>10</strong>, the key is <strong>4</strong>. <strong>Q22</strong> (two liquids, a hole in the lower one, a jet into vessel V): partial, you marked B only.',
+    verdict:'<strong>A new pattern, so there is no old mistake to compare.</strong> The formula is not the problem, since six standard Bernoulli questions were right in the same paper. All three misses had a set-up where the pressure or density at one end was not the usual one. I cannot see your working for 5 and 10. One guess for Q25 only: 500 × 0.032 = 16 Pa (g left out) with no bulb pressure gives √(2 × 16 / 1.3) = 4.96, which rounds to your 5. The tracker note says the bulb’s excess pressure was missed. Either way the fix is the same: write the pressure at both ends before you touch the equation.'},
+  why:'Bernoulli’s equation is energy per volume: P + ½ρv² + ρgz. The equation never changes. What changes is the P and the ρ you put in. In these questions one end is not at P₀ (a squeezed bulb), or the density is not one number (it grows with depth, or there are two layers), or two different fluids are in the same problem (air and liquid). The marks are lost in that first line.',
+  rule:[
+    'Make a two-line table before any formula: pressure, density and height at each end. A gauge excess (the bulb’s Δp) goes on that end’s pressure. Use the air’s density for the air and the liquid’s for the liquid.',
+    'Suction: liquid rises a height h in a tube only if the pressure at the top of the tube is below P₀ by ρ<sub>liquid</sub> g h. The pressure at the throat comes from Bernoulli in the air, with ρ<sub>air</sub>. Add every pressure term, with its sign.',
+    'Density that changes with depth: the pressure at depth d is the area under the ρg graph, P = ∫ρ g dy, not ρ g d. In a steady drain, the liquid at the orifice has the orifice’s own density, so v = √(2ΔP / ρ<sub>orifice</sub>).',
+    'Your Q30, worked: P<sub>bottom</sub> − P<sub>atm</sub> = ∫₀¹ ρ₀(1 + 2y/3) g dy = (4/3) ρ₀ g, and ρ at the orifice (y = 1) = (5/3) ρ₀. So ½ (5/3) ρ₀ v² = (4/3) ρ₀ g, v² = (8/5) g = 16, and v = 4 m/s. Your 10 is not √(2gh) = 4.47 either, so it came from somewhere else.',
+    'Two stacked liquids: the pressure at the hole is ρ₁ g h₁ + ρ₂ g y (add the layers), and the speed is √(2P / ρ of the liquid that is actually leaving). When the liquid that leaves changes, the speed jumps. Your Q22: at the start, the pressure at the hole is d g h + 2d g (h/2) = 2d g h on liquid of density 2d, so v² = 2gh and the first jet lands √2·h from the wall. Where vessel V sits is only in the figure, so I cannot give the key set. You marked B and the question is partial, so B is right and exactly one of C and D is.'],
+  ex:{ src:'WTA20 Q25, real question text',
+    q:'The figure shows a simple perfume atomizer. When a flexible squeeze bulb ‘A’ is compressed, air flows swiftly through the tiny narrow horizontal tube ‘BC’ with uniform speed ‘v’, thereby causing a reduced pressure at the position of vertical tube ‘DE’. The liquid of density 500 kg/m³, then rises in the tube DE, enters tube BC, and is sprayed out. The height of point D, above the liquid surface in the vessel is h = 32 mm. When bulb A is uncompressed, the air in the bulb and the tube are at atmospheric pressure P₀ = 10⁵ N/m². When bulb ‘A’ is compressed, it creates an excess pressure Δp = 0.001 P₀ inside the bulb ‘A’. Density of air is 1.3 kg/m³. The magnitude of minimum value of speed ‘v’, required to cause the liquid to rise through height h, to reach the horizontal tube BC is ________ m/s. (g = 10 m/s²). Assume the flow of air is steady and incompressible.',
+    yours:'5', correct:'20',
+    note:'This is the real text from the answer key. The figure is not shown, but the text describes the whole set-up, and the diagram below is drawn from it. Your working for 5 is not saved.',
+    diag:'My working for 5 is not saved. One guess is that g was left out of ρgh and the bulb pressure was not used.',
+    fig:FIG_ATOM,
+    steps:[
+      {tag:'Step 1: the pressure of the air before it speeds up', html:'The air in the bulb is almost at rest, at P₀ + Δp. Here Δp = 0.001 P₀ = 0.001 × 10⁵ = 100 Pa. So P<sub>bulb</sub> = P₀ + 100 Pa. The tube BC is horizontal, so the air does not change height.'},
+      {tag:'Step 2: what the liquid needs', html:'Liquid of density 500 kg/m³ rises a height h = 32 mm only if the air pressure at D is lower than P₀ by the weight of that column per unit area: ρ g h = 500 × 10 × 0.032 = 160 Pa. “Just reaches BC” gives the minimum speed, so P<sub>D</sub> = P₀ − 160 Pa.'},
+      {tag:'Step 3: Bernoulli in the air', html:'From the bulb (at rest) to the air in BC (speed v), at the same height: P<sub>bulb</sub> = P<sub>D</sub> + ½ ρ<sub>air</sub> v². Use ρ<sub>air</sub> = 1.3 kg/m³ here, not the liquid’s 500. So P₀ + 100 = (P₀ − 160) + ½ (1.3) v².'},
+      {tag:'Step 4: solve', html:'½ (1.3) v² = 100 + 160 = 260, so v² = 400 and v = 20 m/s. This matches the key.'},
+      {tag:'Step 5: check the traps', html:'Leave out the bulb’s 100 Pa: ½ (1.3) v² = 160, so v = 15.7. Use only the 100 Pa: v = 12.4. Put the liquid’s 500 kg/m³ into the ½ρv² term: v = 1.0. None is 20.<div class="final">Answer: 20 m/s</div><div class="trap-note">The trap: the two pressure terms add. The bulb pushes 100 Pa above P₀ and the liquid needs 160 Pa below it, so the air has to supply a drop of 260 Pa. Counting only one of them, or putting the liquid’s density in the air’s kinetic-energy term, gives a wrong speed.</div>'}
+    ]}
+},
+{ id:'s2', n:2, title:'Accelerated and rotating containers: use effective gravity and the pressure gradient', chip:'c5', chipText:'Recurring · Weak',
+  pattern:'fluid-accelerating-and-rotating-frames-pseudo-force',
+  syl:'Syllabus: Mechanics (uniformly accelerated frames of reference, pressure in a fluid, buoyancy, circular motion, Newton’s laws)',
+  lbl:'This one came back', leftH:'Earlier', rightH:'This time',
+  status:'This pattern is recurring on my tracker (wrong in WTA19 and again in WTA20, no fully correct answer on record).',
+  cameBack:{
+    prev:'<strong>WTA19 Q35</strong> (sphere tied in an upward-accelerating tank): wrong, you answered 3.5, the key is 3, a slip in g<sub>eff</sub> = g + a. WTA19 Q26 and Q28 (accelerated fluids) were partial. You did a focus session on this on 6 Oct.',
+    now:'<strong>WTA20 Q27</strong> (bead in a rotating closed container): you answered <strong>6</strong>, the key is <strong>180</strong>. <strong>WTA20 Q29</strong> (force on the end of a water-filled cylinder accelerating in gravity-free space): you answered <strong>25000</strong>, the key is <strong>5</strong> (decanewtons).',
+    verdict:'<strong>A different error in the same topic, so partial progress at best.</strong> The old slip was small (3.5 against 3). The new ones are far off. 25000 is 5000 times the key, so it is not only the daN unit (that would be a factor of 10). That points to a missing step, not a rounding slip. The honest count: no question of this type is marked fully right on your record in WTA19 or WTA20. I cannot see your working. Both new questions need a figure, and I describe each in words.'},
+  why:'A container that accelerates, or spins, changes what “down” means for the fluid inside. In an accelerating box, every still-fluid rule you know (pressure rises with depth, buoyancy opposes gravity, the surface is at right angles to gravity) still holds, with g replaced by g<sub>eff</sub> = g − a, a vector. In a spinning container the pressure rises outward, and a light body is pushed toward the axis. The rules are the same, so what you need is the right g<sub>eff</sub> or the right pressure gradient.',
+  rule:[
+    'Write g<sub>eff</sub> = g − a as a vector before anything else. Its direction is the new “down” for pressure, free surfaces and buoyancy; its size is the new g. Lift going up at a: g + a. Free fall: 0. A box sliding freely down a smooth incline: g cos θ, at right angles to the incline.',
+    'The pressure gradient is ρ(g − a). Along a horizontal tube accelerating at a, the rear is at higher pressure: P<sub>rear</sub> − P<sub>front</sub> = ρ a L. With no gravity, that is the only change in pressure.',
+    'A body of volume V in a fluid is pushed with force ρ<sub>fluid</sub> V g<sub>eff</sub>, opposite to g<sub>eff</sub>. Net force on a body of mass ρ<sub>b</sub> V is (ρ<sub>fluid</sub> − ρ<sub>b</sub>) V g<sub>eff</sub>.',
+    'In a container spinning at ω: dP/dr = ρ ω² r. A small body gets an inward push ρ<sub>fluid</sub> V ω² r from the pressure, the same push that makes the water around it go round. A body lighter than the water goes toward the axis, a heavier one outward.',
+    'Your Q29, worked: the force on the pushed end AB has to accelerate both the piston and the water, F = (m<sub>piston</sub> + ρ A L) a. With m = 50 kg, A = 0.01 m², a = 0.5 m/s² this is (50 + 10 L)(0.5) N. The key of 5 daN = 50 N needs a water column L = 5 m. That length is only in the figure, so I read it back from the key. Check it on your paper.'],
+  ex:{ src:'WTA20 Q27, real question text (figure missing)',
+    q:'A closed cylindrical container with a vertical axis is completely filled with water of density 1000 kg/m³. When the container is at rest initially, a small plastic bead of density 500 kg/m³ and radius r = 1 cm is placed at a distance R = 20 cm from the axis of rotation and is anchored to the bottom of the container by a thin thread of length l = 16 cm. If as a result of the container’s rotation, at constant angular velocity ω, the bead deflects towards the axis of rotation causing the bead to sink by h = 4 cm from the position shown in figure. In the final state the total contents of the container rotate at the same angular speed. The angular velocity of the container is 10√(5√7 / (K₁ − K₂√7)) rad/s where K₁ and K₂ are positive integers. The value of K₁ × K₂ is _____ (g = 10 m/s²)',
+    yours:'6', correct:'180',
+    note:'This is the real text from the answer key. The figure is not shown, and it matters. Set-up in words: a closed cylinder full of water; the bead is lighter than water and is tied to the bottom by a 16 cm thread, which is vertical before the rotation, with the bead directly above its anchor 20 cm from the axis. I treat the bead as a point (its 1 cm radius is ignored). That reading gives exactly the key of 180, so check it against your paper. In the portal text the square-root bar of ω is garbled; I read it as above, and step 5 confirms that reading. Your working for 6 is not saved. A guess: 6 equals K₂, so you may have entered K₂ instead of K₁ × K₂.',
+    diag:'My working for 6 is not saved. The figure is missing from the text. The thread is read as vertical before the rotation. 6 is the value of K2, which may be a coincidence.',
+    fig:FIG_ROT,
+    steps:[
+      {tag:'Step 1: the geometry of the thread', html:'The thread is 16 cm long and the bead started directly above its anchor, so the thread was vertical. The bead sinks 4 cm, so the vertical part of the thread is now 16 − 4 = 12 cm. Then cos θ = 12/16 = 3/4, sin θ = √7/4 and tan θ = √7/3, where θ is the angle from the vertical. The bead has moved sideways by 16 sin θ = 4√7 cm toward the axis, so its distance from the axis is now r = 20 − 4√7 = 4(5 − √7) cm.'},
+      {tag:'Step 2: the push of the water', html:'In the ground frame, the water around the bead goes round a circle at ω, so the pressure must rise outward: dP/dr = ρ<sub>w</sub> ω² r. A small body of volume V in this water gets an inward push ρ<sub>w</sub> V ω² r from the pressure and an upward push ρ<sub>w</sub> V g from buoyancy. A bead lighter than water is pushed toward the axis.'},
+      {tag:'Step 3: Newton’s second law for the bead', html:'The thread pulls it toward the anchor, which is outward and down, with tension T. Toward the axis (centripetal): ρ<sub>w</sub> V ω² r − T sin θ = ρ<sub>b</sub> V ω² r, so T sin θ = (ρ<sub>w</sub> − ρ<sub>b</sub>) V ω² r. Vertical: T cos θ + ρ<sub>b</sub> V g = ρ<sub>w</sub> V g, so T cos θ = (ρ<sub>w</sub> − ρ<sub>b</sub>) V g. The unknowns V and T cancel when you divide.'},
+      {tag:'Step 4: divide and put in the numbers', html:'tan θ = ω² r / g, so ω² = g tan θ / r = 10 × (√7/3) ÷ [0.04 (5 − √7)] = (250/3) √7 / (5 − √7). That is ω² ≈ 93.7, so ω ≈ 9.7 rad/s.'},
+      {tag:'Step 5: match the form in the question', html:'The question writes ω² = 100 × 5√7 / (K₁ − K₂√7). So K₁ − K₂√7 = 500√7 / ω² = 500√7 × 3 (5 − √7) / (250√7) = 6 (5 − √7) = 30 − 6√7. So K₁ = 30 and K₂ = 6, and K₁ × K₂ = 180. This matches the key.<div class="final">Answer: 180</div><div class="trap-note">The trap: using the starting distance R = 20 cm in ω² = g tan θ / r. The bead has moved, and the push from the water depends on where it is now. With R you get ω² = 44.1, which cannot be written with a √7 in it. When a question says “K₁ − K₂√7”, expect a √7 from the geometry.</div>'}
+    ]}
+},
+{ id:'s3', n:3, title:'Floating bodies: depth from mean density, motion from the centre of mass, every option from one set of numbers', chip:'c5', chipText:'Recurring · Weak',
+  pattern:'fluid-buoyancy-floating-bodies-force-work-and-torque',
+  syl:'Syllabus: Mechanics (buoyancy; torque and moment of inertia, parallel axis theorem; simple harmonic motion; Newton’s laws)',
+  lbl:'This one came back', leftH:'Earlier', rightH:'This time',
+  status:'This pattern is recurring on my tracker (wrong or partial in WTA19, CTA19, WTA20 and CTA20).',
+  cameBack:{
+    prev:'<strong>WTA19 Q33</strong> (work to submerge a floating cylinder): wrong, 5 against the key 4. <strong>CTA19 Q21</strong> (speed at first equilibrium by energy): wrong, 5 against the key 3. WTA19 Q25, Q27 and CTA19 Q27 were partial. Standard force-balance questions were right (WTA20 Q35, Q36).',
+    now:'<strong>WTA20 Q19</strong> (a ball of two hemispheres, ρ and 2ρ, fully submerged): you marked A only, and the set is A and D. <strong>CTA20 Q19</strong> (a light tube with trapped air and a block B on it): you marked C only, and the set is A and C (see the last rule).',
+    verdict:'<strong>A different error in the same topic, and a kind of progress.</strong> Earlier, the numbers came out wrong. This time every option you ticked was right, and you stopped one option early, both times on the option that needed one more quantity from numbers you already had (the period, the volume of B). The portal does not print the key for partial questions, so both sets are my hand derivations. The one for CTA20 Q19 also uses the fact that your mark was partial.'},
+  why:'One picture of a floating body gives several numbers: the mean density, the depth, the centre of mass, the torque, the period. In a multi-correct question each option is one of those numbers. If you solve the first, tick it and move on, the rest are never read. List the numbers the picture gives, then read each option off the list.',
+  rule:[
+    'Weight = buoyancy. The mean density is total mass ÷ total volume (for two halves of equal volume, the average). A fully submerged body in equilibrium has mean density equal to the liquid’s. A floating one has the fraction submerged = mean density ÷ liquid density, and the depth depends only on that, not on how the mass is arranged.',
+    'Buoyancy acts at the centre of the displaced volume (for a fully submerged sphere, its geometric centre), not at the centre of mass. Tilt by θ and the two forces make a torque F<sub>b</sub> × (offset) × θ about the centre of mass, with F<sub>b</sub> = M g. That is angular SHM: ω² = F<sub>b</sub> × offset / I<sub>cm</sub>.',
+    'Moment of inertia about the centre of mass, I<sub>cm</sub> = I<sub>centre</sub> − M d² (parallel-axis theorem, taken back from the centre to the centre of mass). A sphere made of two hemispheres has I<sub>centre</sub> = (2/5) M R², because each hemisphere has (2/5) m R² about a diameter.',
+    'Vertical SHM of a floating prism: restoring force ρ<sub>liquid</sub> g A y, mass ρ<sub>mean</sub> A H, so T = 2π√(d / g), where d is the depth submerged. Work to push it down by x: ½ ρ<sub>liquid</sub> g A x², because the force grows from 0.',
+    'Your CTA20 Q19, worked: take the block under water and the length of the air column in the tube as x. The tube feels an upward (P − P₀ − d g h) π r² = d g x π r² from the air, and the block’s weight less its buoyancy is (2d − d) V g = d V g. So V = π r² x and P = P₀ + d g (h + x). That pairs A with C (x = ℓ/3) or B with D (x = 2ℓ/3). The value of x is in the figure only. You marked C and the question is partial, so C is right, and the set is A and C.'],
+  ex:{ src:'WTA20 Q19, real question text',
+    q:'A spherical ball of radius R is formed by joining two solid hemispherical parts of uniform densities ρ and 2ρ. When the ball is placed in a water tank, containing water of uniform density ρ₀, the ball floats in static equilibrium while remaining completely submerged, with the heavier hemisphere at the bottom. Neglect viscous forces, drag and fluid resistance. The sphere is pivoted such that it can undergo small rotational oscillations in a vertical plane, about a fixed horizontal axis passing through its centre of mass. Which of the following options is/are CORRECT? (Acceleration due to gravity is g)\n(A) If density of water is ρ₀ then ρ = 2ρ₀/3\n(B) If density of water is ρ₀ then ρ = ρ₀/3\n(C) The time period of small angular oscillations of the ball about its equilibrium position, is T = 2π√(23R/40g)\n(D) The time period of small angular oscillations of the ball about its equilibrium position, is T = 2π√(123R/40g)',
+    yours:'A', correct:'A, D',
+    note:'This is the real text and the real options from the answer key. The question needs no figure; the diagram below shows the ball as the text describes it. The portal does not print the key for a partial question, so the set A, D is from my derivation below, and I checked all four options.',
+    diag:'I marked A only and missed D.',
+    fig:FIG_BALL,
+    steps:[
+      {tag:'Step 1: the mean density, which settles A and B', html:'The two halves have equal volume, so the mean density is (ρ + 2ρ)/2 = 1.5 ρ. Completely submerged and in equilibrium means the mean density equals the water’s: 1.5 ρ = ρ₀, so ρ = 2ρ₀/3. A is true. B (ρ = ρ₀/3) would give a mean density of 0.5 ρ₀, and the ball would float partly out. B is false.'},
+      {tag:'Step 2: where the centre of mass is', html:'The centre of mass of a solid hemisphere is 3R/8 from its flat face. Take the centre of the ball as the origin, up as positive. The heavy half (mass 2m) is below, at −3R/8; the light half (mass m) is above, at +3R/8. Centre of mass = (2m × (−3R/8) + m × (3R/8)) / 3m = −R/8. So G is R/8 below the centre C. The buoyancy acts at C, which is R/8 above G.'},
+      {tag:'Step 3: the torque when it tilts', html:'Tilt by a small θ about the axis through G. The weight M g acts at G and gives no torque. The buoyancy (also M g, since the ball floats) acts at C, which has moved sideways by (R/8) sin θ ≈ (R/8) θ. The restoring torque is M g (R/8) θ.'},
+      {tag:'Step 4: the moment of inertia about G', html:'About a diameter through C, each hemisphere has (2/5) m<sub>h</sub> R², so the whole ball has I<sub>C</sub> = (2/5) M R². Go to G with the parallel-axis theorem: I<sub>G</sub> = I<sub>C</sub> − M (R/8)² = M R² (2/5 − 1/64) = M R² × (128 − 5)/320 = (123/320) M R².'},
+      {tag:'Step 5: the period, which settles C and D', html:'I<sub>G</sub> α = −M g (R/8) θ, so ω² = M g (R/8) / I<sub>G</sub> = g/(8R) × 320/123 = 40 g / (123 R). So T = 2π/ω = 2π√(123R / 40g). D is true. C (with 23) is false, because 23/40 would need I<sub>G</sub> = (23/320) M R².<div class="final">Answer: A and D</div><div class="trap-note">The trap: stopping at A. A is first on the list and needs one line. D needs three more, but each is one idea (the offset of G, the parallel-axis theorem, the torque), and every number is already on the page. Before you submit a multi-correct answer, ask which numbers you computed and which option each one settles.</div>'}
+    ]}
+},
+{ id:'s4', n:4, title:'Force on the faces of an immersed body: bottom face, then buoyancy, then subtract', chip:'c5', chipText:'Recurring · Weak',
+  pattern:'fluid-pressure-hydraulic-systems-and-manometers',
+  syl:'Syllabus: Mechanics (pressure in a fluid, Pascal’s law, buoyancy)',
+  lbl:'This one came back', leftH:'Earlier', rightH:'This time',
+  status:'This pattern is recurring on my tracker (wrong in WTA19, CTA19 and CTA20; right on five other questions of this type).',
+  cameBack:{
+    prev:'<strong>CTA19 Q36</strong> (force on a small piston from a 600 kg cylinder with an oil head): wrong, 187.5 against the key 37.5, a missing oil-column pressure term or area ratio. WTA19 Q32 and CTA19 Q24 were also wrong. You were right on WTA19 Q22 and Q31, CTA19 Q31, and WTA20 Q20 and Q23.',
+    now:'<strong>CTA20 Q33</strong> (match the forces on a regular tetrahedron under water): you marked B, which reads A-S, B-R, C-P, D-Q. Only B-R is right. The key is not printed by the portal. By hand it is A-P, B-R, C-Q, D-S, which is option D.',
+    verdict:'<strong>A different error in the same topic.</strong> The old one dropped a pressure term in a hydraulic system. This one got the pressure on the bottom face right (B-R) and then attached a wrong value to the other three items. The tracker marks the topic recurring because it failed in three tests, but you were right on five other questions of it, so the basics are there. I cannot see your working for Q33.'},
+  why:'Pressure pushes at right angles on every face of a body under water, and it grows with depth. For a closed body, the forces of all the faces together add to exactly one thing: the buoyancy ρ V g, straight up. That one fact links every part of a question like this. Any group of faces is the whole, minus the faces you are not asking about.',
+  rule:[
+    'Force on a face = ρ g × (depth of the face’s centre) × area, at right angles to the face. For a horizontal face, that is vertical. For a slanted face, split it into vertical and horizontal parts.',
+    'All the faces together give the buoyancy ρ g V, straight up. The horizontal parts cancel. Do not add the faces one by one when you can use this.',
+    '“Some faces” = buoyancy − the other faces, as vectors. Sides = whole − bottom. If the bottom force is larger than the buoyancy, the sides push down.',
+    'Identical faces share a total equally. The vertical part on one of three equal side faces is a third of the total vertical force on the sides.',
+    'Check the form of each answer. A force is ρ g × (length)³, so every term must be h·a² or a³. The pair (3√3 h − √2 a) a² passes. One that mixes h and a² in a term with a³ does not.'],
+  ex:{ src:'CTA20 Q33, real question text',
+    q:'Match the following: A regular tetrahedron is completely immersed under water of density ρ with its bottom surface horizontal at a depth of h. Edge length of tetrahedron is ‘a’. Neglect atmospheric pressure.\nColumn I: A) Net force exerted by the liquid on all the side faces of tetrahedron is; B) Force exerted by the liquid on the bottom face of tetrahedron is; C) Net force exerted by the liquid on tetrahedron is; D) Vertical component of force exerted by liquid on the one of the side face of tetrahedron is.\nColumn II: P) (3√3 h − √2 a) ρ g a² / 12; Q) ρ a³ g / (6√2); R) √3 ρ g h a² / 4; S) (3√3 h − √2 a) ρ g a² / 36.\nOptions: (A) A-S, B-Q, C-R, D-P; (B) A-S, B-R, C-P, D-Q; (C) A-R, B-Q, C-S, D-P; (D) A-P, B-R, C-Q, D-S',
+    yours:'B (A-S, B-R, C-P, D-Q)', correct:'D (A-P, B-R, C-Q, D-S)',
+    note:'This is the real text from the answer key. The question has a figure; the text says the bottom face is horizontal, and the diagram below is drawn from that. The portal does not print the key for this question, so the answer is my derivation, and every item is checked. Your working is not saved.',
+    diag:'I marked B (A-S, B-R, C-P, D-Q). Only B-R is right.',
+    fig:FIG_TET,
+    steps:[
+      {tag:'Step 1: the two numbers you need', html:'A regular tetrahedron of edge a has face area (√3/4) a² and volume V = a³ / (6√2). Its height is not needed.'},
+      {tag:'Step 2: bottom face (item B)', html:'The face is horizontal at depth h, so the pressure on it is the same everywhere, ρ g h (atmospheric pressure is neglected). F = ρ g h × (√3/4) a² = √3 ρ g h a² / 4, upward. That is R. B-R. You had this one right.'},
+      {tag:'Step 3: the whole body (item C)', html:'All four faces together give the buoyancy: ρ g V = ρ g a³ / (6√2). That is Q. So C-Q. You chose P here, which is the force on the side faces only.'},
+      {tag:'Step 4: the three side faces together (item A)', html:'Vertical balance on the forces from the water: bottom (up) + sides (vertical) = buoyancy (up). So the sides give Q − R, which is downward, of size R − Q = ρ g a² (√3 h/4 − a/(6√2)). Put it over 12: √3/4 = 3√3/12 and 1/(6√2) = √2/12. So the size is (3√3 h − √2 a) ρ g a² / 12, which is P. A-P. The horizontal parts cancel by the three-fold symmetry.'},
+      {tag:'Step 5: one side face (item D)', html:'The three side faces are identical and share the vertical force equally. One of them gives P / 3 = (3√3 h − √2 a) ρ g a² / 36, which is S. D-S.'},
+      {tag:'Step 6: the answer and a check', html:'A-P, B-R, C-Q, D-S is option D. Check the sign of P: the apex has to be under water, so h is more than the height 0.82 a, so 3√3 h is far larger than √2 a, and P is positive. Good, the sides do push down.<div class="final">Answer: option D (A-P, B-R, C-Q, D-S)</div><div class="trap-note">The trap: using the value that looks closest to the item. “Net force on the side faces” and “net force on the tetrahedron” are different things, and so are “all the sides” and “one side”. Your A-S gave all three side faces the vertical force of one. Use the buoyancy first, then subtract.</div>'}
+    ]}
+}
+];
+
+var PROBS = [
+{ sec:1, type:'single',
+  q:'A large open tank stands on level ground and is filled to a depth of 4.0 m with a liquid whose density increases with depth, ρ(y) = ρ₀(1 + y / 2 m), where y is the depth below the free surface in metres. A tiny orifice is drilled in the vertical side wall at a depth of 2.0 m, so it is 2.0 m above the ground, and the jet leaves horizontally. The flow is steady and the pressure is atmospheric at the surface and at the orifice. How far from the orifice, measured horizontally, does the jet land? (g = 10 m/s²)',
+  opts:['2√3 m ≈ 3.5 m','4.0 m','2√6 m ≈ 4.9 m','√6 m ≈ 2.4 m'], ans:[0],
+  why:'The pressure at the orifice is the area under the ρg graph: ΔP = ∫₀² ρ₀ (1 + y/2) g dy = ρ₀ g (2 + 1) = 3 ρ₀ g. The density at the orifice is ρ₀ (1 + 1) = 2 ρ₀. Bernoulli: ½ (2ρ₀) v² = 3ρ₀ g, so v² = 3g = 30 and v = √30 m/s. The jet falls 2.0 m: t² = 2 × 2.0 / 10 = 0.4. Range = v t = √(30 × 0.4) = √12 = 2√3 ≈ 3.46 m.',
+  mistakes:{1:'4.0 m: used v² = 2 g d = 40, that is, the constant-density formula. The column is denser than ρ₀, and the speed depends on the orifice’s own density.',
+            2:'2√6 m: divided by the surface density ρ₀ instead of the orifice’s 2ρ₀ (v² = 6g = 60).',
+            3:'√6 m: dropped the factor of 2 in ½ρv² (v² = ΔP/ρ = 1.5 g = 15).'} },
+{ sec:1, type:'single', fig:FIG_SPRAY,
+  q:'In a sprayer, air flows along a horizontal tube that narrows from area 4A (wide part) to area A (throat). In the wide part the air has speed v₁ and a gauge pressure of 45 Pa. A vertical tube from the throat dips into oil of density 900 kg/m³ in an open vessel, with the throat 2.0 cm above the oil surface. The air has density 1.2 kg/m³ and is treated as incompressible. What is the smallest v₁ for which the oil just reaches the throat? (g = 10 m/s²)',
+  opts:['3.9 m/s','4.5 m/s','5.0 m/s','20 m/s'], ans:[2],
+  why:'Continuity: the throat speed is 4 v₁. The oil just reaches the throat when the throat pressure is P₀ − ρ g h = P₀ − 900 × 10 × 0.02 = P₀ − 180 Pa. Bernoulli from the wide part (P₀ + 45, speed v₁) to the throat (speed 4 v₁): P₀ + 45 + ½ (1.2) v₁² = P₀ − 180 + ½ (1.2)(16 v₁²). So 225 = ½ (1.2) × 15 v₁² = 9 v₁², v₁² = 25 and v₁ = 5.0 m/s.',
+  mistakes:{0:'3.9 m/s: subtracted the 45 Pa (9 v₁² = 180 − 45 = 135). The air starts 45 Pa above P₀ and must end 180 Pa below it, so the speeding up has to account for 180 + 45 = 225 Pa.',
+            1:'4.5 m/s: left out the 45 Pa (9 v₁² = 180).',
+            3:'20 m/s: this is the throat speed 4 v₁, not the speed in the wide part that the question asks for.'} },
+{ sec:2, type:'single', fig:FIG_INC,
+  q:'A closed rigid box completely filled with water (1000 kg/m³) slides freely, without friction, down a smooth 37° incline. A small sealed ball of density 400 kg/m³ is held at rest inside the box and then released. Taking the box as the frame, what is the initial acceleration of the ball relative to the box? (g = 10 m/s², sin 37° = 0.6, cos 37° = 0.8)',
+  opts:['15 m/s², vertically upward','12 m/s², at right angles to the incline, away from it','9 m/s², along the incline','4.8 m/s², at right angles to the incline, away from it'], ans:[1],
+  why:'The box accelerates at g sin 37° = 6 m/s² down the incline, so g<sub>eff</sub> = g − a has size g cos 37° = 8 m/s², at right angles to the incline and into it. In the box, the water pushes the ball with ρ<sub>w</sub> V g<sub>eff</sub>, away from the incline. Net force on the ball (towards “up” in the box) = (ρ<sub>w</sub> − ρ<sub>b</sub>) V g<sub>eff</sub> = 600 V × 8, divided by the ball’s mass 400 V: a = 1.5 × 8 = 12 m/s², at right angles to the incline, away from it.',
+  mistakes:{0:'15 m/s², vertically up: used g = 10 as if the box were not accelerating (1.5 g).',
+            2:'9 m/s², along the incline: used g sin 37° instead of g cos 37° (1.5 × 6).',
+            3:'4.8 m/s²: divided the net force by the water’s density instead of the ball’s (0.6 × 8).'} },
+{ sec:3, type:'multi',
+  q:'A solid cylinder of height 0.40 m and cross-section 0.010 m² is made of two equal halves stacked end to end: the lower half has density 800 kg/m³ and the upper half 400 kg/m³. It floats upright in water (1000 kg/m³). (g = 10 m/s²) Which statements are correct?',
+  opts:['It floats with 24 cm of its length below the water surface.','Small vertical oscillations have a period of about 0.97 s.','The least work needed to push it down until its top face is just level with the water surface is 2.56 J.','If the two halves were swapped, it would still float upright but sit deeper than 24 cm.'], ans:[0,1],
+  why:'Mean density = (800 + 400)/2 = 600 kg/m³, so the depth is 0.60 × 0.40 = 0.24 m. A true. Vertical SHM: restoring force ρ<sub>w</sub> g A y with mass 600 × 0.010 × 0.40 = 2.4 kg, so ω² = 1000 × 10 × 0.010 / 2.4 = 41.7 and T = 2π/ω = 2π√(0.24/10) = 0.97 s. B true. Pushing down by x = 0.40 − 0.24 = 0.16 m: the extra force grows from 0 to ρ<sub>w</sub> g A x = 16 N, so W = ½ × 100 N/m × (0.16)² = 1.28 J, not 2.56 J. C false. D: the depth depends only on the total mass and the area, not on the order of the halves, so it is still 24 cm. False.',
+  mistakes:{2:'C: 2.56 J is 16 N × 0.16 m, using the final force over the whole distance. The force grows linearly from 0, so the work has a factor ½.',
+            3:'D: believed the arrangement of the mass sets the depth. It sets the stability and the centre of mass, not how deep it floats.'} },
+{ sec:4, type:'single', fig:FIG_CONE,
+  q:'A solid right circular cone of base radius 0.30 m and height 0.90 m is held completely under water (1000 kg/m³), apex up, with its axis vertical and its flat base horizontal at a depth of 2.0 m. Neglect atmospheric pressure. (g = 10 m/s², use π = 3.14.) Which option gives the net vertical force of the water on the curved (slanted) surface and the net force of the water on the whole cone?',
+  opts:['Curved surface 4.8 kN downward; whole cone 0.85 kN upward','Curved surface 6.5 kN downward; whole cone 0.85 kN upward','Curved surface 4.8 kN downward; whole cone 5.7 kN upward','Curved surface 0.85 kN upward; whole cone 0.85 kN upward'], ans:[0],
+  why:'Base force: ρ g h × π r² = 1000 × 10 × 2.0 × 3.14 × 0.09 = 5652 N, upward. Volume = (1/3) π r² H = (1/3)(3.14)(0.09)(0.90) = 0.0848 m³, so the buoyancy on the whole cone = 1000 × 10 × 0.0848 = 848 N upward (0.85 kN). The curved surface gives the whole minus the base: 848 − 5652 = −4804 N, so 4.8 kN downward. The horizontal parts cancel by symmetry.',
+  mistakes:{1:'6.5 kN down on the curved surface: added the buoyancy to the base force (5652 + 848) instead of subtracting.',
+            2:'5.7 kN up on the whole cone: took the base force as the whole, forgetting the downward push on the slanted surface.',
+            3:'0.85 kN up on the curved surface: thought the slanted surface carries the buoyancy. The bottom is where the large upward push is, so the slanted surface has to push down.'} },
+{ sec:1, type:'multi', fig:FIG_TWO,
+  q:'A wide open vessel stands on a level floor. It holds 1.05 m of liquid of density 3ρ with 0.60 m of an immiscible liquid of density ρ on top. A small hole is made in the side wall 0.45 m above the floor, so 0.60 m of the heavy liquid is above the hole. The free surface falls very slowly. (g = 10 m/s²) Which statements are correct?',
+  opts:['At the start the liquid leaves the hole at 4.0 m/s.','At the start the jet lands about 1.8 m from the wall.','While the heavy liquid is leaving, the speed of the jet stays at 4.0 m/s.','When the heavy liquid above the hole is used up and the light liquid starts to leave, the speed of the jet jumps up (to about 3.5 m/s).'], ans:[0,3],
+  why:'Pressure at the hole level = ρ g (0.60) + 3ρ g y, where y is the height of the heavy liquid above the hole. At the start, y = 0.60: pressure = 2.4 ρ g. The leaving liquid has density 3ρ, so v² = 2 × 2.4 g / 3 = 1.6 g = 16 and v = 4.0 m/s. A true. Fall time from 0.45 m: t = √(0.09) = 0.30 s, so the range is 4.0 × 0.30 = 1.2 m. B false. As y falls to 0, v² = 2 (0.60 g) / 3 = 0.4 g = 4, so v falls to 2.0 m/s. C false. After that, the light liquid (thickness 0.60 m) leaves: v² = 2 g (0.60) = 12, so v = 3.46 m/s. That is a jump up from 2.0 m/s. D true.',
+  mistakes:{1:'B: 1.8 m used the fall height of the free surface of the heavy liquid (1.05 m) instead of the hole’s height above the floor (4.0 × √(2 × 1.05/10) = 1.83 m).',
+            2:'C: treated the speed as fixed. The pressure at the hole drops as the heavy liquid above it drains, so the speed falls from 4.0 to 2.0 m/s.'} }
+];
+
+/* ---------- helpers ---------- */
+var LET = ['A','B','C','D'];
+function plain(html){ var d=document.createElement('div'); d.innerHTML=html.replace(/<\/?(div|br|li|p|ul|ol|figure)[^>]*>/g,' '); return d.textContent.replace(/\s+/g,' ').trim(); }
+var SUP={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁻':'-','⁺':'+'};
+var SUB={'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9','₊':'+','₋':'-'};
+var GREEK={'θ':'theta','α':'alpha','μ':'mu','λ':'lambda','π':'pi','ℓ':'l','ω':'omega','Δ':'delta ','∫':'integral ','≤':'<=','≥':'>=','∝':'prop to','ρ':'rho','≪':'<<','ṡ':'s-dot','ẋ':'x-dot'};
+function ascii(s){
+  return s.replace(/[θαμλπℓωΔ∫≤≥∝ρ≪]|ṡ|ẋ/g,function(c){return GREEK[c];})
+          .replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]+/g,function(r){return '^'+r.split('').map(function(c){return SUP[c];}).join('');})
+          .replace(/[₀-₉₊₋]+/g,function(r){return r.split('').map(function(c){return SUB[c];}).join('');})
+          .replace(/×/g,'x').replace(/→/g,'->').replace(/√/g,'sqrt').replace(/≈/g,'~').replace(/−/g,'-')
+          .replace(/½/g,'1/2').replace(/¼/g,'1/4').replace(/÷/g,'/').replace(/°/g,' deg').replace(/·/g,'*').replace(/✓/g,'(checked)')
+          .replace(/[–—]/g,'-').replace(/[“”]/g,'"').replace(/[’‘]/g,"'");
+}
+var TUTOR = 'I am a JEE aspirant preparing for JEE Advanced. Act as a patient tutor: use simple language, reply in chunks of under 10 lines, explain why and not just how, and wait for my reply before moving on.';
+function askUrl(parts){
+  var ps = parts.map(function(p){ return ascii(p); });
+  function build(){ return 'https://claude.ai/new?q=' + encodeURIComponent(ps.join('\n\n')); }
+  var u = build(), guard = 0;
+  while(u.length > 3300 && guard++ < 200){
+    var li = -1, soft = /^(Steps:|For your reference|Why it matters|Shortcut rules)/;
+    for(var i=1;i<ps.length;i++){ if(soft.test(ps[i]) && ps[i].length > 120 && (li<0 || ps[i].length > ps[li].length)) li = i; }
+    if(li < 0){ li = 1; for(var j=2;j<ps.length;j++){ if(ps[j].length > ps[li].length) li = j; } }
+    ps[li] = ps[li].slice(0, Math.max(40, Math.floor(ps[li].length*0.9))) + '...';
+    u = build();
+  }
+  return u;
+}
+function askLink(parts, label){
+  var a = document.createElement('a');
+  a.className='ask'; a.target='_blank'; a.rel='noopener'; a.textContent = label || 'Ask Claude about this ↗';
+  a.href = askUrl([TUTOR].concat(parts));
+  return a;
+}
+function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
+
+/* ---------- build sections ---------- */
+function buildSections(){
+  var root = document.getElementById('sections');
+  SECTIONS.forEach(function(s){
+    var sec = el('section','pattern'); sec.id = s.id;
+    var head = el('div','pattern-head');
+    head.appendChild(el('h2',null, s.n+' · '+s.title));
+    head.appendChild(el('span','chip '+s.chip, s.chipText));
+    sec.appendChild(head);
+    sec.appendChild(el('div','syl', s.syl));
+    var cb = el('div','came-back');
+    cb.innerHTML = '<span class="lbl'+(s.isNew?' new':'')+'">'+s.lbl+'</span>'
+      +'<div class="sbs"><div><span class="h">'+s.leftH+'</span>'+s.cameBack.prev+'</div><div><span class="h">'+s.rightH+'</span>'+s.cameBack.now+'</div></div>'
+      +'<div>'+s.cameBack.verdict+'</div>';
+    sec.appendChild(cb);
+    sec.appendChild(el('p','why', '<strong>Why this matters.</strong> '+s.why));
+    var rule = el('div','rule');
+    rule.innerHTML = '<span class="rule-label">Shortcut rules</span><ul>'+s.rule.map(function(r){return '<li>'+r+'</li>';}).join('')+'</ul>';
+    sec.appendChild(rule);
+
+    var ex = s.ex, st = el('div','stepper'); st.id = 'st-'+s.id;
+    st.appendChild(el('span','stepper-label','Worked example · '+ex.src));
+    st.appendChild(el('p',null, ex.q.replace(/\n/g,'<br>')));
+    st.appendChild(el('p','yours','Your answer: <strong>'+ex.yours+'</strong>. Correct answer: <strong>'+ex.correct+'</strong>.'));
+    st.appendChild(el('p','rebuilt', ex.note));
+    if(ex.fig){ var f = el('div'); f.innerHTML = ex.fig.svg; st.appendChild(f); }
+    ex.steps.forEach(function(sp,i){
+      var d = el('div','step'); d.innerHTML='<span class="tag">'+sp.tag+'</span>'+sp.html; if(i>0) d.hidden = true; st.appendChild(d);
+    });
+    var b = el('button','step-btn','Show next step →'); b.type='button'; b.onclick=function(){ stepNext(st); }; st.appendChild(b);
+    sec.appendChild(st);
+
+    var secParts = ['Topic: '+s.title+' (JEE Advanced Physics, Fluid Mechanics). Pattern: '+s.pattern+'. '+s.status+(s.isNew?'':' '+plain(s.cameBack.verdict)),
+                    'Why it matters: '+plain(s.why),
+                    'Shortcut rules: '+s.rule.map(plain).join(' | ')];
+    var exParts = ['Worked example ('+ex.src+'). Question: '+plain(ex.q.replace(/\n/g,' '))+(ex.fig?ex.fig.text:''),
+                   'My real answer was '+ex.yours+' and the correct answer is '+ex.correct+'. '+ex.diag,
+                   'Steps: '+ex.steps.map(function(sp){ var t=plain(sp.tag+': '+sp.html); return t.length>230? t.slice(0,227)+'...' : t; }).join(' || ')];
+    var row = el('div');
+    row.appendChild(askLink(secParts, 'Ask Claude about this section ↗')); row.appendChild(document.createTextNode(' '));
+    row.appendChild(askLink(exParts, 'Ask Claude about the worked example ↗'));
+    sec.appendChild(row);
+    root.appendChild(sec);
+  });
+}
+
+/* ---------- build practice ---------- */
+function buildGrid(){
+  var grid = document.getElementById('grid');
+  PROBS.forEach(function(p,idx){
+    var sec = SECTIONS[p.sec-1];
+    var card = el('div','card'); card.id='p'+(idx+1);
+    var head = el('div','card-head');
+    head.appendChild(el('span','qnum', String(idx+1)));
+    head.appendChild(el('span','chip '+(p.type==='multi'?'c2':'c3'), p.type==='multi'?'Multi-correct':'Single-correct'));
+    head.appendChild(el('span','chip c4','Level 4'));
+    head.appendChild(el('span','chip '+sec.chip, 'Section '+sec.n));
+    card.appendChild(head);
+    card.appendChild(el('p',null,p.q));
+    if(p.fig){ var fg = el('div'); fg.innerHTML = p.fig.svg; card.appendChild(fg); }
+    if(p.type==='multi') card.appendChild(el('div','yours','Select all that apply.'));
+    var opts = el('div','opts'); var inputs=[];
+    p.opts.forEach(function(t,i){
+      var lab = el('label','opt');
+      var inp = document.createElement('input'); inp.type = p.type==='multi'?'checkbox':'radio'; inp.name='q'+idx; inp.id='q'+idx+'o'+i; inp.value=i;
+      lab.appendChild(inp); lab.appendChild(el('span','l',LET[i])); lab.appendChild(el('span','t',t));
+      opts.appendChild(lab); inputs.push(inp);
+    });
+    card.appendChild(opts);
+    var verdict = el('div'); verdict.hidden = true;
+    var actions = el('div');
+    var chk = null;
+    function grade(){
+      var sel=[]; inputs.forEach(function(i){ if(i.checked) sel.push(+i.value); });
+      if(!sel.length){ return; }
+      var ok = sel.length===p.ans.length && sel.every(function(x){ return p.ans.indexOf(x)>-1; });
+      inputs.forEach(function(inp,i){
+        var lab = inp.parentNode; lab.classList.remove('is-right','is-wrong','is-miss');
+        var isAns = p.ans.indexOf(i)>-1;
+        if(inp.checked && isAns) lab.classList.add('is-right');
+        else if(inp.checked && !isAns) lab.classList.add('is-wrong');
+        else if(!inp.checked && isAns) lab.classList.add('is-miss');
+      });
+      verdict.className = 'verdict '+(ok?'ok':'no'); verdict.hidden=false;
+      verdict.textContent = (ok?'Correct. ':'Not quite. ')+'Correct option'+(p.ans.length>1?'s':'')+': '+p.ans.map(function(i){return LET[i];}).join(', ')+'.';
+    }
+    if(p.type==='multi'){
+      chk = el('button','check-btn','Check answer'); chk.type='button'; chk.onclick=grade; actions.appendChild(chk);
+    } else {
+      inputs.forEach(function(i){ i.addEventListener('change', grade); });
+    }
+    var rev = el('button','reveal-btn','Show why'); rev.type='button'; actions.appendChild(rev);
+    card.appendChild(actions); card.appendChild(verdict);
+    var ans = el('div','answer'); ans.hidden = true;
+    var mk = Object.keys(p.mistakes).map(function(k){ return '<li>'+p.mistakes[k]+'</li>'; }).join('');
+    ans.innerHTML = '<div>'+p.why+'</div><ul>'+mk+'</ul>';
+    card.appendChild(ans);
+    rev.onclick = function(){ ans.hidden = !ans.hidden; rev.textContent = ans.hidden ? 'Show why' : 'Hide why'; };
+
+    var parts = ['Practice problem '+(idx+1)+' ('+(p.type==='multi'?'multi-correct: pick all correct options':'single-correct')+', level 4, topic: '+sec.title+').',
+                 'Problem: '+plain(p.q)+(p.fig?p.fig.text:''),
+                 'Options: '+p.opts.map(function(t,i){return LET[i]+') '+plain(t);}).join('  '),
+                 'For your reference only, do not reveal unless I ask or have made a real attempt. Correct: '+p.ans.map(function(i){return LET[i];}).join(', ')+'. Reasoning: '+plain(p.why),
+                 'Ask me what I have tried first, then give me one hint at a time.'];
+    card.appendChild(askLink(parts));
+    grid.appendChild(card);
+  });
+}
+
+function stepNext(st){
+  var steps = st.querySelectorAll('.step'), shown = 0;
+  steps.forEach(function(s){ if(!s.hidden) shown++; });
+  if(shown < steps.length){ steps[shown].hidden = false; shown++; }
+  if(shown >= steps.length){ st.querySelector('.step-btn').hidden = true; }
+}
+function setMode(mode, btn){
+  document.querySelectorAll('.mode-btn').forEach(function(b){ b.setAttribute('aria-pressed', b===btn?'true':'false'); });
+  document.getElementById('timerBar').hidden = (mode!=='timed');
+}
+var remaining = 40*60, timerId = null;
+function renderTime(){ var m=String(Math.floor(remaining/60)).padStart(2,'0'), s=String(remaining%60).padStart(2,'0'); document.getElementById('timeDisplay').textContent=m+':'+s; }
+function startTimer(){ if(timerId) return; timerId=setInterval(function(){ remaining--; if(remaining<=0){ clearInterval(timerId); timerId=null; document.getElementById('timeDisplay').textContent="Time's up"; } else renderTime(); },1000); }
+function resetTimer(){ clearInterval(timerId); timerId=null; remaining=40*60; renderTime(); }
+
+buildSections(); buildGrid(); renderTime();
+</script>

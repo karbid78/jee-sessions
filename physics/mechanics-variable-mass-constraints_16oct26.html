@@ -1,0 +1,616 @@
+<title>Mechanics: Variable Mass, Friction, Constraints</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one column. Hero, four sections (came-back box, rule, one worked example with a diagram), then a 6-problem MCQ grid. Blue-slate mechanics system, same family as the other physics pages. */
+  :root{
+    --bg:#F4F6FB;
+    --surface:#FFFFFF;
+    --surface-2:#EAEFF8;
+    --ink:#18223A;
+    --ink-soft:#4F5C78;
+    --border:#D6DEEC;
+    --accent:#2A5CAA;
+    --accent-ink:#FFFFFF;
+    --accent-soft:#DFE8F7;
+    --highlight-ink:#53390A;
+    --highlight-bg:#FFF4D6;
+    --highlight-border:#EBCF86;
+    --good:#217A4B;
+    --good-bg:#E2F4EA;
+    --trap:#B24A38;
+    --trap-bg:#FBE9E5;
+    --chip-1:#2A5CAA; --chip-1-bg:#DFE8F7;
+    --chip-2:#7A4FB5; --chip-2-bg:#EEE7F8;
+    --chip-3:#217A4B; --chip-3-bg:#E2F4EA;
+    --chip-4:#A9631A; --chip-4-bg:#FBEBD9;
+    --chip-5:#B24A38; --chip-5-bg:#FBE9E5;
+    --warm:#C2841B;
+    --shadow: 0 1px 2px rgba(24,34,58,.05), 0 8px 24px -12px rgba(24,34,58,.2);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0E1424; --surface:#151D33; --surface-2:#1D2744; --ink:#E6ECF8; --ink-soft:#A3AECA; --border:#2A3558;
+      --accent:#7FA9F0; --accent-ink:#0A1226; --accent-soft:#1B2A4D;
+      --highlight-ink:#FBE8B8; --highlight-bg:#3A2E10; --highlight-border:#5C4A1B;
+      --good:#5FCB8E; --good-bg:#12301F; --trap:#E58E7E; --trap-bg:#3A1E19;
+      --chip-1:#7FA9F0; --chip-1-bg:#1B2A4D; --chip-2:#C2A5EE; --chip-2-bg:#2A2140; --chip-3:#5FCB8E; --chip-3-bg:#12301F;
+      --chip-4:#E5A96B; --chip-4-bg:#3A2A14; --chip-5:#E58E7E; --chip-5-bg:#3A1E19;
+      --warm:#E8B84B;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.55);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0E1424; --surface:#151D33; --surface-2:#1D2744; --ink:#E6ECF8; --ink-soft:#A3AECA; --border:#2A3558;
+    --accent:#7FA9F0; --accent-ink:#0A1226; --accent-soft:#1B2A4D;
+    --highlight-ink:#FBE8B8; --highlight-bg:#3A2E10; --highlight-border:#5C4A1B;
+    --good:#5FCB8E; --good-bg:#12301F; --trap:#E58E7E; --trap-bg:#3A1E19;
+    --chip-1:#7FA9F0; --chip-1-bg:#1B2A4D; --chip-2:#C2A5EE; --chip-2-bg:#2A2140; --chip-3:#5FCB8E; --chip-3-bg:#12301F;
+    --chip-4:#E5A96B; --chip-4-bg:#3A2A14; --chip-5:#E58E7E; --chip-5-bg:#3A1E19;
+    --warm:#E8B84B;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.55);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body{
+    background: var(--bg); color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    padding-left: max(18px, env(safe-area-inset-left, 0px));
+    padding-right: max(18px, env(safe-area-inset-right, 0px));
+    padding-block: 28px 64px; line-height: 1.55; font-size: 16px;
+  }
+  .wrap{ max-width: 780px; margin: 0 auto; }
+  h1,h2,h3{ font-family: "Fraunces", Georgia, serif; font-weight: 600; text-wrap: balance; margin: 0; }
+  a{ color: var(--accent); }
+  .eyebrow{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); font-weight:600; }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  .hero{ padding-block: 6px 22px; }
+  .hero h1{ font-size: clamp(1.7rem, 5vw, 2.3rem); margin-top:10px; }
+  .hero p{ color:var(--ink-soft); max-width:62ch; }
+  .hero-note{ margin-top:14px; padding:13px 15px; border-radius:12px; background:var(--accent-soft); border:1px solid var(--border); font-size:.92rem; }
+  .meta{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .pill{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; padding:4px 10px; border-radius:999px; background:var(--surface-2); border:1px solid var(--border); color:var(--ink-soft); }
+  .pill b{ color:var(--ink); }
+
+  .pattern{ background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:22px 20px 24px; margin-block:18px; box-shadow:var(--shadow); min-width:0; }
+  .pattern-head{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:6px; }
+  .pattern-head h2{ font-size:1.25rem; }
+  .chip{ font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.05em; text-transform:uppercase; padding:3px 9px; border-radius:999px; font-weight:600; white-space:nowrap; }
+  .c1{ color:var(--chip-1); background:var(--chip-1-bg); } .c2{ color:var(--chip-2); background:var(--chip-2-bg); }
+  .c3{ color:var(--chip-3); background:var(--chip-3-bg); } .c4{ color:var(--chip-4); background:var(--chip-4-bg); }
+  .c5{ color:var(--chip-5); background:var(--chip-5-bg); }
+  .pattern p{ margin:10px 0; }
+  .why{ color:var(--ink-soft); font-size:.95rem; }
+  .syl{ font-family:"IBM Plex Mono",monospace; font-size:.74rem; color:var(--ink-soft); }
+
+  .came-back{ margin:12px 0; padding:12px 14px; border-radius:10px; border:1px solid var(--border); background:var(--surface-2); font-size:.92rem; }
+  .came-back .lbl{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; color:var(--trap); display:block; margin-bottom:6px; }
+  .came-back .lbl.new{ color:var(--accent); }
+  .sbs{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin:8px 0; }
+  .sbs > div{ background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:9px 11px; min-width:0; }
+  .sbs .h{ font-weight:600; font-size:.78rem; color:var(--ink-soft); display:block; margin-bottom:3px; }
+
+  .rule{ margin-top:14px; padding:14px 16px; border-radius:10px; background:var(--highlight-bg); border:1px solid var(--highlight-border); color:var(--highlight-ink); }
+  .rule-label{ font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; margin-bottom:6px; display:block; }
+  .rule ul, .rule ol{ margin:6px 0 0; padding-left:20px; } .rule li{ margin:4px 0; }
+
+  .stepper{ margin-top:16px; border-top:1px dashed var(--border); padding-top:14px; }
+  .stepper-label{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:8px; display:block; }
+  .step{ padding:10px 0; border-bottom:1px solid var(--border); }
+  .step:last-of-type{ border-bottom:none; }
+  .step .tag{ font-weight:600; font-size:.82rem; color:var(--accent); display:block; margin-bottom:4px; }
+  .step-btn{ margin-top:10px; font:inherit; font-weight:600; font-size:.88rem; background:var(--accent); color:var(--accent-ink); border:none; border-radius:8px; padding:9px 14px; cursor:pointer; }
+  .final{ background:var(--good-bg); color:var(--good); border-radius:8px; padding:10px 12px; font-weight:700; margin-top:8px; }
+  .trap-note{ background:var(--trap-bg); color:var(--trap); border-radius:8px; padding:10px 12px; font-size:.9rem; margin-top:10px; }
+  .yours{ font-size:.9rem; color:var(--ink-soft); }
+  .rebuilt{ font-size:.82rem; color:var(--ink-soft); font-style:italic; }
+  figure{ margin:14px 0 4px; }
+  figure svg{ width:100%; max-width:480px; height:auto; display:block; color:var(--ink); }
+  figcaption{ font-size:.82rem; color:var(--ink-soft); margin-top:4px; }
+  .figwrap{ overflow-x:auto; }
+  svg text{ font-family:"IBM Plex Sans", system-ui, sans-serif; }
+
+  .ask{ display:inline-block; margin-top:10px; font-size:.82rem; font-weight:600; color:var(--accent); text-decoration:none; border:1px solid var(--border); border-radius:999px; padding:5px 11px; background:var(--surface); }
+  .ask:hover{ background:var(--accent-soft); }
+
+  .practice-head{ padding-block:10px 4px; }
+  .mode-row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:14px 0 8px; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px 16px; box-shadow:var(--shadow); }
+  .mode-btn{ font:inherit; font-weight:600; font-size:.9rem; padding:8px 14px; border-radius:999px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); cursor:pointer; }
+  .mode-btn[aria-pressed="true"]{ background:var(--accent); color:var(--accent-ink); border-color:var(--accent); }
+  .timer-bar{ display:flex; align-items:center; gap:12px; margin-left:auto; flex-wrap:wrap; }
+  .time{ font-family:"IBM Plex Mono",monospace; font-size:1.3rem; font-variant-numeric:tabular-nums; min-width:64px; }
+  .timer-btn{ font:inherit; font-size:.85rem; font-weight:600; border-radius:8px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); padding:7px 12px; cursor:pointer; }
+  .mode-help{ font-size:.85rem; color:var(--ink-soft); margin:6px 2px 0; }
+
+  .grid{ display:grid; grid-template-columns:1fr; gap:14px; margin-top:16px; }
+  .card{ background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:16px 16px 14px; box-shadow:var(--shadow); min-width:0; }
+  .card-head{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+  .qnum{ font-family:"Fraunces",serif; font-weight:700; font-size:1.05rem; color:var(--accent); }
+  .opts{ display:grid; gap:7px; margin:10px 0 4px; }
+  .opt{ display:flex; gap:10px; align-items:flex-start; padding:9px 11px; border:1px solid var(--border); border-radius:10px; background:var(--surface-2); cursor:pointer; min-width:0; }
+  .opt input{ margin-top:5px; flex:none; accent-color:var(--accent); }
+  .opt .l{ font-family:"IBM Plex Mono",monospace; font-weight:600; color:var(--accent); flex:none; }
+  .opt .t{ min-width:0; overflow-wrap:anywhere; }
+  .opt.is-right{ border-color:var(--good); background:var(--good-bg); }
+  .opt.is-miss{ border-color:var(--good); border-style:dashed; background:var(--good-bg); }
+  .opt.is-wrong{ border-color:var(--trap); background:var(--trap-bg); }
+  .check-btn, .reveal-btn{ font:inherit; font-weight:600; font-size:.85rem; border-radius:8px; padding:7px 12px; cursor:pointer; margin-top:10px; margin-right:8px; }
+  .check-btn{ background:var(--accent); color:var(--accent-ink); border:none; }
+  .reveal-btn{ background:none; border:1.4px solid var(--accent); color:var(--accent); }
+  .verdict{ margin-top:10px; padding:9px 12px; border-radius:8px; font-weight:700; font-size:.92rem; }
+  .verdict.ok{ background:var(--good-bg); color:var(--good); }
+  .verdict.no{ background:var(--trap-bg); color:var(--trap); }
+  .answer{ margin-top:10px; padding:10px 12px; background:var(--surface-2); border-radius:8px; font-size:.9rem; }
+  .answer ul{ margin:6px 0 0; padding-left:18px; } .answer li{ margin:3px 0; }
+  footer{ margin-top:26px; color:var(--ink-soft); font-size:.88rem; text-align:center; }
+</style>
+
+<div class="wrap">
+  <section class="hero">
+    <span class="eyebrow">Physics · Focus Session · 16 Oct 2026</span>
+    <h1>Mechanics: variable mass, friction on a moving board, string constraints</h1>
+    <p>Built from CTA20 (Sunday), with WTA20 checked. Four sections: one new pattern, two patterns that were right before and slipped on Sunday, and the skipping and multi-correct habit that is still on your tracker. Six practice problems follow.</p>
+    <div class="meta">
+      <span class="pill">Level used: <b>L4</b> (multi-concept, a trap in each)</span>
+      <span class="pill">Format: <b>MCQ A–D</b>, 4 single + 2 multi-correct</span>
+      <span class="pill">Sources: <b>CTA20 (Sun) · WTA20 (Sat)</b></span>
+    </div>
+    <div class="hero-note">
+      <strong>How to use this:</strong> read a section, click through its worked example, then do the matching practice problems. Multi-correct problems are right only if you pick every correct option and nothing else. <strong>Ask Claude</strong> links open a new claude.ai chat with that item preloaded. You need to be signed in to claude.ai.
+    </div>
+    <div class="hero-note" style="margin-top:10px">
+      <strong>About the worked examples:</strong> they use your real questions (CTA20 Q28, Q26, Q27 and Q23), with the text copied from the nLearn answer key, together with your real answers and the keys. The portal shows the text but not the figures. Q26 and Q27 depend on a figure, so those two say so and describe the setup in words. No number was invented to make a key come out.
+    </div>
+  </section>
+
+  <div id="sections"></div>
+
+  <section class="practice-head">
+    <span class="eyebrow">Practice Set</span>
+    <h2 style="margin-top:8px; font-size:1.4rem;">6 fresh problems, level 4</h2>
+    <p style="color:var(--ink-soft)">Two on variable mass and continuous momentum transfer (a raindrop with a different law, and a hemisphere in a gas), one on friction on an accelerating board, one on a string constraint, and two of the “skipped” type where the first line is derivable (the first of those is multi-correct).</p>
+  </section>
+
+  <div class="mode-row">
+    <button class="mode-btn" aria-pressed="true" onclick="setMode('practice', this)">Practice (untimed)</button>
+    <button class="mode-btn" aria-pressed="false" onclick="setMode('timed', this)">Timed · 40 min</button>
+    <div class="timer-bar" id="timerBar" hidden>
+      <span class="time" id="timeDisplay">40:00</span>
+      <button class="timer-btn" onclick="startTimer()">Start</button>
+      <button class="timer-btn" onclick="resetTimer()">Reset</button>
+    </div>
+  </div>
+  <p class="mode-help">First pass: stay in Practice mode. Save Timed mode for a second pass.</p>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>Built from CTA20 (Sun 11 Oct), with WTA20 (Sat 10 Oct) checked. Every WTA20 physics miss was fluids (efflux, Bernoulli, accelerated fluids), so Saturday adds nothing here. CTA20 Q29–Q34 (collisions, rolling, potential energy, matching) are not on this page.</footer>
+</div>
+
+<script>
+/* ---------- diagrams (inline SVG, theme tokens) ---------- */
+var FIG_CYL = { svg:
+'<figure><div class="figwrap"><svg viewBox="0 0 440 220" role="img" aria-label="Cross-section of a cylinder of radius R moving right at speed v through dust at rest. A surface point P sits at angle theta above the axis, and its outward normal makes angle theta with the direction of motion.">'
++'<g fill="currentColor"><circle cx="330" cy="40" r="3"/><circle cx="370" cy="75" r="3"/><circle cx="345" cy="115" r="3"/><circle cx="395" cy="140" r="3"/><circle cx="335" cy="170" r="3"/><circle cx="382" cy="30" r="3"/><circle cx="300" cy="75" r="3"/><circle cx="300" cy="145" r="3"/></g>'
++'<text x="400" y="100" font-size="12" fill="currentColor" text-anchor="end">dust at rest</text>'
++'<circle cx="170" cy="105" r="60" fill="var(--accent-soft)" stroke="currentColor" stroke-width="2"/>'
++'<line x1="170" y1="105" x2="290" y2="105" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4"/>'
++'<line x1="170" y1="105" x2="216" y2="66" stroke="currentColor" stroke-width="1.5"/><text x="186" y="76" font-size="12" fill="currentColor">R</text>'
++'<line x1="216" y1="66" x2="262" y2="66" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4"/>'
++'<line x1="216" y1="66" x2="251" y2="36" stroke="var(--warm)" stroke-width="2.2"/><polygon points="255,33 244,35 250,43" fill="var(--warm)"/>'
++'<text x="256" y="30" font-size="12" fill="var(--warm)" font-weight="600">normal</text>'
++'<path d="M238 66 A22 22 0 0 0 233 52" fill="none" stroke="currentColor" stroke-width="1.2"/><text x="242" y="60" font-size="12" fill="currentColor">θ</text>'
++'<circle cx="216" cy="66" r="3.5" fill="var(--warm)"/><text x="206" y="62" font-size="12" fill="currentColor" text-anchor="end">P</text>'
++'<line x1="110" y1="200" x2="200" y2="200" stroke="currentColor" stroke-width="2"/><polygon points="208,200 198,195 198,205" fill="currentColor"/>'
++'<text x="110" y="216" font-size="12" fill="currentColor">cylinder moves at v</text>'
++'</svg></div><figcaption>Cross-section, looking along the axis. A particle that hits at P meets a wall tilted by θ, so only the part v cos θ of its speed is along the normal.</figcaption></figure>',
+text:' Diagram: cross-section of a cylinder of radius R moving to the right at speed v through dust at rest. A surface point P lies at angle theta above the axis; its outward normal makes angle theta with the direction of motion.' };
+var FIG_BOARD = { svg:
+'<figure><div class="figwrap"><svg viewBox="0 0 440 230" role="img" aria-label="Top view. A board AC stands like a wall on a smooth horizontal plane, with block B touching its right face. The board accelerates with a0 = 10 meters per second squared at an angle theta to the normal of the board, which splits into a part along the normal and a part along the board.">'
++'<rect x="20" y="10" width="400" height="210" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5"/><text x="30" y="28" font-size="11" fill="currentColor">smooth horizontal plane, top view</text>'
++'<line x1="270" y1="60" x2="270" y2="190" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>'
++'<text x="270" y="50" font-size="13" text-anchor="middle" fill="currentColor" font-weight="600">A</text><text x="270" y="210" font-size="13" text-anchor="middle" fill="currentColor" font-weight="600">C</text>'
++'<rect x="274" y="117" width="16" height="16" fill="var(--warm)" stroke="currentColor" stroke-width="1.5"/><text x="298" y="150" font-size="12" fill="currentColor" font-weight="600">B, 2 kg</text>'
++'<line x1="282" y1="113" x2="282" y2="86" stroke="var(--accent)" stroke-width="2.4"/><polygon points="282,80 277,91 287,91" fill="var(--accent)"/><text x="292" y="96" font-size="12" fill="var(--accent)" font-weight="600">friction</text>'
++'<line x1="40" y1="180" x2="128" y2="180" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4"/><line x1="128" y1="180" x2="128" y2="114" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4"/>'
++'<line x1="40" y1="180" x2="122" y2="118.5" stroke="var(--warm)" stroke-width="2.6"/><polygon points="128,114 116,115 123,124" fill="var(--warm)"/>'
++'<text x="40" y="100" font-size="13" fill="var(--warm)" font-weight="600">a0 = 10 m/s²</text>'
++'<path d="M74 180 A34 34 0 0 0 67 160" fill="none" stroke="currentColor" stroke-width="1.2"/><text x="80" y="172" font-size="12" fill="currentColor">θ</text>'
++'<text x="84" y="198" font-size="11" text-anchor="middle" fill="currentColor">part along the normal</text><text x="134" y="152" font-size="11" fill="currentColor">part along</text><text x="134" y="165" font-size="11" fill="currentColor">the board</text>'
++'</svg></div><figcaption>Top view, drawn from the question text. The angle θ is in the original figure and is not in the text, so the angle drawn is not to scale. The block is touching the right face of the board.</figcaption></figure>',
+text:' Diagram (drawn from the question text; the original figure is not available and the angle is not in the text): top view of a smooth horizontal plane. A board AC stands like a wall, with the 2 kg block B touching its face. The board accelerates at a0 = 10 m/s2 at an angle theta to the normal of the board. a0 splits into a part along the normal (pushing the board into the block) and a part along the board.' };
+
+var FIG_RING = { svg:
+'<figure><div class="figwrap"><svg viewBox="0 0 440 230" role="img" aria-label="A 1 kg ring on a smooth vertical rod. A string from the ring goes up to a small pulley 0.7 meters from the rod, level with the ring start, and over it down along a smooth 37 degree incline to a 5 kg block. The string from ring to pulley makes 37 degrees with the horizontal.">'
++'<line x1="90" y1="10" x2="90" y2="215" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>'
++'<line x1="96" y1="40" x2="222" y2="40" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4"/><text x="156" y="32" font-size="12" text-anchor="middle" fill="currentColor">L = 0.7 m</text>'
++'<circle cx="90" cy="40" r="6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="3 3"/><text x="78" y="30" font-size="11" text-anchor="end" fill="currentColor">start</text>'
++'<polygon points="230,40 390,160 230,160" fill="var(--surface-2)" stroke="currentColor" stroke-width="2"/>'
++'<line x1="90" y1="145" x2="224" y2="44.5" stroke="var(--warm)" stroke-width="2"/>'
++'<line x1="232" y1="30" x2="273" y2="60.75" stroke="var(--warm)" stroke-width="2"/>'
++'<circle cx="230" cy="40" r="8" fill="var(--surface)" stroke="currentColor" stroke-width="2"/>'
++'<g transform="translate(278,76) rotate(37)"><rect x="-13" y="-18" width="26" height="18" fill="var(--accent-soft)" stroke="currentColor" stroke-width="2"/></g>'
++'<text x="300" y="62" font-size="13" fill="currentColor" font-weight="600">M = 5 kg</text>'
++'<circle cx="90" cy="145" r="9" fill="var(--accent-soft)" stroke="currentColor" stroke-width="2.4"/><text x="76" y="149" font-size="13" text-anchor="end" fill="currentColor" font-weight="600">1 kg</text>'
++'<line x1="99" y1="145" x2="160" y2="145" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4"/>'
++'<path d="M130 145 A40 40 0 0 0 122 121" fill="none" stroke="currentColor" stroke-width="1.2"/><text x="136" y="162" font-size="12" fill="currentColor">α = 37°</text>'
++'<path d="M360 160 A30 30 0 0 1 366 142" fill="none" stroke="currentColor" stroke-width="1.2"/><text x="338" y="153" font-size="12" text-anchor="middle" fill="currentColor">37°</text>'
++'<text x="150" y="205" font-size="12" fill="currentColor">smooth rod, pulley and incline; light string</text>'
++'</svg></div><figcaption>Drawn from the question text; the original figure is not available. The string from the pulley to M is drawn parallel to the incline, which is how I read the figure. α is measured from the horizontal.</figcaption></figure>',
+text:' Diagram (drawn from the question text; the original figure is not available): a smooth vertical rod with a 1 kg ring. A string from the ring goes up and across to a small pulley that is 0.7 m from the rod and level with the ring start position, then down along a smooth 37 degree incline to a 5 kg block (string read as parallel to the incline). The string between ring and pulley makes alpha = 37 degrees with the horizontal.' };
+
+var FIG_BUNGEE = { svg:
+'<figure><div class="figwrap"><svg viewBox="0 0 440 262" role="img" aria-label="Three snapshots of the bungee jump. 1: standing on the platform 25 meters above the lake. 2: the lowest point, head at the water, foot 2 meters up, rope length 23 meters. 3: at rest, head 8 meters above the water, foot 10 meters up, rope length 15 meters.">'
++'<g stroke="var(--accent)" stroke-width="3"><line x1="6" y1="230" x2="144" y2="230"/><line x1="156" y1="230" x2="294" y2="230"/><line x1="306" y1="230" x2="444" y2="230"/></g>'
++'<g stroke="currentColor" stroke-width="5"><line x1="10" y1="30" x2="70" y2="30"/><line x1="160" y1="30" x2="220" y2="30"/><line x1="310" y1="30" x2="370" y2="30"/></g>'
++'<g stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="40" y1="30" x2="40" y2="18"/><line x1="220" y1="214" x2="220" y2="226"/><line x1="370" y1="150" x2="370" y2="162"/></g>'
++'<g fill="currentColor"><circle cx="40" cy="14" r="3.5"/><circle cx="220" cy="229" r="3.5"/><circle cx="370" cy="165" r="3.5"/></g>'
++'<g stroke="var(--warm)" stroke-width="2"><line x1="220" y1="30" x2="220" y2="214"/><line x1="370" y1="30" x2="370" y2="150"/></g>'
++'<g stroke="currentColor" stroke-width="1"><line x1="100" y1="30" x2="100" y2="230"/><line x1="95" y1="30" x2="105" y2="30"/><line x1="95" y1="230" x2="105" y2="230"/><line x1="340" y1="166" x2="340" y2="230"/><line x1="335" y1="166" x2="345" y2="166"/></g>'
++'<g font-size="12" fill="currentColor"><text x="108" y="132">25 m</text><text x="228" y="126" fill="var(--warm)" font-weight="600">rope 23 m</text><text x="378" y="96" fill="var(--warm)" font-weight="600">rope 15 m</text><text x="334" y="203" text-anchor="end">8 m</text><text x="50" y="22">2 m tall</text></g>'
++'<g font-size="11" fill="currentColor"><text x="10" y="252">1  standing, at rest</text><text x="160" y="252">2  lowest: head at water</text><text x="310" y="252">3  hanging at rest</text></g>'
++'</svg></div><figcaption>Heights are measured to the head or foot of the man. His centre of mass is 1 m from each end, so between 1 and 2 it falls 26 m − 1 m = 25 m, even though the foot only falls 23 m.</figcaption></figure>',
+text:' Diagram: three snapshots: standing on the platform 25 m up; lowest point (head at water, foot 2 m up, rope 23 m); hanging at rest (head 8 m up, foot 10 m up, rope 15 m).' };
+
+var FIG_P3 = { svg:
+'<figure><div class="figwrap"><svg viewBox="0 0 440 170" role="img" aria-label="A 1.0 kg block at the right end of a 4.0 kg plank of length 1.25 m on a smooth floor. A horizontal force of 30 N pulls the plank to the right.">'
++'<line x1="20" y1="150" x2="420" y2="150" stroke="currentColor" stroke-width="1.5"/><text x="30" y="166" font-size="11" fill="currentColor">smooth floor</text>'
++'<rect x="60" y="110" width="280" height="30" fill="var(--accent-soft)" stroke="currentColor" stroke-width="2"/><text x="170" y="130" font-size="12" text-anchor="middle" fill="currentColor">plank 4.0 kg</text>'
++'<rect x="284" y="72" width="46" height="38" fill="var(--surface-2)" stroke="currentColor" stroke-width="2"/><text x="307" y="95" font-size="12" text-anchor="middle" fill="currentColor" font-weight="600">1.0 kg</text>'
++'<line x1="340" y1="125" x2="400" y2="125" stroke="var(--warm)" stroke-width="2.4"/><polygon points="408,125 398,120 398,130" fill="var(--warm)"/><text x="372" y="115" font-size="13" text-anchor="middle" fill="var(--warm)" font-weight="600">30 N</text>'
++'<line x1="60" y1="98" x2="340" y2="98" stroke="currentColor" stroke-width="1"/><line x1="60" y1="93" x2="60" y2="103" stroke="currentColor" stroke-width="1"/><line x1="340" y1="93" x2="340" y2="103" stroke="currentColor" stroke-width="1"/>'
++'<text x="180" y="90" font-size="12" text-anchor="middle" fill="currentColor">1.25 m</text>'
++'<text x="30" y="40" font-size="12" fill="currentColor">μs = 0.50, μk = 0.40 between block and plank</text>'
++'</svg></div><figcaption>The block starts at the right end. It leaves from the left end if it slides back along the plank.</figcaption></figure>',
+text:' Diagram: a 4.0 kg plank of length 1.25 m on a smooth floor, pulled to the right by a horizontal 30 N force. A 1.0 kg block sits at the right end of the plank. Between block and plank mu s = 0.50 and mu k = 0.40.' };
+var FIG_P4 = { svg:
+'<figure><div class="figwrap"><svg viewBox="0 0 440 200" role="img" aria-label="A ring on a smooth horizontal rod. A string from the ring goes up to a pulley 0.60 m above the rod and is pulled in at constant speed u = 4.0 meters per second. The string makes angle theta = 37 degrees with the rod.">'
++'<line x1="20" y1="160" x2="330" y2="160" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>'
++'<line x1="260" y1="160" x2="260" y2="70" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4"/>'
++'<text x="272" y="118" font-size="12" fill="currentColor">h = 0.60 m</text>'
++'<circle cx="260" cy="64" r="9" fill="var(--surface-2)" stroke="currentColor" stroke-width="2"/><line x1="260" y1="64" x2="260" y2="40" stroke="currentColor" stroke-width="2"/>'
++'<line x1="132" y1="160" x2="253" y2="69" stroke="var(--warm)" stroke-width="2"/>'
++'<line x1="268" y1="68" x2="360" y2="105" stroke="var(--warm)" stroke-width="2"/><polygon points="368,108 357,109 361,100" fill="var(--warm)"/>'
++'<text x="370" y="128" font-size="13" fill="var(--warm)" font-weight="600" text-anchor="middle">u = 4.0 m/s</text>'
++'<circle cx="132" cy="160" r="9" fill="var(--accent-soft)" stroke="currentColor" stroke-width="2.4"/><text x="132" y="190" font-size="12" text-anchor="middle" fill="currentColor">ring</text>'
++'<path d="M164 160 A32 32 0 0 0 158 141" fill="none" stroke="currentColor" stroke-width="1.2"/><text x="172" y="150" font-size="12" fill="currentColor">θ = 37°</text>'
++'</svg></div><figcaption>The free end of the string is pulled at a constant speed u. The ring’s own speed is not constant.</figcaption></figure>',
+text:' Diagram: a smooth horizontal rod with a small ring on it. A string tied to the ring goes up to a small pulley fixed 0.60 m above the rod, then away to the right where it is pulled at constant speed u = 4.0 m/s. At the instant shown the string makes theta = 37 degrees with the rod.' };
+var FIG_P5 = { svg:
+'<figure><div class="figwrap"><svg viewBox="0 0 440 250" role="img" aria-label="A block accelerating right at 7.5 meters per second squared on a smooth floor. Inside, rough wire P slopes down to the right at 37 degrees with a bead on it, and smooth horizontal wire Q has a bead on it.">'
++'<line x1="10" y1="226" x2="430" y2="226" stroke="currentColor" stroke-width="1.5"/><text x="14" y="242" font-size="11" fill="currentColor">smooth floor</text>'
++'<rect x="30" y="30" width="310" height="196" fill="var(--surface-2)" stroke="currentColor" stroke-width="2"/>'
++'<line x1="60" y1="60" x2="200" y2="165" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>'
++'<path d="M160 135 L160 165 L200 165" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3"/><path d="M180 165 A20 20 0 0 1 184 153" fill="none" stroke="currentColor" stroke-width="1.2"/><text x="176" y="180" font-size="12" text-anchor="middle" fill="currentColor">37°</text>'
++'<circle cx="125" cy="108.7" r="9" fill="var(--warm)" stroke="currentColor" stroke-width="1.5"/>'
++'<text x="70" y="52" font-size="12" fill="currentColor" font-weight="600">wire P, rough, μs = 0.50</text>'
++'<line x1="60" y1="198" x2="320" y2="198" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>'
++'<circle cx="220" cy="189" r="9" fill="var(--warm)" stroke="currentColor" stroke-width="1.5"/>'
++'<text x="60" y="216" font-size="12" fill="currentColor" font-weight="600">wire Q, smooth, horizontal</text>'
++'<line x1="352" y1="128" x2="410" y2="128" stroke="var(--accent)" stroke-width="2.6"/><polygon points="418,128 408,123 408,133" fill="var(--accent)"/>'
++'<text x="385" y="116" font-size="13" text-anchor="middle" fill="var(--accent)" font-weight="600">a₀ = 7.5 m/s²</text>'
++'</svg></div><figcaption>Both beads are 0.20 kg and start at rest relative to the block. The two wires lie in the vertical plane of the motion.</figcaption></figure>',
+text:' Diagram: a block accelerating to the right at a0 = 7.5 m/s2 on a smooth floor. Inside it, wire P is rough (mu s = 0.50) and slopes down to the right at 37 degrees to the horizontal, with a bead on it. Wire Q is smooth and horizontal, with a bead on it. Both beads are 0.20 kg and start at rest relative to the block.' };
+
+/* ---------- content ---------- */
+var SECTIONS = [
+{ id:'s1', n:1, title:'Variable mass and continuous collisions: count what crosses the boundary', chip:'c1', chipText:'New · Weak',
+  pattern:'momentum-transfer-continuous-mass-flow-and-variable-mass',
+  syl:'Syllabus: Mechanics (Newton’s laws, systems of particles, impulse, conservation of linear momentum, elastic and inelastic collisions)',
+  isNew:true,
+  cameBack:{
+    prev:'Nothing earlier on your tracker. This pattern first appeared on Sunday, and it cost both questions.',
+    now:'CTA20 Q25 (a raindrop gaining mass in still mist, rate of gain proportional to its speed and the square of its radius, find the uniform acceleration): you answered <strong>8</strong> in 1 min 09 s, the key is <strong>1.42–1.43</strong>. CTA20 Q28 (cylinder moving through dust, drag per length = K n m R v²): you answered <strong>4</strong> in 21 s, the key is <strong>2.66–2.67</strong>.',
+    verdict:'<strong>A new pattern, so there is no old mistake to compare.</strong> Two misses in one paper is the signal. The key for Q25 is g/7, worked in the last rule below. I cannot see your working for 8. Q28 took you 21 seconds against 50 recommended, and the example below shows that 4 is the flat-plate answer.'},
+  why:'F = m·a is wrong the moment the mass changes. What is still true is that force equals the rate of change of momentum of a fixed collection of matter. So the whole job is bookkeeping: choose the pieces that cross the boundary, and write their momentum before and after.',
+  rule:[
+    'Pick a system whose mass does not change: the body plus the small piece about to join (or leave). Write the momentum at t and at t + dt.',
+    'For matter of mass dm joining at velocity u: F<sub>ext</sub> = m dv/dt + (v − u) dm/dt. Dust or rain at rest: u = 0. Matter that leaves with the body’s own velocity (sand leaking from a cart) gives no thrust, so F = m dv/dt.',
+    'Continuous collisions: force = (hits per second) × (momentum change per hit). Hits per second on a patch = n × (speed normal to the patch) × area. Elastic bounce: 2 m v<sub>n</sub> along the normal. Sticking: the particle ends up moving with the body.',
+    'Curved surface: use the normal component of the speed, then resolve the force back along the motion. That is one cos θ for the rate, one for the momentum, one for the resolving, then integrate.',
+    'Your Q25, worked: rate of gain = k r² v and m = (4/3)πρr³, so dm = 4πρr² dr and dr/dt ∝ v. Uniform acceleration means v = a t, so r grows like t² and dm/dt = 3m(dr/dt)/r = 6m/t. Then m a + v (dm/dt) = m g gives a + 6a = g, so a = g/7 = 1.43 m/s².'],
+  ex:{ src:'CTA20 Q28, real question text',
+    q:'A cylinder of mass M and radius R moves with constant speed v through a region of space that contains dust particles, each of mass m, which are initially at rest. There are n number of particles per unit volume. The cylinder moves in a direction perpendicular to its axis. Assume m ≪ M, and assume the particles do not interact with each other. All the collision are perfectly elastic and the surface of the cylinder is smooth. The drag force per unit length of the cylinder required to maintain the speed v constant for the cylinder when it has entered the region is K n m R v². Find the value of K.',
+    yours:'4', correct:'2.66–2.67 (that is, 8/3)',
+    note:'This is the real text from the answer key. The question needs no figure. Your working for 4 is not saved. Four is exactly what a flat plate of width 2R gives (2 n m v² × 2R), and you spent 21 seconds on it, so I suspect the curved face was treated as flat. That is a guess.',
+    diag:'My working for 4 is not saved. It equals the flat-plate result.',
+    fig:FIG_CYL,
+    steps:[
+      {tag:'Step 1: what the drag has to supply, and one bounce', html:'The speed is constant, so the drag equals the momentum the dust takes per second (M and the mass of the cylinder do not matter). At P the wall is tilted by θ from head-on. In the cylinder’s frame the dust comes at speed v, and only v cos θ is along the normal. An elastic bounce reverses it, so the momentum change per particle is 2 m v cos θ, along the normal.'},
+      {tag:'Step 2: how many hit per second', html:'A strip of the surface of arc length R dθ and unit length along the axis sweeps a volume (v cos θ)(R dθ) per second. Hits per second = n v cos θ R dθ.'},
+      {tag:'Step 3: resolve along the motion', html:'The force is along the normal, but the drag is along the motion, so multiply by cos θ once more. dF = (n v cos θ R dθ)(2 m v cos θ)(cos θ) = 2 n m v² R cos³θ dθ.'},
+      {tag:'Step 4: add up the front half', html:'θ runs from −90° to +90°. ∫cos³θ dθ = ∫(1 − sin²θ) d(sin θ) = [s − s³/3] from −1 to 1 = 4/3. So F = 2 n m v² R × 4/3 = (8/3) n m R v², and K = 8/3 = 2.67. This matches the key.'},
+      {tag:'Step 5: check against the flat plate', html:'A flat plate of width 2R, hit head-on, gets 2 n m v² × 2R = 4 n m R v². The curved face must give less, because most of the face is slanted. 8/3 is less than 4.<div class="final">Answer: K = 8/3 ≈ 2.67</div><div class="trap-note">The trap: using 2 m v for every hit and the whole width 2R. That is correct for a flat plate only. On a curve the cos³θ factor is what turns 4 into 8/3.</div>'}
+    ]}
+},
+{ id:'s2', n:2, title:'Friction on an accelerating board: find N, decide slip, then use μk', chip:'c4', chipText:'Shaky · Middle',
+  pattern:'kinematics-projectile-and-relative-motion-friction',
+  syl:'Syllabus: Mechanics (static and dynamic friction, relative velocity, uniformly accelerated frames of reference, Newton’s laws)',
+  cameBack:{
+    prev:'CTA17 Q34 and CTA18 Q25 (projectile on an incline with a hole) were both <strong>correct</strong>. No earlier error on record.',
+    now:'CTA20 Q26 (top view: board AC with a0 = 10 m/s² and a 2 kg block on a smooth plane, μs = 0.6, μk = 0.5, relative acceleration): you answered <strong>8</strong> in 26 s, the key is <strong>2</strong>.',
+    verdict:'<strong>Not a repeat of an old error: a first miss in a topic you had right.</strong> The tracker marks it shaky, which is why it is here. The earlier two were projectile questions, so this is a different sub-type, friction with a moving surface. I cannot see your working for 8, and the figure is not in the text. The routine below would have caught most wrong answers.'},
+  why:'On a moving board the friction value depends on two things. First, the normal force N, which is not always m g. Second, one yes/no question: does the block slip? Static friction can take any value up to μs N. Once it slips, friction is exactly μk N. Most wrong answers use the wrong N or the wrong one of the two coefficients.',
+  rule:[
+    'Find the normal force N first, from the motion at right angles to the contact. Block lying on a flat board: N = m g. Top view with the board standing like a wall: N = m × (the board’s acceleration along the normal), because the smooth plane gives the block no other horizontal force, and gravity does not enter.',
+    'Assume the block sticks. The friction it would need is m × (the board’s acceleration along the surface). Compare it with the most static friction can give, μs N.',
+    'Needed ≤ μs N: no slip, so the relative acceleration is 0. Needed > μs N: it slips, friction is exactly μk N along the surface in the direction the board drags the block, and the same size pushes back on the board.',
+    'Relative acceleration along the surface = the board’s acceleration along the surface − the block’s. It must come out between 0 and the board’s acceleration along the surface, which is a quick sanity check.'],
+  ex:{ src:'CTA20 Q26, real question text (figure missing)',
+    q:'The figure shows the top view of a block B of negligible size and mass m = 2 kg lying on a smooth horizontal plane. The board AC moves with a constant acceleration a0 = 10 m/s² in the direction shown. The coefficients of friction between the board and the block are μs = 0.6 and μk = 0.5. Calculate the acceleration (in m/s²) of the block relative to the board at the instant shown.',
+    yours:'8', correct:'2',
+    note:'This is the real text from the answer key. The figure is not in the text, and it matters. Setup in words: the board AC stands like a wall on the smooth plane, block B touches its face, and a0 points at an angle to the board. The text does not give that angle. Working back from the key of 2, the angle has to be 37° from the normal of the board (8 m/s² along the normal, 6 m/s² along the board), so I use that, and you should check it against your paper. I also take the block to be at rest relative to the board at that instant. Your working for 8 is not saved.',
+    diag:'My working for 8 is not saved. The figure is missing from the text; the angle of a0 is read back from the key.',
+    fig:FIG_BOARD,
+    steps:[
+      {tag:'Step 1: the normal force', html:'The plane is smooth, so the board is the only horizontal agent on the block. The block has to keep up with the board along the normal: a<sub>n</sub> = a0 cos θ = 8 m/s². So N = m a<sub>n</sub> = 2 × 8 = 16 N. (Gravity is vertical and plays no part in N here.)'},
+      {tag:'Step 2: does it slip?', html:'Along the board, the board’s acceleration is a<sub>t</sub> = a0 sin θ = 6 m/s². If the block stuck, it would need friction 2 × 6 = 12 N. The most static friction can give is μs N = 0.6 × 16 = 9.6 N. Needed 12 N is more than 9.6 N, so it slips.'},
+      {tag:'Step 3: the friction now acting', html:'Slipping, so kinetic: f = μk N = 0.5 × 16 = 8 N, along the board in the direction the board is moving along itself. The block’s acceleration along the board is 8 ÷ 2 = 4 m/s².'},
+      {tag:'Step 4: relative acceleration', html:'Along the normal the block stays in contact, so there is no relative acceleration that way. Along the board: a<sub>rel</sub> = a<sub>t</sub> − 4 = 6 − 4 = 2 m/s². This matches the key.'},
+      {tag:'Step 5: check the traps', html:'Using μs after slipping: 6 − 9.6/2 = 1.2. Assuming no slip: 0. Using N = m g = 20 N: the slip test becomes 12 N needed against 12 N available, so you would say it does not slip and answer 0. None of these is 2.<div class="final">Answer: 2 m/s²</div><div class="trap-note">The trap: taking N = m g because “friction” and “block” come to mind together. In this top view the block’s weight is carried by the plane, and N comes from the board pushing sideways.</div>'}
+    ]}
+},
+{ id:'s3', n:3, title:'String and pulley constraints: relate the speeds, then check the sign of the net work', chip:'c4', chipText:'Shaky · Middle',
+  pattern:'constraint-relations-beads-string-accelerations',
+  syl:'Syllabus: Mechanics (Newton’s laws, kinetic and potential energy, conservation of mechanical energy, kinematics in one and two dimensions)',
+  cameBack:{
+    prev:'CTA16 Q34 (beads on a frictionless wire joined by a string to a 2m mass): <strong>correct</strong>, every acceleration matched. No earlier error on record.',
+    now:'CTA20 Q27 (1 kg ring on a smooth vertical rod, string over a pulley 0.7 m from the rod to a 5 kg block on a smooth 37° incline, speed of the ring when the string makes 37° with the horizontal): you answered <strong>6</strong> in 10 min 07 s, the key is <strong>0</strong>.',
+    verdict:'<strong>A first miss in a topic you had right, so not a repeat.</strong> You handled the earlier constraint question well. Ten minutes is about twelve times the 50 seconds recommended, so the question cost you time as well as marks. The rule that would have caught it: check the sign of the net work before solving for a speed. I cannot see your working for 6, and the figure is not in the text.'},
+  why:'Strings do not stretch, so the speeds along the string must match. That one relation links two bodies that move in different directions. Once it is written, energy or Newton’s law finishes the problem. The step people skip is the sign of the net work between the start and the position asked about.',
+  rule:[
+    'String length is fixed: the rate at which the string leaves one body equals the rate at which it arrives at the other. For a ring falling at v with the string at angle α to the horizontal, the string on the ring side lengthens at v sin α, so the other body moves at v sin α along its path.',
+    'Write the length constraint with distances, then differentiate once for speeds and again for accelerations. The second derivative also contains the change of the angle. Never treat the angle as fixed.',
+    'Energy with a constraint: ½ m v² + ½ M (v sin α)² = net work done on the two bodies. Ring falling h: + m g h. Block rising a height H on an incline: − M g H.',
+    'Before solving for a speed, work out the net work done between the start and the position asked about. Positive: solve for the speed. Zero: the speed there is zero. Negative: the body never gets there.'],
+  ex:{ src:'CTA20 Q27, real question text (figure missing)',
+    q:'A ring of mass m = 1 kg can slide over a smooth vertical rod. A light string attached to the ring passes over a smooth fixed small pulley at a distance of L = 0.7 m from the rod as shown in figure. At the other end of the string mass M = 5 kg is attached, lying over a smooth fixed inclined plane of inclination angle 37°. The ring is held in level with the pulley and released. Determine the velocity of ring (in m/s) when the string makes an angle (α = 37°) with the horizontal. (sin 37° = 0.6).',
+    yours:'6', correct:'0',
+    note:'This is the real text from the answer key. The figure is not in the text. Setup in words: a vertical rod with the ring; the pulley at the ring’s starting level, 0.7 m to the side; the string goes over the pulley and down along the incline to M. I read the string between the pulley and M as parallel to the incline. That is the one assumption, and with it the numbers give exactly the key of 0. Your working for 6 is not saved.',
+    diag:'My working for 6 is not saved. The figure is missing from the text; the string is read as parallel to the incline.',
+    fig:FIG_RING,
+    steps:[
+      {tag:'Step 1: geometry', html:'α is measured from the horizontal, so the ring has fallen h = L tan 37° = 0.7 × 0.75 = 0.525 m. The string from ring to pulley is s = L ÷ cos 37° = 0.7 ÷ 0.8 = 0.875 m, up from 0.70 m at the start.'},
+      {tag:'Step 2: the block’s motion', html:'The string on the ring side lengthened by 0.175 m, so the block moved 0.175 m up the incline, a rise of 0.175 × 0.6 = 0.105 m. Its speed is the rate at which that string lengthens: v<sub>M</sub> = v sin α = 0.6 v.'},
+      {tag:'Step 3: net work, before any speed', html:'Gravity on the ring does + m g h = 1 × 10 × 0.525 = 5.25 J. The block climbs, so gravity on it does − M g × rise = −5 × 10 × 0.105 = −5.25 J. Net work = 0.'},
+      {tag:'Step 4: kinetic energy', html:'½ (1) v² + ½ (5)(0.6 v)² = 0.5 v² + 0.9 v² = 1.4 v², and this equals the net work, 0. So v = 0. This matches the key.'},
+      {tag:'Step 5: check that it gets there', html:'For a smaller drop, say h = 0.30 m, the net work is 3.0 − 30 × (√(0.49 + 0.09) − 0.7) = 3.0 − 1.85 = +1.15 J, so the ring did fall that far. Beyond h = 0.525 m the net work would be negative. So 37° is the lowest point, where the ring stops for an instant.<div class="final">Answer: 0</div><div class="trap-note">The trap: solving for a speed before looking at the work. The net work was zero, so the speed was zero, and the answer came in one line. Compute it first, every time.</div>'}
+    ]}
+},
+{ id:'s4', n:4, title:'Skips and multi-correct: write the first line, then read every option off it', chip:'c5', chipText:'Recurring · Weak',
+  pattern:'skips-on-derivable-questions',
+  syl:'Applies to every Mechanics question. This example uses: Newton’s laws, Hooke’s law, conservation of mechanical energy, work done by a spring force',
+  cameBack:{
+    prev:'<strong>Skips:</strong> every test on record except one. Physics skips per test: CTA16 1, CTA17 6, CTA18 4, WTA19 1, CTA19 3, <strong>WTA20 0</strong>, CTA20 3. You did a focus session on this on 6 Oct. <strong>Multi-correct:</strong> partial or over-marked in six tests on this pattern’s record, CTA16 through CTA20. WTA20 also had two partials (Q19, Q22), filed under fluids.',
+    now:'<strong>Skips:</strong> CTA20 Q21 (a ball strikes an L-shaped massless frame carrying two masses; you left after 1 min 21 s), Q24 (beads on two wires of an accelerating block; you left after 11 s) and Q35 (collision of spheres, e = 1/3; 46 s). <strong>Multi-correct:</strong> CTA20 Q23 (bungee jump): you marked B and C and missed <strong>A</strong>. A, B and C are all true.',
+    verdict:'<strong>The same habit, not a new error.</strong> WTA20 had no skips, and CTA20 had three, the same as CTA19. Q24 was dropped after 11 seconds, which is not enough time to read it through, so the skip happened before the first line. The multi-correct miss is also the exact same one: the missed option comes from a number you already had. Telling you to “check every option” has not worked. The routine below changes what you do in the first 30 seconds instead.'},
+  why:'A question you skip looks like a long stem, a figure and four options. But it still has a first line that needs no insight: a force balance, a conservation law or a length constraint. That one line often settles half the options. Skipping means you never wrote it.',
+  rule:[
+    'How to start, in four moves. (1) Redraw the picture and write every given with its unit. (2) Write the one line that needs no insight: F = m a for one body, a conservation law, or the string constraint. (3) Solve that line for one number. (4) Ask which options that number settles, and tick or cross them before reading further.',
+    'Do not skip until you have done moves 1 and 2. If the line does not lead anywhere, mark the question and move on. That is a decision, and a skip without it is a habit.',
+    'Multi-correct: build a table of every quantity you can get from the first line, then read each option off the table. Never from memory of the stem.',
+    'Before you submit: count the options your table settled. If you ticked fewer than the table supports, find the ones you left out.'],
+  ex:{ src:'CTA20 Q23, real question text',
+    q:'A man of height h0 = 2 m and mass m = 50 kg is bungee jumping from a platform situated at a height h = 25 m above a lake. One end of an elastic rope is attached to his foot and the other end is fixed to the platform. He starts falling from rest in vertical position. The length and elastic properties of the rope are chosen so that his speed will have been reduced to zero at instant when his head reaches the surface of water. Ultimately the jumper is hanging from the rope with his head 8 m above the water. (take g = 10 m/s²) (air resistance is negligible, center of mass of the man is at his mid-point)\n(A) The maximum acceleration achieved during the jump is approximately 40 m/s²\n(B) Natural length of elastic rope is 13 m\n(C) When finally man comes to at rest, elongation in the rope is 2 m.\n(D) Total work done by elastic rope is 250 J',
+    yours:'B, C', correct:'A, B, C',
+    note:'This is the real text and the real options from the answer key. The question has no figure; the diagram below only shows the three positions the text describes. The portal does not show the key for a partial question, so the set A, B, C is the one you gave me, and I checked every option by hand below. All three came out true.',
+    diag:'I marked B and C and missed A.',
+    fig:FIG_BUNGEE,
+    steps:[
+      {tag:'Step 1: the first line, from the heights', html:'He stands on the platform with his foot at 25 m, so his centre of mass is at 26 m. At the lowest point his head is at the water, so his foot is at 2 m and his centre of mass at 1 m. The centre of mass falls 25 m, and the rope is then 25 − 2 = 23 m long. At the end, head at 8 m means foot at 10 m, so the rope is 15 m long.'},
+      {tag:'Step 2: two equations for L₀ and k', html:'Let e = 15 − L₀ be the final elongation. At rest: k e = m g = 500. Energy from the start to the lowest point: m g × 25 = ½ k (23 − L₀)² = ½ k (e + 8)², so 12500 = ½ k (e + 8)².'},
+      {tag:'Step 3: solve', html:'Put k = 500/e: 12500 = 250 (e + 8)²/e, so e² − 34 e + 64 = 0, so e = 2 or e = 32. The value 32 would make L₀ negative, so e = 2 m. That makes C true. Then L₀ = 15 − 2 = 13 m, so B is true, and k = 500 ÷ 2 = 250 N/m.'},
+      {tag:'Step 4: read the next option off the same numbers', html:'At the lowest point the rope is 23 m long, so its extension is 23 − 13 = 10 m. The rope pulls up with k x = 250 × 10 = 2500 N and gravity is 500 N. Net 2000 N upward, so a = 2000 ÷ 50 = 40 m/s². A is true. This is the option you missed, and it needed only the L₀ and k from Step 3.'},
+      {tag:'Step 5: the work option', html:'The rope pulls up while he moves down, so its work is negative: −½ k x² = −½ × 250 × 100 = −12 500 J. That equals −m g × 25, as energy conservation requires. It is not 250 J, so D is false.<div class="final">Answer: A, B, C</div><div class="trap-note">The trap: stopping after the options that came to mind. The L₀ and k from Step 3 answer three options. Writing the first line and solving it settles A, B and C, and rules out D.</div>'}
+    ]}
+}
+];
+
+var PROBS = [
+{ sec:1, type:'single',
+  q:'A raindrop falls vertically through stationary mist and collects mass as it falls. It stays spherical, and its rate of mass gain is proportional to its speed and to its radius (not the radius squared). It starts from rest with a negligible radius. Find its uniform acceleration. (g = 10 m/s²)',
+  opts:['10 m/s²','3.33 m/s²','2.5 m/s²','1.43 m/s²'], ans:[2],
+  why:'Uniform acceleration means v = a t. Rate of gain: dm/dt = k r v, and m = (4/3)πρr³ gives dm = 4πρr² dr, so 4πρ r² (dr/dt) = k r v and r (dr/dt) ∝ v = a t. Then r² ∝ t², so r ∝ t and (dr/dt)/r = 1/t. So dm/dt = 3m (dr/dt)/r = 3m/t. Take the drop plus the mist it meets (at rest): d(mv)/dt = m g, which is m a + v (dm/dt) = m g. Then a + (a t)(3/t) = g, so 4a = g and a = 2.5 m/s². Compare your CTA20 Q25 (rate ∝ r²): r ∝ t², dm/dt = 6m/t, and a = g/7 = 1.43.',
+  mistakes:{0:'10 m/s²: used m dv/dt = m g and left out the momentum given to the mist, the v dm/dt term.',
+            1:'3.33 m/s²: took the mass as proportional to r² instead of r³, so dm/dt = 2m/t and a + 2a = g.',
+            3:'1.43 m/s²: reused the g/7 result from the real Q25, where the rate is proportional to r². Here it is r, so the power of t changes.'} },
+{ sec:1, type:'multi',
+  q:'A solid hemisphere of radius R moves with speed v along its axis through a dilute gas at rest (n particles per unit volume, each of mass m). Collisions with the surface are smooth and elastic, and re-collisions are ignored. Let F₁ be the force opposing the motion when the curved face leads, and F₂ when the flat face leads. Which statements are correct?',
+  opts:['F₁ = π n m R² v²','F₂ = 2 F₁','If the particles stuck to the hemisphere instead of bouncing, F₁ would be half of its elastic value.','If v is doubled, F₁ is doubled.'], ans:[0,1],
+  why:'Curved face, patch at angle θ from the axis: dF = (n v cos θ)(2 m v cos θ)(cos θ) dA, with dA = 2πR² sin θ dθ. F₁ = 4π n m v² R² ∫₀^(π/2) cos³θ sin θ dθ = 4π n m v² R² × ¼ = π n m R² v². A true. Flat face leading is a plate of area πR² hit head-on: F₂ = 2 n m v² × πR² = 2π n m R² v² = 2 F₁. B true. C: sticking gives hits n v πR² per second, each giving m v, so F = π n m R² v², the same as elastic on a curved face. False. D: both the hit rate and the momentum per hit are proportional to v, so F ∝ v² and doubling v gives 4 F₁. False.',
+  mistakes:{2:'C: applied the flat-plate rule (elastic is twice sticking) to a curved face. The cos³θ weighting makes the two equal here.',
+            3:'D: took the force as proportional to v. Both the hits per second and the momentum per hit scale with v.'} },
+{ sec:2, type:'single', fig:FIG_P3,
+  q:'A plank of mass 4.0 kg and length 1.25 m lies on a smooth floor. A block of mass 1.0 kg rests at its right end, with μs = 0.50 and μk = 0.40 between block and plank. A constant horizontal force of 30 N pulls the plank to the right. After how long does the block slide off the left end? (g = 10 m/s²)',
+  opts:['0.85 s','1.0 s','1.4 s','It never slides off'], ans:[1],
+  why:'Test for slip. If they moved together, a = 30 ÷ 5.0 = 6.0 m/s², and the block would need friction 1.0 × 6.0 = 6.0 N. The most static friction can give is 0.50 × 1.0 × 10 = 5.0 N, which is less, so it slips. Kinetic friction f = 0.40 × 1.0 × 10 = 4.0 N. Block: a = 4.0 m/s² forward. Plank: (30 − 4.0) ÷ 4.0 = 6.5 m/s² forward. Relative acceleration = 6.5 − 4.0 = 2.5 m/s². The block must slide back 1.25 m relative to the plank: ½ × 2.5 × t² = 1.25, so t² = 1.0 and t = 1.0 s.',
+  mistakes:{0:'0.85 s: left out the reaction of friction on the plank (took a = 30 ÷ 4.0 = 7.5), so the relative acceleration came out as 3.5.',
+            2:'1.4 s: used μs = 0.50 as the sliding friction (block 5.0, plank 6.25, relative 1.25, t = √2).',
+            3:'It never slides off: assumed they move together at 6.0 m/s² and did not compare the 6.0 N needed with the 5.0 N available.'} },
+{ sec:3, type:'single', fig:FIG_P4,
+  q:'A small ring slides on a smooth horizontal rod. A light string tied to the ring passes over a small pulley fixed 0.60 m above the rod and is pulled in at a constant speed u = 4.0 m/s. At the instant the string makes θ = 37° with the rod, what is the acceleration of the ring? (sin 37° = 0.6, cos 37° = 0.8)',
+  opts:['0','7.2 m/s²','11.25 m/s²','26.7 m/s²'], ans:[2],
+  why:'Let the horizontal distance from the foot of the pulley be x and the string length s = √(x² + h²). Pulling in at u means ds/dt = −u. Differentiate: x ẋ = s ṡ, so the ring’s speed is v = u s/x = u/cos θ = 4.0 ÷ 0.8 = 5.0 m/s. Differentiate again: a = d/dt (u s/x) = u (ṡ x − s ẋ)/x² = u² h²/x³. Here x = h/tan 37° = 0.80 m, so a = 16 × 0.36 ÷ 0.512 = 11.25 m/s². (Equivalently a = u² tan³θ/h.) The ring speeds up toward the foot of the pulley.',
+  mistakes:{0:'0: pulled at constant speed, so no acceleration. This treats θ as fixed; it changes, and v = u/cos θ changes with it.',
+            1:'7.2 m/s²: used v = u cos θ (the wrong way round) and differentiated that.',
+            3:'26.7 m/s²: used u²/h, as if the ring moved on a circle about the pulley.'} },
+{ sec:4, type:'multi', fig:FIG_P5,
+  q:'A block accelerates to the right at a₀ = 7.5 m/s² on a smooth floor. Two fixed wires lie in the vertical plane of the motion: wire P slopes down to the right at 37° to the horizontal and is rough (μs = 0.50), and wire Q is horizontal and smooth. A bead of mass 0.20 kg sits on each wire, and both start at rest relative to the block. Take g = 10 m/s², sin 37° = 0.6, cos 37° = 0.8. Which statements are correct?',
+  opts:['The bead on P stays at rest relative to the block.','The total force that wire P exerts on its bead is 2.5 N.','The friction force on the bead on P is 1.25 N.','The bead on Q has no horizontal acceleration relative to the ground.'], ans:[0,1,3],
+  why:'First line: the bead on P, if it stays at rest relative to the block, has acceleration (7.5, 0) in the ground frame. Along the wire (unit vector 0.8 right, 0.6 down): the needed friction f = m (a₀ cos 37° − g sin 37°) = 0.20 × (6.0 − 6.0) = 0. The needed friction is 0, which is within the limit μs N, so the bead stays. A true. Normal to the wire: N = m (g cos 37° + a₀ sin 37°) = 0.20 × (8.0 + 4.5) = 2.5 N, and with f = 0 that is the total force. B true. C: friction is not μs N. Static friction takes only the value needed, here 0. False. D: on a smooth horizontal wire there is no horizontal force, so the bead stays at rest in the ground frame while the block moves under it. True (relative to the block it slides back at 7.5 m/s²).',
+  mistakes:{2:'C: used f = μs N = 1.25 N. That is the maximum static friction, not the value acting.'} },
+{ sec:4, type:'single',
+  q:'Two smooth spheres of masses 2 kg and 4 kg move towards each other on a smooth horizontal table, along the line joining their centres, at 6 m/s and 3 m/s respectively. The coefficient of restitution is 1/3. Which option gives the impulse between them up to the instant of maximum deformation, the impulse during reformation, and the total loss of kinetic energy in the collision?',
+  opts:['12 N·s, 4 N·s, 48 J','12 N·s, 4 N·s, 54 J','16 N·s, 4 N·s, 48 J','6 N·s, 2 N·s, 48 J'], ans:[0],
+  why:'First line: at maximum deformation the spheres move together. Total momentum = 2 × 6 − 4 × 3 = 0, so the common velocity is 0. The impulse up to then is the momentum change of the 2 kg sphere: 2 × 6 = 12 N·s (the 4 kg sphere gives 4 × 3 = 12, a check). That already rules out C and D. Reformation impulse = e × 12 = 4 N·s, so the total impulse is 16 N·s. After the collision: 2 kg sphere 6 − 16/2 = −2 m/s, 4 kg sphere −3 + 16/4 = +1 m/s (relative speed 3 = (1/3) × 9, as required). Kinetic energy before = ½ × 2 × 36 + ½ × 4 × 9 = 54 J, after = 4 + 2 = 6 J. Loss = 48 J.',
+  mistakes:{1:'12 N·s, 4 N·s, 54 J: took the loss at maximum deformation (everything stopped, 54 J gone) as the total. Reformation gives 6 J back.',
+            2:'16 N·s, 4 N·s, 48 J: used the total impulse (12 + 4) as the impulse up to maximum deformation.',
+            3:'6 N·s, 2 N·s, 48 J: used the 4 kg sphere’s speed (3 m/s) for the 2 kg sphere, 2 × 3, and then e times that.'} }
+];
+
+/* ---------- helpers ---------- */
+var LET = ['A','B','C','D'];
+function plain(html){ var d=document.createElement('div'); d.innerHTML=html.replace(/<\/?(div|br|li|p|ul|ol|figure)[^>]*>/g,' '); return d.textContent.replace(/\s+/g,' ').trim(); }
+var SUP={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁻':'-','⁺':'+'};
+var SUB={'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9','₊':'+','₋':'-'};
+var GREEK={'θ':'theta','α':'alpha','μ':'mu','λ':'lambda','π':'pi','ℓ':'l','ω':'omega','Δ':'delta ','∫':'integral ','≤':'<=','≥':'>=','∝':'prop to','ρ':'rho','≪':'<<','ṡ':'s-dot','ẋ':'x-dot','₁':'1','₂':'2'};
+function ascii(s){
+  return s.replace(/[θαμλπℓωΔ∫≤≥∝ρ≪]|ṡ|ẋ/g,function(c){return GREEK[c];})
+          .replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]+/g,function(r){return '^'+r.split('').map(function(c){return SUP[c];}).join('');})
+          .replace(/[₀-₉₊₋]+/g,function(r){return r.split('').map(function(c){return SUB[c];}).join('');})
+          .replace(/×/g,'x').replace(/→/g,'->').replace(/√/g,'sqrt').replace(/≈/g,'~').replace(/−/g,'-')
+          .replace(/½/g,'1/2').replace(/¼/g,'1/4').replace(/÷/g,'/').replace(/°/g,' deg').replace(/·/g,'*').replace(/✓/g,'(checked)')
+          .replace(/[–—]/g,'-').replace(/[“”]/g,'"').replace(/[’‘]/g,"'");
+}
+var TUTOR = 'I am a JEE aspirant preparing for JEE Advanced. Act as a patient tutor: use simple language, reply in chunks of under 10 lines, explain why and not just how, and wait for my reply before moving on.';
+function askUrl(parts){
+  var ps = parts.map(function(p){ return ascii(p); });
+  function build(){ return 'https://claude.ai/new?q=' + encodeURIComponent(ps.join('\n\n')); }
+  var u = build(), guard = 0;
+  while(u.length > 3300 && guard++ < 200){
+    var li = -1, soft = /^(Steps:|For your reference|Why it matters|Shortcut rules)/;
+    for(var i=1;i<ps.length;i++){ if(soft.test(ps[i]) && ps[i].length > 120 && (li<0 || ps[i].length > ps[li].length)) li = i; }
+    if(li < 0){ li = 1; for(var j=2;j<ps.length;j++){ if(ps[j].length > ps[li].length) li = j; } }
+    ps[li] = ps[li].slice(0, Math.max(40, Math.floor(ps[li].length*0.9))) + '...';
+    u = build();
+  }
+  return u;
+}
+function askLink(parts, label){
+  var a = document.createElement('a');
+  a.className='ask'; a.target='_blank'; a.rel='noopener'; a.textContent = label || 'Ask Claude about this ↗';
+  a.href = askUrl([TUTOR].concat(parts));
+  return a;
+}
+function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
+
+/* ---------- build sections ---------- */
+function buildSections(){
+  var root = document.getElementById('sections');
+  SECTIONS.forEach(function(s){
+    var sec = el('section','pattern'); sec.id = s.id;
+    var head = el('div','pattern-head');
+    head.appendChild(el('h2',null, s.n+' · '+s.title));
+    head.appendChild(el('span','chip '+s.chip, s.chipText));
+    sec.appendChild(head);
+    sec.appendChild(el('div','syl', s.syl));
+    var cb = el('div','came-back');
+    cb.innerHTML = '<span class="lbl'+(s.isNew?' new':'')+'">'+(s.isNew?'New in CTA20':(s.id==='s4'?'This one came back':'Right before, wrong on Sunday'))+'</span>'
+      +'<div class="sbs"><div><span class="h">'+(s.isNew?'Before':(s.id==='s4'?'Last time':'Earlier tests'))+'</span>'+s.cameBack.prev+'</div><div><span class="h">This time</span>'+s.cameBack.now+'</div></div>'
+      +'<div>'+s.cameBack.verdict+'</div>';
+    sec.appendChild(cb);
+    sec.appendChild(el('p','why', '<strong>Why this matters.</strong> '+s.why));
+    var rule = el('div','rule');
+    rule.innerHTML = '<span class="rule-label">'+(s.id==='s4'?'How to start, and the multi-correct routine':'Shortcut rules')+'</span><ul>'+s.rule.map(function(r){return '<li>'+r+'</li>';}).join('')+'</ul>';
+    sec.appendChild(rule);
+
+    var ex = s.ex, st = el('div','stepper'); st.id = 'st-'+s.id;
+    st.appendChild(el('span','stepper-label','Worked example · '+ex.src));
+    st.appendChild(el('p',null, ex.q.replace(/\n/g,'<br>')));
+    st.appendChild(el('p','yours','Your answer: <strong>'+ex.yours+'</strong>. Correct answer: <strong>'+ex.correct+'</strong>.'));
+    st.appendChild(el('p','rebuilt', ex.note));
+    if(ex.fig){ var f = el('div'); f.innerHTML = ex.fig.svg; st.appendChild(f); }
+    ex.steps.forEach(function(sp,i){
+      var d = el('div','step'); d.innerHTML='<span class="tag">'+sp.tag+'</span>'+sp.html; if(i>0) d.hidden = true; st.appendChild(d);
+    });
+    var b = el('button','step-btn','Show next step →'); b.type='button'; b.onclick=function(){ stepNext(st); }; st.appendChild(b);
+    sec.appendChild(st);
+
+    var status = s.isNew ? 'This pattern is new (first seen in CTA20).' : (s.id==='s4' ? 'This pattern is recurring: ' : 'This pattern is shaky on my tracker (right earlier, wrong in CTA20): ');
+    var secParts = ['Topic: '+s.title+' (JEE Advanced Physics, Mechanics). Pattern: '+s.pattern+'. '+status+(s.isNew?'':plain(s.cameBack.verdict)),
+                    'Why it matters: '+plain(s.why),
+                    'Shortcut rules: '+s.rule.map(plain).join(' | ')];
+    var exParts = ['Worked example ('+ex.src+'). Question: '+plain(ex.q.replace(/\n/g,' '))+(ex.fig?ex.fig.text:''),
+                   'My real answer was '+ex.yours+' and the correct answer is '+ex.correct+'. '+ex.diag,
+                   'Steps: '+ex.steps.map(function(sp){ var t=plain(sp.tag+': '+sp.html); return t.length>230? t.slice(0,227)+'...' : t; }).join(' || ')];
+    var row = el('div');
+    row.appendChild(askLink(secParts, 'Ask Claude about this section ↗')); row.appendChild(document.createTextNode(' '));
+    row.appendChild(askLink(exParts, 'Ask Claude about the worked example ↗'));
+    sec.appendChild(row);
+    root.appendChild(sec);
+  });
+}
+
+/* ---------- build practice ---------- */
+function buildGrid(){
+  var grid = document.getElementById('grid');
+  PROBS.forEach(function(p,idx){
+    var sec = SECTIONS[p.sec-1];
+    var card = el('div','card'); card.id='p'+(idx+1);
+    var head = el('div','card-head');
+    head.appendChild(el('span','qnum', String(idx+1)));
+    head.appendChild(el('span','chip '+(p.type==='multi'?'c2':'c3'), p.type==='multi'?'Multi-correct':'Single-correct'));
+    head.appendChild(el('span','chip c4','Level 4'));
+    head.appendChild(el('span','chip '+sec.chip, 'Section '+sec.n));
+    card.appendChild(head);
+    card.appendChild(el('p',null,p.q));
+    if(p.fig){ var fg = el('div'); fg.innerHTML = p.fig.svg; card.appendChild(fg); }
+    if(p.type==='multi') card.appendChild(el('div','yours','Select all that apply.'));
+    var opts = el('div','opts'); var inputs=[];
+    p.opts.forEach(function(t,i){
+      var lab = el('label','opt');
+      var inp = document.createElement('input'); inp.type = p.type==='multi'?'checkbox':'radio'; inp.name='q'+idx; inp.id='q'+idx+'o'+i; inp.value=i;
+      lab.appendChild(inp); lab.appendChild(el('span','l',LET[i])); lab.appendChild(el('span','t',t));
+      opts.appendChild(lab); inputs.push(inp);
+    });
+    card.appendChild(opts);
+    var verdict = el('div'); verdict.hidden = true;
+    var actions = el('div');
+    var chk = null;
+    function grade(){
+      var sel=[]; inputs.forEach(function(i){ if(i.checked) sel.push(+i.value); });
+      if(!sel.length){ return; }
+      var ok = sel.length===p.ans.length && sel.every(function(x){ return p.ans.indexOf(x)>-1; });
+      inputs.forEach(function(inp,i){
+        var lab = inp.parentNode; lab.classList.remove('is-right','is-wrong','is-miss');
+        var isAns = p.ans.indexOf(i)>-1;
+        if(inp.checked && isAns) lab.classList.add('is-right');
+        else if(inp.checked && !isAns) lab.classList.add('is-wrong');
+        else if(!inp.checked && isAns) lab.classList.add('is-miss');
+      });
+      verdict.className = 'verdict '+(ok?'ok':'no'); verdict.hidden=false;
+      verdict.textContent = (ok?'Correct. ':'Not quite. ')+'Correct option'+(p.ans.length>1?'s':'')+': '+p.ans.map(function(i){return LET[i];}).join(', ')+'.';
+    }
+    if(p.type==='multi'){
+      chk = el('button','check-btn','Check answer'); chk.type='button'; chk.onclick=grade; actions.appendChild(chk);
+    } else {
+      inputs.forEach(function(i){ i.addEventListener('change', grade); });
+    }
+    var rev = el('button','reveal-btn','Show why'); rev.type='button'; actions.appendChild(rev);
+    card.appendChild(actions); card.appendChild(verdict);
+    var ans = el('div','answer'); ans.hidden = true;
+    var mk = Object.keys(p.mistakes).map(function(k){ return '<li>'+p.mistakes[k]+'</li>'; }).join('');
+    ans.innerHTML = '<div>'+p.why+'</div><ul>'+mk+'</ul>';
+    card.appendChild(ans);
+    rev.onclick = function(){ ans.hidden = !ans.hidden; rev.textContent = ans.hidden ? 'Show why' : 'Hide why'; };
+
+    var parts = ['Practice problem '+(idx+1)+' ('+(p.type==='multi'?'multi-correct: pick all correct options':'single-correct')+', level 4, topic: '+sec.title+').',
+                 'Problem: '+plain(p.q)+(p.fig?p.fig.text:''),
+                 'Options: '+p.opts.map(function(t,i){return LET[i]+') '+plain(t);}).join('  '),
+                 'For your reference only, do not reveal unless I ask or have made a real attempt. Correct: '+p.ans.map(function(i){return LET[i];}).join(', ')+'. Reasoning: '+plain(p.why),
+                 'Ask me what I have tried first, then give me one hint at a time.'];
+    card.appendChild(askLink(parts));
+    grid.appendChild(card);
+  });
+}
+
+function stepNext(st){
+  var steps = st.querySelectorAll('.step'), shown = 0;
+  steps.forEach(function(s){ if(!s.hidden) shown++; });
+  if(shown < steps.length){ steps[shown].hidden = false; shown++; }
+  if(shown >= steps.length){ st.querySelector('.step-btn').hidden = true; }
+}
+function setMode(mode, btn){
+  document.querySelectorAll('.mode-btn').forEach(function(b){ b.setAttribute('aria-pressed', b===btn?'true':'false'); });
+  document.getElementById('timerBar').hidden = (mode!=='timed');
+}
+var remaining = 40*60, timerId = null;
+function renderTime(){ var m=String(Math.floor(remaining/60)).padStart(2,'0'), s=String(remaining%60).padStart(2,'0'); document.getElementById('timeDisplay').textContent=m+':'+s; }
+function startTimer(){ if(timerId) return; timerId=setInterval(function(){ remaining--; if(remaining<=0){ clearInterval(timerId); timerId=null; document.getElementById('timeDisplay').textContent="Time's up"; } else renderTime(); },1000); }
+function resetTimer(){ clearInterval(timerId); timerId=null; remaining=40*60; renderTime(); }
+
+buildSections(); buildGrid(); renderTime();
+</script>

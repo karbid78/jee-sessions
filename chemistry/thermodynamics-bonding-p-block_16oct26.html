@@ -1,0 +1,580 @@
+<title>Thermodynamics, Bonding and p-Block Statements</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one column. Hero, five sections (came-back or improved box, rule box, one worked example), then a 6-problem MCQ practice grid. Same teal chemistry system as the 6 Oct and 16 Oct pages. */
+  :root{
+    --bg:#F3F8F7;
+    --surface:#FFFFFF;
+    --surface-2:#E8F1EF;
+    --ink:#14262B;
+    --ink-soft:#4A6168;
+    --border:#D3E2DF;
+    --accent:#0F6E7A;
+    --accent-ink:#FFFFFF;
+    --accent-soft:#DDEFF0;
+    --highlight-ink:#53390A;
+    --highlight-bg:#FFF4D6;
+    --highlight-border:#EBCF86;
+    --good:#217A4B;
+    --good-bg:#E2F4EA;
+    --trap:#B24A38;
+    --trap-bg:#FBE9E5;
+    --chip-1:#0F6E7A; --chip-1-bg:#DDEFF0;
+    --chip-2:#7A4FB5; --chip-2-bg:#EEE7F8;
+    --chip-3:#217A4B; --chip-3-bg:#E2F4EA;
+    --chip-4:#A9631A; --chip-4-bg:#FBEBD9;
+    --chip-5:#B24A38; --chip-5-bg:#FBE9E5;
+    --chip-6:#3F5BA9; --chip-6-bg:#E4EAF8;
+    --atom-a:#0F6E7A; --atom-b:#C2841B;
+    --shadow: 0 1px 2px rgba(20,38,43,.05), 0 8px 24px -12px rgba(20,38,43,.2);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0D1A1D; --surface:#13252A; --surface-2:#1B3036; --ink:#E4F0EF; --ink-soft:#9FB7BC; --border:#27424A;
+      --accent:#5CC4D0; --accent-ink:#06191C; --accent-soft:#16363C;
+      --highlight-ink:#FBE8B8; --highlight-bg:#3A2E10; --highlight-border:#5C4A1B;
+      --good:#5FCB8E; --good-bg:#12301F; --trap:#E58E7E; --trap-bg:#3A1E19;
+      --chip-1:#5CC4D0; --chip-1-bg:#16363C; --chip-2:#C2A5EE; --chip-2-bg:#2A2140; --chip-3:#5FCB8E; --chip-3-bg:#12301F;
+      --chip-4:#E5A96B; --chip-4-bg:#3A2A14; --chip-5:#E58E7E; --chip-5-bg:#3A1E19; --chip-6:#8FA9E8; --chip-6-bg:#1B2642;
+      --atom-a:#5CC4D0; --atom-b:#E8B84B;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.55);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0D1A1D; --surface:#13252A; --surface-2:#1B3036; --ink:#E4F0EF; --ink-soft:#9FB7BC; --border:#27424A;
+    --accent:#5CC4D0; --accent-ink:#06191C; --accent-soft:#16363C;
+    --highlight-ink:#FBE8B8; --highlight-bg:#3A2E10; --highlight-border:#5C4A1B;
+    --good:#5FCB8E; --good-bg:#12301F; --trap:#E58E7E; --trap-bg:#3A1E19;
+    --chip-1:#5CC4D0; --chip-1-bg:#16363C; --chip-2:#C2A5EE; --chip-2-bg:#2A2140; --chip-3:#5FCB8E; --chip-3-bg:#12301F;
+    --chip-4:#E5A96B; --chip-4-bg:#3A2A14; --chip-5:#E58E7E; --chip-5-bg:#3A1E19; --chip-6:#8FA9E8; --chip-6-bg:#1B2642;
+    --atom-a:#5CC4D0; --atom-b:#E8B84B;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.55);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body{
+    background: var(--bg); color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    padding-left: max(18px, env(safe-area-inset-left, 0px));
+    padding-right: max(18px, env(safe-area-inset-right, 0px));
+    padding-block: 28px 64px; line-height: 1.55; font-size: 16px;
+  }
+  .wrap{ max-width: 780px; margin: 0 auto; }
+  h1,h2,h3{ font-family: "Fraunces", Georgia, serif; font-weight: 600; text-wrap: balance; margin: 0; }
+  a{ color: var(--accent); }
+  .eyebrow{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); font-weight:600; }
+  .m{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.93em; }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  .hero{ padding-block: 6px 22px; }
+  .hero h1{ font-size: clamp(1.7rem, 5vw, 2.3rem); margin-top:10px; }
+  .hero p{ color:var(--ink-soft); max-width:62ch; }
+  .hero-note{ margin-top:14px; padding:13px 15px; border-radius:12px; background:var(--accent-soft); border:1px solid var(--border); font-size:.92rem; }
+  .meta{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .pill{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; padding:4px 10px; border-radius:999px; background:var(--surface-2); border:1px solid var(--border); color:var(--ink-soft); }
+  .pill b{ color:var(--ink); }
+
+  .pattern{ background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:22px 20px 24px; margin-block:18px; box-shadow:var(--shadow); min-width:0; }
+  .pattern-head{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:6px; }
+  .pattern-head h2{ font-size:1.25rem; }
+  .chip{ font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.05em; text-transform:uppercase; padding:3px 9px; border-radius:999px; font-weight:600; white-space:nowrap; }
+  .c1{ color:var(--chip-1); background:var(--chip-1-bg); } .c2{ color:var(--chip-2); background:var(--chip-2-bg); }
+  .c3{ color:var(--chip-3); background:var(--chip-3-bg); } .c4{ color:var(--chip-4); background:var(--chip-4-bg); }
+  .c5{ color:var(--chip-5); background:var(--chip-5-bg); } .c6{ color:var(--chip-6); background:var(--chip-6-bg); }
+  .pattern p{ margin:10px 0; }
+  .why{ color:var(--ink-soft); font-size:.95rem; }
+  .syl{ font-family:"IBM Plex Mono",monospace; font-size:.74rem; color:var(--ink-soft); }
+
+  .came-back{ margin:12px 0; padding:12px 14px; border-radius:10px; border:1px solid var(--border); background:var(--surface-2); font-size:.92rem; }
+  .came-back .lbl{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; color:var(--trap); display:block; margin-bottom:6px; }
+  .came-back.better .lbl{ color:var(--good); }
+  .sbs{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin:8px 0; }
+  .sbs > div{ background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:9px 11px; min-width:0; }
+  .sbs .h{ font-weight:600; font-size:.78rem; color:var(--ink-soft); display:block; margin-bottom:3px; }
+
+  .rule{ margin-top:14px; padding:14px 16px; border-radius:10px; background:var(--highlight-bg); border:1px solid var(--highlight-border); color:var(--highlight-ink); }
+  .rule-label{ font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; margin-bottom:6px; display:block; }
+  .rule ul{ margin:6px 0 0; padding-left:20px; } .rule li{ margin:4px 0; }
+  .mini{ margin-top:12px; padding:12px 14px; border-radius:10px; background:var(--surface-2); border:1px solid var(--border); font-size:.9rem; }
+  .mini .lbl{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; color:var(--accent); display:block; margin-bottom:4px; }
+
+  .stepper{ margin-top:16px; border-top:1px dashed var(--border); padding-top:14px; }
+  .stepper-label{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:8px; display:block; }
+  .step{ padding:10px 0; border-bottom:1px solid var(--border); }
+  .step:last-of-type{ border-bottom:none; }
+  .step .tag{ font-weight:600; font-size:.82rem; color:var(--accent); display:block; margin-bottom:4px; }
+  .step-btn{ margin-top:10px; font:inherit; font-weight:600; font-size:.88rem; background:var(--accent); color:var(--accent-ink); border:none; border-radius:8px; padding:9px 14px; cursor:pointer; }
+  .final{ background:var(--good-bg); color:var(--good); border-radius:8px; padding:10px 12px; font-weight:700; margin-top:8px; }
+  .trap-note{ background:var(--trap-bg); color:var(--trap); border-radius:8px; padding:10px 12px; font-size:.9rem; margin-top:10px; }
+  .yours{ font-size:.9rem; color:var(--ink-soft); }
+  .rebuilt{ font-size:.82rem; color:var(--ink-soft); font-style:italic; }
+  figure{ margin:14px 0 4px; }
+  figure svg{ width:100%; max-width:520px; height:auto; display:block; color:var(--ink); }
+  figcaption{ font-size:.82rem; color:var(--ink-soft); margin-top:4px; }
+  .figwrap{ overflow-x:auto; }
+
+  .ask{ display:inline-block; margin-top:10px; font-size:.82rem; font-weight:600; color:var(--accent); text-decoration:none; border:1px solid var(--border); border-radius:999px; padding:5px 11px; background:var(--surface); }
+  .ask:hover{ background:var(--accent-soft); }
+
+  .practice-head{ padding-block:10px 4px; }
+  .mode-row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:14px 0 8px; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px 16px; box-shadow:var(--shadow); }
+  .mode-btn{ font:inherit; font-weight:600; font-size:.9rem; padding:8px 14px; border-radius:999px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); cursor:pointer; }
+  .mode-btn[aria-pressed="true"]{ background:var(--accent); color:var(--accent-ink); border-color:var(--accent); }
+  .timer-bar{ display:flex; align-items:center; gap:12px; margin-left:auto; flex-wrap:wrap; }
+  .time{ font-family:"IBM Plex Mono",monospace; font-size:1.3rem; font-variant-numeric:tabular-nums; min-width:64px; }
+  .timer-btn{ font:inherit; font-size:.85rem; font-weight:600; border-radius:8px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); padding:7px 12px; cursor:pointer; }
+  .mode-help{ font-size:.85rem; color:var(--ink-soft); margin:6px 2px 0; }
+
+  .grid{ display:grid; grid-template-columns:1fr; gap:14px; margin-top:16px; }
+  .card{ background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:16px 16px 14px; box-shadow:var(--shadow); min-width:0; }
+  .card-head{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+  .qnum{ font-family:"Fraunces",serif; font-weight:700; font-size:1.05rem; color:var(--accent); }
+  .opts{ display:grid; gap:7px; margin:10px 0 4px; }
+  .opt{ display:flex; gap:10px; align-items:flex-start; padding:9px 11px; border:1px solid var(--border); border-radius:10px; background:var(--surface-2); cursor:pointer; min-width:0; }
+  .opt input{ margin-top:5px; flex:none; accent-color:var(--accent); }
+  .opt .l{ font-family:"IBM Plex Mono",monospace; font-weight:600; color:var(--accent); flex:none; }
+  .opt .t{ min-width:0; overflow-wrap:anywhere; }
+  .opt.is-right{ border-color:var(--good); background:var(--good-bg); }
+  .opt.is-miss{ border-color:var(--good); border-style:dashed; background:var(--good-bg); }
+  .opt.is-wrong{ border-color:var(--trap); background:var(--trap-bg); }
+  .check-btn, .reveal-btn{ font:inherit; font-weight:600; font-size:.85rem; border-radius:8px; padding:7px 12px; cursor:pointer; margin-top:10px; margin-right:8px; }
+  .check-btn{ background:var(--accent); color:var(--accent-ink); border:none; }
+  .reveal-btn{ background:none; border:1.4px solid var(--accent); color:var(--accent); }
+  .verdict{ margin-top:10px; padding:9px 12px; border-radius:8px; font-weight:700; font-size:.92rem; }
+  .verdict.ok{ background:var(--good-bg); color:var(--good); }
+  .verdict.no{ background:var(--trap-bg); color:var(--trap); }
+  .answer{ margin-top:10px; padding:10px 12px; background:var(--surface-2); border-radius:8px; font-size:.9rem; }
+  .answer ul{ margin:6px 0 0; padding-left:18px; } .answer li{ margin:3px 0; }
+  footer{ margin-top:26px; color:var(--ink-soft); font-size:.88rem; text-align:center; }
+</style>
+
+<div class="wrap">
+  <section class="hero">
+    <span class="eyebrow">Chemistry · Focus Session · 16 Oct 2026</span>
+    <h1>Thermodynamics, Bonding and p-Block Statements</h1>
+    <p>Built from WTA20 (Sat 10 Oct) and CTA20 (Sun 11 Oct), weighted to Sunday. Four of the five patterns were already on your tracker as recurring. Silicates is improving, so it gets a light section. Each recurring section opens with the old and new mistake side by side, then gives the rule and one worked example. Six practice problems follow.</p>
+    <div class="meta">
+      <span class="pill">Level used: <b>L4</b> (multi-concept, a trap in each)</span>
+      <span class="pill">Format: <b>MCQ A–D</b>, 4 single + 2 multi-correct</span>
+      <span class="pill">Sources: <b>CTA20 (Sun) · WTA20 (Sat)</b></span>
+    </div>
+    <div class="hero-note">
+      <strong>How to use this:</strong> read a section, click through its worked example, then do the matching practice problem. Multi-correct problems are right only if you pick every correct option and nothing else. <strong>Ask Claude</strong> links open a new claude.ai chat with that item preloaded. You need to be signed in to claude.ai.
+    </div>
+    <div class="hero-note" style="margin-top:10px">
+      <strong>About the worked examples:</strong> the portal does not save question text, so every stem is rebuilt from your tracker notes. I chose the numbers so that Q45 (−10.7), Q46 (31.08) and Q44 (60.3) land on your real keys, and the Q50 count of 7 is built to match. Q38 and Q40 have no saved key, so their answers hold for my versions only. WTA20 Q43 could not be rebuilt.
+    </div>
+  </section>
+
+  <div id="sections"></div>
+
+  <section class="practice-head">
+    <span class="eyebrow">Practice Set</span>
+    <h2 style="margin-top:8px; font-size:1.4rem;">6 fresh problems, level 4</h2>
+    <p style="color:var(--ink-soft)">Two on thermodynamics and real gases, one on dipole moments, one on Group 13 statement counting, one multi-correct on MO theory, and one on silicones. Problems 3 and 5 are multi-correct.</p>
+  </section>
+
+  <div class="mode-row">
+    <button class="mode-btn" aria-pressed="true" onclick="setMode('practice', this)">Practice (untimed)</button>
+    <button class="mode-btn" aria-pressed="false" onclick="setMode('timed', this)">Timed · 40 min</button>
+    <div class="timer-bar" id="timerBar" hidden>
+      <span class="time" id="timeDisplay">40:00</span>
+      <button class="timer-btn" onclick="startTimer()">Start</button>
+      <button class="timer-btn" onclick="resetTimer()">Reset</button>
+    </div>
+  </div>
+  <p class="mode-help">First pass: stay in Practice mode. Save Timed mode for a second pass.</p>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>Built from WTA20 (Sat 10 Oct) and CTA20 (Sun 11 Oct), weighted to Sunday · Chemistry only. Not on this page: n-factor, ionic equilibrium, cells and Le Chatelier (see the 16 Oct titration page), and WTA20 Q39 and Q41.</footer>
+</div>
+
+<script>
+/* ---------- diagram helpers (inline SVG, theme tokens) ---------- */
+function arrow(x1,y1,x2,y2,col,w){
+  var dx=x2-x1, dy=y2-y1, L=Math.sqrt(dx*dx+dy*dy), ux=dx/L, uy=dy/L, h=9, hw=4.5;
+  var bx=x2-ux*h, by=y2-uy*h;
+  return '<line x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+bx.toFixed(1)+'" y2="'+by.toFixed(1)+'" stroke="'+col+'" stroke-width="'+(w||2.4)+'" stroke-linecap="round"/>'
+    +'<polygon points="'+x2.toFixed(1)+','+y2.toFixed(1)+' '+(bx+uy*hw).toFixed(1)+','+(by-ux*hw).toFixed(1)+' '+(bx-uy*hw).toFixed(1)+','+(by+ux*hw).toFixed(1)+'" fill="'+col+'"/>';
+}
+/* bond dipole drawn beside the bond from atom A to atom B (arrowhead at B), shifted sideways by dxOff */
+function bondDipole(A,B,dxOff,col){
+  var dx=B[0]-A[0], dy=B[1]-A[1], L=Math.sqrt(dx*dx+dy*dy), ux=dx/L, uy=dy/L, pad=17;
+  return arrow(A[0]+ux*pad+dxOff, A[1]+uy*pad, B[0]-ux*pad+dxOff, B[1]-uy*pad, col, 2.6);
+}
+function pyramid(cx, X, mode){
+  var N=[cx,78], X1=[cx-58,150], X2=[cx+58,150], amber='var(--atom-b)', teal='var(--accent)', s='';
+  s += '<line x1="'+N[0]+'" y1="'+N[1]+'" x2="'+X1[0]+'" y2="'+X1[1]+'" stroke="currentColor" stroke-width="1.4"/>';
+  s += '<line x1="'+N[0]+'" y1="'+N[1]+'" x2="'+X2[0]+'" y2="'+X2[1]+'" stroke="currentColor" stroke-width="1.4"/>';
+  s += arrow(cx, 62, cx, 14, teal, 2.8);
+  s += '<text x="'+(cx+10)+'" y="30" font-size="11" fill="currentColor">lone pair</text>';
+  if(mode==='toN'){ s += bondDipole(X1,N,-11,amber) + bondDipole(X2,N,11,amber); }
+  else { s += bondDipole(N,X1,-11,amber) + bondDipole(N,X2,11,amber); }
+  s += '<g fill="var(--surface-2)" stroke="currentColor" stroke-width="1.5"><circle cx="'+N[0]+'" cy="'+N[1]+'" r="12"/><circle cx="'+X1[0]+'" cy="'+X1[1]+'" r="12"/><circle cx="'+X2[0]+'" cy="'+X2[1]+'" r="12"/></g>';
+  s += '<g font-size="13" font-weight="600" text-anchor="middle" fill="currentColor"><text x="'+N[0]+'" y="83">N</text><text x="'+X1[0]+'" y="155">'+X+'</text><text x="'+X2[0]+'" y="155">'+X+'</text></g>';
+  return s;
+}
+var FIG_DIPOLE =
+'<figure><div class="figwrap"><svg viewBox="0 0 520 218" role="img" aria-label="NH3 and NF3 drawn side by side as pyramids with one lone pair on nitrogen. In NH3 the N-H bond dipoles point toward N, the same way as the lone pair, so they add, net mu about 1.47 D. In NF3 the N-F bond dipoles point toward F, against the lone pair, so they oppose, net mu about 0.24 D.">'
++pyramid(130,'H','toN')+pyramid(390,'F','toX')
++'<g font-size="12" font-weight="600" text-anchor="middle" fill="currentColor"><text x="130" y="184">NH₃: they add, μ ≈ 1.47 D</text><text x="390" y="184">NF₃: they oppose, μ ≈ 0.24 D</text></g>'
++arrow(150,206,182,206,'var(--atom-b)',2.4)+'<text x="190" y="210" font-size="11" fill="currentColor">bond dipole</text>'
++arrow(290,206,322,206,'var(--accent)',2.4)+'<text x="330" y="210" font-size="11" fill="currentColor">lone-pair dipole</text>'
++'</svg></div><figcaption>Side view; the third atom sits behind the page. Arrows point toward the negative end. In NH₃ all the arrows point up, toward N and the lone pair. In NF₃ the bond arrows point down, toward F, against the lone pair.</figcaption></figure>';
+
+var FIG_CHAIN =
+'<figure><div class="figwrap"><svg viewBox="0 0 460 156" role="img" aria-label="Linear silicone chain R3Si-O-(R2SiO)10-SiR3. Left end cap R3Si from R3SiCl, one linking O, ten repeat units R2Si-O from R2SiCl2, right end cap SiR3 from R3SiCl. Si atoms 2 + 10 = 12, O atoms 1 + 10 = 11. Cl removed 2 x 1 + 10 x 2 = 22 atoms = 781.">'
++'<g fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"><rect x="8" y="26" width="66" height="38" rx="8"/><rect x="150" y="18" width="200" height="54" rx="8"/><rect x="380" y="26" width="66" height="38" rx="8"/></g>'
++'<g stroke="currentColor" stroke-width="1.6"><line x1="74" y1="45" x2="102" y2="45"/><line x1="126" y1="45" x2="150" y2="45"/><line x1="350" y1="45" x2="380" y2="45"/></g>'
++'<circle cx="114" cy="45" r="12" fill="var(--surface-2)" stroke="currentColor" stroke-width="1.5"/>'
++'<g font-size="14" font-weight="600" text-anchor="middle" fill="currentColor"><text x="41" y="50">R₃Si</text><text x="114" y="50">O</text><text x="250" y="42">R₂Si – O</text><text x="413" y="50">SiR₃</text></g>'
++'<g font-size="11" text-anchor="middle" fill="currentColor"><text x="250" y="60">repeated 10 times</text><text x="41" y="88">from R₃SiCl</text><text x="250" y="88">from R₂SiCl₂</text><text x="413" y="88">from R₃SiCl</text></g>'
++'<g font-size="12" text-anchor="middle" fill="currentColor"><text x="230" y="116">Si atoms: 2 + 10 = 12.  O atoms: 1 + 10 = 11, one fewer than Si.</text><text x="230" y="136">Cl removed: 2 × 1 + 10 × 2 = 22 atoms, 22 × 35.5 = 781.</text></g>'
++'</svg></div><figcaption>The end caps come from R₃SiCl (one Cl each). The ten chain units come from R₂SiCl₂ (two Cl each). Every Cl leaves and the oxygens join the chain.</figcaption></figure>';
+
+/* ---------- content ---------- */
+var SECTIONS = [
+{ id:'s1', n:1, title:'Real gases and calorimetry: write the equation before the numbers', chip:'c1', chipText:'Recurring · Weak', status:'recurring',
+  pattern:'thermo-entropy-work-and-real-gas-concepts',
+  syl:'Syllabus: States of Matter (deviation from ideality, van der Waals equation) and Chemical Thermodynamics (first law, internal energy, heat, enthalpy, entropy)',
+  cb:{ label:'This one came back', h1:'Last time', h2:'This time',
+    prev:'CTA16 Q49 (entropy) wrong: you answered 3, the key was 35. CTA17 Q39 wrong, Q40 and Q43 partial. CTA19 Q45 and Q50 wrong, Q41 skipped. CTA18 Q48 was right.',
+    now:'CTA20 Q45 (van der Waals cubic, coefficient ratio): you answered <strong>0.05</strong>, key <strong>−10.7</strong>. CTA20 Q46 (bomb calorimeter, Ag₂O): you answered <strong>250</strong>, key <strong>31.08</strong>.',
+    verdict:'<strong>A different error in the same chapter, with no progress yet.</strong> Q49 in CTA16 was an entropy slip. These two are a real-gas setup and a calorimeter conversion. This pattern was wrong in 4 of the last 5 tests (CTA16, CTA17, CTA19, CTA20). A session on it was built on 6 Oct, and CTA20 is the first test since then that had thermodynamics. Your working is not saved. Both answers are far from the key, so they are not rounding slips, and I suspect the equation was set up wrongly. The steps below start by writing the equation, not the numbers.'},
+  why:'Both questions look like long arithmetic. Each is really two short steps: write the right equation, then substitute. A real-gas question wants the equation rearranged into a cubic. A calorimeter question wants heat measured at constant volume turned into enthalpy. If the equation is wrong, every number after it is wasted.',
+  rule:[
+    'van der Waals for n mol: (P + n²a/V²)(V − nb) = nRT. Multiply out and divide by P: V³ − (nb + nRT/P)V² + (n²a/P)V − n³ab/P = 0. Read each coefficient off this line. Note n² on a and n on b.',
+    'Keep units together. With R = 0.082 L atm K⁻¹ mol⁻¹, use P in atm, V in L, a in atm L² mol⁻² and b in L mol⁻¹.',
+    'Bomb calorimeter (constant volume): C × ΔT gives ΔU, not ΔH. Then ΔH = ΔU + Δn<sub>g</sub>RT, where Δn<sub>g</sub> counts gas moles only, products minus reactants, for the equation as you wrote it.',
+    'The calorimeter takes in the heat the reaction gives out, so ΔU of the reaction is negative: ΔU = −CΔT ÷ moles. Divide by the moles of the species the question names, then convert to ΔH.',
+    'Entropy: ΔS of the system depends only on the end states, so use a reversible path. ΔS of the surroundings uses the actual heat, −q ÷ T. A positive total means irreversible.'],
+  extra:'<div class="mini"><span class="lbl">CTA20 Q46 in four lines (rebuilt)</span>8 mol of Ag(s) burns completely in a fixed-volume bomb calorimeter: 8Ag + 2O₂ → 4Ag₂O. Heat capacity 12.5 kJ K⁻¹, temperature rise 9.55 K, T = 298 K, R = 8.3 J K⁻¹ mol⁻¹. Find |ΔH<sub>f</sub>(Ag₂O)|.<br>① ΔU = −12.5 × 9.55 ÷ 4 = −29.84 kJ per mol of Ag₂O.<br>② Δn<sub>g</sub> = −½ (half an O₂ used per Ag₂O).<br>③ Δn<sub>g</sub>RT = −½ × 8.3 × 10⁻³ × 298 = −1.24 kJ.<br>④ ΔH = −29.84 − 1.24 = −31.08 kJ mol⁻¹, so |X| = 31.08.<br><span class="rebuilt">Numbers chosen by me so the answer matches your real key. The real stem may differ. Your working for 250 is not saved.</span></div>',
+  ex:{ src:'CTA20 Q45, rebuilt',
+    q:'For 1 mol of a gas, a = 4.0 atm L² mol⁻² and b = 0.10 L mol⁻¹. At 400 K and 100 atm, the van der Waals equation is written as a cubic in V (in litres): V³ + pV² + qV + r = 0. Find p ÷ q. Take R = 0.082 L atm K⁻¹ mol⁻¹.',
+    yours:'0.05', correct:'−10.7',
+    note:'Stem rebuilt from the tracker note (van der Waals cubic, coefficient ratio, key −10.7). The numbers are mine, chosen so the answer equals your real key; the real stem may differ. Your working is not saved.',
+    diag:'My working for 0.05 is not saved.',
+    steps:[
+      {tag:'Step 1: write the equation, not the numbers', html:'For n = 1: (P + a/V²)(V − b) = RT. Multiply by V² and divide by P: V³ − (b + RT/P)V² + (a/P)V − ab/P = 0. So p = −(b + RT/P), q = a/P and r = −ab/P.'},
+      {tag:'Step 2: compute RT/P', html:'RT/P = 0.082 × 400 ÷ 100 = 0.328 L.'},
+      {tag:'Step 3: the V² coefficient', html:'p = −(0.10 + 0.328) = −0.428.'},
+      {tag:'Step 4: the V coefficient', html:'q = a/P = 4.0 ÷ 100 = 0.040.'},
+      {tag:'Step 5: the ratio, then a sign check', html:'p ÷ q = −0.428 ÷ 0.040 = −10.7.<div class="final">Answer: −10.7</div><div class="trap-note">The trap: p is negative and q is positive, so the ratio has to be negative. A positive answer, or one near zero, means a coefficient was built wrongly. Check each against the line in Step 1: a is divided by P, and RT/P is added to b.</div>'}
+    ]}
+},
+{ id:'s2', n:2, title:'Dipole moments and MO trends: draw before you rank', chip:'c6', chipText:'Recurring · Weak', status:'recurring',
+  pattern:'bonding-mo-theory-and-property-trends',
+  syl:'Syllabus: Chemical Bonding and Molecular Structure (VSEPR shapes, polarity and dipole moment, molecular orbital energy diagrams for homonuclear diatomic species up to Ne₂)',
+  cb:{ label:'This one came back', h1:'Last time', h2:'This time',
+    prev:'CTA17 Q51, Q52 and CTA18 Q52, Q53 were wrong: MO overlap and nodal-plane list-match, and B₂ against F₂ bond energy (CTA18 Q53 asked for the INCORRECT statement and you marked a true one). CTA16 Q53 and CTA19 Q46 were right.',
+    now:'CTA20 Q38 (dipole moment orders, multi-correct): you marked <strong>A and D</strong> and it was wrong. The correct set is not saved. CTA20 Q52 (VSEPR shapes of interhalogen species) was right.',
+    verdict:'<strong>A different error in the same chapter, so partial progress.</strong> The question you got right in CTA20 comes straight from a rule (shapes from VSEPR). The ones you lose are property rankings, where the answer needs a drawn shape or an MO table first. The session on this pattern was built on 2 Oct, and CTA19 and CTA20 had one right and one wrong each.'},
+  why:'Ranking questions feel like memory tests, but most can be settled with a picture. A dipole moment is a vector sum, so the shape decides it. A bond order, bond length or magnetism follows from the MO electron count. Drawing first turns a guess into a check.',
+  rule:[
+    'Dipole: get the shape from VSEPR. Draw each bond dipole toward the more electronegative atom, and the lone-pair dipole from the central atom out toward the lone pair. Then add them as vectors.',
+    'Symmetric shapes with identical bonds give zero: BF₃, CCl₄, PCl₅, SF₆, trans-1,2-dichloroethene, para-dichlorobenzene.',
+    'A lone pair adds to the bond dipoles in NH₃ and H₂O (the bonds point toward N or O). It opposes them in NF₃ and OF₂ (the bonds point toward F). So NH₃ > NF₃ and H₂O > OF₂.',
+    'Two equal dipoles at angle θ give μ = 2μ₀cos(θ/2): 60° gives 1.73μ₀, 120° gives 1.0μ₀, 180° gives 0. So ortho > meta > para.',
+    'MO for homonuclear diatomics: bond order = (bonding − antibonding) ÷ 2. For B₂, C₂ and N₂ the π2p orbitals sit below σ2p. From O₂ onward σ2p is lower. Unpaired electrons mean paramagnetic.',
+    'Equal bond order does not mean equal bond energy: B₂ is about 289 kJ mol⁻¹ and F₂ about 159 kJ mol⁻¹, because lone pairs on the small F atoms repel. Nodal planes: π has one (containing the axis), σ* has one (between the nuclei), π* has two.'],
+  ex:{ src:'CTA20 Q38, rebuilt',
+    q:'Choose the correct orders of dipole moment.\n(A) NH₃ > NF₃\n(B) ortho-dichlorobenzene > meta-dichlorobenzene > para-dichlorobenzene\n(C) BF₃ > NF₃\n(D) cis-1,2-dichloroethene > trans-1,2-dichloroethene',
+    yours:'A, D (on the real paper)', correct:'A, B, D (for this rebuilt stem)',
+    note:'On the real paper you marked A and D and it was wrong. The real options and the correct set are not saved, so I cannot tell which of your two was false or what you missed. This stem keeps the technique, not the options.',
+    diag:'On the real paper I marked A and D and it was wrong. The real options are not saved.',
+    fig:FIG_DIPOLE,
+    steps:[
+      {tag:'Step 1: draw the shape first', html:'NH₃ and NF₃ are pyramidal with one lone pair. BF₃ is trigonal planar. The dichlorobenzenes are flat rings with two C–Cl bonds at 60°, 120° or 180°. In the dichloroethenes the two C–Cl bonds are on the same side (cis) or on opposite sides (trans).'},
+      {tag:'Step 2: option A, lone pair against the bond dipoles', html:'In NH₃ the N–H dipoles point toward N, the same way as the lone pair, so everything adds: μ ≈ 1.47 D. In NF₃ the N–F dipoles point toward F, against the lone pair, so they cancel most of it: μ ≈ 0.24 D. A is true.'},
+      {tag:'Step 3: option B, two equal vectors', html:'μ = 2μ₀cos(θ/2). Ortho (60°): 1.73μ₀. Meta (120°): 1.0μ₀. Para (180°): 0. So ortho > meta > para and B is true.'},
+      {tag:'Step 4: option C, symmetry', html:'BF₃ is planar with three identical bonds at 120°, so the three dipoles cancel and μ = 0. NF₃ has a small non-zero μ, so BF₃ is not larger. C is false.'},
+      {tag:'Step 5: option D, same side or opposite side', html:'In cis-1,2-dichloroethene the two C–Cl dipoles are on the same side and add (about 1.9 D). In trans they point opposite ways and cancel (0). D is true.<div class="final">Answer: A, B, D</div><div class="trap-note">The trap: reading C as “fluorine is the most electronegative, so BF₃ is very polar”. Polar bonds do not make a polar molecule. Check the shape before you rank.</div>'}
+    ]}
+},
+{ id:'s3', n:3, title:'Group 13 statements: judge each one, then count', chip:'c5', chipText:'Recurring · Weak', status:'recurring',
+  pattern:'group-13-halides-oxides-and-statement-questions',
+  syl:'Syllabus: p-Block Elements (Group 13: reactivity towards acids, alkalis and halogens; borax, orthoboric acid, diborane, boron trifluoride, aluminium chloride, alums; uses of boron and aluminium; oxidation states and trends)',
+  cb:{ label:'This one came back', h1:'Last time', h2:'This time',
+    prev:'WTA19 Q37, Q41 and Q44 were wrong (Q41: BeCl₂ route and BX₃ bond-angle order, marked A). The tracker note says the wrong ones were the “INCORRECT / CORRECT statement” lists with four long options. You got 4 of the 7 Group 13 questions right.',
+    now:'WTA20 Q45 (count of correct statements, 9 statements a–i on groups 13 and 14): you answered <strong>7</strong>, key <strong>6</strong>. CTA20 Q50 (count of correct statements on the uses of boron and aluminium): you answered <strong>8</strong>, key <strong>7</strong>.',
+    verdict:'<strong>The same kind of error, repeating.</strong> Both new counts were exactly one too high: you accepted one false statement that sounded right. WTA19 was a one-of-four pick and these are counts, but the slip underneath is the same, a statement passed without a deciding fact. Both came after the 6 Oct session on this pattern, so the advice has to change. Do not count as you read. Write T or F and the one fact that decides it, and add up at the end.'},
+  why:'A count question gives no partial credit and no way to guess from the options. One false statement accepted, or one true statement rejected, changes the number. False statements usually fail in one of three ways, and you can learn to look for them.',
+  rule:[
+    'Do not tally while reading. Next to each statement write T or F and the single fact that decides it. Add up only at the end.',
+    'The false statement is usually one of three kinds: a swapped subject (boron for aluminium), a reversed trend, or a formula that looks normal but is not (TlI₃).',
+    'Your last two counts were each one too high, so the slip is accepting, not rejecting. Reopen the statement you only half-recognised.',
+    'Facts to hold: Lewis acidity BF₃ < BCl₃ < BBr₃ < BI₃ (back-donation is strongest in BF₃). AlCl₃ is Al₂Cl₆ in the vapour, each Al sp³. BF₃ with water gives H₃BO₃ and HBF₄. Oxides: B₂O₃ acidic, Al₂O₃ amphoteric, Tl₂O basic. Inert pair: Tl⁺ is more stable than Tl³⁺, so TlI₃ is Tl⁺ and I₃⁻.'],
+  ex:{ src:'CTA20 Q50, rebuilt',
+    q:'How many of the following statements about the uses of boron and aluminium are correct?\n(1) Boron fibres are used in bullet-proof vests and light composite material for aircraft.\n(2) The ¹⁰B isotope absorbs neutrons, so boron rods are used as control rods and shields in nuclear reactors.\n(3) Borax and boric acid are used to make heat-resistant glass such as Pyrex.\n(4) Borax is used as a flux for soldering metals.\n(5) An aqueous solution of orthoboric acid is used as a mild antiseptic.\n(6) Weight for weight, aluminium conducts electricity about twice as well as copper.\n(7) Aluminium alloys with Cu, Mn, Mg, Si and Zn are used in aircraft, packaging and utensils.\n(8) Aluminium fibres, not boron fibres, are used in bullet-proof vests.',
+    yours:'8', correct:'7',
+    note:'Stem rebuilt from the tracker note (count of correct statements on the uses of boron and aluminium; you answered 8, key 7). The eight statements are mine. Eight statements with a key of 7 means exactly one is false. The real stem may have had a different number of statements.',
+    diag:'My working for 8 is not saved.',
+    steps:[
+      {tag:'Step 1: the boron statements, T or F with the deciding fact', html:'(1) T: boron fibres go into bullet-proof vests and aircraft composites. (2) T: ¹⁰B absorbs neutrons, so it makes control rods. (3) T: borosilicate glass such as Pyrex uses borax and boric acid. (4) T: borax is a soldering flux. (5) T: dilute boric acid is a mild antiseptic.'},
+      {tag:'Step 2: the aluminium statements', html:'(6) T: weight for weight, aluminium conducts about twice as well as copper. The words “weight for weight” matter, because volume for volume copper conducts better. (7) T: aluminium alloys with Cu, Mn, Mg, Si and Zn, and the alloys go into aircraft, packaging and utensils.'},
+      {tag:'Step 3: statement 8 against statement 1', html:'(8) says aluminium fibres are used in bullet-proof vests. Statement 1 already settled that the fibres are boron. So (8) is F. It sounds right only because aluminium is the metal known for aircraft.'},
+      {tag:'Step 4: add up at the end', html:'True: 1, 2, 3, 4, 5, 6, 7 = 7. False: 8.<div class="final">Answer: 7</div><div class="trap-note">The trap: answering 8 means every statement passed. The false one differed from a true one in a single word, “aluminium” for “boron”. A swapped subject is the first thing to check when a count looks too high.</div>'}
+    ]}
+},
+{ id:'s4', n:4, title:'Multi-correct: a verdict and a table cell for every option', chip:'c2', chipText:'Recurring · Weak', status:'recurring',
+  pattern:'chem-multi-correct-incomplete',
+  syl:'Syllabus: Mole concept (stoichiometry, limiting reagent, gas volumes). The method applies to every multi-correct question.',
+  cb:{ label:'This one came back', h1:'Last time', h2:'This time',
+    prev:'Partial or wrong in every test the tracker has on this habit: CTA16 (Q37, Q40), CTA17 (Q38, Q40, Q43 partial, Q39 wrong), CTA18 (Q49: M = 122 and A⁻ = 99 were right, but pH ≈ 4 and Kb = 10⁻⁸ follow from the same Kh = 10⁻⁸; all four were correct and you marked 2), WTA19 (Q44, Q48 wrong, Q45 partial), CTA19 (Q45 wrong, Q44 partial).',
+    now:'CTA20 Q40 (Al with H₂SO₄): you ticked A and B and missed <strong>C</strong>. By hand A, B and C are all true. CTA20 Q38 in section 2 was multi-correct as well.',
+    verdict:'<strong>The exact same error is repeating:</strong> the missed option came straight from numbers you already had. Sessions on this habit were built on 2 Oct and 6 Oct, and Q40 came after both. “Check every option” has not worked, and the 16 Oct page used the same table-first advice, which was built after CTA20, so I do not know yet whether it helps. The change here: every option gets a verdict and the table cell that proves it. An option with no cell has not been checked.'},
+  why:'In a multi-correct question one calculation often feeds several options. Once the limiting reagent and the moles reacted are known, the gas volume and the leftover are one line each. Stopping after the first two means the third was already in your hands.',
+  rule:[
+    'Do the calculation once, as a table: moles available, moles that react, moles left, moles of product.',
+    'Then give every option a verdict, true or false, and write the table cell that proves it. An option with no cell has not been checked.',
+    'A false option is useful. It usually uses one wrong number from the table (the wrong limiting reagent, a missing mole ratio). Naming that number confirms the table.',
+    'Before you submit, count how many options the table settled. If you ticked fewer than it supports, go back to the ones you skipped.'],
+  ex:{ src:'CTA20 Q40, rebuilt',
+    q:'5.4 g of Al is added to 400 mL of 1.0 M H₂SO₄ (Al = 27, molar volume 22.4 L at 273 K and 1 atm). Which statements are correct?\n(A) Al is the limiting reagent.\n(B) 6.72 L of H₂ is evolved at 273 K and 1 atm.\n(C) 0.10 mol of H₂SO₄ is left unreacted.\n(D) 8.96 L of H₂ is evolved at 273 K and 1 atm.',
+    yours:'A, B', correct:'A, B, C',
+    note:'Stem rebuilt from the tracker note (limiting reagent, H₂ volume, leftover acid; you marked A and B and missed C). The numbers are mine and differ from the 16 Oct page.',
+    diag:'I ticked A and B and missed C.',
+    steps:[
+      {tag:'Step 1: the table', html:'2Al + 3H₂SO₄ → Al₂(SO₄)₃ + 3H₂. Al available = 5.4 ÷ 27 = 0.20 mol. H₂SO₄ available = 0.400 L × 1.0 M = 0.40 mol. Al needs 0.20 × 3/2 = 0.30 mol of H₂SO₄.'},
+      {tag:'Step 2: option A (cell: Al needs 0.30, acid has 0.40)', html:'The acid in hand (0.40) is more than Al needs (0.30), so Al runs out first. A is true.'},
+      {tag:'Step 3: options B and D (cell: H₂ made = 0.30 mol)', html:'H₂ = 0.20 × 3/2 = 0.30 mol, and 0.30 × 22.4 = 6.72 L. B is true. D (8.96 L = 0.40 mol of H₂) assumes all the acid reacts: false.'},
+      {tag:'Step 4: option C (cell: acid left)', html:'H₂SO₄ left = 0.40 − 0.30 = 0.10 mol. C is true. It uses two numbers already in the table.<div class="final">Answer: A, B, C</div><div class="trap-note">The trap: stopping after B. “Left over” is the subtraction 0.40 − 0.30 that you did in Step 1 when you compared what Al needs with what the acid has.</div>'}
+    ]}
+},
+{ id:'s5', n:5, title:'Silicones and silicates: count the Cl removed, then the O added', chip:'c3', chipText:'Improving · Middle', status:'improving',
+  pattern:'silicon-silicates-and-silicones-structure-and-molar-mass',
+  syl:'Syllabus: p-Block Elements (Group 14: silicones, silicates, silicon dioxide, reactivity towards water and halogens)',
+  cb:{ label:'This one improved', h1:'What improved', h2:'Still happening', better:true,
+    prev:'WTA20: 5 of 7 silicon questions right (Q42, Q46, Q48, Q53, Q54). CTA20 Q54 (silicon compounds and their uses) was right.',
+    now:'WTA20 Q44 (silicone chain molar mass): you answered <strong>77.9</strong>, key <strong>60.3</strong>. WTA20 Q43 (silicates, shared oxygens): you answered <strong>1.5</strong>, key <strong>2</strong>.',
+    verdict:'<strong>Improving, so this is a light section.</strong> The structure and statement questions are fine. Only the two arithmetic ones were lost. Your 77.9 is exactly what you get if you take away all the chlorine but never add back the 11 oxygens: (781 − 2) ÷ 10 = 77.9. That is my deduction from the number, since your working is not saved. The Q43 stem is not saved either, so it is not rebuilt. The tracker’s hand check was 0 + 1 + 2 + 4 − 5 = 2.'},
+  why:'A silicone question is a mass balance. Chlorine leaves as HCl and oxygen joins the chain. Count what leaves and what joins, in that order, and the formula writes itself.',
+  rule:[
+    'Each Si–Cl becomes Si–O. Take away every Cl (35.5 each), then add the oxygens. One O links two Si atoms, so a linear chain of k Si atoms has k − 1 O atoms.',
+    'R₃SiCl is a chain stopper (one Cl, one end). R₂SiCl₂ builds the chain (two Cl). RSiCl₃ cross-links.',
+    'Silicates: let s be the number of O atoms a SiO₄ tetrahedron shares. Orthosilicate 0, pyrosilicate 1, chain and ring 2, sheet 3, three-dimensional network 4. The charge per Si is s − 4.'],
+  ex:{ src:'WTA20 Q44, rebuilt',
+    q:'R₂SiCl₂ (molar mass x) and R₃SiCl (molar mass y) are hydrolysed and condensed to give the end-capped linear polymer R₃Si–O–(R₂SiO)<sub>10</sub>–SiR₃. Its molar mass is P·x + Q·y − S. Find (S − Q) ÷ P. (Cl = 35.5, O = 16.)',
+    yours:'77.9', correct:'60.3',
+    note:'Stem rebuilt from the tracker note (polymer = 10x + 2y − 605, answer 603 ÷ 10 = 60.3). The letters P, Q and S are my guess at how the real question asked for it, chosen so the answer matches your real key.',
+    diag:'My working for 77.9 is not saved.',
+    fig:FIG_CHAIN,
+    steps:[
+      {tag:'Step 1: count what is in the polymer', html:'Ends: 2 × R₃Si, from 2 R₃SiCl. Chain: 10 × R₂Si, from 10 R₂SiCl₂. Si atoms = 12, so O atoms = 12 − 1 = 11.'},
+      {tag:'Step 2: Cl taken away', html:'Each R₂SiCl₂ loses 2 Cl: 10 × 71 = 710. Each R₃SiCl loses 1 Cl: 2 × 35.5 = 71. Total removed = 781.'},
+      {tag:'Step 3: O added', html:'11 × 16 = 176.'},
+      {tag:'Step 4: molar mass', html:'M = 10x + 2y − 781 + 176 = 10x + 2y − 605. So P = 10, Q = 2 and S = 605.'},
+      {tag:'Step 5: the quantity asked', html:'(S − Q) ÷ P = (605 − 2) ÷ 10 = 603 ÷ 10 = 60.3.<div class="final">Answer: 60.3</div><div class="trap-note">The trap: stopping at the 781. Using 781 for S gives (781 − 2) ÷ 10 = 77.9, which is the number you gave. It comes from skipping Step 3. The oxygens are what turn the chlorides into the polymer.</div>'}
+    ]}
+}
+];
+
+var PROBS = [
+{ sec:1, type:'single',
+  q:'A 2.0 mol sample of a van der Waals gas has a = 1.5 atm L² mol⁻² and b = 0.050 L mol⁻¹. At 300 K and 10 atm, the equation is written as a cubic in V (in litres): V³ + pV² + qV + r = 0. What is p ÷ q? Take R = 0.082 L atm K⁻¹ mol⁻¹.',
+  opts:['−33.5','−8.37','+8.37','−0.12'], ans:[1],
+  why:'For n mol: V³ − (nb + nRT/P)V² + (n²a/P)V − n³ab/P = 0. nb = 2.0 × 0.050 = 0.10. nRT/P = 2.0 × 0.082 × 300 ÷ 10 = 4.92. So p = −(0.10 + 4.92) = −5.02. q = n²a/P = 4 × 1.5 ÷ 10 = 0.60. p ÷ q = −5.02 ÷ 0.60 = −8.37. Sign check: p is negative and q is positive, so the ratio is negative.',
+  mistakes:{0:'−33.5: used a/P = 0.15 instead of n²a/P = 0.60, so the n² on a was dropped (−5.02 ÷ 0.15).',
+            2:'+8.37: forgot the minus sign on the V² coefficient.',
+            3:'−0.12: inverted the ratio, q ÷ p = 0.60 ÷ (−5.02).'} },
+{ sec:1, type:'single',
+  q:'In a fixed-volume bomb calorimeter, 0.60 g of Mg(s) burns completely in excess O₂ at 298 K: Mg(s) + ½O₂(g) → MgO(s). The calorimeter (bomb and water) has heat capacity 10.0 kJ K⁻¹ and its temperature rises by 1.50 K. The ignition wire itself releases 0.20 kJ. Find the standard enthalpy of formation of MgO(s) in kJ mol⁻¹. (Mg = 24, R = 8.3 J K⁻¹ mol⁻¹.)',
+  opts:['−593.2','−592.0','−590.8','−601.2'], ans:[0],
+  why:'Heat absorbed by the calorimeter = 10.0 × 1.50 = 15.00 kJ. The wire supplied 0.20 kJ of it, so the Mg gave 14.80 kJ. Moles of Mg = 0.60 ÷ 24 = 0.025 mol. ΔU = −14.80 ÷ 0.025 = −592.0 kJ mol⁻¹ (negative, since heat is given out). Δn<sub>g</sub> = 0 − ½ = −½, so Δn<sub>g</sub>RT = −½ × 8.3 × 10⁻³ × 298 = −1.24 kJ mol⁻¹. ΔH = ΔU + Δn<sub>g</sub>RT = −592.0 − 1.24 = −593.2 kJ mol⁻¹.',
+  mistakes:{1:'−592.0: stopped at ΔU and never converted to ΔH.',
+            2:'−590.8: took Δn<sub>g</sub> as +½ (wrong sign), so −592.0 + 1.24.',
+            3:'−601.2: forgot the ignition wire and used the full 15.00 kJ (−600.0 − 1.24).'} },
+{ sec:2, type:'multi',
+  q:'Which of the following orders of dipole moment are correct?',
+  opts:['H₂O > OF₂','PCl₅ > PCl₃','1,2,4-trichlorobenzene > 1,3,5-trichlorobenzene','ClF₃ > BF₃'], ans:[0,2,3],
+  why:'A: in H₂O the bond dipoles point toward O, the same way as the lone pairs, so they add (1.85 D). In OF₂ the bond dipoles point toward F, against the lone pairs (0.30 D). True. B: PCl₅ is trigonal bipyramidal and its dipoles cancel, μ = 0; PCl₃ is pyramidal and polar (0.56 D). False. C: 1,3,5-trichlorobenzene has three equal dipoles at 120°, which cancel (μ = 0); 1,2,4 has no such symmetry, so μ > 0. True. D: ClF₃ is T-shaped and polar; BF₃ is planar and non-polar. True. Correct set: A, C, D.',
+  mistakes:{1:'B: reasoned “more polar bonds, so a more polar molecule”. The five P–Cl dipoles of PCl₅ cancel by symmetry.'} },
+{ sec:3, type:'single',
+  q:'How many of the following statements are correct?\n(a) BF₃ is the weakest Lewis acid among BF₃, BCl₃, BBr₃ and BI₃.\n(b) In the vapour phase AlCl₃ exists as Al₂Cl₆, and each Al atom is sp³ hybridised.\n(c) Anhydrous AlCl₃ can be prepared by strongly heating AlCl₃·6H₂O in air.\n(d) TlI₃ contains Tl³⁺ and three I⁻ ions.\n(e) BF₃ reacts with water to give H₃BO₃ and HBF₄.\n(f) B₂O₃ is acidic and Al₂O₃ is amphoteric, while Tl₂O is basic.',
+  opts:['3','4','5','6'], ans:[1],
+  why:'(a) T: back-donation is strongest in BF₃, so its Lewis acidity is the weakest. (b) T: two bridging Cl, four Cl around each Al, so sp³. (c) F: the hydrate hydrolyses on heating and leaves Al₂O₃. (d) F: Tl⁺ is the stable state (inert pair effect), so TlI₃ is Tl⁺ and I₃⁻. (e) T: 4BF₃ + 3H₂O → H₃BO₃ + 3HBF₄. (f) T: acidic character falls down the group. True: a, b, e, f = 4.',
+  mistakes:{0:'3: rejected (a) because F is the most electronegative, so BF₃ looks like the strongest acid (the reversed trend).',
+            2:'5: accepted (d), because TlI₃ looks like any MX₃ halide (the inert pair effect was not applied).',
+            3:'6: accepted both (c) and (d) and so passed every statement without finding the deciding fact.'} },
+{ sec:4, type:'multi',
+  q:'Which statements about homonuclear diatomic species are correct?',
+  opts:['B₂ and F₂ both have bond order 1, so their bond energies are nearly equal.','B₂ is paramagnetic and has bond order 1.','C₂ is diamagnetic and has bond order 2, with both bonding pairs in π orbitals.','N₂⁺ is paramagnetic and has a longer bond than N₂.'], ans:[1,2,3],
+  why:'Fill the valence electrons in the order σ2s, σ*2s, π2p, σ2p, π*2p, σ*2p (π below σ for B₂, C₂ and N₂). B₂ (6 e⁻): σ2s² σ*2s² π2p¹ π2p¹. Bond order = (4 − 2) ÷ 2 = 1 and there are two unpaired electrons, so B is true. C₂ (8 e⁻): σ2s² σ*2s² π2p⁴. Bond order = (6 − 2) ÷ 2 = 2, no unpaired electrons, and the two net bonds are both π bonds, so C is true. N₂⁺ (9 e⁻): N₂ loses one σ2p electron, so bond order falls from 3 to 2.5, the bond is longer, and one electron is unpaired. D is true. A is false: B₂ is about 289 kJ mol⁻¹ and F₂ about 159 kJ mol⁻¹, because lone pairs on the small F atoms repel. Correct set: B, C, D. Three options come from one table, so ticking two and stopping misses one.',
+  mistakes:{0:'A: assumed equal bond order gives equal bond energy. This is the same trap as CTA18 Q53 (B₂ against F₂).'} },
+{ sec:5, type:'single',
+  q:'Me₂SiCl₂ is hydrolysed with a small amount of Me₃SiCl as chain stopper, and the products condense to give the linear polymer Me₃Si–O–(Me₂SiO)<sub>n</sub>–SiMe₃ of molar mass 1050 g mol⁻¹. How many grams of HCl are released per mole of polymer? (C = 12, H = 1, Si = 28, O = 16, Cl = 35.5.)',
+  opts:['876','912.5','949','1022'], ans:[2],
+  why:'Me₃Si = 3 × 15 + 28 = 73. Me₂SiO = 2 × 15 + 28 + 16 = 74. Polymer = 2 × 73 + 16 (the O joining the left cap to the chain) + 74n = 162 + 74n. Setting this to 1050 gives 74n = 888, so n = 12. Every Cl leaves as HCl: 12 Me₂SiCl₂ give 24, and 2 Me₃SiCl give 2, so 26 HCl. Mass = 26 × 36.5 = 949 g.',
+  mistakes:{0:'876: counted only the 24 Cl of the chain units and forgot the Cl on the two chain stoppers.',
+            1:'912.5: counted the Cl of one chain stopper only (25 Cl).',
+            3:'1022: gave every Si two Cl, including the two end-cap Si (28 Cl).'} }
+];
+
+/* ---------- helpers ---------- */
+var LET = ['A','B','C','D'];
+function plain(html){ var d=document.createElement('div'); d.innerHTML=html.replace(/<\/?(div|br|li|p|ul|figure)[^>]*>/g,' '); return d.textContent.replace(/\s+/g,' ').trim(); }
+var SUP={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁻':'-','⁺':'+'};
+var SUB={'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9','₊':'+','₋':'-'};
+function ascii(s){
+  return s.replace(/([EG])°/g,function(m,c){return c+'0';})
+          .replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]+/g,function(r){return '^'+r.split('').map(function(c){return SUP[c];}).join('');})
+          .replace(/[₀-₉₊₋]+/g,function(r){return r.split('').map(function(c){return SUB[c];}).join('');})
+          .replace(/×/g,'x').replace(/→/g,'->').replace(/⇌/g,'<=>').replace(/√/g,'sqrt').replace(/≈/g,'~').replace(/−/g,'-')
+          .replace(/½/g,'1/2').replace(/Δ/g,'delta ').replace(/÷/g,'/').replace(/°/g,' deg').replace(/·/g,'*')
+          .replace(/μ/g,'mu').replace(/θ/g,'theta').replace(/σ/g,'sigma').replace(/π/g,'pi')
+          .replace(/①/g,'(1)').replace(/②/g,'(2)').replace(/③/g,'(3)').replace(/④/g,'(4)')
+          .replace(/[–—]/g,'-').replace(/[“”]/g,'"').replace(/[’‘]/g,"'");
+}
+var TUTOR = 'I am a JEE aspirant preparing for JEE Advanced. Act as a patient tutor: use simple language, reply in chunks of under 10 lines, explain why and not just how, and wait for my reply before moving on.';
+function askUrl(parts){
+  var ps = parts.map(function(p){ return ascii(p); });
+  function build(){ return 'https://claude.ai/new?q=' + encodeURIComponent(ps.join('\n\n')); }
+  var u = build(), guard = 0;
+  while(u.length > 3300 && guard++ < 200){
+    var li = 1; for(var i=2;i<ps.length;i++){ if(ps[i].length > ps[li].length) li = i; }
+    ps[li] = ps[li].slice(0, Math.max(40, Math.floor(ps[li].length*0.9))) + '...';
+    u = build();
+  }
+  return u;
+}
+function askLink(parts, label){
+  var a = document.createElement('a');
+  a.className='ask'; a.target='_blank'; a.rel='noopener'; a.textContent = label || 'Ask Claude about this ↗';
+  a.href = askUrl([TUTOR].concat(parts));
+  return a;
+}
+function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
+
+/* ---------- build sections ---------- */
+function buildSections(){
+  var root = document.getElementById('sections');
+  SECTIONS.forEach(function(s){
+    var sec = el('section','pattern'); sec.id = s.id;
+    var head = el('div','pattern-head');
+    head.appendChild(el('h2',null, s.n+' · '+s.title));
+    head.appendChild(el('span','chip '+s.chip, s.chipText));
+    sec.appendChild(head);
+    sec.appendChild(el('div','syl', s.syl));
+    var cb = el('div','came-back'+(s.cb.better?' better':''));
+    cb.innerHTML = '<span class="lbl">'+s.cb.label+'</span>'
+      +'<div class="sbs"><div><span class="h">'+s.cb.h1+'</span>'+s.cb.prev+'</div><div><span class="h">'+s.cb.h2+'</span>'+s.cb.now+'</div></div>'
+      +'<div>'+s.cb.verdict+'</div>';
+    sec.appendChild(cb);
+    sec.appendChild(el('p','why', '<strong>Why this matters.</strong> '+s.why));
+    var rule = el('div','rule');
+    rule.innerHTML = '<span class="rule-label">Shortcut rules</span><ul>'+s.rule.map(function(r){return '<li>'+r+'</li>';}).join('')+'</ul>';
+    sec.appendChild(rule);
+    if(s.extra){ var xt = el('div'); xt.innerHTML = s.extra; sec.appendChild(xt); }
+
+    var ex = s.ex, st = el('div','stepper'); st.id = 'st-'+s.id;
+    st.appendChild(el('span','stepper-label','Worked example · '+ex.src));
+    st.appendChild(el('p',null, ex.q.replace(/\n/g,'<br>')));
+    st.appendChild(el('p','yours','Your answer: <strong>'+ex.yours+'</strong>. Correct answer: <strong>'+ex.correct+'</strong>.'));
+    st.appendChild(el('p','rebuilt', ex.note));
+    if(ex.fig){ var f = el('div'); f.innerHTML = ex.fig; st.appendChild(f); }
+    ex.steps.forEach(function(sp,i){
+      var d = el('div','step'); d.innerHTML='<span class="tag">'+sp.tag+'</span>'+sp.html; if(i>0) d.hidden = true; st.appendChild(d);
+    });
+    var b = el('button','step-btn','Show next step →'); b.type='button'; b.onclick=function(){ stepNext(st); }; st.appendChild(b);
+    sec.appendChild(st);
+
+    var figText = '';
+    if(ex.fig === FIG_DIPOLE) figText = ' Diagram: NH3 and NF3 side by side as pyramids with one lone pair on N, seen from the side. In NH3 the N-H bond dipoles point up toward N, the same way as the lone pair, so they add (mu about 1.47 D). In NF3 the N-F bond dipoles point down toward F, against the lone pair, so they oppose (mu about 0.24 D).';
+    if(ex.fig === FIG_CHAIN) figText = ' Diagram: a chain R3Si - O - [R2Si - O] repeated 10 times - SiR3. The two end caps come from R3SiCl, the ten units from R2SiCl2. Si atoms 2 + 10 = 12, O atoms 1 + 10 = 11, Cl removed 2 x 1 + 10 x 2 = 22 atoms, 22 x 35.5 = 781.';
+    var secParts = ['Topic: '+s.title+' (JEE Advanced Chemistry). Pattern: '+s.pattern+'. This pattern is '+s.status+': '+plain(s.cb.verdict),
+                    'Why it matters: '+plain(s.why),
+                    'Shortcut rules: '+s.rule.map(plain).join(' | ')];
+    var exParts = ['Worked example ('+ex.src+'). Question: '+plain(ex.q.replace(/\n/g,' '))+figText,
+                   'My real answer was '+plain(ex.yours)+' and the correct answer is '+plain(ex.correct)+'. '+ex.diag,
+                   'Steps: '+ex.steps.map(function(sp){ var t=plain(sp.tag+': '+sp.html); return t.length>230? t.slice(0,227)+'...' : t; }).join(' || ')];
+    var row = el('div');
+    row.appendChild(askLink(secParts, 'Ask Claude about this section ↗')); row.appendChild(document.createTextNode(' '));
+    row.appendChild(askLink(exParts, 'Ask Claude about the worked example ↗'));
+    sec.appendChild(row);
+    root.appendChild(sec);
+  });
+}
+
+/* ---------- build practice ---------- */
+function buildGrid(){
+  var grid = document.getElementById('grid');
+  PROBS.forEach(function(p,idx){
+    var sec = SECTIONS[p.sec-1];
+    var card = el('div','card'); card.id='p'+(idx+1);
+    var head = el('div','card-head');
+    head.appendChild(el('span','qnum', String(idx+1)));
+    head.appendChild(el('span','chip '+(p.type==='multi'?'c2':'c3'), p.type==='multi'?'Multi-correct':'Single-correct'));
+    head.appendChild(el('span','chip c4','Level 4'));
+    head.appendChild(el('span','chip '+sec.chip, 'Section '+sec.n));
+    card.appendChild(head);
+    card.appendChild(el('p',null,p.q.replace(/\n/g,'<br>')));
+    if(p.type==='multi') card.appendChild(el('div','yours','Select all that apply.'));
+    var opts = el('div','opts'); var inputs=[];
+    p.opts.forEach(function(t,i){
+      var lab = el('label','opt');
+      var inp = document.createElement('input'); inp.type = p.type==='multi'?'checkbox':'radio'; inp.name='q'+idx; inp.id='q'+idx+'o'+i; inp.value=i;
+      lab.appendChild(inp); lab.appendChild(el('span','l',LET[i])); lab.appendChild(el('span','t',t));
+      opts.appendChild(lab); inputs.push(inp);
+    });
+    card.appendChild(opts);
+    var verdict = el('div'); verdict.hidden = true;
+    var actions = el('div');
+    var chk = null;
+    function grade(){
+      var sel=[]; inputs.forEach(function(i){ if(i.checked) sel.push(+i.value); });
+      if(!sel.length){ return; }
+      var ok = sel.length===p.ans.length && sel.every(function(x){ return p.ans.indexOf(x)>-1; });
+      inputs.forEach(function(inp,i){
+        var lab = inp.parentNode; lab.classList.remove('is-right','is-wrong','is-miss');
+        var isAns = p.ans.indexOf(i)>-1;
+        if(inp.checked && isAns) lab.classList.add('is-right');
+        else if(inp.checked && !isAns) lab.classList.add('is-wrong');
+        else if(!inp.checked && isAns) lab.classList.add('is-miss');
+      });
+      verdict.className = 'verdict '+(ok?'ok':'no'); verdict.hidden=false;
+      verdict.textContent = (ok?'Correct. ':'Not quite. ')+'Correct option'+(p.ans.length>1?'s':'')+': '+p.ans.map(function(i){return LET[i];}).join(', ')+'.';
+    }
+    if(p.type==='multi'){
+      chk = el('button','check-btn','Check answer'); chk.type='button'; chk.onclick=grade; actions.appendChild(chk);
+    } else {
+      inputs.forEach(function(i){ i.addEventListener('change', grade); });
+    }
+    var rev = el('button','reveal-btn','Show why'); rev.type='button'; actions.appendChild(rev);
+    card.appendChild(actions); card.appendChild(verdict);
+    var ans = el('div','answer'); ans.hidden = true;
+    var mk = Object.keys(p.mistakes).map(function(k){ return '<li>'+p.mistakes[k]+'</li>'; }).join('');
+    ans.innerHTML = '<div>'+p.why+'</div><ul>'+mk+'</ul>';
+    card.appendChild(ans);
+    rev.onclick = function(){ ans.hidden = !ans.hidden; rev.textContent = ans.hidden ? 'Show why' : 'Hide why'; };
+
+    var parts = ['Practice problem '+(idx+1)+' ('+(p.type==='multi'?'multi-correct: pick all correct options':'single-correct')+', level 4, topic: '+sec.title+').',
+                 'Problem: '+plain(p.q.replace(/\n/g,' ')),
+                 'Options: '+p.opts.map(function(t,i){return LET[i]+') '+plain(t);}).join('  '),
+                 'For your reference only, do not reveal unless I ask or have made a real attempt. Correct: '+p.ans.map(function(i){return LET[i];}).join(', ')+'. Reasoning: '+plain(p.why),
+                 'Ask me what I have tried first, then give me one hint at a time.'];
+    card.appendChild(askLink(parts));
+    grid.appendChild(card);
+  });
+}
+
+function stepNext(st){
+  var steps = st.querySelectorAll('.step'), shown = 0;
+  steps.forEach(function(s){ if(!s.hidden) shown++; });
+  if(shown < steps.length){ steps[shown].hidden = false; shown++; }
+  if(shown >= steps.length){ st.querySelector('.step-btn').hidden = true; }
+}
+function setMode(mode, btn){
+  document.querySelectorAll('.mode-btn').forEach(function(b){ b.setAttribute('aria-pressed', b===btn?'true':'false'); });
+  document.getElementById('timerBar').hidden = (mode!=='timed');
+}
+var remaining = 40*60, timerId = null;
+function renderTime(){ var m=String(Math.floor(remaining/60)).padStart(2,'0'), s=String(remaining%60).padStart(2,'0'); document.getElementById('timeDisplay').textContent=m+':'+s; }
+function startTimer(){ if(timerId) return; timerId=setInterval(function(){ remaining--; if(remaining<=0){ clearInterval(timerId); timerId=null; document.getElementById('timeDisplay').textContent="Time's up"; } else renderTime(); },1000); }
+function resetTimer(){ clearInterval(timerId); timerId=null; remaining=40*60; renderTime(); }
+
+buildSections(); buildGrid(); renderTime();
+</script>

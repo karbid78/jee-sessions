@@ -1,0 +1,556 @@
+<title>Chemistry Fix List 16 Oct</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one column. Hero, five recurring-pattern sections (came-back box, rule, worked example), then a 6-problem MCQ practice grid. Same teal chemistry system as the 6 Oct page. */
+  :root{
+    --bg:#F3F8F7;
+    --surface:#FFFFFF;
+    --surface-2:#E8F1EF;
+    --ink:#14262B;
+    --ink-soft:#4A6168;
+    --border:#D3E2DF;
+    --accent:#0F6E7A;
+    --accent-ink:#FFFFFF;
+    --accent-soft:#DDEFF0;
+    --highlight-ink:#53390A;
+    --highlight-bg:#FFF4D6;
+    --highlight-border:#EBCF86;
+    --good:#217A4B;
+    --good-bg:#E2F4EA;
+    --trap:#B24A38;
+    --trap-bg:#FBE9E5;
+    --chip-1:#0F6E7A; --chip-1-bg:#DDEFF0;
+    --chip-2:#7A4FB5; --chip-2-bg:#EEE7F8;
+    --chip-3:#217A4B; --chip-3-bg:#E2F4EA;
+    --chip-4:#A9631A; --chip-4-bg:#FBEBD9;
+    --chip-5:#B24A38; --chip-5-bg:#FBE9E5;
+    --chip-6:#3F5BA9; --chip-6-bg:#E4EAF8;
+    --atom-a:#0F6E7A; --atom-b:#C2841B;
+    --shadow: 0 1px 2px rgba(20,38,43,.05), 0 8px 24px -12px rgba(20,38,43,.2);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0D1A1D; --surface:#13252A; --surface-2:#1B3036; --ink:#E4F0EF; --ink-soft:#9FB7BC; --border:#27424A;
+      --accent:#5CC4D0; --accent-ink:#06191C; --accent-soft:#16363C;
+      --highlight-ink:#FBE8B8; --highlight-bg:#3A2E10; --highlight-border:#5C4A1B;
+      --good:#5FCB8E; --good-bg:#12301F; --trap:#E58E7E; --trap-bg:#3A1E19;
+      --chip-1:#5CC4D0; --chip-1-bg:#16363C; --chip-2:#C2A5EE; --chip-2-bg:#2A2140; --chip-3:#5FCB8E; --chip-3-bg:#12301F;
+      --chip-4:#E5A96B; --chip-4-bg:#3A2A14; --chip-5:#E58E7E; --chip-5-bg:#3A1E19; --chip-6:#8FA9E8; --chip-6-bg:#1B2642;
+      --atom-a:#5CC4D0; --atom-b:#E8B84B;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.55);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0D1A1D; --surface:#13252A; --surface-2:#1B3036; --ink:#E4F0EF; --ink-soft:#9FB7BC; --border:#27424A;
+    --accent:#5CC4D0; --accent-ink:#06191C; --accent-soft:#16363C;
+    --highlight-ink:#FBE8B8; --highlight-bg:#3A2E10; --highlight-border:#5C4A1B;
+    --good:#5FCB8E; --good-bg:#12301F; --trap:#E58E7E; --trap-bg:#3A1E19;
+    --chip-1:#5CC4D0; --chip-1-bg:#16363C; --chip-2:#C2A5EE; --chip-2-bg:#2A2140; --chip-3:#5FCB8E; --chip-3-bg:#12301F;
+    --chip-4:#E5A96B; --chip-4-bg:#3A2A14; --chip-5:#E58E7E; --chip-5-bg:#3A1E19; --chip-6:#8FA9E8; --chip-6-bg:#1B2642;
+    --atom-a:#5CC4D0; --atom-b:#E8B84B;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.55);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body{
+    background: var(--bg); color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    padding-left: max(18px, env(safe-area-inset-left, 0px));
+    padding-right: max(18px, env(safe-area-inset-right, 0px));
+    padding-block: 28px 64px; line-height: 1.55; font-size: 16px;
+  }
+  .wrap{ max-width: 780px; margin: 0 auto; }
+  h1,h2,h3{ font-family: "Fraunces", Georgia, serif; font-weight: 600; text-wrap: balance; margin: 0; }
+  a{ color: var(--accent); }
+  .eyebrow{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); font-weight:600; }
+  .m{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.93em; }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  .hero{ padding-block: 6px 22px; }
+  .hero h1{ font-size: clamp(1.7rem, 5vw, 2.3rem); margin-top:10px; }
+  .hero p{ color:var(--ink-soft); max-width:62ch; }
+  .hero-note{ margin-top:14px; padding:13px 15px; border-radius:12px; background:var(--accent-soft); border:1px solid var(--border); font-size:.92rem; }
+  .meta{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .pill{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; padding:4px 10px; border-radius:999px; background:var(--surface-2); border:1px solid var(--border); color:var(--ink-soft); }
+  .pill b{ color:var(--ink); }
+
+  .pattern{ background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:22px 20px 24px; margin-block:18px; box-shadow:var(--shadow); min-width:0; }
+  .pattern-head{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:6px; }
+  .pattern-head h2{ font-size:1.25rem; }
+  .chip{ font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.05em; text-transform:uppercase; padding:3px 9px; border-radius:999px; font-weight:600; white-space:nowrap; }
+  .c1{ color:var(--chip-1); background:var(--chip-1-bg); } .c2{ color:var(--chip-2); background:var(--chip-2-bg); }
+  .c3{ color:var(--chip-3); background:var(--chip-3-bg); } .c4{ color:var(--chip-4); background:var(--chip-4-bg); }
+  .c5{ color:var(--chip-5); background:var(--chip-5-bg); } .c6{ color:var(--chip-6); background:var(--chip-6-bg); }
+  .pattern p{ margin:10px 0; }
+  .why{ color:var(--ink-soft); font-size:.95rem; }
+  .syl{ font-family:"IBM Plex Mono",monospace; font-size:.74rem; color:var(--ink-soft); }
+
+  .came-back{ margin:12px 0; padding:12px 14px; border-radius:10px; border:1px solid var(--border); background:var(--surface-2); font-size:.92rem; }
+  .came-back .lbl{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; color:var(--trap); display:block; margin-bottom:6px; }
+  .sbs{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin:8px 0; }
+  .sbs > div{ background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:9px 11px; min-width:0; }
+  .sbs .h{ font-weight:600; font-size:.78rem; color:var(--ink-soft); display:block; margin-bottom:3px; }
+
+  .rule{ margin-top:14px; padding:14px 16px; border-radius:10px; background:var(--highlight-bg); border:1px solid var(--highlight-border); color:var(--highlight-ink); }
+  .rule-label{ font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; margin-bottom:6px; display:block; }
+  .rule ul{ margin:6px 0 0; padding-left:20px; } .rule li{ margin:4px 0; }
+
+  .stepper{ margin-top:16px; border-top:1px dashed var(--border); padding-top:14px; }
+  .stepper-label{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:8px; display:block; }
+  .step{ padding:10px 0; border-bottom:1px solid var(--border); }
+  .step:last-of-type{ border-bottom:none; }
+  .step .tag{ font-weight:600; font-size:.82rem; color:var(--accent); display:block; margin-bottom:4px; }
+  .step-btn{ margin-top:10px; font:inherit; font-weight:600; font-size:.88rem; background:var(--accent); color:var(--accent-ink); border:none; border-radius:8px; padding:9px 14px; cursor:pointer; }
+  .final{ background:var(--good-bg); color:var(--good); border-radius:8px; padding:10px 12px; font-weight:700; margin-top:8px; }
+  .trap-note{ background:var(--trap-bg); color:var(--trap); border-radius:8px; padding:10px 12px; font-size:.9rem; margin-top:10px; }
+  .yours{ font-size:.9rem; color:var(--ink-soft); }
+  .rebuilt{ font-size:.82rem; color:var(--ink-soft); font-style:italic; }
+  figure{ margin:14px 0 4px; }
+  figure svg{ width:100%; max-width:480px; height:auto; display:block; color:var(--ink); }
+  figcaption{ font-size:.82rem; color:var(--ink-soft); margin-top:4px; }
+  .figwrap{ overflow-x:auto; }
+
+  .ask{ display:inline-block; margin-top:10px; font-size:.82rem; font-weight:600; color:var(--accent); text-decoration:none; border:1px solid var(--border); border-radius:999px; padding:5px 11px; background:var(--surface); }
+  .ask:hover{ background:var(--accent-soft); }
+
+  .practice-head{ padding-block:10px 4px; }
+  .mode-row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:14px 0 8px; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px 16px; box-shadow:var(--shadow); }
+  .mode-btn{ font:inherit; font-weight:600; font-size:.9rem; padding:8px 14px; border-radius:999px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); cursor:pointer; }
+  .mode-btn[aria-pressed="true"]{ background:var(--accent); color:var(--accent-ink); border-color:var(--accent); }
+  .timer-bar{ display:flex; align-items:center; gap:12px; margin-left:auto; flex-wrap:wrap; }
+  .time{ font-family:"IBM Plex Mono",monospace; font-size:1.3rem; font-variant-numeric:tabular-nums; min-width:64px; }
+  .timer-btn{ font:inherit; font-size:.85rem; font-weight:600; border-radius:8px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); padding:7px 12px; cursor:pointer; }
+  .mode-help{ font-size:.85rem; color:var(--ink-soft); margin:6px 2px 0; }
+
+  .grid{ display:grid; grid-template-columns:1fr; gap:14px; margin-top:16px; }
+  .card{ background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:16px 16px 14px; box-shadow:var(--shadow); min-width:0; }
+  .card-head{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+  .qnum{ font-family:"Fraunces",serif; font-weight:700; font-size:1.05rem; color:var(--accent); }
+  .opts{ display:grid; gap:7px; margin:10px 0 4px; }
+  .opt{ display:flex; gap:10px; align-items:flex-start; padding:9px 11px; border:1px solid var(--border); border-radius:10px; background:var(--surface-2); cursor:pointer; min-width:0; }
+  .opt input{ margin-top:5px; flex:none; accent-color:var(--accent); }
+  .opt .l{ font-family:"IBM Plex Mono",monospace; font-weight:600; color:var(--accent); flex:none; }
+  .opt .t{ min-width:0; overflow-wrap:anywhere; }
+  .opt.is-right{ border-color:var(--good); background:var(--good-bg); }
+  .opt.is-miss{ border-color:var(--good); border-style:dashed; background:var(--good-bg); }
+  .opt.is-wrong{ border-color:var(--trap); background:var(--trap-bg); }
+  .check-btn, .reveal-btn{ font:inherit; font-weight:600; font-size:.85rem; border-radius:8px; padding:7px 12px; cursor:pointer; margin-top:10px; margin-right:8px; }
+  .check-btn{ background:var(--accent); color:var(--accent-ink); border:none; }
+  .reveal-btn{ background:none; border:1.4px solid var(--accent); color:var(--accent); }
+  .verdict{ margin-top:10px; padding:9px 12px; border-radius:8px; font-weight:700; font-size:.92rem; }
+  .verdict.ok{ background:var(--good-bg); color:var(--good); }
+  .verdict.no{ background:var(--trap-bg); color:var(--trap); }
+  .answer{ margin-top:10px; padding:10px 12px; background:var(--surface-2); border-radius:8px; font-size:.9rem; }
+  .answer ul{ margin:6px 0 0; padding-left:18px; } .answer li{ margin:3px 0; }
+  footer{ margin-top:26px; color:var(--ink-soft); font-size:.88rem; text-align:center; }
+</style>
+
+<div class="wrap">
+  <section class="hero">
+    <span class="eyebrow">Chemistry · Focus Session · 16 Oct 2026</span>
+    <h1>Physical chemistry: ionic equilibrium, titration n-factor, electrochemistry, Le Chatelier</h1>
+    <p>Built from WTA20 and CTA20. All five patterns were already on your tracker as recurring. Each section opens with the old mistake and the new one side by side, then gives the rule and one worked example. Six practice problems follow.</p>
+    <div class="meta">
+      <span class="pill">Level used: <b>L4</b> (multi-concept, a trap in each)</span>
+      <span class="pill">Format: <b>MCQ A–D</b>, 4 single + 2 multi-correct</span>
+      <span class="pill">Sources: <b>CTA20 (Sun) · WTA20 (Sat)</b></span>
+    </div>
+    <div class="hero-note">
+      <strong>How to use this:</strong> read a section, click through its worked example, then do the matching practice problem. Multi-correct problems are right only if you pick every correct option and nothing else. <strong>Ask Claude</strong> links open a new claude.ai chat with that item preloaded. You need to be signed in to claude.ai.
+    </div>
+    <div class="hero-note" style="margin-top:10px">
+      <strong>About the worked examples:</strong> the portal does not save question text, so all five stems are rebuilt from your tracker notes. The structure, your marked options and the keys for Q43 (6.9) and Q44 (0.1) are real. The other numbers are mine. WTA20 Q47 and Q49 could not be rebuilt at all.
+    </div>
+  </section>
+
+  <div id="sections"></div>
+
+  <section class="practice-head">
+    <span class="eyebrow">Practice Set</span>
+    <h2 style="margin-top:8px; font-size:1.4rem;">6 fresh problems, level 4</h2>
+    <p style="color:var(--ink-soft)">One on buffers, one on n-factor titration, one on the cell, one on Le Chatelier, one multi-correct, and one mixed problem that needs buffers and n-factor together.</p>
+  </section>
+
+  <div class="mode-row">
+    <button class="mode-btn" aria-pressed="true" onclick="setMode('practice', this)">Practice (untimed)</button>
+    <button class="mode-btn" aria-pressed="false" onclick="setMode('timed', this)">Timed · 40 min</button>
+    <div class="timer-bar" id="timerBar" hidden>
+      <span class="time" id="timeDisplay">40:00</span>
+      <button class="timer-btn" onclick="startTimer()">Start</button>
+      <button class="timer-btn" onclick="resetTimer()">Reset</button>
+    </div>
+  </div>
+  <p class="mode-help">First pass: stay in Practice mode. Save Timed mode for a second pass.</p>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>Built from WTA20 (Sat 10 Oct) and CTA20 (Sun 11 Oct), weighted to Sunday · Chemistry only. Other CTA20 and WTA20 chemistry misses (thermodynamics, group 13/14, bonding) are not on this page.</footer>
+</div>
+
+<script>
+/* ---------- diagrams (inline SVG, theme tokens) ---------- */
+var FIG_STAGES =
+'<figure><div class="figwrap"><svg viewBox="0 0 440 120" role="img" aria-label="Na2CO3 titration stages: CO3 2- takes one H+ to become HCO3-, then a second H+ to become H2CO3. Phenolphthalein stops after the first, n = 1. Methyl orange stops after both, n = 2.">'
++'<g fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"><rect x="10" y="18" width="100" height="38" rx="8"/><rect x="170" y="18" width="100" height="38" rx="8"/><rect x="330" y="18" width="100" height="38" rx="8"/></g>'
++'<g font-size="14" font-weight="600" text-anchor="middle" fill="currentColor"><text x="60" y="42">CO₃²⁻</text><text x="220" y="42">HCO₃⁻</text><text x="380" y="42">H₂CO₃</text></g>'
++'<g stroke="currentColor" stroke-width="1.8" fill="currentColor"><line x1="112" y1="37" x2="160" y2="37"/><polygon points="168,37 158,32 158,42" stroke="none"/><line x1="272" y1="37" x2="320" y2="37"/><polygon points="328,37 318,32 318,42" stroke="none"/></g>'
++'<g font-size="11" text-anchor="middle" fill="currentColor"><text x="140" y="30">+ H⁺</text><text x="300" y="30">+ H⁺</text></g>'
++'<g stroke="var(--atom-b)" stroke-width="2" fill="none"><path d="M10 72 V78 H220 V72"/><path d="M10 96 V102 H430 V96"/></g>'
++'<g font-size="11" text-anchor="middle" fill="currentColor"><text x="115" y="92">phenolphthalein stops here: n = 1</text><text x="220" y="116">methyl orange stops here: n = 2</text></g>'
++'</svg></div><figcaption>Each CO₃²⁻ can take two H⁺. The indicator decides how many it takes before the colour changes, and that count is the n-factor.</figcaption></figure>';
+
+var FIG_CELL =
+'<figure><div class="figwrap"><svg viewBox="0 0 480 218" role="img" aria-label="Cell Ag, AgCl, KCl 0.10 M, salt bridge, KBr 0.010 M, AgBr, Ag. Left half-cell is the anode, right half-cell is the cathode.">'
++'<path d="M200 22 H77 V56" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M280 22 H403 V56" stroke="currentColor" stroke-width="1.6" fill="none"/><line x1="200" y1="22" x2="280" y2="22" stroke="currentColor" stroke-width="1.6"/>'
++'<polygon points="262,22 252,17 252,27" fill="currentColor"/><text x="240" y="14" font-size="11" text-anchor="middle" fill="currentColor">electrons, as written</text>'
++'<rect x="31" y="100" width="158" height="68" fill="var(--accent-soft)"/><rect x="291" y="100" width="158" height="68" fill="var(--accent-soft)"/>'
++'<path d="M30 70 V170 H190 V70" fill="none" stroke="currentColor" stroke-width="2"/><path d="M290 70 V170 H450 V70" fill="none" stroke="currentColor" stroke-width="2"/>'
++'<path d="M170 112 V70 H310 V112" fill="none" stroke="var(--atom-b)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><text x="240" y="62" font-size="11" text-anchor="middle" fill="currentColor">salt bridge</text>'
++'<rect x="72" y="56" width="10" height="100" fill="var(--surface-2)" stroke="currentColor" stroke-width="1.5"/><rect x="398" y="56" width="10" height="100" fill="var(--surface-2)" stroke="currentColor" stroke-width="1.5"/>'
++'<g font-size="11" fill="currentColor"><text x="92" y="128">Ag coated</text><text x="92" y="142">with AgCl(s)</text><text x="358" y="128" text-anchor="end">Ag coated</text><text x="358" y="142" text-anchor="end">with AgBr(s)</text></g>'
++'<g font-size="12" font-weight="600" fill="currentColor"><text x="40" y="160">KCl 0.10 M</text><text x="440" y="160" text-anchor="end">KBr 0.010 M</text></g>'
++'<g font-size="11" fill="currentColor"><text x="10" y="192">Anode (left, oxidation)</text><text x="10" y="207">Ag + Cl⁻ → AgCl + e⁻</text><text x="470" y="192" text-anchor="end">Cathode (right, reduction)</text><text x="470" y="207" text-anchor="end">AgBr + e⁻ → Ag + Br⁻</text></g>'
++'</svg></div><figcaption>The notation puts the first electrode on the left as the anode. A negative E means the cell as written does not run by itself.</figcaption></figure>';
+
+/* ---------- content ---------- */
+var SECTIONS = [
+{ id:'s1', n:1, title:'Buffers made by neutralisation', chip:'c1', chipText:'Recurring · Weak',
+  pattern:'ionic-equilibrium-buffers-hydrolysis-ksp-lists',
+  syl:'Syllabus: Chemical and Ionic Equilibrium (buffer solutions, pH, acids and bases)',
+  cameBack:{
+    prev:'CTA16 Q45 and CTA17 Q53, Q54 were skipped. CTA18 Q49 was partial: you found the right M and A⁻, but missed the options that follow from the same Kh. CTA19 Q51 was wrong (working not saved).',
+    now:'CTA20 Q43 (phosphate mixture): you answered <strong>8</strong>, the key is <strong>6.9</strong>. This time you attempted it.',
+    verdict:'<strong>A different error in the same chapter, so this is partial progress.</strong> Earlier tests lost this chapter by skipping or by stopping halfway. Here you reached a number, but the wrong one. Your working for 8 is not saved, so I cannot say where it broke. Step 5 below is the check that would have caught it: with more acid form than base form, the pH has to sit below pKa₂ = 7.20, and 8 is above it.'},
+  why:'A beaker with an acid, its salts and a strong base is not a buffer yet. The strong base reacts first and completely, and only what is left sets the pH. Miss that, and every later step is wrong even if your Henderson–Hasselbalch line is perfect.',
+  rule:[
+    'The strong base reacts first, with the strongest acid present: H₃PO₄ + OH⁻ → H₂PO₄⁻, then H₂PO₄⁻ + OH⁻ → HPO₄²⁻. Do it as a mole table, not in your head.',
+    'Pick the pKa that matches the two species left: H₂PO₄⁻/HPO₄²⁻ uses pKa₂, HPO₄²⁻/PO₄³⁻ uses pKa₃.',
+    'pH = pKa + log(moles of base form ÷ moles of acid form). Volume cancels, so use moles.',
+    'Direction check before you answer: more acid form than base form means pH below pKa. More base form means above. Equal means pH = pKa.'],
+  ex:{ src:'CTA20 Q43, rebuilt',
+    q:'A solution contains 0.01 mol each of H₃PO₄, KH₂PO₄, K₂HPO₄ and KOH in water. Given pKa₂ of H₃PO₄ = 7.20 and log 2 = 0.30, find the pH.',
+    yours:'8', correct:'6.9',
+    note:'Stem rebuilt from the tracker note (0.02 mol H₂PO₄⁻ : 0.01 mol HPO₄²⁻, pH = 7.20 − 0.30). Your working is not saved.',
+    diag:'My working for 8 is not saved.',
+    steps:[
+      {tag:'Step 1: list what is in the beaker', html:'H₃PO₄ 0.01 mol, KH₂PO₄ 0.01 mol, K₂HPO₄ 0.01 mol, KOH 0.01 mol. KOH is the only strong base, so it reacts first.'},
+      {tag:'Step 2: KOH meets the strongest acid', html:'H₃PO₄ + KOH → KH₂PO₄ + H₂O. Both are 0.01 mol, so both are used up and 0.01 mol more H₂PO₄⁻ forms.'},
+      {tag:'Step 3: the new mole table', html:'H₂PO₄⁻ = 0.01 + 0.01 = 0.02 mol. HPO₄²⁻ = 0.01 mol. H₃PO₄ = 0 and KOH = 0. It is now a clean H₂PO₄⁻/HPO₄²⁻ buffer, so pKa₂ applies.'},
+      {tag:'Step 4: Henderson–Hasselbalch', html:'pH = 7.20 + log(0.01 ÷ 0.02) = 7.20 + log 0.5 = 7.20 − 0.30 = 6.90.'},
+      {tag:'Step 5: direction check', html:'The acid form (0.02) is double the base form (0.01), so the pH must be below 7.20. 6.9 passes. An answer of 8 would need more HPO₄²⁻ than H₂PO₄⁻.<div class="final">Answer: 6.9</div><div class="trap-note">The trap: reading the printed amounts as a 1 : 1 mixture of the two salts, or forgetting the KOH. The KOH is spent on H₃PO₄ first, and that changes the ratio.</div>'}
+    ]}
+},
+{ id:'s2', n:2, title:'n-factor: count what changes, then answer the question asked', chip:'c4', chipText:'Recurring · Weak',
+  pattern:'stoichiometry-n-factor-basis-and-last-step',
+  syl:'Syllabus: Mole concept (redox and neutralisation titrations, normality)',
+  cameBack:{
+    prev:'CTA16: H₂SO₄ treated as monobasic, S not found as the limiting reagent. CTA17 Q45: stopped at (n₁/n₂)² without ×28 (answered 7, key 200). CTA18 Q51: gave the mole % instead of the mass % (marked 50, key 60).',
+    now:'WTA20 Q47 (thiosulfate titration, then mass of Fe: 3.75 vs 18.66) and Q49 (CaC₂ hydrolysis: 24.7 vs 90). CTA20 Q44 (Na₂CO₃ to methyl orange: <strong>2</strong> vs <strong>0.1</strong>).',
+    verdict:'<strong>The same error family, repeating.</strong> The setup is right and the n-factor, basis or last step is wrong. It has cost you marks in five of the last seven tests (CTA16, CTA17, CTA18, WTA20, CTA20). Telling you to “check the n-factor” has not worked, so the fix here is different: write the unit of the answer first, then count the n-factor from what actually changes. The stems of WTA20 Q47 and Q49 are not saved, so the example is Q44.'},
+  why:'Titration questions are short chains: moles of A, then equivalents, then moles of B, then the quantity asked. The marks go at the two ends: a wrong n-factor at the start, or stopping one step before the thing the question asked for.',
+  rule:[
+    'Write the target first: “molarity of HCl”, “mass of Fe”, “mL of KMnO₄”. Your last line must be in that unit and that species.',
+    'n-factor = what one formula unit changes: electrons gained or lost in redox, H⁺ or OH⁻ taken or given in acid–base. Na₂CO₃ to phenolphthalein: 1. To methyl orange: 2. H₂SO₄ as an acid: 2.',
+    'At the end point the milliequivalents match: M₁V₁n₁ = M₂V₂n₂. Use it whenever both n-factors are known.',
+    'At every link of a chain, count atoms of the element you are tracking. Fe₂O₃ holds 2 Fe. I₂ reacts with S₂O₃²⁻ in the ratio 1 : 2.'],
+  ex:{ src:'CTA20 Q44, rebuilt',
+    q:'5.0 mL of 0.10 M Na₂CO₃ is titrated with HCl using methyl orange as the indicator. The end point needs 10.0 mL of HCl. Find the molarity of the HCl.',
+    yours:'2', correct:'0.1 M',
+    note:'Stem rebuilt from the tracker note (5 × 0.1 × 2 mmol in 10 mL). Your working is not saved.',
+    diag:'My working for 2 is not saved.',
+    fig:FIG_STAGES,
+    steps:[
+      {tag:'Step 1: write the target', html:'Asked: molarity of HCl in mol/L. The last line must be mmol of HCl ÷ mL of HCl.'},
+      {tag:'Step 2: what does methyl orange tell you?', html:'Methyl orange changes colour near pH 4, after both stages: CO₃²⁻ → HCO₃⁻ → H₂CO₃. Each CO₃²⁻ takes two H⁺, so the n-factor of Na₂CO₃ is 2. (Phenolphthalein would stop after the first stage, n = 1.)'},
+      {tag:'Step 3: equivalents of the base', html:'Na₂CO₃ = 5.0 mL × 0.10 M = 0.50 mmol. Milliequivalents = 0.50 × 2 = 1.0 meq.'},
+      {tag:'Step 4: equivalents match at the end point', html:'HCl has n = 1, so 1.0 meq of Na₂CO₃ needs 1.0 mmol of HCl.'},
+      {tag:'Step 5: the last step, divide by the HCl volume', html:'Molarity of HCl = 1.0 mmol ÷ 10.0 mL = 0.10 M.<div class="final">Answer: 0.1 M</div><div class="trap-note">The trap: dropping the n-factor gives 0.05 M, and stopping at 1.0 (the mmol) skips the division. Compare your own working for 2 with these five lines and find the line where it differs.</div>'}
+    ]}
+},
+{ id:'s3', n:3, title:'Cells with sparingly soluble salts: Ksp inside a Nernst line', chip:'c6', chipText:'Recurring · Weak',
+  pattern:'electrochemistry-nernst-ksp-coupling-and-electron-count',
+  syl:'Syllabus: Electrochemistry (cell reactions, Nernst equation, electrochemical work) and Solubility product',
+  cameBack:{
+    prev:'Four wrong answers, then skips. CTA16 Q43, Q46 and CTA17 Q47, Q49 were wrong (CTA17 Q47: the answer was Kf√Ksp = 60, you got 2.66). CTA18 Q43 and Q45 were skipped, Q45 after 31 seconds.',
+    now:'CTA20 Q41 (cell Ag|AgCl||AgBr|Ag, asking E, E°, ΔG, ΔG°): <strong>skipped</strong>, not visited.',
+    verdict:'<strong>Not the same error as CTA16 and CTA17, but the same one as CTA18.</strong> When you attempted these you lost the coupling step. When you skipped them, they were solvable in a few lines. Q41 was never opened, so the fix is to start the routine below before judging the question by how it looks.'},
+  why:'These look like three topics at once: a cell, a Ksp and a sign. The routine is the same every time: get [Ag⁺] or the cell reaction from Ksp, then use one Nernst line. Ksp is only a way to get a concentration.',
+  rule:[
+    'Write the cell reaction and count n first. The Nernst term is (0.06/n) log Q, and ΔG = −nFE uses the same n.',
+    'For an Ag|AgX electrode, [Ag⁺] = Ksp ÷ [X⁻]. Then E(electrode) = E°(Ag⁺/Ag) + 0.06 log [Ag⁺] at 298 K.',
+    'E°cell = (0.06/n) log K, where K is the equilibrium constant of the cell reaction. For AgBr + Cl⁻ → AgCl + Br⁻, K = Ksp(AgBr) ÷ Ksp(AgCl).',
+    'Sign check: E < 0 means the reaction as written is not spontaneous (ΔG > 0). The reverse reaction runs.'],
+  ex:{ src:'CTA20 Q41, rebuilt',
+    q:'Cell at 298 K: Ag(s) | AgCl(s) | KCl(0.10 M) || KBr(0.010 M) | AgBr(s) | Ag(s). Ksp(AgCl) = 1.0 × 10⁻¹⁰, Ksp(AgBr) = 1.0 × 10⁻¹³, 2.303RT/F = 0.06 V, F = 96500 C mol⁻¹. Which statements about the cell reaction as written are correct?\n(A) E°cell = −0.18 V\n(B) Ecell = −0.12 V\n(C) ΔG° = +17.4 kJ mol⁻¹\n(D) ΔG = −11.6 kJ mol⁻¹',
+    yours:'skipped', correct:'A, B, C',
+    note:'Stem and numbers rebuilt from the tracker note (cell Ag|AgCl||AgBr|Ag asking E, E°, ΔG, ΔG°). You skipped it, so there is no answer of yours to compare.',
+    diag:'I skipped it in the test.',
+    fig:FIG_CELL,
+    steps:[
+      {tag:'Step 1: cell reaction and n', html:'Left (anode): Ag + Cl⁻ → AgCl + e⁻. Right (cathode): AgBr + e⁻ → Ag + Br⁻. Net: AgBr + Cl⁻ → AgCl + Br⁻, so n = 1.'},
+      {tag:'Step 2: E° from the two Ksp values', html:'K = Ksp(AgBr) ÷ Ksp(AgCl) = 10⁻¹³ ÷ 10⁻¹⁰ = 10⁻³. E° = 0.06 × log 10⁻³ = −0.18 V. A is true.'},
+      {tag:'Step 3: Q and E', html:'Q = [Br⁻] ÷ [Cl⁻] = 0.010 ÷ 0.10 = 0.1. E = E° − 0.06 log Q = −0.18 − 0.06 × (−1) = −0.12 V. B is true.'},
+      {tag:'Step 4: cross-check through the two electrodes', html:'[Ag⁺] on the left = 10⁻¹⁰ ÷ 0.10 = 10⁻⁹. [Ag⁺] on the right = 10⁻¹³ ÷ 0.010 = 10⁻¹¹. E = 0.06 log (10⁻¹¹ ÷ 10⁻⁹) = 0.06 × (−2) = −0.12 V. Same answer by a different route.'},
+      {tag:'Step 5: ΔG and ΔG°', html:'ΔG° = −nFE° = −1 × 96500 × (−0.18) = +17.4 kJ mol⁻¹, so C is true. ΔG = −96500 × (−0.12) = +11.6 kJ mol⁻¹, so D has the wrong sign.<div class="final">Answer: A, B, C</div><div class="trap-note">The trap: D. E is negative, so ΔG is positive. Writing the minus of −nFE and forgetting E’s own minus gives the wrong sign.</div>'}
+    ]}
+},
+{ id:'s4', n:4, title:'Le Chatelier colour changes: one equilibrium, four options', chip:'c5', chipText:'Recurring · Weak',
+  pattern:'chem-skips-on-derivable-questions',
+  syl:'Syllabus: Chemical and Ionic Equilibrium (Le Chatelier’s principle: concentration, temperature, pressure)',
+  cameBack:{
+    prev:'Chemistry skips in every test: CTA16 had 4, CTA17 had 3, CTA18 had 3 (Q43 after 6 min 06 s, Q45 after 31 s) and CTA19 had 4. Each was solved here in under ten lines.',
+    now:'CTA20 Q39 (Le Chatelier colour changes, multi-correct): <strong>skipped</strong>, not visited. It was the only chemistry skip in CTA20.',
+    verdict:'<strong>The same habit, but smaller:</strong> 4 skips in CTA19 down to 1. That is partial progress. One difference: in CTA18 you opened the questions and left them, but Q39 was never opened, so the skip happened before reading it.'},
+  why:'Colour-change questions look like memory tests, but nothing needs to be remembered. The stem gives you the equilibrium, the colours and the sign of ΔH. Everything else is one rule applied four times.',
+  rule:[
+    'Rewrite the equilibrium with the colour under each species and ΔH beside it. Each option is now a stress on this one line.',
+    'Add a species: the shift is away from it. Remove a species (precipitate, complex, neutralise): the shift is toward it. Heat: toward the endothermic direction. Cool: the opposite.',
+    'Dilution with water favours the side with more dissolved particles. Count the species on each side of Q. A catalyst changes nothing.',
+    'The colour you see is the colour of the side that grew.'],
+  ex:{ src:'CTA20 Q39, rebuilt',
+    q:'In the equilibrium [Co(H₂O)₆]²⁺ (pink) + 4Cl⁻ ⇌ [CoCl₄]²⁻ (blue) + 6H₂O, ΔH is positive for the forward reaction. Which observations are correct?\n(A) Adding conc. HCl turns the solution bluer.\n(B) Adding water turns it pinker.\n(C) Heating turns it pinker.\n(D) Cooling turns it bluer.',
+    yours:'skipped', correct:'A, B',
+    note:'Stem rebuilt from the tracker note (Le Chatelier colour changes, multi-correct). You skipped it, so there is no answer of yours to compare.',
+    diag:'I skipped it in the test.',
+    steps:[
+      {tag:'Step 1: one line with colours and ΔH', html:'[Co(H₂O)₆]²⁺ (pink) + 4Cl⁻ ⇌ [CoCl₄]²⁻ (blue) + 6H₂O. The forward reaction is endothermic.'},
+      {tag:'Step 2: option A, add Cl⁻', html:'Cl⁻ is on the left, so the equilibrium shifts right. More blue. A is true.'},
+      {tag:'Step 3: option B, add water', html:'Water is on the right, and dilution also thins out the four Cl⁻ on the left. Both push the shift left. More pink. B is true.'},
+      {tag:'Step 4: options C and D, temperature', html:'The forward reaction is endothermic, so heating shifts right (bluer) and cooling shifts left (pinker). C says heating gives pink: false. D says cooling gives blue: false.<div class="final">Answer: A, B</div><div class="trap-note">The trap: skipping because four options look like four problems. It was one equation and one rule, in four short lines.</div>'}
+    ]}
+},
+{ id:'s5', n:5, title:'Multi-correct: solve once, then tick everything that follows', chip:'c2', chipText:'Recurring · Weak',
+  pattern:'chem-multi-correct-incomplete',
+  syl:'Syllabus: Mole concept (stoichiometry, limiting reagent, gas volumes). The method applies to every multi-correct question.',
+  cameBack:{
+    prev:'CTA18 Q49: M = 122 and A⁻ = 99 were right, but pH ≈ 4 and Kb = 10⁻⁸ follow from the same Kh = 10⁻⁸. All four were correct and you marked 2. Recorded in six of the last seven tests, and the missed option was usually a direct consequence of one already ticked.',
+    now:'CTA20 Q40 (Al with H₂SO₄): you ticked A and B and missed <strong>C</strong>. By hand, A, B and C are all true.',
+    verdict:'<strong>The exact same error is repeating:</strong> the missed option came straight from numbers you already had. So “check every option” will not help, since you already know it. The new method is below: build a table of every quantity first, then read the options off it.'},
+  why:'In a multi-correct question one calculation usually feeds several options. Once you know the limiting reagent and the moles that reacted, the gas volume and the leftover reagent are one line each. Ticking only the first two means the third was in your hands and went unchecked.',
+  rule:[
+    'Do the stoichiometry once, in a table: moles available, moles that react, moles left, moles of product.',
+    'Only then read the options. Check each against the table, never against your memory of the question.',
+    'An option the table cannot settle is the only one that needs fresh work.',
+    'Before you submit, count the options the table settled. If you ticked fewer than the table supports, find the ones you skipped.'],
+  ex:{ src:'CTA20 Q40, rebuilt',
+    q:'2.7 g of Al is added to 200 mL of 1.0 M H₂SO₄ (Al = 27, H₂SO₄ = 98, molar volume 22.4 L at 273 K and 1 atm). Which statements are correct?\n(A) Al is the limiting reagent.\n(B) 3.36 L of H₂ is evolved at 273 K and 1 atm.\n(C) 0.05 mol of H₂SO₄ is left unreacted.\n(D) 4.48 L of H₂ is evolved at 273 K and 1 atm.',
+    yours:'A, B', correct:'A, B, C',
+    note:'Stem rebuilt from the tracker note (limiting reagent, H₂ volume, leftover acid; you marked A and B and missed C). The numbers are mine.',
+    diag:'I ticked A and B and missed C.',
+    steps:[
+      {tag:'Step 1: the table', html:'2Al + 3H₂SO₄ → Al₂(SO₄)₃ + 3H₂. Al = 2.7 ÷ 27 = 0.10 mol. H₂SO₄ = 0.200 L × 1.0 M = 0.20 mol.'},
+      {tag:'Step 2: limiting reagent', html:'0.10 mol Al needs 0.10 × 3/2 = 0.15 mol H₂SO₄. There is 0.20 mol, so Al is limiting. A is true.'},
+      {tag:'Step 3: product, from the limiting reagent', html:'H₂ = 0.10 × 3/2 = 0.15 mol, and 0.15 × 22.4 = 3.36 L. B is true. D (4.48 L = 0.20 mol H₂) treats the acid as the limiting reagent: false.'},
+      {tag:'Step 4: what is left, the option you missed', html:'H₂SO₄ left = 0.20 − 0.15 = 0.05 mol. C is true. It uses the same two numbers you used in Step 2.<div class="final">Answer: A, B, C</div><div class="trap-note">The trap: stopping after the volume. “Leftover” is a subtraction you had already done in Step 2.</div>'}
+    ]}
+}
+];
+
+var MIXED = { n:'Mixed', title:'Titration into a buffer (n-factor and buffers together)', chip:'c3' };
+
+var PROBS = [
+{ sec:1, type:'single',
+  q:'A 1.00 L solution is made with 0.020 mol H₃PO₄, 0.010 mol KH₂PO₄, 0.030 mol K₂HPO₄ and 0.040 mol KOH. For H₃PO₄, pKa₂ = 7.20 and log 5 = 0.70. What is the pH?',
+  opts:['7.20','6.50','7.90','7.68'], ans:[2],
+  why:'KOH (0.040 mol) first neutralises H₃PO₄ (0.020 mol), so H₂PO₄⁻ rises from 0.010 to 0.030 mol. The other 0.020 mol KOH turns 0.020 mol H₂PO₄⁻ into HPO₄²⁻. Now H₂PO₄⁻ = 0.010 mol and HPO₄²⁻ = 0.030 + 0.020 = 0.050 mol. pH = 7.20 + log (0.050 ÷ 0.010) = 7.20 + 0.70 = 7.90. Direction check: more base form than acid form, so the pH is above 7.20.',
+  mistakes:{0:'7.20: used only the first 0.020 mol of KOH (on H₃PO₄) and forgot that the remaining 0.020 mol keeps going to H₂PO₄⁻, which leaves the ratio at 1.',
+            1:'6.50: inverted the ratio, 7.20 − log 5.',
+            3:'7.68: ignored H₃PO₄ and KOH and used the two salts only, 7.20 + log 3.'} },
+{ sec:2, type:'single',
+  q:'A 0.800 g sample of an iron ore, in which only Fe₂O₃ reacts, is dissolved and treated with excess KI: 2Fe³⁺ + 2I⁻ → 2Fe²⁺ + I₂. The iodine needs 20.0 mL of 0.100 M Na₂S₂O₃ (I₂ + 2S₂O₃²⁻ → 2I⁻ + S₄O₆²⁻). What mass of iron metal can be obtained from 8.00 g of the same ore? (Fe = 56, O = 16)',
+  opts:['0.56 g','1.12 g','1.60 g','2.24 g'], ans:[1],
+  why:'Target: grams of Fe. S₂O₃²⁻ = 20.0 × 0.100 = 2.00 mmol. I₂ = 1.00 mmol (2 S₂O₃²⁻ per I₂). Fe³⁺ = 2.00 mmol (2 per I₂). Fe₂O₃ = 1.00 mmol in 0.800 g. In 8.00 g, Fe₂O₃ = 10.0 mmol, so Fe = 20.0 mmol = 20.0 × 56 = 1120 mg = 1.12 g. Shortcut: Fe³⁺ → Fe²⁺ and S₂O₃²⁻ both have n = 1, so the milliequivalents are equal: 2.00 meq = 2.00 mmol Fe³⁺.',
+  mistakes:{0:'0.56 g: counted one Fe per Fe₂O₃ (10 mmol of Fe instead of 20).',
+            2:'1.60 g: stopped one step early and gave the mass of Fe₂O₃ (10.0 mmol × 160), not of Fe.',
+            3:'2.24 g: took I₂ and S₂O₃²⁻ as 1 : 1, which doubles every later amount.'} },
+{ sec:3, type:'single',
+  q:'At 298 K a cell is set up as Zn(s) | Zn²⁺(1.0 M) || Cl⁻(0.10 M) | AgCl(s) | Ag(s). Given E°(Zn²⁺/Zn) = −0.76 V, E°(Ag⁺/Ag) = +0.80 V, Ksp(AgCl) = 1.0 × 10⁻¹⁰, 2.303RT/F = 0.06 V and F = 96500 C mol⁻¹, what is ΔG for the cell reaction Zn + 2AgCl → Zn²⁺ + 2Ag + 2Cl⁻ (in kJ per mole of Zn)?',
+  opts:['−98','−185','−313','−197'], ans:[3],
+  why:'n = 2. E°(AgCl/Ag) = 0.80 + 0.06 log Ksp = 0.80 − 0.60 = 0.20 V, so E°cell = 0.20 + 0.76 = 0.96 V. Q = [Zn²⁺][Cl⁻]² = 1.0 × 0.10² = 0.010. E = 0.96 − (0.06/2) log 0.010 = 0.96 + 0.06 = 1.02 V. ΔG = −nFE = −2 × 96500 × 1.02 = −197 kJ. Cross-check with [Ag⁺] = 10⁻¹⁰ ÷ 0.10 = 10⁻⁹: E = 1.56 − 0.03 log (1 ÷ 10⁻¹⁸) = 1.56 − 0.54 = 1.02 V. Same.',
+  mistakes:{0:'−98: used n = 1 in ΔG = −nFE although two electrons move.',
+            1:'−185: left out the Q term and used E° = 0.96 V.',
+            2:'−313: used 0.80 V for the silver electrode as if it were Ag⁺/Ag, ignoring that Ksp lowers E°(AgCl/Ag) to 0.20 V.'} },
+{ sec:4, type:'multi',
+  q:'The equilibrium 2CrO₄²⁻ (yellow) + 2H⁺ ⇌ Cr₂O₇²⁻ (orange) + H₂O is set up in water. Which statements are correct?',
+  opts:['Adding NaOH solution turns the mixture more yellow.','Adding a few drops of conc. H₂SO₄ turns the mixture more yellow.','Adding Ba(NO₃)₂ solution, which precipitates BaCrO₄, makes the solution more acidic.','Diluting with a large volume of water favours the orange ion.'], ans:[0,2],
+  why:'A: OH⁻ removes H⁺, so the shift is left to yellow CrO₄²⁻. True. B: H⁺ is added, so the shift is right to orange. False. C: Ba²⁺ removes CrO₄²⁻, the shift is left, and Cr₂O₇²⁻ + H₂O → 2CrO₄²⁻ + 2H⁺ releases H⁺. True. D: the left has 4 dissolved particles (2 CrO₄²⁻ + 2 H⁺) and the right has 1, so Q = [Cr₂O₇²⁻] ÷ ([CrO₄²⁻]²[H⁺]²) grows by f³ on diluting f times. Q > K means a shift left, to yellow. False.',
+  mistakes:{1:'B: treated adding acid as removing the H⁺ side, so the shift went the wrong way.',
+            3:'D: looked only at the water on the right and not at the particle count. The left side has four dissolved particles and the right has one, so dilution favours the left.'} },
+{ sec:5, type:'multi',
+  q:'A 1.50 g Mg–Al alloy dissolves completely in excess dilute HCl and gives 1.68 L of H₂ at 273 K and 1 atm (molar volume 22.4 L; Mg = 24, Al = 27). Which statements are correct?',
+  opts:['The alloy contains 0.90 g of Al.','The alloy contains equal moles of Mg and Al.','The alloy is 40% Mg by mass.','The HCl consumed is 0.15 mol.'], ans:[0,2,3],
+  why:'Let x = mol Mg and y = mol Al. Mass: 24x + 27y = 1.50. H₂: x + 1.5y = 1.68 ÷ 22.4 = 0.075. Then x = 0.075 − 1.5y, so 1.80 − 36y + 27y = 1.50 and y = 1/30 = 0.0333, x = 0.025. Al = 0.0333 × 27 = 0.90 g (A true). Mg = 0.60 g = 40% (C true). HCl = 2 × 0.075 = 0.15 mol, since both metals use 2 HCl per H₂ (D true). Mg is 0.025 mol and Al is 0.0333 mol, so B is false.',
+  mistakes:{1:'B: assumed equal moles without solving. Equal moles would give 1.65 L of H₂, which is close to 1.68 L but not equal, so this one needs the full solve.'} },
+{ sec:0, type:'single',
+  q:'A 20.0 mL sample contains NaOH (0.0500 M) and Na₂CO₃ (0.100 M). It is titrated with 0.100 M HCl. Given pKa₁(H₂CO₃) = 6.4, pKa₂ = 10.3 and log 2 = 0.30, what is the pH after 40.0 mL of HCl has been added?',
+  opts:['6.4','6.7','6.1','8.35'], ans:[0],
+  why:'NaOH = 1.00 mmol, Na₂CO₃ = 2.00 mmol, HCl added = 4.00 mmol. HCl first neutralises the NaOH (1.00 mmol). Next, CO₃²⁻ → HCO₃⁻ uses 2.00 mmol, which is the phenolphthalein end point at 30.0 mL. The last 1.00 mmol of HCl turns 1.00 mmol of HCO₃⁻ into H₂CO₃, leaving HCO₃⁻ = 2.00 − 1.00 = 1.00 mmol and H₂CO₃ = 1.00 mmol. pH = pKa₁ + log (1.00 ÷ 1.00) = 6.4. (Methyl orange needs 1 + 2 + 2 = 5 mmol, which is 50.0 mL.)',
+  mistakes:{1:'6.7: forgot that HCO₃⁻ is used up when H₂CO₃ forms. Took HCO₃⁻ = 2.00 and H₂CO₃ = 1.00, so 6.4 + log 2.',
+            2:'6.1: the same slip with the ratio inverted, 6.4 − log 2.',
+            3:'8.35: used (pKa₁ + pKa₂) ÷ 2, which is the pH at the end of stage 1 (the 30.0 mL point), not at 40.0 mL.'} }
+];
+
+/* ---------- helpers ---------- */
+var LET = ['A','B','C','D'];
+function plain(html){ var d=document.createElement('div'); d.innerHTML=html.replace(/<\/?(div|br|li|p|ul|figure)[^>]*>/g,' '); return d.textContent.replace(/\s+/g,' ').trim(); }
+var SUP={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁻':'-','⁺':'+'};
+var SUB={'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9','₊':'+','₋':'-'};
+function ascii(s){
+  return s.replace(/([EG])°/g,function(m,c){return c+'0';})
+          .replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]+/g,function(r){return '^'+r.split('').map(function(c){return SUP[c];}).join('');})
+          .replace(/[₀-₉₊₋]+/g,function(r){return r.split('').map(function(c){return SUB[c];}).join('');})
+          .replace(/×/g,'x').replace(/→/g,'->').replace(/⇌/g,'<=>').replace(/√/g,'sqrt').replace(/≈/g,'~').replace(/−/g,'-')
+          .replace(/½/g,'1/2').replace(/Δ/g,'delta ').replace(/÷/g,'/').replace(/°/g,' deg').replace(/·/g,'*')
+          .replace(/[–—]/g,'-').replace(/[“”]/g,'"').replace(/[’‘]/g,"'");
+}
+var TUTOR = 'I am a JEE aspirant preparing for JEE Advanced. Act as a patient tutor: use simple language, reply in chunks of under 10 lines, explain why and not just how, and wait for my reply before moving on.';
+function askUrl(parts){
+  var ps = parts.map(function(p){ return ascii(p); });
+  function build(){ return 'https://claude.ai/new?q=' + encodeURIComponent(ps.join('\n\n')); }
+  var u = build(), guard = 0;
+  while(u.length > 3300 && guard++ < 200){
+    var li = 1; for(var i=2;i<ps.length;i++){ if(ps[i].length > ps[li].length) li = i; }
+    ps[li] = ps[li].slice(0, Math.max(40, Math.floor(ps[li].length*0.9))) + '...';
+    u = build();
+  }
+  return u;
+}
+function askLink(parts, label){
+  var a = document.createElement('a');
+  a.className='ask'; a.target='_blank'; a.rel='noopener'; a.textContent = label || 'Ask Claude about this ↗';
+  a.href = askUrl([TUTOR].concat(parts));
+  return a;
+}
+function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
+
+/* ---------- build sections ---------- */
+function buildSections(){
+  var root = document.getElementById('sections');
+  SECTIONS.forEach(function(s){
+    var sec = el('section','pattern'); sec.id = s.id;
+    var head = el('div','pattern-head');
+    head.appendChild(el('h2',null, s.n+' · '+s.title));
+    head.appendChild(el('span','chip '+s.chip, s.chipText));
+    sec.appendChild(head);
+    sec.appendChild(el('div','syl', s.syl));
+    var cb = el('div','came-back');
+    cb.innerHTML = '<span class="lbl">This one came back</span>'
+      +'<div class="sbs"><div><span class="h">Last time</span>'+s.cameBack.prev+'</div><div><span class="h">This time</span>'+s.cameBack.now+'</div></div>'
+      +'<div>'+s.cameBack.verdict+'</div>';
+    sec.appendChild(cb);
+    sec.appendChild(el('p','why', '<strong>Why this matters.</strong> '+s.why));
+    var rule = el('div','rule');
+    rule.innerHTML = '<span class="rule-label">Shortcut rules</span><ul>'+s.rule.map(function(r){return '<li>'+r+'</li>';}).join('')+'</ul>';
+    sec.appendChild(rule);
+
+    var ex = s.ex, st = el('div','stepper'); st.id = 'st-'+s.id;
+    st.appendChild(el('span','stepper-label','Worked example · '+ex.src));
+    st.appendChild(el('p',null, ex.q.replace(/\n/g,'<br>')));
+    st.appendChild(el('p','yours','Your answer: <strong>'+ex.yours+'</strong>. Correct answer: <strong>'+ex.correct+'</strong>.'));
+    st.appendChild(el('p','rebuilt', ex.note));
+    if(ex.fig){ var f = el('div'); f.innerHTML = ex.fig; st.appendChild(f); }
+    ex.steps.forEach(function(sp,i){
+      var d = el('div','step'); d.innerHTML='<span class="tag">'+sp.tag+'</span>'+sp.html; if(i>0) d.hidden = true; st.appendChild(d);
+    });
+    var b = el('button','step-btn','Show next step →'); b.type='button'; b.onclick=function(){ stepNext(st); }; st.appendChild(b);
+    sec.appendChild(st);
+
+    var figText = '';
+    if(ex.fig === FIG_STAGES) figText = ' Diagram: three boxes in a row, CO3 2-, HCO3- and H2CO3, joined by arrows labelled +H+. Phenolphthalein stops after the first arrow (n = 1). Methyl orange stops after both (n = 2).';
+    if(ex.fig === FIG_CELL) figText = ' Diagram: two beakers joined by a salt bridge. Left beaker KCl 0.10 M with an Ag electrode coated with AgCl(s), the anode (Ag + Cl- -> AgCl + e-). Right beaker KBr 0.010 M with an Ag electrode coated with AgBr(s), the cathode (AgBr + e- -> Ag + Br-). Electrons are drawn left to right, as written.';
+    var secParts = ['Topic: '+s.title+' (JEE Advanced Chemistry). Pattern: '+s.pattern+'. This pattern is recurring: '+plain(s.cameBack.verdict),
+                    'Why it matters: '+plain(s.why),
+                    'Shortcut rules: '+s.rule.map(plain).join(' | ')];
+    var exParts = ['Worked example ('+ex.src+'). Question: '+plain(ex.q.replace(/\n/g,' '))+figText,
+                   'My real answer was '+ex.yours+' and the correct answer is '+ex.correct+'. '+ex.diag,
+                   'Steps: '+ex.steps.map(function(sp){ var t=plain(sp.tag+': '+sp.html); return t.length>230? t.slice(0,227)+'...' : t; }).join(' || ')];
+    var row = el('div');
+    row.appendChild(askLink(secParts, 'Ask Claude about this section ↗')); row.appendChild(document.createTextNode(' '));
+    row.appendChild(askLink(exParts, 'Ask Claude about the worked example ↗'));
+    sec.appendChild(row);
+    root.appendChild(sec);
+  });
+}
+
+/* ---------- build practice ---------- */
+function buildGrid(){
+  var grid = document.getElementById('grid');
+  PROBS.forEach(function(p,idx){
+    var sec = p.sec ? SECTIONS[p.sec-1] : MIXED;
+    var card = el('div','card'); card.id='p'+(idx+1);
+    var head = el('div','card-head');
+    head.appendChild(el('span','qnum', String(idx+1)));
+    head.appendChild(el('span','chip '+(p.type==='multi'?'c2':'c3'), p.type==='multi'?'Multi-correct':'Single-correct'));
+    head.appendChild(el('span','chip c4','Level 4'));
+    head.appendChild(el('span','chip '+sec.chip, p.sec ? 'Section '+sec.n : 'Mixed'));
+    card.appendChild(head);
+    card.appendChild(el('p',null,p.q));
+    if(p.type==='multi') card.appendChild(el('div','yours','Select all that apply.'));
+    var opts = el('div','opts'); var inputs=[];
+    p.opts.forEach(function(t,i){
+      var lab = el('label','opt');
+      var inp = document.createElement('input'); inp.type = p.type==='multi'?'checkbox':'radio'; inp.name='q'+idx; inp.id='q'+idx+'o'+i; inp.value=i;
+      lab.appendChild(inp); lab.appendChild(el('span','l',LET[i])); lab.appendChild(el('span','t',t));
+      opts.appendChild(lab); inputs.push(inp);
+    });
+    card.appendChild(opts);
+    var verdict = el('div'); verdict.hidden = true;
+    var actions = el('div');
+    var chk = null;
+    function grade(){
+      var sel=[]; inputs.forEach(function(i){ if(i.checked) sel.push(+i.value); });
+      if(!sel.length){ return; }
+      var ok = sel.length===p.ans.length && sel.every(function(x){ return p.ans.indexOf(x)>-1; });
+      inputs.forEach(function(inp,i){
+        var lab = inp.parentNode; lab.classList.remove('is-right','is-wrong','is-miss');
+        var isAns = p.ans.indexOf(i)>-1;
+        if(inp.checked && isAns) lab.classList.add('is-right');
+        else if(inp.checked && !isAns) lab.classList.add('is-wrong');
+        else if(!inp.checked && isAns) lab.classList.add('is-miss');
+      });
+      verdict.className = 'verdict '+(ok?'ok':'no'); verdict.hidden=false;
+      verdict.textContent = (ok?'Correct. ':'Not quite. ')+'Correct option'+(p.ans.length>1?'s':'')+': '+p.ans.map(function(i){return LET[i];}).join(', ')+'.';
+    }
+    if(p.type==='multi'){
+      chk = el('button','check-btn','Check answer'); chk.type='button'; chk.onclick=grade; actions.appendChild(chk);
+    } else {
+      inputs.forEach(function(i){ i.addEventListener('change', grade); });
+    }
+    var rev = el('button','reveal-btn','Show why'); rev.type='button'; actions.appendChild(rev);
+    card.appendChild(actions); card.appendChild(verdict);
+    var ans = el('div','answer'); ans.hidden = true;
+    var mk = Object.keys(p.mistakes).map(function(k){ return '<li>'+p.mistakes[k]+'</li>'; }).join('');
+    ans.innerHTML = '<div>'+p.why+'</div><ul>'+mk+'</ul>';
+    card.appendChild(ans);
+    rev.onclick = function(){ ans.hidden = !ans.hidden; rev.textContent = ans.hidden ? 'Show why' : 'Hide why'; };
+
+    var parts = ['Practice problem '+(idx+1)+' ('+(p.type==='multi'?'multi-correct: pick all correct options':'single-correct')+', level 4, topic: '+sec.title+').',
+                 'Problem: '+plain(p.q),
+                 'Options: '+p.opts.map(function(t,i){return LET[i]+') '+plain(t);}).join('  '),
+                 'For your reference only, do not reveal unless I ask or have made a real attempt. Correct: '+p.ans.map(function(i){return LET[i];}).join(', ')+'. Reasoning: '+plain(p.why),
+                 'Ask me what I have tried first, then give me one hint at a time.'];
+    card.appendChild(askLink(parts));
+    grid.appendChild(card);
+  });
+}
+
+function stepNext(st){
+  var steps = st.querySelectorAll('.step'), shown = 0;
+  steps.forEach(function(s){ if(!s.hidden) shown++; });
+  if(shown < steps.length){ steps[shown].hidden = false; shown++; }
+  if(shown >= steps.length){ st.querySelector('.step-btn').hidden = true; }
+}
+function setMode(mode, btn){
+  document.querySelectorAll('.mode-btn').forEach(function(b){ b.setAttribute('aria-pressed', b===btn?'true':'false'); });
+  document.getElementById('timerBar').hidden = (mode!=='timed');
+}
+var remaining = 40*60, timerId = null;
+function renderTime(){ var m=String(Math.floor(remaining/60)).padStart(2,'0'), s=String(remaining%60).padStart(2,'0'); document.getElementById('timeDisplay').textContent=m+':'+s; }
+function startTimer(){ if(timerId) return; timerId=setInterval(function(){ remaining--; if(remaining<=0){ clearInterval(timerId); timerId=null; document.getElementById('timeDisplay').textContent="Time's up"; } else renderTime(); },1000); }
+function resetTimer(){ clearInterval(timerId); timerId=null; remaining=40*60; renderTime(); }
+
+buildSections(); buildGrid(); renderTime();
+</script>

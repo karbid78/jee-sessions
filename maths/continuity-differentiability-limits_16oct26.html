@@ -1,0 +1,761 @@
+<meta charset="utf-8">
+<title>Continuity, Differentiability and Limits</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&amp;family=IBM+Plex+Mono:wght@400;600;700&amp;family=IBM+Plex+Sans:wght@400;600&amp;display=swap">
+<style>
+  :root{
+    --bg:#F5F7FB;
+    --surface:#FFFFFF;
+    --surface-2:#EDF1F8;
+    --ink:#1B2436;
+    --ink-soft:#535F76;
+    --border:#DBE1ED;
+    --accent:#2F5A8A;
+    --accent-soft:#E7EEF7;
+    --highlight:#D99A12;
+    --highlight-ink:#5C4008;
+    --highlight-bg:#FFF6DE;
+    --highlight-border:#F0D796;
+    --good:#2F8F5B;
+    --good-bg:#E5F5EC;
+    --trap:#B8503F;
+    --trap-bg:#FBEAE6;
+    --chip-1:#2F5A8A;
+    --chip-1-bg:#E7EEF7;
+    --chip-2:#7C4FBF;
+    --chip-2-bg:#F0E9FA;
+    --chip-3:#2F8F5B;
+    --chip-3-bg:#E5F5EC;
+    --chip-4:#B4681F;
+    --chip-4-bg:#FBEEDF;
+    --chip-5:#535F76;
+    --chip-5-bg:#EDF1F8;
+    --shadow: 0 1px 2px rgba(27,36,54,.04), 0 8px 24px -12px rgba(27,36,54,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0F131C;
+      --surface:#161C29;
+      --surface-2:#1E2635;
+      --ink:#E7ECF6;
+      --ink-soft:#A6B1C6;
+      --border:#2B3448;
+      --accent:#7BAAE0;
+      --accent-soft:#1B2A3E;
+      --highlight:#E8B84B;
+      --highlight-ink:#FBE8B8;
+      --highlight-bg:#3A2E10;
+      --highlight-border:#5C4A1B;
+      --good:#5FC98C;
+      --good-bg:#12301F;
+      --trap:#E1897A;
+      --trap-bg:#3A1E19;
+      --chip-1:#7BAAE0; --chip-1-bg:#1B2A3E;
+      --chip-2:#C0A2EC; --chip-2-bg:#2A2140;
+      --chip-3:#5FC98C; --chip-3-bg:#12301F;
+      --chip-4:#E3A768; --chip-4-bg:#3A2A14;
+      --chip-5:#A6B1C6; --chip-5-bg:#1E2635;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0F131C;
+    --surface:#161C29;
+    --surface-2:#1E2635;
+    --ink:#E7ECF6;
+    --ink-soft:#A6B1C6;
+    --border:#2B3448;
+    --accent:#7BAAE0;
+    --accent-soft:#1B2A3E;
+    --highlight:#E8B84B;
+    --highlight-ink:#FBE8B8;
+    --highlight-bg:#3A2E10;
+    --highlight-border:#5C4A1B;
+    --good:#5FC98C;
+    --good-bg:#12301F;
+    --trap:#E1897A;
+    --trap-bg:#3A1E19;
+    --chip-1:#7BAAE0; --chip-1-bg:#1B2A3E;
+    --chip-2:#C0A2EC; --chip-2-bg:#2A2140;
+    --chip-3:#5FC98C; --chip-3-bg:#12301F;
+    --chip-4:#E3A768; --chip-4-bg:#3A2A14;
+    --chip-5:#A6B1C6; --chip-5-bg:#1E2635;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+
+  * { box-sizing: border-box; }
+  body{
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    padding-inline: 20px;
+    padding-block: 28px 64px;
+    line-height: 1.55;
+  }
+  .wrap{ max-width: 760px; margin: 0 auto; }
+  h1,h2,h3{ font-family: "Fraunces", Georgia, serif; font-weight: 600; text-wrap: balance; margin: 0; }
+  a { color: var(--accent); }
+  .eyebrow{
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+
+  /* ---------- math helpers ---------- */
+  .m{ font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .97em; }
+  .f{ display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; font-size:.88em; line-height:1.15; margin:0 .15em; }
+  .f .fn{ border-bottom:1.4px solid currentColor; padding:0 .22em .04em; }
+  .f .fd{ padding:.04em .22em 0; }
+  .lim{ display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; font-style:italic; line-height:1.05; margin-right:.18em; }
+  .lim .sub{ font-size:.66em; font-style:normal; color: var(--ink-soft); }
+  .eq{ display:block; margin: 14px 0; padding: 14px 16px; background: var(--surface-2); border-radius: 10px; overflow-x:auto; }
+
+  /* ---------- hero ---------- */
+  .hero{ padding-block: 8px 30px; }
+  .hero h1{ font-size: clamp(1.7rem, 5vw, 2.35rem); margin-top: 10px; }
+  .hero p{ color: var(--ink-soft); max-width: 60ch; }
+  .hero-note{
+    margin-top: 18px; padding: 14px 16px; border-radius: 12px;
+    background: var(--accent-soft); border: 1px solid var(--border);
+    font-size: .93rem;
+  }
+  .asymptote-fig{ width: 100%; max-width: 420px; height: auto; display:block; margin: 18px 0 4px; }
+  @media (prefers-reduced-motion: no-preference){
+    .dot{ animation: approach 3.2s ease-in-out infinite; }
+    @keyframes approach{
+      0%{ transform: translateX(0); }
+      55%{ transform: translateX(190px); }
+      100%{ transform: translateX(190px); }
+    }
+  }
+
+  /* ---------- pattern sections ---------- */
+  .pattern{
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 22px 22px 24px; margin-block: 18px; box-shadow: var(--shadow);
+  }
+  .pattern-head{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom: 6px; }
+  .pattern-head h2{ font-size: 1.28rem; }
+  .chip{
+    font-family:"IBM Plex Mono", monospace; font-size:.68rem; letter-spacing:.05em; text-transform:uppercase;
+    padding: 3px 9px; border-radius: 999px; font-weight: 600; white-space:nowrap;
+  }
+  .chip-1{ color:var(--chip-1); background:var(--chip-1-bg); }
+  .chip-2{ color:var(--chip-2); background:var(--chip-2-bg); }
+  .chip-3{ color:var(--chip-3); background:var(--chip-3-bg); }
+  .chip-4{ color:var(--chip-4); background:var(--chip-4-bg); }
+  .chip-5{ color:var(--chip-5); background:var(--chip-5-bg); }
+  .pattern p{ margin: 10px 0; }
+  .why{ color: var(--ink-soft); font-size: .95rem; }
+
+  .rule{
+    margin-top: 14px; padding: 14px 16px; border-radius: 10px;
+    background: var(--highlight-bg); border: 1px solid var(--highlight-border); color: var(--highlight-ink);
+  }
+  .rule-label{ font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; margin-bottom:6px; display:block; }
+  .rule ul{ margin: 6px 0 0; padding-left: 20px; }
+  .rule li{ margin: 3px 0; }
+
+  /* ---------- stepper (worked examples) ---------- */
+  .stepper{ margin-top: 16px; border-top: 1px dashed var(--border); padding-top: 14px; }
+  .stepper-label{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color: var(--ink-soft); margin-bottom: 8px; display:block; }
+  .step{ padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .step:last-of-type{ border-bottom: none; }
+  .step .tag{ font-weight:600; font-size:.82rem; color: var(--accent); display:block; margin-bottom: 4px; }
+  .step-btn{
+    margin-top: 10px; font: inherit; font-weight: 600; font-size: .88rem;
+    background: var(--accent); color: white; border: none; border-radius: 8px;
+    padding: 9px 14px; cursor: pointer;
+  }
+  .step-btn:hover{ filter: brightness(1.08); }
+  .final{ background: var(--good-bg); color: var(--good); border-radius: 8px; padding: 10px 12px; font-weight: 700; margin-top: 6px; }
+  .trap-note{ background: var(--trap-bg); color: var(--trap); border-radius: 8px; padding: 10px 12px; font-size: .9rem; margin-top: 10px; }
+
+  /* ---------- practice section ---------- */
+  .practice-head{ padding-block: 6px 4px; }
+  .mode-row{
+    display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin: 14px 0 8px;
+    background: var(--surface); border:1px solid var(--border); border-radius: 14px; padding: 14px 16px;
+    box-shadow: var(--shadow);
+  }
+  .mode-btn{
+    font: inherit; font-weight:600; font-size:.9rem; padding: 8px 14px; border-radius: 999px;
+    border:1px solid var(--border); background: var(--surface-2); color: var(--ink); cursor:pointer;
+  }
+  .mode-btn[aria-pressed="true"]{ background: var(--accent); color: white; border-color: var(--accent); }
+  .timer-bar{ display:flex; align-items:center; gap:12px; margin-left:auto; flex-wrap:wrap; }
+  .time{ font-family:"IBM Plex Mono",monospace; font-size:1.3rem; font-variant-numeric: tabular-nums; min-width: 64px; }
+  .timer-btn{ font: inherit; font-size:.85rem; font-weight:600; border-radius:8px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); padding:7px 12px; cursor:pointer; }
+  .mode-help{ font-size:.85rem; color: var(--ink-soft); margin: 6px 2px 0; }
+
+  .grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin-top: 16px; }
+  .card{
+    background: var(--surface); border:1px solid var(--border); border-radius: 14px; padding: 16px 16px 14px;
+    box-shadow: var(--shadow); display:flex; flex-direction:column;
+  }
+  .card-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom: 8px; }
+  .qnum{ font-family:"Fraunces",serif; font-weight:700; font-size:1.05rem; color: var(--accent); }
+  .card ol{ padding-left: 20px; margin: 6px 0; }
+  .card li{ margin: 3px 0; }
+  .reveal-btn{
+    align-self:flex-start; margin-top:10px; font: inherit; font-weight:600; font-size:.85rem;
+    background: none; border: 1.4px solid var(--accent); color: var(--accent); border-radius: 8px;
+    padding: 7px 12px; cursor: pointer;
+  }
+  .reveal-btn:hover{ background: var(--accent-soft); }
+  .answer{ margin-top: 10px; padding: 10px 12px; background: var(--good-bg); border-radius: 8px; }
+  .answer .val{ color: var(--good); font-weight: 700; font-family:"IBM Plex Mono",monospace; }
+  .answer .why{ margin-top: 4px; font-size: .88rem; }
+
+  footer{ margin-top: 26px; color: var(--ink-soft); font-size: .88rem; text-align:center; }
+
+  .hero-fig{ width:100%; max-width:440px; height:auto; display:block; margin:18px 0 4px; }
+  .cmp{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px; margin:14px 0 6px; }
+  .cmp .box{ background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:11px 13px; font-size:.9rem; min-width:0; }
+  .cmp .box.now{ background:var(--trap-bg); border-color:var(--trap); }
+  .cmp .box .tagline{ display:block; font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; font-weight:700; color:var(--ink-soft); margin-bottom:5px; }
+  .cmp .box.now .tagline{ color:var(--trap); }
+  .verdict{ font-size:.93rem; margin:10px 0 4px; padding:10px 13px; border-left:3px solid var(--highlight); background:var(--highlight-bg); color:var(--highlight-ink); border-radius:0 8px 8px 0; }
+  .back{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; font-weight:700; color:var(--trap); background:var(--trap-bg); padding:3px 9px; border-radius:999px; white-space:nowrap; }
+  .note{ font-size:.88rem; color:var(--ink-soft); margin-top:8px; }
+  .step, .rule, .cmp, .answer, .eq { overflow-wrap:anywhere; }
+  .eq{ font-size:.93rem; }
+  .ask-row{ margin-top:14px; display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; }
+  .ask{ display:inline-flex; align-items:center; gap:6px; font:inherit; font-weight:600; font-size:.85rem; color:var(--accent); background:var(--accent-soft); border:1.4px solid var(--accent); border-radius:8px; padding:7px 12px; text-decoration:none; }
+  .ask:hover{ filter:brightness(.97); text-decoration:underline; }
+  .ask:focus-visible{ outline:2px solid var(--highlight); outline-offset:2px; }
+  .ask-hint{ font-size:.8rem; color:var(--ink-soft); }
+  .card .ask-row{ margin-top:10px; }
+
+  .card-tags{ display:flex; align-items:center; gap:6px; }
+  .lvl{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; font-weight:700; letter-spacing:.06em; color:var(--highlight-ink); background:var(--highlight-bg); border:1px solid var(--highlight-border); padding:2px 8px; border-radius:999px; }
+  .answer ol{ margin:6px 0 0 1.2em; padding:0; font-size:.88rem; color:var(--ink-soft); }
+  .answer ol li{ margin:3px 0; }
+  .answer .trap-note{ margin-top:8px; }
+
+  :root{ --on-accent:#FFFFFF; }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --on-accent:#0F131C; } }
+  :root[data-theme="dark"]{ --on-accent:#0F131C; }
+  .step-btn{ color:var(--on-accent); }
+  .mode-btn[aria-pressed="true"]{ color:var(--on-accent); }
+  .qtype{ font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.05em; text-transform:uppercase; font-weight:700; padding:3px 9px; border-radius:999px; color:var(--ink-soft); background:var(--surface-2); border:1px solid var(--border); white-space:nowrap; }
+  .card-tags{ flex-wrap:wrap; justify-content:flex-end; }
+  .opts{ display:grid; gap:8px; margin:12px 0 4px; }
+  .opt{ display:flex; gap:10px; align-items:flex-start; padding:9px 12px; border:1.4px solid var(--border); border-radius:10px; background:var(--surface-2); cursor:pointer; min-width:0; overflow-wrap:anywhere; }
+  .opt:hover{ border-color:var(--accent); }
+  .opt input{ margin-top:4px; accent-color:var(--accent); flex:none; }
+  .opt .ol{ font-family:"IBM Plex Mono",monospace; font-weight:700; color:var(--accent); flex:none; }
+  .opt .ot{ min-width:0; }
+  .opt.ok{ border-color:var(--good); background:var(--good-bg); }
+  .opt.bad{ border-color:var(--trap); background:var(--trap-bg); }
+  .opt.miss{ border-color:var(--good); border-style:dashed; background:var(--good-bg); }
+  .opt .mark{ margin-left:auto; flex:none; font-weight:700; font-size:.82rem; }
+  .opt.ok .mark,.opt.miss .mark{ color:var(--good); } .opt.bad .mark{ color:var(--trap); }
+  .result{ margin-top:10px; padding:9px 12px; border-radius:8px; font-weight:600; font-size:.92rem; }
+  .result.right{ background:var(--good-bg); color:var(--good); }
+  .result.wrong{ background:var(--trap-bg); color:var(--trap); }
+  .btn-row{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:10px; }
+  .btn-row .reveal-btn{ margin-top:0; }
+  .check-btn{ font:inherit; font-weight:600; font-size:.85rem; background:var(--accent); color:var(--on-accent); border:none; border-radius:8px; padding:8px 13px; cursor:pointer; }
+  .check-btn:focus-visible,.reveal-btn:focus-visible,.opt:focus-within{ outline:2px solid var(--highlight); outline-offset:2px; }
+  .pfig{ margin:10px 0 2px; }
+  .pfig svg{ display:block; width:100%; max-width:340px; height:auto; color:var(--ink); }
+  .pfig svg text{ font-family:"IBM Plex Mono",monospace; font-size:11px; fill:currentColor; }
+  .pfig figcaption{ font-size:.8rem; color:var(--ink-soft); margin-top:4px; }
+  .mistakes{ margin:6px 0 0; padding-left:18px; font-size:.86rem; }
+  .grid{ grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr)); }
+  .mat{display:inline-block;vertical-align:middle;border-left:1.6px solid currentColor;border-right:1.6px solid currentColor;border-radius:5px;padding:2px 8px;margin:0 3px;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.88em;max-width:100%;overflow-x:auto}
+  .mat .mr{display:grid;grid-template-columns:repeat(var(--c),auto);gap:1px 14px;text-align:center}
+  .pattern > .pfig{margin:14px 0 4px}
+</style>
+<div class="wrap">
+<section class="hero">
+<span class="eyebrow">Maths · Focus Session · WTA20 · CTA20</span>
+<h1>Continuity, Differentiability and Limits</h1>
+<p>This session is built from your Saturday WTA20 (10 Oct) and Sunday CTA20 (11 Oct) results. Every worked example below is a real question from those papers, with the answer you gave or the options you marked. The six practice problems use the same techniques in new problems at level L4.</p>
+<div class="hero-note"><strong>How to use this:</strong> go section by section. Read the comparison, click through the worked example, then do the matching practice problem. Every practice problem is multiple choice (A to D). Some have one correct option. Others need every correct option ticked. Do all 6 once, untimed. The 40-minute timed mode is for a later pass.<br><br><strong>Stuck on something?</strong> Every section, worked example and practice problem has an <em>Ask Claude</em> link. It opens a new claude.ai chat with that topic already typed in, set up so Claude explains step by step and does not just hand over answers. You need to be signed in to claude.ai.</div>
+<p class="note level-note"><strong>Level L4.</strong> The practice problems are set at the level of your Sunday ADV-CTA papers: more than one concept, 6 or more steps, and one trap or boundary check. Every problem carries its level tag. The worked examples are your real questions, kept at their real level. Series expansions use Maclaurin series, which your class covered on 2 Oct. Everything else comes from the JEE Advanced syllabus. Sections 1 to 3 come from Saturday, sections 4 and 5 from Sunday. The multi-correct habit in section 5 comes from both days.</p>
+</section>
+<section class="pattern">
+<div class="pattern-head"><h2>1 · Counting jumps and kinks</h2><span class="chip chip-1">Continuity</span><span class="chip chip-5">New</span><span class="chip chip-3">Sat · WTA20</span></div>
+<p class="why">Questions that ask for the number of points where a function is discontinuous or not derivable are bookkeeping questions. You need a complete list of candidate points, and one test for each. You got all three wrong on WTA20, and this pattern had not shown up before, so it is new. The tests below catch the usual errors: two jumps that cancel, a kink that a zero factor smooths out, and a vertical tangent.</p>
+<div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this pattern ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
+<div class="cmp"><div class="box"><span class="tagline">Q9 · [5x] + {3x}</span>You: <strong>15</strong>. Key: <strong>30</strong>.</div><div class="box"><span class="tagline">Q10 · semicircle and line pieces</span>You: <strong>3</strong>. Key: <strong>19</strong>.</div><div class="box"><span class="tagline">Q12 · α + β</span>You: <strong>6</strong>. Key: <strong>5</strong>.</div></div>
+<div class="stepper" id="st1">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p>The number of points at which <span class='m'>f(x) = [5x] + {3x}</span> is discontinuous in the interval <span class='m'>[0, 5]</span>, where <span class='m'>[·]</span> is the greatest integer function and <span class='m'>{·}</span> the fractional part function.</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">Your answer was <strong>15</strong>. Correct answer: <strong>30</strong>. Here's why.</p>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · rewrite the fractional part</span>
+Use <span class='m'>{3x} = 3x − [3x]</span>. Then <span class='m'>f(x) = [5x] − [3x] + 3x</span>. The term <span class='m'>3x</span> is continuous, so only <span class='m'>[5x] − [3x]</span> can cause a break.
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · the breaks of [5x]</span>
+<span class='m'>[5x]</span> jumps up by 1 at every <span class='m'>x = k/5</span>. In <span class='m'>(0, 5]</span> that is <span class='m'>k = 1, …, 25</span>: 25 points.
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · the breaks of −[3x]</span>
+<span class='m'>−[3x]</span> jumps down by 1 at every <span class='m'>x = k/3</span>, <span class='m'>k = 1, …, 15</span>: 15 points.
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · points in both lists</span>
+A point is in both lists when it is a multiple of <span class='m'>1/5</span> and of <span class='m'>1/3</span>. These are the integers <span class='m'>x = 1, 2, 3, 4, 5</span>: 5 points. At each of them the jumps are <span class='m'>+1</span> and <span class='m'>−1</span>, so they cancel and <span class='m'>f</span> is continuous there.
+</div>
+<div class="step" data-n="5" hidden>
+<span class="tag">Step 5 · count and check the ends</span>
+Breaks = <span class='m'>25 + 15 − 2·5 = 30</span>. Subtract 5 twice: once to remove the point from the 25, once from the 15. The ends: at <span class='m'>x = 0</span> the function is right-continuous. At <span class='m'>x = 5</span> the left limit is <span class='m'>24 − 14 + 15 = 25</span> and <span class='m'>f(5) = 25 − 15 + 15 = 25</span>, so it is continuous (one of the cancelled five).<div class="final">Answer: 30</div><div class="trap-note">I can't see your working. 15 is exactly the number of breaks of <span class='m'>{3x}</span> on its own (<span class='m'>x = k/3, k = 1…15</span>), so you may have counted only that list. If that is not what you did, tell me. The fix is to write both lists, then compare them.</div>
+</div>
+<button class="step-btn" onclick="stepNext('st1')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<div class="rule">
+<span class="rule-label">The shortcuts</span>
+<ul>
+<li><strong>List first.</strong> For <span class='m'>[kx]</span> and <span class='m'>{kx}</span> the breaks are at the multiples of <span class='m'>1/k</span>. For <span class='m'>|p(x)|</span> the kinks are at the roots of <span class='m'>p</span>. For a circle piece, the joins and the top.</li>
+<li><strong>Rewrite <span class='m'>{kx} = kx − [kx]</span>.</strong> Then everything is floors plus a line, and the line never matters for continuity.</li>
+<li><strong>Same point, opposite jumps: they cancel.</strong> Count = (first list) + (second list) − 2 × (points in both).</li>
+<li><strong>A kink times a factor that is 0 there is smooth.</strong> <span class='m'>|x−1|(x²−1)</span> is derivable at <span class='m'>x = 1</span> because <span class='m'>x²−1 = 0</span> there.</li>
+<li><strong>A vertical tangent next to a finite slope is a non-derivable point.</strong> Square-root and semicircle pieces do this.</li>
+<li><strong>Check the ends of the interval alone,</strong> using one-sided limits only.</li>
+</ul>
+</div>
+<div class="note"><strong>Your other two from WTA20, solved.</strong> <strong>Q10 (key 19):</strong> on <span class='m'>[n, n+1/2)</span> the root is the quarter circle <span class='m'>(x−n−1/2)² + y² = 1/4</span>, rising from 0 to 1/2 with a vertical tangent at <span class='m'>x = n</span>. Then the line <span class='m'>(n+1) − x</span> falls with slope −1. At each integer from −4 to 4 (9 points) a vertical tangent meets slope −1. At each half-integer from −4.5 to 4.5 (10 points) slope 0 meets slope −1. Total 19. <strong>Q12 (key 5):</strong> <span class='m'>[x²/2]</span> jumps at <span class='m'>x = ±√2</span>, so α = 2. <span class='m'>(|x| + |x−1|)(x² − 1)</span> has kinks at 0 and 1, but at 1 the factor <span class='m'>x²−1</span> is 0, so only <span class='m'>x = 0</span> stays. The two jump points are not derivable either, so β = 3 and α + β = 5. I can't see your working, but counting <span class='m'>x = 1</span> as a kink gives exactly your 6.</div>
+</section>
+<section class="pattern">
+<div class="pattern-head"><h2>2 · Max, min and running minimum</h2><span class="chip chip-1">Continuity</span><span class="chip chip-5">New</span><span class="chip chip-3">Sat · WTA20</span></div>
+<p class="why">A max or min of two functions, or a running minimum, is a function built piece by piece. First decide which piece is active where. Then test the joins, one at a time. On WTA20 you got Q5 wrong and Q4 partly right. This pattern had not shown up before, so it is new.</p>
+<div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this pattern ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
+<div class="cmp"><div class="box"><span class="tagline">Q4 · inverse-trig max</span>You marked <strong>A, B, D</strong>. By my working all four are true, so <strong>C</strong> was left out.</div><div class="box"><span class="tagline">Q5 · running minimum</span>You marked <strong>B, C</strong>. Only <strong>A</strong> is correct by my working. The portal does not print the key.</div></div>
+<div class="stepper" id="st2">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p>Consider <span class='m'>f: (0, 2) → R, f(x) = x/2 + 2/x</span> and <span class='m'>g(x) = min{f(t) : 0 &lt; t ≤ x}</span> for <span class='m'>0 &lt; x ≤ 1</span>, <span class='m'>g(x) = 3/2 + x</span> for <span class='m'>1 &lt; x &lt; 2</span>. Then: (A) g is continuous but not differentiable at x = 1. (B) g is not continuous for all x ∈ (0, 2). (C) g is neither continuous nor differentiable at x = 1. (D) g is continuous and differentiable for all x ∈ (0, 2).</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">You marked <strong>B and C</strong>. Correct: <strong>A</strong> (by my working; the portal does not print the key). Here's why.</p>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · what the running minimum is</span>
+<span class='m'>f'(x) = 1/2 − 2/x² = (x² − 4)/(2x²)</span>, which is negative on <span class='m'>(0, 2)</span>. So <span class='m'>f</span> is decreasing there, and the smallest value of <span class='m'>f(t)</span> for <span class='m'>t ≤ x</span> is the last one, <span class='m'>f(x)</span>. Hence <span class='m'>g(x) = x/2 + 2/x</span> on <span class='m'>(0, 1]</span>.
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · the value at the join</span>
+<span class='m'>g(1) = 1/2 + 2 = 5/2</span>.
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · continuity at 1</span>
+The right piece at 1 gives <span class='m'>3/2 + 1 = 5/2</span>. Left limit = <span class='m'>g(1)</span> = right limit = 5/2, so <span class='m'>g</span> is continuous at 1. Options B and C both say it is not, so both are out. B also says "for all x", which is far too strong.
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · slopes at 1</span>
+Left: <span class='m'>g'(1⁻) = f'(1) = 1/2 − 2 = −3/2</span>. Right: <span class='m'>g'(1⁺) = 1</span>. They are different, so <span class='m'>g</span> is not differentiable at 1. Option D is out.
+</div>
+<div class="step" data-n="5" hidden>
+<span class="tag">Step 5 · answer</span>
+Only A: continuous, not differentiable at 1. Check the sketch below: the curve and the line meet at one point, with a corner.<div class="final">Answer: A</div><div class="trap-note">I can't see your working. B and C both claim a break at 1, and that can only happen if the left limit or the right limit differs from 5/2. Check both numbers: it takes ten seconds and shows there is no break. Always compute the value and both one-sided limits at the join before you judge.</div>
+</div>
+<button class="step-btn" onclick="stepNext('st2')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<figure class="pfig" data-desc="Diagram: the graph of g(x) for WTA20 Q5 on x between 0.5 and 2. For x up to 1, g(x) = x/2 + 2/x falls from about 4.25 to 5/2 at x = 1 with slope -3/2. For x above 1, g(x) = 3/2 + x rises in a straight line of slope 1 from 5/2 at x = 1 to 7/2 at x = 2. The two pieces meet at the point (1, 5/2), so g is continuous but has a corner there. A dashed curve shows f(x) = x/2 + 2/x continuing to fall to 2 at x = 2, which g does not follow."><svg viewBox="0 0 400 195" role="img" aria-label="Graph of g for Q5: falling curve to the point (1, 5/2), then a line of slope 1; a corner at x = 1"><line x1="40" y1="170" x2="360" y2="170" stroke="var(--border)" stroke-width="1.2"/><polyline points="40.0,28.7 45.3,38.9 50.7,48.2 56.0,56.6 61.3,64.2 66.7,71.2 72.0,77.6 77.3,83.4 82.7,88.8 88.0,93.8 93.3,98.4 98.7,102.6 104.0,106.5 109.3,110.2 114.7,113.6 120.0,116.7 125.3,119.7 130.7,122.4 136.0,125.0 141.3,127.4 146.7,129.6" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/><line x1="146.7" y1="129.6" x2="360.0" y2="71.9" stroke="var(--accent)" stroke-width="2.5"/><polyline points="146.7,129.6 157.3,133.7 168.0,137.2 178.7,140.3 189.3,143.1 200.0,145.5 210.7,147.6 221.3,149.4 232.0,151.0 242.7,152.4 253.3,153.7 264.0,154.7 274.7,155.6 285.3,156.3 296.0,156.9 306.7,157.4 317.3,157.8 328.0,158.1 338.7,158.3 349.3,158.4 360.0,158.5" fill="none" stroke="var(--ink-soft)" stroke-width="1.6" stroke-dasharray="5 4"/><circle cx="146.7" cy="129.6" r="4.5" fill="var(--highlight)" stroke="var(--ink)" stroke-width="1.2"/><text x="112" y="88">slope −3/2 here</text><text x="240" y="84">slope 1 here</text><text x="44" y="160">g(1) = 5/2 on both sides</text><text x="358" y="124" text-anchor="end">dashed: f keeps</text><text x="358" y="136" text-anchor="end">falling to 2</text><line x1="40.0" y1="170" x2="40.0" y2="175" stroke="currentColor"/><text x="40.0" y="188" text-anchor="middle">0.5</text><line x1="146.7" y1="170" x2="146.7" y2="175" stroke="currentColor"/><text x="146.7" y="188" text-anchor="middle">1</text><line x1="253.3" y1="170" x2="253.3" y2="175" stroke="currentColor"/><text x="253.3" y="188" text-anchor="middle">1.5</text><line x1="360.0" y1="170" x2="360.0" y2="175" stroke="currentColor"/><text x="360.0" y="188" text-anchor="middle">2</text></svg><figcaption>g from WTA20 Q5. The pieces meet at (1, 5/2), but the slope jumps from −3/2 to 1.</figcaption></figure>
+<div class="rule">
+<span class="rule-label">The shortcuts</span>
+<ul>
+<li><strong>Sketch first.</strong> A rough sketch shows where pieces switch. Do it before reading the options.</li>
+<li><strong>Running minimum <span class='m'>g(x) = min{f(t) : t ≤ x}</span>.</strong> Where <span class='m'>f</span> is decreasing, <span class='m'>g = f</span>. Where <span class='m'>f</span> dips and then rises, <span class='m'>g</span> follows <span class='m'>f</span> down to the lowest point and stays flat after it.</li>
+<li><strong>The joins are continuous. The only question is the slope.</strong> At a smooth lowest point both slopes are 0, so the running minimum is differentiable there.</li>
+<li><strong><span class='m'>max{p, q}</span> changes piece only where <span class='m'>p = q</span>.</strong> A kink can only be there, and only if the slopes differ.</li>
+<li><strong>Inverse trig:</strong> <span class='m'>sin⁻¹(sin x) ≤ cos⁻¹(cos x)</span> for every <span class='m'>x</span>. So <span class='m'>max{sin⁻¹(sin x), cos⁻¹(cos x)} = cos⁻¹(cos x)</span>, and <span class='m'>max{sin⁻¹(cos x), cos⁻¹(sin x)} = π/2 − sin⁻¹(sin x)</span>.</li>
+</ul>
+</div>
+<div class="note"><strong>Your WTA20 Q4, solved.</strong> By the last two shortcuts, <span class='m'>H = cos⁻¹(cos x) − sin⁻¹(sin x) + π/2</span>. On one period <span class='m'>[0, 2π]</span>: <span class='m'>H = π/2</span> on <span class='m'>[0, π/2]</span>, <span class='m'>2x − π/2</span> on <span class='m'>[π/2, π]</span>, <span class='m'>3π/2</span> on <span class='m'>[π, 3π/2]</span>, <span class='m'>9π/2 − 2x</span> on <span class='m'>[3π/2, 2π]</span>. <strong>A:</strong> kinks at <span class='m'>π/2, π, 3π/2, 2π, 5π/2, 3π, 7π/2</span>, which is 7 points in <span class='m'>(0, 4π)</span>. True. <strong>B:</strong> the range is <span class='m'>[π/2, 3π/2]</span>. True. <strong>C:</strong> <span class='m'>H = 3π/2</span> on <span class='m'>(π, 3π/2)</span>. True, and this is the one you left out. <strong>D:</strong> <span class='m'>H = π</span> at <span class='m'>3π/4</span> and <span class='m'>7π/4</span> in each period, so 4 solutions in <span class='m'>[0, 4π]</span>. True.</div>
+</section>
+<section class="pattern">
+<div class="pattern-head"><h2>3 · Series expansion: find a and b, then the limit</h2><span class="chip chip-1">Limits</span><span class="back">Came back</span><span class="chip chip-3">Sat · WTA20</span></div>
+<p class="why">A limit with unknown constants looks long, but it is one recipe. Expand the top to the power the bottom needs. Every coefficient below that power must be 0, and each one gives an equation for a or b. The next coefficient is the limit. WTA20 Q15 and Q16 were this recipe twice.</p>
+<div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this pattern ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
+<div class="cmp"><div class="box"><span class="tagline">Before</span><strong>CTA18 Q17</strong> (27 Sep): a limit with unknown constants, skipped after 23 seconds. Maclaurin series was taught only on 2 Oct.</div><div class="box now"><span class="tagline">Now</span><strong>WTA20 Q15 and Q16</strong> (10 Oct): not visited. Maclaurin had been taught 8 days earlier.</div></div>
+<p class="verdict"><strong>The same error is repeating.</strong> Both times you skipped a limit with unknown constants. The old reason could be that the tool was not taught yet. That reason is gone: Maclaurin was taught on 2 Oct, and on WTA19 you did attempt this type (Q8 and Q18 wrong, Q9 partial). My reading of the new skip is that Q15 and Q16 look like four problems (find a, find b, find ℓ, then a 1^∞ limit) when they are one recipe used twice. I can't see why you skipped, so tell me if it was time.</p>
+<div class="stepper" id="st3">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p>If <span class='m'>lim (x→0) [1/(sin²x · ln(1+x))] · (1/√(1+x) − (1+ax)/(1+bx)) = ℓ</span> and <span class='m'>g(x) = ( (1+x)^(1/(2ax)) / e² )^(3/(b sin x))</span> (a, b real constants, ℓ ∈ R − {0}). Q15: the value of ℓ is (A) −1/32 (B) −3/32 (C) −1/16 (D) 1/32. Q16: <span class='m'>lim (x→0) g(x)</span> is (A) e^(−1/(8ℓ)) (B) e^(1/(8ℓ)) (C) e^(−1/(4ℓ)) (D) e^(1/(4ℓ)).</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">You did not visit Q15 or Q16. Correct (my derivation; the portal prints no key for unvisited questions): <strong>Q15 = A (−1/32)</strong> and <strong>Q16 = B</strong>.</p>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · decide the order</span>
+The bottom is <span class='m'>sin²x · ln(1+x) ≈ x² · x = x³</span>. It is a product, so first terms are enough there. The top must be known to <span class='m'>x³</span>, and for a finite nonzero limit its <span class='m'>x</span> and <span class='m'>x²</span> coefficients must be 0.
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · expand the root</span>
+<span class='m'>(1+x)^(−1/2) = 1 − x/2 + 3x²/8 − 5x³/16 + …</span> (Maclaurin series).
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · expand the fraction</span>
+<span class='m'>1/(1+bx) = 1 − bx + b²x² − b³x³ + …</span>. Multiply by <span class='m'>(1+ax)</span>: <span class='m'>(1+ax)/(1+bx) = 1 + (a−b)x − b(a−b)x² + b²(a−b)x³ + …</span>.
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · two equations for a and b</span>
+Coefficient of <span class='m'>x</span>: <span class='m'>−1/2 = a − b</span>. Coefficient of <span class='m'>x²</span>: <span class='m'>3/8 = −b(a−b) = b/2</span>, so <span class='m'>b = 3/4</span> and <span class='m'>a = 1/4</span>.
+</div>
+<div class="step" data-n="5" hidden>
+<span class="tag">Step 5 · the limit, Q15</span>
+Coefficient of <span class='m'>x³</span> in the top: <span class='m'>−5/16 − b²(a−b) = −5/16 − (9/16)(−1/2) = −5/16 + 9/32 = −1/32</span>. The bottom is <span class='m'>x³</span>, so <span class='m'>ℓ = −1/32</span>. That is option A.
+</div>
+<div class="step" data-n="6" hidden>
+<span class="tag">Step 6 · Q16: take the log</span>
+With <span class='m'>a = 1/4, b = 3/4</span>: <span class='m'>1/(2a) = 2</span> and <span class='m'>3/b = 4</span>. <span class='m'>ln g = (4/sin x)(2 ln(1+x)/x − 2) = (8/sin x)(ln(1+x) − x)/x</span>. Use <span class='m'>ln(1+x) − x ≈ −x²/2</span>: <span class='m'>ln g ≈ (8/x)(−x/2) = −4</span>. So <span class='m'>g → e⁻⁴</span>.
+</div>
+<div class="step" data-n="7" hidden>
+<span class="tag">Step 7 · match the option</span>
+With <span class='m'>ℓ = −1/32</span>, <span class='m'>8ℓ = −1/4</span> and <span class='m'>1/(8ℓ) = −4</span>. So <span class='m'>e⁻⁴ = e^(1/(8ℓ))</span>, which is option B.<div class="final">Answer: Q15 A (−1/32), Q16 B (e^(1/(8ℓ)) = e⁻⁴)</div><div class="trap-note">The trap is deciding it is too long. Count the real work: two expansions, two equations, one more coefficient. Q16 then follows from a and b with one more expansion. Both would have been worth a try.</div>
+</div>
+<button class="step-btn" onclick="stepNext('st3')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<div class="rule">
+<span class="rule-label">The shortcuts</span>
+<ul>
+<li><strong>Match the order.</strong> If the bottom is <span class='m'>xⁿ</span>, expand every term of the top to <span class='m'>xⁿ</span>. For a finite limit the coefficients of <span class='m'>x⁰ … xⁿ⁻¹</span> must be 0. Each zero coefficient is one equation for a constant.</li>
+<li><strong>Expand a fraction</strong> <span class='m'>(1+ax)/(1+bx)</span> as <span class='m'>(1+ax)(1 − bx + b²x² − b³x³ + …)</span>. The pattern is <span class='m'>1 + (a−b)x − b(a−b)x² + b²(a−b)x³</span>.</li>
+<li><strong>Keep these ready:</strong> <span class='m'>(1+x)^(−1/2) = 1 − x/2 + 3x²/8 − 5x³/16</span>, <span class='m'>ln(1+x) = x − x²/2 + x³/3 − x⁴/4</span>.</li>
+<li><strong>A 1^∞ form:</strong> take the log, expand it, and then exponentiate. Do not guess the form.</li>
+<li><strong>Do not skip because it looks long.</strong> Write the setup first (order, equations), and see how short it is.</li>
+</ul>
+</div>
+</section>
+<section class="pattern">
+<div class="pattern-head"><h2>4 · Telescoping products and sums</h2><span class="chip chip-2">Limits</span><span class="back">Came back</span><span class="chip chip-4">Sun · CTA20</span></div>
+<p class="why">When a limit is a long sum or product, do not expand it term by term. Factor each term so that neighbours cancel, get a closed form for the total, and only then take the limit. On CTA20 Q8 the closed form is short. The limit then needs one more term of expansion.</p>
+<div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this pattern ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
+<div class="cmp"><div class="box"><span class="tagline">Before</span><strong>WTA19 Q17</strong> (3 Oct): wrong. A sum that telescopes: you got 3, key 5. The slip was after the telescoping, in the expansion that fixes the constant. Q14 was wrong too.</div><div class="box now"><span class="tagline">Now</span><strong>CTA20 Q8</strong> (11 Oct): wrong. A product that telescopes: you got <strong>4</strong>, key <strong>1</strong>.</div></div>
+<p class="verdict"><strong>The same pattern, but I can't say it is the same slip.</strong> The portal keeps only your final answer, 4, so I can't see where this one went. Some of this pattern you did get right (WTA20 Q13, CTA20 Q9 and Q14), so the idea is within reach. It looks like a different error in the same topic: the old one came after the telescoping, and this one has two things that can go wrong before you get to the limit (the factoring, then the end terms).</p>
+<div class="stepper" id="st4">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p>For <span class='m'>n ∈ N</span>, define <span class='m'>Pₙ = ∏ (k=1..n) (k⁴ + 4)/(k² + 1)²</span>. Evaluate <span class='m'>lim (n→∞) n²(2Pₙ − 1 − 2/n)</span>.</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">Your answer was <strong>4</strong>. Correct answer: <strong>1</strong>. Here's why.</p>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · factor the top</span>
+<span class='m'>k⁴ + 4 = (k² + 2)² − (2k)² = (k² − 2k + 2)(k² + 2k + 2)</span>. Since <span class='m'>k² − 2k + 2 = (k−1)² + 1</span> and <span class='m'>k² + 2k + 2 = (k+1)² + 1</span>, the top is <span class='m'>((k−1)² + 1)((k+1)² + 1)</span>.
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · name the repeating piece</span>
+Let <span class='m'>uₖ = k² + 1</span>. Each term is <span class='m'>u(k−1) · u(k+1) / uₖ²</span>.
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · split into two telescoping products</span>
+<span class='m'>∏ u(k−1)/uₖ = u₀/uₙ = 1/(n² + 1)</span>. And <span class='m'>∏ u(k+1)/uₖ = u(n+1)/u₁ = ((n+1)² + 1)/2</span>. Keep the end terms: <span class='m'>u₀ = 1</span> and <span class='m'>u₁ = 2</span> set the constants.
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · closed form</span>
+<span class='m'>Pₙ = (n² + 2n + 2) / (2(n² + 1))</span>. Test with <span class='m'>n = 1</span>: the definition gives <span class='m'>(1⁴+4)/(1²+1)² = 5/4</span> and the formula gives <span class='m'>5/(2·2) = 5/4</span>. ✓
+</div>
+<div class="step" data-n="5" hidden>
+<span class="tag">Step 5 · subtract the first two terms</span>
+<span class='m'>2Pₙ = 1 + (2n+1)/(n²+1)</span>. So <span class='m'>2Pₙ − 1 − 2/n = (2n+1)/(n²+1) − 2/n = (n − 2)/(n(n² + 1))</span>. The 1 and the 2/n are the first two terms, so what is left is of size <span class='m'>1/n²</span>.
+</div>
+<div class="step" data-n="6" hidden>
+<span class="tag">Step 6 · the limit</span>
+<span class='m'>n² · (n − 2)/(n(n² + 1)) = n(n − 2)/(n² + 1) → 1</span>.<div class="final">Answer: 1</div><div class="trap-note">I can't see your working. Two checks catch most slips here: test the closed form at n = 1, and notice that the limit asks for the coefficient of 1/n², which is why the 1 and the 2/n are subtracted first.</div>
+</div>
+<button class="step-btn" onclick="stepNext('st4')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<div class="rule">
+<span class="rule-label">The shortcuts</span>
+<ul>
+<li><strong>Factor first.</strong> Look for a difference of squares or a sum or difference of cubes that leaves factors at shifted indices: <span class='m'>k⁴+4 = ((k−1)²+1)((k+1)²+1)</span>, <span class='m'>k³−1 = (k−1)(k²+k+1)</span>.</li>
+<li><strong>Name the repeating piece <span class='m'>uₖ</span>.</strong> Each term becomes <span class='m'>u(k−1)/uₖ</span> or <span class='m'>u(k+1)/uₖ</span>, and the product telescopes: <span class='m'>∏ u(k−1)/uₖ = u₀/uₙ</span>.</li>
+<li><strong>Keep the end terms.</strong> They set the constant in the closed form.</li>
+<li><strong>Closed form first, limit second.</strong> If the limit subtracts the leading terms, the answer sits one order further out.</li>
+<li><strong>Test the closed form</strong> at <span class='m'>n = 1</span> or <span class='m'>n = 2</span> before you use it.</li>
+</ul>
+</div>
+</section>
+<section class="pattern">
+<div class="pattern-head"><h2>5 · One-sided limits of composites, and finishing multi-correct questions</h2><span class="chip chip-2">Limits</span><span class="back">Came back</span><span class="chip chip-4">Sun · CTA20 + Sat</span></div>
+<p class="why">Two recurring patterns meet in CTA20 Q4. It is a multi-correct question about limits of composites, and each option is its own problem. A composite limit needs to know which side the inner function approaches from. A multi-correct question needs every option checked before you tick anything.</p>
+<div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this pattern ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
+<div class="cmp"><div class="box"><span class="tagline">One-sided limits · before</span><strong>WTA19 Q16</strong> (3 Oct): floor of limits near 0. You got 40, key 51. A floor needs the value from above and from below separately.</div><div class="box now"><span class="tagline">One-sided limits · now</span><strong>CTA20 Q4</strong> (11 Oct): you marked A and D. D is right. A is wrong, because for x → 1⁺ the inner function is just below 0.</div></div>
+<p class="verdict"><strong>A different error with the same root, so partial progress.</strong> Before, the floor needed the side. Now the side decides whether g(f(x)) exists at all. Both come from not asking which side the inner value comes from. D was right, and it needed exactly that.</p>
+<div class="cmp"><div class="box"><span class="tagline">Multi-correct · before (Sat, WTA20)</span><strong>Q2</strong>: marked A, C, missed B. <strong>Q4</strong>: marked A, B, D, missed C. <strong>Q6</strong>: marked B, missed D.</div><div class="box now"><span class="tagline">Multi-correct · now (Sun, CTA20)</span><strong>Q1</strong>: marked A, B, missed C. <strong>Q4</strong>: marked A and D, missed B, and A is false. <strong>Q5</strong>: marked B, missed A and D.</div></div>
+<p class="verdict"><strong>The same error is repeating.</strong> In all six questions where I can work out the full key, at least one true option was left unticked, and in CTA20 Q4 a false one was ticked as well. (The portal prints no key for the other multi-correct questions, so I can't count those.) The old explanation was that you stop after one or two true options. My new reading is about method: the missed options were quick checks (a sum, a derivative at a point, an even function), so the fix is a procedure and not more knowledge. Write T or F beside every option first, and only then tick.</p>
+<div class="stepper" id="st5">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p>Consider <span class='m'>f(x) = 2 − |x|</span> for <span class='m'>−1 ≤ x ≤ 1</span>; <span class='m'>|x−2| − x</span> for <span class='m'>1 &lt; x ≤ 3</span>. And <span class='m'>g(x) = sin x − 1</span> for <span class='m'>0 ≤ x &lt; π/2</span>; <span class='m'>[x] − cos(x−2)</span> for <span class='m'>π/2 ≤ x ≤ π</span>, where <span class='m'>[x]</span> is the greatest integer function. Which is/are CORRECT? (A) <span class='m'>lim (x→1⁺) g(f(x)) = −1</span> (B) <span class='m'>lim (x→π/2⁻) g(f(g(x))) = 0</span> (C) <span class='m'>lim (x→2⁺) f(g(x))/(f(x)−2) = 1/2</span> (D) <span class='m'>lim (x→0⁺) g(f(x))/(f(x)−2)² = 1/2</span>.</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">You marked <strong>A and D</strong>. Correct (my working; the portal does not print the key): <strong>B and D</strong>.</p>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · write the pieces</span>
+<span class='m'>f</span> on <span class='m'>(1, 2]</span> is <span class='m'>2 − 2x</span> (since <span class='m'>|x−2| = 2−x</span>), and on <span class='m'>(2, 3]</span> it is <span class='m'>−2</span>. And <span class='m'>g</span> is defined only for <span class='m'>0 ≤ y ≤ π</span>.
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · A: where does f go?</span>
+As <span class='m'>x → 1⁺</span>, <span class='m'>f = 2 − 2x → 0</span> from below, so <span class='m'>f(x) &lt; 0</span>. That is outside the domain of <span class='m'>g</span>. So <span class='m'>g(f(x)) </span> does not exist and the limit does not exist. A is <strong>false</strong>. (The tempting value is <span class='m'>g(0) = −1</span>, which uses the wrong side.)
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · B: three layers, one at a time</span>
+As <span class='m'>x → π/2⁻</span>, <span class='m'>g(x) = sin x − 1 → 0⁻</span>. Then <span class='m'>f(0⁻) = 2 − |·| → 2⁻</span>. Then <span class='m'>g(2⁻) = [2⁻] − cos(2⁻ − 2) = 1 − 1 = 0</span>, since <span class='m'>2 ∈ [π/2, π]</span>. B is <strong>true</strong>. You left this one out.
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · C: second-order top</span>
+As <span class='m'>x → 2⁺</span>: <span class='m'>g(x) = 2 − cos(x−2) ≈ 1 + (x−2)²/2</span>, just above 1. So <span class='m'>f(g(x)) = 2 − 2g ≈ −(x−2)²</span>. The bottom is <span class='m'>f(x) − 2 = −2 − 2 = −4</span>. Ratio <span class='m'>→ 0</span>, not 1/2. C is <strong>false</strong>.
+</div>
+<div class="step" data-n="5" hidden>
+<span class="tag">Step 5 · D: same idea at 0</span>
+As <span class='m'>x → 0⁺</span>: <span class='m'>f = 2 − x → 2⁻</span>. Then <span class='m'>g(2 − x) = [2−x] − cos(−x) = 1 − cos x ≈ x²/2</span>. The bottom is <span class='m'>(f − 2)² = x²</span>. Ratio <span class='m'>→ 1/2</span>. D is <strong>true</strong>.
+</div>
+<div class="step" data-n="6" hidden>
+<span class="tag">Step 6 · collect the set</span>
+A false, B true, C false, D true. The set is <strong>B, D</strong>. You had D, added a false A, and left out B.<div class="final">Answer: B, D</div><div class="trap-note">I can't see your working. A is the value g(0) = −1 read straight off, but f(x) approaches 0 from below, where g does not exist. And B is a three-layer composite, the kind that gets skipped when you stop at two options. This is why you write T or F beside every option first.</div>
+</div>
+<button class="step-btn" onclick="stepNext('st5')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<div class="rule">
+<span class="rule-label">The shortcuts</span>
+<ul>
+<li><strong>Composite limit <span class='m'>lim g(f(x))</span>:</strong> first find where <span class='m'>f(x)</span> goes and from which side (above or below). Then use <span class='m'>g</span>'s one-sided limit at that value. Check the domain: if <span class='m'>f(x)</span> lands outside it, the composite does not exist.</li>
+<li><strong>A floor adds a second reason for a side.</strong> <span class='m'>[y]</span> is 0 just below 1 and 1 at and above 1.</li>
+<li><strong>Multi-correct: write T or F beside every option before ticking anything.</strong> Give each option its own short calculation. Never stop after two.</li>
+<li><strong>A false option you tick is a mistake too.</strong> In CTA20 Q4 both happened: a true option skipped and a false one ticked.</li>
+<li><strong>Do the quick checks first, but come back to every option</strong> before you tick. Most missed options needed under a minute.</li>
+</ul>
+</div>
+<div class="note"><strong>The other missed options, solved quickly.</strong> <strong>WTA20 Q2, B:</strong> <span class='m'>f = [|x|] + √{|x|}</span> has vertical tangents at <span class='m'>x = 0, ±1</span>, so it is non-differentiable at 3 points. True. <strong>WTA20 Q6, D:</strong> <span class='m'>|f(h)/h| ≤ |h|^(4n−1) → 0</span>, so <span class='m'>f'(0) = 0</span>. True. <strong>CTA20 Q1, C:</strong> <span class='m'>bₙ = 1/aₙ</span> satisfies <span class='m'>b(n+1) − 1 = (bₙ − 1)/2</span>, so <span class='m'>(1−aₙ)/aₙ = bₙ − 1 = 4/2^(n−1)</span> and the sum is 8. True. <strong>CTA20 Q5:</strong> <span class='m'>ℓ = 987 = 3 · 7 · 47</span>, so A, B and D are true and only C (37) is false.</div>
+</section>
+<section class="practice-head">
+<span class="eyebrow">Practice Set</span>
+<h2 style="margin-top:8px; font-size:1.4rem;">6 fresh problems, same patterns</h2>
+<p style="color:var(--ink-soft)">Not copies of the test questions: same technique, new problems at level L4. You asked for one problem per pattern, so each pattern gets one, and two of the six are multi-correct (problems 2 and 6). Problems 1 to 3 follow Saturday's patterns, and 4 to 6 follow Sunday's. Each problem is multiple choice with options A to D, and every wrong option is a mistake you could really make. Single-correct problems mark themselves as soon as you pick. In multi-correct problems you must tick all the correct options, then press Check answer. Every answer here was solved by hand and checked twice, and also checked by computer.</p>
+</section>
+<div class="mode-row">
+<button class="mode-btn" data-mode="practice" aria-pressed="true" onclick="setMode('practice', this)">Practice (untimed)</button>
+<button class="mode-btn" data-mode="timed" aria-pressed="false" onclick="setMode('timed', this)">Timed — 40 min</button>
+<div class="timer-bar" id="timerBar" hidden>
+<span class="time" id="timeDisplay">40:00</span>
+<button class="timer-btn" id="startBtn" onclick="startTimer()">Start</button>
+<button class="timer-btn" id="resetBtn" onclick="resetTimer()">Reset</button>
+</div>
+</div>
+<p class="mode-help">First pass: stay in Practice mode. In Timed mode all 6 fit in 40 minutes, about 6 minutes each, which is the top of the L4 range.</p>
+<div class="grid">
+<div class="card" id="q1" data-kind="single" data-correct="C">
+<div class="card-head"><span class="qnum">1</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-1">Counting breaks</span><span class="lvl">L4</span></span></div>
+<p class="stem"><span class='m'>f(x) = [3x] + {2x}</span>, where <span class='m'>[·]</span> is the greatest integer function and <span class='m'>{·}</span> the fractional part function. The number of points in <span class='m'>[0, 3]</span> at which <span class='m'>f</span> is discontinuous is:</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 1"><label class="opt"><input type="radio" name="q1" value="A"><span class="ol">A</span><span class="ot">6</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q1" value="B"><span class="ol">B</span><span class="ot">12</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q1" value="C"><span class="ol">C</span><span class="ot">9</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q1" value="D"><span class="ol">D</span><span class="ot">15</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: C · 9</span><div class="why"><ol><li>Write <span class='m'>{2x} = 2x − [2x]</span>, so <span class='m'>f = [3x] − [2x] + 2x</span>. The term <span class='m'>2x</span> is continuous, so only <span class='m'>[3x] − [2x]</span> matters.</li><li><span class='m'>[3x]</span> jumps up by 1 at <span class='m'>x = k/3</span>, <span class='m'>k = 1…9</span> in <span class='m'>(0, 3]</span>: 9 points.</li><li><span class='m'>−[2x]</span> jumps down by 1 at <span class='m'>x = k/2</span>, <span class='m'>k = 1…6</span>: 6 points.</li><li>Both lists contain <span class='m'>x = 1, 2, 3</span>. There the jumps <span class='m'>+1</span> and <span class='m'>−1</span> cancel, so <span class='m'>f</span> is continuous at 1, 2 and 3.</li><li>Remaining breaks: the other 6 points <span class='m'>k/3</span> (not integers) and the other 3 points <span class='m'>k/2</span> (the half-odd ones <span class='m'>1/2, 3/2, 5/2</span>). That is <span class='m'>6 + 3 = 9</span>, or <span class='m'>9 + 6 − 2·3 = 9</span>.</li><li>Ends: <span class='m'>x = 0</span> is right-continuous. At <span class='m'>x = 3</span> the left limit is <span class='m'>8 − 5 + 6 = 9</span> and <span class='m'>f(3) = 9</span>, so it is continuous. The count stays 9.</li></ol></div><ul class="mistakes"><li><strong>A (6)</strong>: counted only the breaks of <span class='m'>{2x}</span> (<span class='m'>k/2</span>, 6 points)</li><li><strong>B (12)</strong>: counted every point of either list once (9 + 6 − 3) and forgot that the jumps cancel at 1, 2, 3</li><li><strong>D (15)</strong>: added 9 + 6, counting 1, 2 and 3 twice and ignoring the cancellation</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q2" data-kind="multi" data-correct="ACD">
+<div class="card-head"><span class="qnum">2</span><span class="card-tags"><span class="qtype">Multi-correct</span><span class="chip chip-1">Max, min, running minimum</span><span class="lvl">L4</span></span></div>
+<p class="stem">Let <span class='m'>f(x) = x + 1/x</span> for <span class='m'>x &gt; 0</span>, and <span class='m'>G(x) = min{f(t) : 0 &lt; t ≤ x}</span>. Define <span class='m'>H(x) = max{G(x), x/2 + 1}</span> for <span class='m'>0 &lt; x &lt; 3</span>. Select all correct statements.</p>
+<p class="note" style="margin:6px 0 0">Select every correct option. It counts only if your set matches exactly.</p>
+<div class="opts" role="group" aria-label="Options for problem 2"><label class="opt"><input type="checkbox" name="q2" value="A"><span class="ol">A</span><span class="ot">G is differentiable at <span class='m'>x = 1</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q2" value="B"><span class="ol">B</span><span class="ot">G is not continuous at <span class='m'>x = 1</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q2" value="C"><span class="ol">C</span><span class="ot">H is non-differentiable at exactly one point of <span class='m'>(0, 3)</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q2" value="D"><span class="ol">D</span><span class="ot"><span class='m'>H(x) = 2</span> has infinitely many solutions in <span class='m'>(0, 3)</span></span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="check-btn" type="button" onclick="checkCard(this)">Check answer</button><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: A, C, D</span><div class="why"><ol><li><span class='m'>f'(x) = 1 − 1/x²</span>: <span class='m'>f</span> decreases on <span class='m'>(0, 1)</span> and increases on <span class='m'>(1, ∞)</span>. Its lowest value is <span class='m'>f(1) = 2</span>.</li><li>Running minimum: on <span class='m'>(0, 1]</span>, <span class='m'>f</span> is decreasing, so <span class='m'>G(x) = x + 1/x</span>. For <span class='m'>x &gt; 1</span> nothing is lower than 2, so <span class='m'>G(x) = 2</span>.</li><li><span class='m'>G(1) = 2</span> and <span class='m'>G(1⁺) = 2</span>: continuous at 1. B is false.</li><li>Slopes at 1: <span class='m'>G'(1⁻) = 1 − 1 = 0</span> and <span class='m'>G'(1⁺) = 0</span>. Equal, so <span class='m'>G</span> is differentiable at 1. A is true.</li><li><span class='m'>H = max{G, x/2 + 1}</span>. On <span class='m'>(0, 1]</span>, <span class='m'>G ≥ 2</span> is above the line (at most 3/2), so <span class='m'>H = G</span>. On <span class='m'>(1, 2)</span>, <span class='m'>H = 2</span>. The line equals 2 at <span class='m'>x = 2</span> and is bigger after it, so <span class='m'>H = x/2 + 1</span> for <span class='m'>x ≥ 2</span>.</li><li>The only kink is at <span class='m'>x = 2</span> (slopes 0 and 1/2), and <span class='m'>H</span> is smooth at 1. C is true.</li><li><span class='m'>H = 2</span> on all of <span class='m'>[1, 2]</span>: infinitely many solutions. D is true. The set is A, C, D.</li></ol></div><ul class="mistakes"><li><strong>B ticked</strong>: assumed that when the running minimum stops following <span class='m'>f</span> it must jump or break. It joins at <span class='m'>(1, 2)</span> with no gap</li><li><strong>A not ticked</strong>: read the lowest point of <span class='m'>f</span> as a corner of <span class='m'>G</span>. At a smooth minimum the slope is 0 on both sides</li><li><strong>C not ticked</strong>: counted <span class='m'>x = 1</span> as a second kink, which makes "exactly one" look false</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q3" data-kind="single" data-correct="D">
+<div class="card-head"><span class="qnum">3</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-1">Series expansion</span><span class="lvl">L4</span></span></div>
+<p class="stem">If <span class='m'>lim (x→0) [ln(1+x) − x(1+ax)/(1+bx)] / x⁴</span> exists and equals the finite number <span class='m'>ℓ</span>, then the value of <span class='m'>12a + 6b + 36ℓ</span> is:</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 3"><label class="opt"><input type="radio" name="q3" value="A"><span class="ol">A</span><span class="ot">−3</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q3" value="B"><span class="ol">B</span><span class="ot">7</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q3" value="C"><span class="ol">C</span><span class="ot">8</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q3" value="D"><span class="ol">D</span><span class="ot">5</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: D · 5</span><div class="why"><ol><li>The bottom is <span class='m'>x⁴</span>. For a finite limit the top must have zero coefficients for <span class='m'>x, x², x³</span>.</li><li><span class='m'>ln(1+x) = x − x²/2 + x³/3 − x⁴/4 + …</span>.</li><li><span class='m'>1/(1+bx) = 1 − bx + b²x² − b³x³ + …</span>, so <span class='m'>x(1+ax)/(1+bx) = x + (a−b)x² − b(a−b)x³ + b²(a−b)x⁴ + …</span>.</li><li><span class='m'>x</span> terms match. <span class='m'>x²</span>: <span class='m'>−1/2 = a − b</span>.</li><li><span class='m'>x³</span>: <span class='m'>1/3 = −b(a−b) = b/2</span>, so <span class='m'>b = 2/3</span> and <span class='m'>a = 1/6</span>.</li><li><span class='m'>x⁴</span>: <span class='m'>ln</span> gives <span class='m'>−1/4</span>. The fraction gives <span class='m'>b²(a−b) = (4/9)(−1/2) = −2/9</span>. The top is <span class='m'>(−1/4 − (−2/9))x⁴ = −x⁴/36</span>, so <span class='m'>ℓ = −1/36</span>.</li><li><span class='m'>12a + 6b + 36ℓ = 2 + 4 − 1 = 5</span>.</li></ol></div><ul class="mistakes"><li><strong>A (−3)</strong>: forgot that the fraction also has an <span class='m'>x⁴</span> term, took <span class='m'>ℓ = −1/4</span>: <span class='m'>2 + 4 − 9</span></li><li><strong>B (7)</strong>: subtracted the other way round, <span class='m'>ℓ = +1/36</span>: <span class='m'>2 + 4 + 1</span></li><li><strong>C (8)</strong>: solved the two equations with a and b interchanged, <span class='m'>a = 2/3, b = 1/6</span>: <span class='m'>8 + 1 − 1</span></li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q4" data-kind="single" data-correct="A">
+<div class="card-head"><span class="qnum">4</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-2">Telescoping product</span><span class="lvl">L4</span></span></div>
+<p class="stem">For <span class='m'>n ≥ 2</span>, let <span class='m'>Pₙ = ∏ (k=2..n) (k³ − 1)/(k³ + 1)</span>. Then <span class='m'>lim (n→∞) n³(3Pₙ − 2 − 2/n²)</span> equals:</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 4"><label class="opt"><input type="radio" name="q4" value="A"><span class="ol">A</span><span class="ot">−2</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q4" value="B"><span class="ol">B</span><span class="ot">2</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q4" value="C"><span class="ol">C</span><span class="ot">0</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q4" value="D"><span class="ol">D</span><span class="ot">the limit does not exist (it diverges)</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: A · −2</span><div class="why"><ol><li>Factor: <span class='m'>k³ − 1 = (k − 1)(k² + k + 1)</span> and <span class='m'>k³ + 1 = (k + 1)(k² − k + 1)</span>.</li><li>Let <span class='m'>uₖ = k² + k + 1</span>. Then <span class='m'>k² − k + 1 = u(k−1)</span>. Each term is <span class='m'>[(k−1)/(k+1)] · [uₖ/u(k−1)]</span>.</li><li><span class='m'>∏ (k=2..n) (k−1)/(k+1) = (1·2)/(n(n+1)) = 2/(n(n+1))</span>.</li><li><span class='m'>∏ (k=2..n) uₖ/u(k−1) = uₙ/u₁ = (n² + n + 1)/3</span>.</li><li><span class='m'>Pₙ = 2(n² + n + 1)/(3n(n+1))</span>. Check <span class='m'>n = 2</span>: <span class='m'>2·7/(3·6) = 7/9</span> and the definition gives <span class='m'>7/9</span>. ✓</li><li><span class='m'>3Pₙ = 2 + 2/(n(n+1))</span>, so <span class='m'>3Pₙ − 2 − 2/n² = 2/(n(n+1)) − 2/n² = −2/(n²(n+1))</span>.</li><li><span class='m'>n³ · (−2)/(n²(n+1)) = −2n/(n+1) → −2</span>.</li></ol></div><ul class="mistakes"><li><strong>B (2)</strong>: sign slip in <span class='m'>2/(n(n+1)) − 2/n²</span> (wrote it the other way round)</li><li><strong>C (0)</strong>: used <span class='m'>Pₙ → 2/3</span> and decided the bracket tends to 0, without keeping the next term</li><li><strong>D (diverges)</strong>: dropped the end terms of the telescoping (the 2 and the 3), so <span class='m'>3Pₙ</span> no longer tends to 2 and the bracket tends to 1</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q5" data-kind="single" data-correct="B">
+<div class="card-head"><span class="qnum">5</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-4">One-sided composite</span><span class="lvl">L4</span></span></div>
+<p class="stem">Let <span class='m'>f(x) = 2 − x²</span> and <span class='m'>g(y) = [y] + sin(πy/2)</span> for <span class='m'>0 ≤ y ≤ 2</span>, where <span class='m'>[·]</span> is the greatest integer function. Then <span class='m'>lim (x→1⁺) (g(f(x)) − 1)/(x − 1)²</span> equals:</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 5"><label class="opt"><input type="radio" name="q5" value="A"><span class="ol">A</span><span class="ot">−π²/8</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q5" value="B"><span class="ol">B</span><span class="ot">−π²/2</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q5" value="C"><span class="ol">C</span><span class="ot">0</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q5" value="D"><span class="ol">D</span><span class="ot">+∞</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: B · −π²/2</span><div class="why"><ol><li>As <span class='m'>x → 1⁺</span>, <span class='m'>y = f(x) = 2 − x²</span> goes to 1 from <strong>below</strong>, so <span class='m'>0 ≤ y &lt; 1</span>.</li><li>For <span class='m'>0 ≤ y &lt; 1</span>, <span class='m'>[y] = 0</span>, so <span class='m'>g(y) = sin(πy/2)</span>.</li><li>Put <span class='m'>t = 1 − y &gt; 0</span>. Then <span class='m'>g − 1 = sin(π/2 − πt/2) − 1 = cos(πt/2) − 1 ≈ −π²t²/8</span>.</li><li><span class='m'>t = 1 − y = x² − 1 = (x − 1)(x + 1)</span>, and <span class='m'>x + 1 → 2</span>, so <span class='m'>t ≈ 2(x − 1)</span>.</li><li><span class='m'>t² ≈ 4(x − 1)²</span>.</li><li><span class='m'>(g − 1)/(x − 1)² ≈ −(π²/8) · 4 = −π²/2</span>.</li></ol></div><ul class="mistakes"><li><strong>A (−π²/8)</strong>: wrote <span class='m'>t ≈ x − 1</span> and forgot the factor <span class='m'>x + 1 ≈ 2</span>, so <span class='m'>t² ≈ 4(x−1)²</span> became <span class='m'>(x−1)²</span></li><li><strong>C (0)</strong>: stopped at the first order. The slope of <span class='m'>sin</span> at its top is 0, so the first-order term vanishes, but the second-order term does not</li><li><strong>D (+∞)</strong>: used the branch <span class='m'>y &gt; 1</span> (where <span class='m'>[y] = 1</span>) because <span class='m'>x → 1⁺</span> "feels like" <span class='m'>y → 1⁺</span>. Here the inner function runs the other way</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q6" data-kind="multi" data-correct="ABD">
+<div class="card-head"><span class="qnum">6</span><span class="card-tags"><span class="qtype">Multi-correct</span><span class="chip chip-5">Multi-correct, finish every option</span><span class="lvl">L4</span></span></div>
+<p class="stem">Let <span class='m'>f(x) = x² sin(1/x)</span> for <span class='m'>x ≠ 0</span> and <span class='m'>f(0) = 0</span>. Select all correct statements.</p>
+<p class="note" style="margin:6px 0 0">Select every correct option. It counts only if your set matches exactly.</p>
+<div class="opts" role="group" aria-label="Options for problem 6"><label class="opt"><input type="checkbox" name="q6" value="A"><span class="ol">A</span><span class="ot"><span class='m'>f</span> is continuous at <span class='m'>x = 0</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q6" value="B"><span class="ol">B</span><span class="ot"><span class='m'>f</span> is differentiable at <span class='m'>x = 0</span> and <span class='m'>f'(0) = 0</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q6" value="C"><span class="ol">C</span><span class="ot"><span class='m'>f'</span> is continuous at <span class='m'>x = 0</span> (that is, <span class='m'>lim (x→0) f'(x)</span> exists and equals <span class='m'>f'(0)</span>)</span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q6" value="D"><span class="ol">D</span><span class="ot"><span class='m'>f'</span> is bounded on <span class='m'>(−1, 1)</span></span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="check-btn" type="button" onclick="checkCard(this)">Check answer</button><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: A, B, D</span><div class="why"><ol><li>A: <span class='m'>|f(x)| ≤ x² → 0 = f(0)</span> by the squeeze theorem, so <span class='m'>f</span> is continuous at 0. True.</li><li>B: <span class='m'>(f(h) − f(0))/h = h sin(1/h)</span>, and <span class='m'>|h sin(1/h)| ≤ |h| → 0</span>. So <span class='m'>f'(0) = 0</span>. True.</li><li>For <span class='m'>x ≠ 0</span>: <span class='m'>f'(x) = 2x sin(1/x) + x² cos(1/x) · (−1/x²) = 2x sin(1/x) − cos(1/x)</span>.</li><li>C: as <span class='m'>x → 0</span>, <span class='m'>2x sin(1/x) → 0</span> but <span class='m'>cos(1/x)</span> keeps swinging between −1 and 1 (it equals 1 at <span class='m'>x = 1/(2πk)</span> and −1 at <span class='m'>x = 1/((2k+1)π)</span>). So <span class='m'>lim f'(x)</span> does not exist. False, even though <span class='m'>f'(0)</span> exists.</li><li>D: <span class='m'>|f'(x)| ≤ 2|x| + 1 &lt; 3</span> on <span class='m'>(−1, 1)</span> for <span class='m'>x ≠ 0</span>, and <span class='m'>f'(0) = 0</span>. Bounded. True.</li><li>Write T, T, F, T beside A, B, C, D. The set is A, B, D.</li></ol></div><ul class="mistakes"><li><strong>C ticked</strong>: assumed that if <span class='m'>f'</span> exists at every point then <span class='m'>f'</span> must be continuous. It need not be</li><li><strong>D not ticked</strong>: felt that an oscillating <span class='m'>f'</span> must be unbounded. <span class='m'>cos(1/x)</span> oscillates but stays between −1 and 1</li><li><strong>B not ticked</strong>: stopped at the formula for <span class='m'>f'(x)</span> and did not check <span class='m'>x = 0</span> with the definition</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+</div>
+<footer>Built from WTA20 (10 Oct) and CTA20 (11 Oct) · Maths only · Stems and your marked options come from the nLearn answer-key pages; keys for partial and unvisited questions were derived by hand and checked by computer.</footer>
+</div>
+<script>
+
+  function stepNext(id){
+    var root = document.getElementById(id);
+    var steps = root.querySelectorAll('.step');
+    var btn = root.querySelector('.step-btn');
+    var shown = 0;
+    steps.forEach(function(s){ if(!s.hidden) shown++; });
+    if(shown < steps.length){
+      steps[shown].hidden = false;
+      shown++;
+    }
+    if(shown >= steps.length){ btn.hidden = true; }
+  }
+
+  function toggleAnswer(btn){
+    var ans = btn.closest('.card').querySelector('.answer');
+    ans.hidden = !ans.hidden;
+    btn.textContent = ans.hidden ? 'Show answer and why' : 'Hide answer and why';
+  }
+  function checkCard(el){
+    var card = el.closest('.card');
+    var correct = card.dataset.correct.split('');
+    var chosen = [].slice.call(card.querySelectorAll('input:checked')).map(function(i){return i.value;});
+    if(!chosen.length) return;
+    var exact = chosen.length === correct.length && chosen.every(function(c){return correct.indexOf(c) > -1;});
+    card.querySelectorAll('.opt').forEach(function(o){
+      var v = o.querySelector('input').value, isC = correct.indexOf(v) > -1, isS = chosen.indexOf(v) > -1;
+      o.classList.remove('ok','bad','miss');
+      var m = o.querySelector('.mark');
+      if(isC && isS){ o.classList.add('ok'); m.textContent = '✓ correct'; }
+      else if(isC){ o.classList.add('miss'); m.textContent = '✓ also correct'; }
+      else if(isS){ o.classList.add('bad'); m.textContent = '✗ wrong'; }
+      else { m.textContent = ''; }
+      o.querySelector('input').disabled = true;
+    });
+    var r = card.querySelector('.result');
+    r.hidden = false;
+    r.className = 'result ' + (exact ? 'right' : 'wrong');
+    r.textContent = exact ? 'Right. Correct: ' + correct.join(', ') + '.' : 'Not quite. Correct: ' + correct.join(', ') + '.';
+  }
+  function resetCard(el){
+    var card = el.closest('.card');
+    card.querySelectorAll('.opt').forEach(function(o){
+      o.classList.remove('ok','bad','miss'); o.querySelector('.mark').textContent = '';
+      var i = o.querySelector('input'); i.checked = false; i.disabled = false;
+    });
+    var r = card.querySelector('.result'); r.hidden = true;
+  }
+  document.querySelectorAll('.card[data-kind="single"] input').forEach(function(i){
+    i.addEventListener('change', function(){ checkCard(i); });
+  });
+
+  function setMode(mode, btn){
+    document.querySelectorAll('.mode-btn').forEach(function(b){
+      b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+    });
+    document.getElementById('timerBar').hidden = (mode !== 'timed');
+  }
+
+  var remaining = 40 * 60;
+  var timerId = null;
+  function renderTime(){
+    var m = String(Math.floor(remaining/60)).padStart(2,'0');
+    var s = String(remaining%60).padStart(2,'0');
+    document.getElementById('timeDisplay').textContent = m + ':' + s;
+  }
+  function startTimer(){
+    if(timerId) return;
+    timerId = setInterval(function(){
+      remaining--;
+      if(remaining <= 0){
+        clearInterval(timerId); timerId = null;
+        document.getElementById('timeDisplay').textContent = "Time's up";
+      } else {
+        renderTime();
+      }
+    }, 1000);
+  }
+  function resetTimer(){
+    clearInterval(timerId); timerId = null;
+    remaining = 40*60;
+    renderTime();
+  }
+  renderTime();
+
+  (function buildAskLinks(){
+    var TUTOR = "I'm a JEE aspirant preparing for JEE Advanced. Please act as a patient Maths tutor. Use simple language. Reply in chunks of under 10 lines. Explain why, not just how. Wait for my reply before moving on.";
+    var MAXLEN = 3300;
+    function clean(el){
+      var c = el.cloneNode(true);
+      c.querySelectorAll('.mat').forEach(function(m){ m.replaceWith(document.createTextNode(m.getAttribute('data-t') || '[matrix]')); });
+      c.querySelectorAll('.ask-row,.step-btn,.reveal-btn,.check-btn,.pfig,svg').forEach(function(x){ x.remove(); });
+      c.querySelectorAll('br').forEach(function(b){ b.replaceWith(document.createTextNode(' ')); });
+      c.querySelectorAll('li,p,div,.tag,.eq,.val,.final').forEach(function(x){ x.appendChild(document.createTextNode(' ')); });
+      c.querySelectorAll('.final,.trap-note,.eq').forEach(function(x){ x.insertBefore(document.createTextNode(' '), x.firstChild); });
+      return c.textContent.replace(/\s+/g,' ').trim();
+    }
+    function cut(s, n){ return s.length <= n ? s : s.slice(0, n - 1).trim() + '…'; }
+    function diagram(root){
+      var f = root.querySelector('.pfig');
+      return f ? ' ' + f.getAttribute('data-desc') : '';
+    }
+    function fit(parts){
+      for (var guard = 0; guard < 400; guard++){
+        var url = 'https://claude.ai/new?q=' + encodeURIComponent(parts.map(function(p){ return p.t; }).join(' '));
+        if (url.length <= MAXLEN) return url;
+        var longest = null;
+        parts.forEach(function(p){ if (!p.fixed && (!longest || p.t.length > longest.t.length)) longest = p; });
+        if (!longest || longest.t.length < 60) return url;
+        longest.t = cut(longest.t, Math.floor(longest.t.length * 0.9));
+      }
+    }
+    function sectionPrompt(sec){
+      var rules = Array.prototype.map.call(sec.querySelectorAll('.rule li'), clean).join(' | ');
+      var why = sec.querySelector('.why');
+      return [
+        {t: TUTOR, fixed: true},
+        {t: 'Topic: ' + clean(sec.querySelector('h2')) + '.', fixed: true},
+        {t: 'Why it matters: ' + (why ? clean(why) : ''), fixed: false},
+        {t: 'Key shortcuts: ' + rules, fixed: false},
+        {t: 'Please start by asking which part I want to understand better.', fixed: true}
+      ];
+    }
+    function examplePrompt(box){
+      var sec = box.closest('section.pattern');
+      var ps = box.querySelectorAll(':scope > p');
+      var steps = Array.prototype.map.call(box.querySelectorAll('.step'), function(s, i){
+        return 'Step ' + (i + 1) + ' · ' + cut(clean(s).replace(/^Step \d+\s*·\s*/, ''), 230);
+      }).join(' ');
+      return [
+        {t: TUTOR, fixed: true},
+        {t: "I'm going through a worked example from my own test. Topic: " + clean(sec.querySelector('h2')) + '.', fixed: true},
+        {t: 'Question: ' + clean(ps[0]) + diagram(box), fixed: true},
+        {t: 'My result: ' + (ps[1] ? clean(ps[1]) : ''), fixed: false},
+        {t: 'Steps in the solution: ' + steps, fixed: false},
+        {t: 'Please ask me which step I find hardest, then explain it and give me a similar example to try.', fixed: true}
+      ];
+    }
+    function problemPrompt(card){
+      var lvl = card.querySelector('.lvl');
+      var multi = card.getAttribute('data-kind') === 'multi';
+      var opts = Array.prototype.map.call(card.querySelectorAll('.opt'), function(o){
+        return '(' + o.querySelector('.ol').textContent.trim() + ') ' + clean(o.querySelector('.ot'));
+      }).join(' ');
+      var ans = card.querySelector('.answer');
+      return [
+        {t: TUTOR, fixed: true},
+        {t: 'I want to practise this problem' + (lvl ? ' (level ' + lvl.textContent.trim() + ')' : '') + ': ' + clean(card.querySelector('.stem')) + diagram(card), fixed: true},
+        {t: 'Type: ' + (multi ? 'multi-correct (one or more options are correct; I must pick all of them).' : 'single-correct (exactly one option is correct).') + ' Options: ' + opts, fixed: true},
+        {t: 'For your reference only, do not reveal unless the student asks or has made a real attempt: ' + clean(ans), fixed: false},
+        {t: 'Please ask me what I have tried so far, then give me one hint at a time.', fixed: true}
+      ];
+    }
+    document.querySelectorAll('a.ask').forEach(function(a){
+      var kind = a.getAttribute('data-ask'), parts;
+      if (kind === 'section') parts = sectionPrompt(a.closest('section.pattern'));
+      else if (kind === 'example') parts = examplePrompt(a.closest('.stepper'));
+      else parts = problemPrompt(a.closest('.card'));
+      a.href = fit(parts);
+    });
+  })();
+</script>
+<!-- Methods and sources: Maclaurin series (class-scope, taught 2 Oct 2026); binomial series via Maclaurin; geometric series 1/(1+bx) (syllabus: infinite geometric series); telescoping products by factoring (syllabus: sequences and series; algebra); squeeze theorem and limits (syllabus: limit of a function); derivative from the definition, product and chain rule (syllabus: differentiability); greatest integer, fractional part, modulus, inverse trig, composition (syllabus: functions, inverse trigonometric functions, continuity of composite functions). Nothing marked "not yet" in class-scope is used. -->
