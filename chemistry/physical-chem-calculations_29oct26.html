@@ -1,0 +1,560 @@
+<title>Physical Chemistry Calculations</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one column. Hero, five pattern sections (came-back box, rule, worked example, extras), then a 6-problem MCQ practice grid. Same teal chemistry system as the 16 Oct page. */
+  :root{
+    --bg:#F3F8F7;
+    --surface:#FFFFFF;
+    --surface-2:#E8F1EF;
+    --ink:#14262B;
+    --ink-soft:#4A6168;
+    --border:#D3E2DF;
+    --accent:#0F6E7A;
+    --accent-ink:#FFFFFF;
+    --accent-soft:#DDEFF0;
+    --highlight-ink:#53390A;
+    --highlight-bg:#FFF4D6;
+    --highlight-border:#EBCF86;
+    --good:#217A4B;
+    --good-bg:#E2F4EA;
+    --trap:#B24A38;
+    --trap-bg:#FBE9E5;
+    --chip-1:#0F6E7A; --chip-1-bg:#DDEFF0;
+    --chip-2:#7A4FB5; --chip-2-bg:#EEE7F8;
+    --chip-3:#217A4B; --chip-3-bg:#E2F4EA;
+    --chip-4:#A9631A; --chip-4-bg:#FBEBD9;
+    --chip-5:#B24A38; --chip-5-bg:#FBE9E5;
+    --chip-6:#3F5BA9; --chip-6-bg:#E4EAF8;
+    --atom-a:#0F6E7A; --atom-b:#C2841B;
+    --shadow: 0 1px 2px rgba(20,38,43,.05), 0 8px 24px -12px rgba(20,38,43,.2);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0D1A1D; --surface:#13252A; --surface-2:#1B3036; --ink:#E4F0EF; --ink-soft:#9FB7BC; --border:#27424A;
+      --accent:#5CC4D0; --accent-ink:#06191C; --accent-soft:#16363C;
+      --highlight-ink:#FBE8B8; --highlight-bg:#3A2E10; --highlight-border:#5C4A1B;
+      --good:#5FCB8E; --good-bg:#12301F; --trap:#E58E7E; --trap-bg:#3A1E19;
+      --chip-1:#5CC4D0; --chip-1-bg:#16363C; --chip-2:#C2A5EE; --chip-2-bg:#2A2140; --chip-3:#5FCB8E; --chip-3-bg:#12301F;
+      --chip-4:#E5A96B; --chip-4-bg:#3A2A14; --chip-5:#E58E7E; --chip-5-bg:#3A1E19; --chip-6:#8FA9E8; --chip-6-bg:#1B2642;
+      --atom-a:#5CC4D0; --atom-b:#E8B84B;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.55);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0D1A1D; --surface:#13252A; --surface-2:#1B3036; --ink:#E4F0EF; --ink-soft:#9FB7BC; --border:#27424A;
+    --accent:#5CC4D0; --accent-ink:#06191C; --accent-soft:#16363C;
+    --highlight-ink:#FBE8B8; --highlight-bg:#3A2E10; --highlight-border:#5C4A1B;
+    --good:#5FCB8E; --good-bg:#12301F; --trap:#E58E7E; --trap-bg:#3A1E19;
+    --chip-1:#5CC4D0; --chip-1-bg:#16363C; --chip-2:#C2A5EE; --chip-2-bg:#2A2140; --chip-3:#5FCB8E; --chip-3-bg:#12301F;
+    --chip-4:#E5A96B; --chip-4-bg:#3A2A14; --chip-5:#E58E7E; --chip-5-bg:#3A1E19; --chip-6:#8FA9E8; --chip-6-bg:#1B2642;
+    --atom-a:#5CC4D0; --atom-b:#E8B84B;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.55);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body{
+    background: var(--bg); color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    padding-left: max(18px, env(safe-area-inset-left, 0px));
+    padding-right: max(18px, env(safe-area-inset-right, 0px));
+    padding-block: 28px 64px; line-height: 1.55; font-size: 16px;
+  }
+  .wrap{ max-width: 780px; margin: 0 auto; }
+  h1,h2,h3{ font-family: "Fraunces", Georgia, serif; font-weight: 600; text-wrap: balance; margin: 0; }
+  a{ color: var(--accent); }
+  .eyebrow{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); font-weight:600; }
+  .m{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.93em; }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  .hero{ padding-block: 6px 22px; }
+  .hero h1{ font-size: clamp(1.7rem, 5vw, 2.3rem); margin-top:10px; }
+  .hero p{ color:var(--ink-soft); max-width:62ch; }
+  .hero-note{ margin-top:14px; padding:13px 15px; border-radius:12px; background:var(--accent-soft); border:1px solid var(--border); font-size:.92rem; }
+  .meta{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .pill{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; padding:4px 10px; border-radius:999px; background:var(--surface-2); border:1px solid var(--border); color:var(--ink-soft); }
+  .pill b{ color:var(--ink); }
+
+  .pattern{ background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:22px 20px 24px; margin-block:18px; box-shadow:var(--shadow); min-width:0; }
+  .pattern-head{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:6px; }
+  .pattern-head h2{ font-size:1.25rem; }
+  .chip{ font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.05em; text-transform:uppercase; padding:3px 9px; border-radius:999px; font-weight:600; white-space:nowrap; }
+  .c1{ color:var(--chip-1); background:var(--chip-1-bg); } .c2{ color:var(--chip-2); background:var(--chip-2-bg); }
+  .c3{ color:var(--chip-3); background:var(--chip-3-bg); } .c4{ color:var(--chip-4); background:var(--chip-4-bg); }
+  .c5{ color:var(--chip-5); background:var(--chip-5-bg); } .c6{ color:var(--chip-6); background:var(--chip-6-bg); }
+  .pattern p{ margin:10px 0; }
+  .why{ color:var(--ink-soft); font-size:.95rem; }
+  .syl{ font-family:"IBM Plex Mono",monospace; font-size:.74rem; color:var(--ink-soft); }
+
+  .came-back{ margin:12px 0; padding:12px 14px; border-radius:10px; border:1px solid var(--border); background:var(--surface-2); font-size:.92rem; }
+  .came-back .lbl{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; color:var(--trap); display:block; margin-bottom:6px; }
+  .sbs{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin:8px 0; }
+  .sbs > div{ background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:9px 11px; min-width:0; }
+  .sbs .h{ font-weight:600; font-size:.78rem; color:var(--ink-soft); display:block; margin-bottom:3px; }
+
+  .rule{ margin-top:14px; padding:14px 16px; border-radius:10px; background:var(--highlight-bg); border:1px solid var(--highlight-border); color:var(--highlight-ink); }
+  .rule-label{ font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; margin-bottom:6px; display:block; }
+  .rule ul{ margin:6px 0 0; padding-left:20px; } .rule li{ margin:4px 0; }
+
+  .stepper{ margin-top:16px; border-top:1px dashed var(--border); padding-top:14px; }
+  .stepper-label{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:8px; display:block; }
+  .step{ padding:10px 0; border-bottom:1px solid var(--border); }
+  .step:last-of-type{ border-bottom:none; }
+  .step .tag{ font-weight:600; font-size:.82rem; color:var(--accent); display:block; margin-bottom:4px; }
+  .step-btn{ margin-top:10px; font:inherit; font-weight:600; font-size:.88rem; background:var(--accent); color:var(--accent-ink); border:none; border-radius:8px; padding:9px 14px; cursor:pointer; }
+  .final{ background:var(--good-bg); color:var(--good); border-radius:8px; padding:10px 12px; font-weight:700; margin-top:8px; }
+  .trap-note{ background:var(--trap-bg); color:var(--trap); border-radius:8px; padding:10px 12px; font-size:.9rem; margin-top:10px; }
+  .yours{ font-size:.9rem; color:var(--ink-soft); }
+  .rebuilt{ font-size:.82rem; color:var(--ink-soft); font-style:italic; }
+  figure{ margin:14px 0 4px; }
+  figure svg{ width:100%; max-width:480px; height:auto; display:block; color:var(--ink); }
+  figcaption{ font-size:.82rem; color:var(--ink-soft); margin-top:4px; }
+  .figwrap{ overflow-x:auto; }
+
+  .ask{ display:inline-block; margin-top:10px; font-size:.82rem; font-weight:600; color:var(--accent); text-decoration:none; border:1px solid var(--border); border-radius:999px; padding:5px 11px; background:var(--surface); }
+  .ask:hover{ background:var(--accent-soft); }
+
+  .practice-head{ padding-block:10px 4px; }
+  .mode-row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:14px 0 8px; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px 16px; box-shadow:var(--shadow); }
+  .mode-btn{ font:inherit; font-weight:600; font-size:.9rem; padding:8px 14px; border-radius:999px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); cursor:pointer; }
+  .mode-btn[aria-pressed="true"]{ background:var(--accent); color:var(--accent-ink); border-color:var(--accent); }
+  .timer-bar{ display:flex; align-items:center; gap:12px; margin-left:auto; flex-wrap:wrap; }
+  .time{ font-family:"IBM Plex Mono",monospace; font-size:1.3rem; font-variant-numeric:tabular-nums; min-width:64px; }
+  .timer-btn{ font:inherit; font-size:.85rem; font-weight:600; border-radius:8px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); padding:7px 12px; cursor:pointer; }
+  .mode-help{ font-size:.85rem; color:var(--ink-soft); margin:6px 2px 0; }
+
+  .grid{ display:grid; grid-template-columns:1fr; gap:14px; margin-top:16px; }
+  .card{ background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:16px 16px 14px; box-shadow:var(--shadow); min-width:0; }
+  .card-head{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+  .qnum{ font-family:"Fraunces",serif; font-weight:700; font-size:1.05rem; color:var(--accent); }
+  .opts{ display:grid; gap:7px; margin:10px 0 4px; }
+  .opt{ display:flex; gap:10px; align-items:flex-start; padding:9px 11px; border:1px solid var(--border); border-radius:10px; background:var(--surface-2); cursor:pointer; min-width:0; }
+  .opt input{ margin-top:5px; flex:none; accent-color:var(--accent); }
+  .opt .l{ font-family:"IBM Plex Mono",monospace; font-weight:600; color:var(--accent); flex:none; }
+  .opt .t{ min-width:0; overflow-wrap:anywhere; }
+  .opt.is-right{ border-color:var(--good); background:var(--good-bg); }
+  .opt.is-miss{ border-color:var(--good); border-style:dashed; background:var(--good-bg); }
+  .opt.is-wrong{ border-color:var(--trap); background:var(--trap-bg); }
+  .check-btn, .reveal-btn{ font:inherit; font-weight:600; font-size:.85rem; border-radius:8px; padding:7px 12px; cursor:pointer; margin-top:10px; margin-right:8px; }
+  .check-btn{ background:var(--accent); color:var(--accent-ink); border:none; }
+  .reveal-btn{ background:none; border:1.4px solid var(--accent); color:var(--accent); }
+  .verdict{ margin-top:10px; padding:9px 12px; border-radius:8px; font-weight:700; font-size:.92rem; }
+  .verdict.ok{ background:var(--good-bg); color:var(--good); }
+  .verdict.no{ background:var(--trap-bg); color:var(--trap); }
+  .answer{ margin-top:10px; padding:10px 12px; background:var(--surface-2); border-radius:8px; font-size:.9rem; }
+  .answer ul{ margin:6px 0 0; padding-left:18px; } .answer li{ margin:3px 0; }
+  footer{ margin-top:26px; color:var(--ink-soft); font-size:.88rem; text-align:center; }
+</style>
+
+<div class="wrap">
+  <section class="hero">
+    <span class="eyebrow">Chemistry · Focus Session · 29 Oct 2026</span>
+    <h1>Physical chemistry calculations: vapour pressure, hydrolysis, conductance, osmotic pressure</h1>
+    <p>Built from CTA21 (Sun 25 Oct). All four patterns were already on your tracker. Sections 1 and 2 are the first pattern, which gets the biggest share of the page and half of the practice set. Each section opens with your earlier misses next to this one, then the rule and one worked example from your real question.</p>
+    <div class="meta">
+      <span class="pill">Level used: <b>L4</b> (multi-concept, a trap in each)</span>
+      <span class="pill">Format: <b>MCQ A–D</b>, 4 single + 2 multi-correct</span>
+      <span class="pill">Source: <b>CTA21</b> (Q37–Q54)</span>
+    </div>
+    <div class="hero-note">
+      <strong>How to use this:</strong> read a section, click through its worked example, then do the matching practice problem. Multi-correct problems are right only if you pick every correct option and nothing else. <strong>Ask Claude</strong> links open a new claude.ai chat with that item preloaded. You need to be signed in to claude.ai.
+    </div>
+    <div class="hero-note" style="margin-top:10px">
+      <strong>What is real and what is not:</strong> the questions and your marked options come from the CTA21 record. The portal did not show your answer for Q51 and did not save option text for Q41, Q46, Q47 and Q54. Where an option is unknown I say so and do not invent it. Where I explain a wrong answer from the numbers, it is a guess and is marked as one.
+    </div>
+  </section>
+
+  <div id="sections"></div>
+
+  <section class="practice-head">
+    <span class="eyebrow">Practice Set</span>
+    <h2 style="margin-top:8px; font-size:1.4rem;">6 fresh problems, level 4</h2>
+    <p style="color:var(--ink-soft)">Three on pattern 1 (Ostwald–Walker, osmotic pressure after a reaction, rate statements), one each on hydrolysis, conductance and the n-factor basis. Problems 3 and 4 are multi-correct.</p>
+  </section>
+
+  <div class="mode-row">
+    <button class="mode-btn" aria-pressed="true" onclick="setMode('practice', this)">Practice (untimed)</button>
+    <button class="mode-btn" aria-pressed="false" onclick="setMode('timed', this)">Timed · 40 min</button>
+    <div class="timer-bar" id="timerBar" hidden>
+      <span class="time" id="timeDisplay">40:00</span>
+      <button class="timer-btn" onclick="startTimer()">Start</button>
+      <button class="timer-btn" onclick="resetTimer()">Reset</button>
+    </div>
+  </div>
+  <p class="mode-help">First pass: stay in Practice mode. Save Timed mode for a second pass.</p>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>Built from CTA21 (Sun 25 Oct) · Chemistry only. Other CTA21 chemistry misses (Q37 reaction direction, Q38 entropy, Q44 and Q45 bonding and s-block, Q49 N₂O₄ graph) are not on this page.</footer>
+</div>
+
+<script>
+/* ---------- diagram (inline SVG, theme tokens) ---------- */
+var FIG_OW =
+'<figure><div class="figwrap"><svg viewBox="0 0 520 150" role="img" aria-label="Ostwald-Walker set-up for CTA21 Q52. Dry air passes through the solution bulbs (1 mol AlCl3 in 17 mol water, loses 0.18 g), then the pure-water bulbs (loss unknown), then the absorbent (gain unknown).">'
++'<defs><marker id="owArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker></defs>'
++'<g fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"><rect x="30" y="30" width="120" height="44" rx="8"/><rect x="200" y="30" width="120" height="44" rx="8"/></g>'
++'<rect x="370" y="30" width="120" height="44" rx="8" fill="var(--highlight-bg)" stroke="var(--atom-b)" stroke-width="1.5"/>'
++'<g stroke="currentColor" stroke-width="1.6" fill="none"><line x1="2" y1="52" x2="26" y2="52" marker-end="url(#owArrow)"/><line x1="152" y1="52" x2="196" y2="52" marker-end="url(#owArrow)"/><line x1="322" y1="52" x2="366" y2="52" marker-end="url(#owArrow)"/><line x1="492" y1="52" x2="516" y2="52" marker-end="url(#owArrow)"/></g>'
++'<g font-size="12" font-weight="600" text-anchor="middle" fill="currentColor"><text x="90" y="49">Solution</text><text x="260" y="49">Pure water</text><text x="430" y="49">Absorbent</text></g>'
++'<g font-size="11" text-anchor="middle" fill="currentColor"><text x="90" y="65">bulbs</text><text x="260" y="65">bulbs</text><text x="430" y="65">tube</text><text x="14" y="42">dry air</text><text x="174" y="44">air + vapour</text><text x="344" y="44">air + vapour</text></g>'
++'<g font-size="11" text-anchor="middle" fill="currentColor"><text x="90" y="98">1 mol AlCl₃, 17 mol H₂O</text><text x="90" y="114" font-weight="600">loses 0.18 g (∝ p)</text><text x="260" y="114" font-weight="600">loses ? (∝ p° − p)</text><text x="430" y="114" font-weight="600">gains ? (∝ p°)</text></g>'
++'<path d="M92 128 V134 H430 V128" fill="none" stroke="var(--atom-b)" stroke-width="1.6"/><text x="260" y="148" font-size="11" text-anchor="middle" fill="currentColor">gain of the absorbent = sum of the two losses</text>'
++'</svg></div><figcaption>The air picks up vapour in the solution bulbs, then the rest of what it can hold in the pure-water bulbs. The absorbent collects both, so its gain is proportional to the pure-solvent vapour pressure p°.</figcaption></figure>';
+
+/* ---------- content ---------- */
+var SECTIONS = [
+{ id:'s1', n:1, title:'Ostwald–Walker: three weighings, one ratio', chip:'c1', chipText:'Recurring · Weak',
+  pattern:'solutions-kinetics-data-interpretation',
+  syl:'Syllabus: Solutions (lowering of vapour pressure, Raoult’s law, van’t Hoff factor)',
+  cameBack:{
+    prev:'CTA19 Q38, Q52, Q53 and Q48 were wrong (molality against molarity, mixing, ΔT_b, osmosis), all bookkeeping slips with units and particle counts. CTA18 Q38 was wrong too: you misread how t½ changes with pressure. CTA17 Q42 and CTA18 Q37 were skipped.',
+    now:'CTA21 Q51 wrong (the portal did not show your answer; key <strong>1000/21 %</strong>). Q52 wrong: you marked <strong>0.191 g</strong>, key <strong>0.216 g</strong>. This pattern was “In between” after CTA20 (Q48, Q49 right) and is back to Weak.',
+    verdict:'<strong>Probably the CTA19 error again, not the CTA18 one.</strong> The trend-reading mistake did not come back. For Q52 I can get 0.191 g by leaving out the dissociation (i = 1): 0.18 × 18/17 = 0.1906. That is the particle-count slip from CTA19. Your working is not saved, so this is a guess. For Q51 I cannot say, because your answer was not captured.'},
+  why:'The Ostwald–Walker method looks like a new apparatus, but it only measures one ratio: how much vapour pressure the solute removed, compared with the pressure of pure solvent. Once you know which bulb measures which pressure, the question is the same Raoult’s-law bookkeeping as before.',
+  rule:[
+    'Air meets the bulbs in a fixed order: solution, then pure solvent, then the absorbent.',
+    'Solution bulbs lose in proportion to <span class="m">p</span>. Solvent bulbs lose in proportion to <span class="m">p° − p</span>. The absorbent gains in proportion to <span class="m">p°</span>, the sum of the two.',
+    '<span class="m">(p° − p) ÷ p°</span> = solvent-bulb loss ÷ absorbent gain = mole fraction of solute, <span class="m">x₂</span>.',
+    '<span class="m">(p° − p) ÷ p</span> = solvent-bulb loss ÷ solution-bulb loss = <span class="m">n₂ ÷ n₁</span> (solute particles over solvent moles).',
+    'Count particles, not formula units: <span class="m">n₂ = i × moles dissolved</span>, with <span class="m">i = 1 + (ν − 1)α</span>. For AlCl₃, ν = 4.'],
+  ex:{ src:'CTA21 Q52',
+    q:'In an Ostwald–Walker experiment the solution is 1 mol of AlCl₃ in 17 mol of water, with degree of dissociation α = 0.8. The solution loses 0.18 g. What is the gain of the absorbent?',
+    yours:'0.191 g', correct:'0.216 g',
+    note:'Stem as saved in the CTA21 record (options not saved). Your working is not saved.',
+    diag:'My working is not saved. I can reproduce 0.191 g by ignoring the dissociation.',
+    fig:FIG_OW,
+    steps:[
+      {tag:'Step 1: read the order', html:'Air meets the solution first, so the solution’s loss (0.18 g) is proportional to <span class="m">p</span>. The absorbent’s gain is proportional to <span class="m">p°</span>. The target is a gain, so the last line must be in grams of absorbent.'},
+      {tag:'Step 2: count the particles', html:'AlCl₃ → Al³⁺ + 3Cl⁻, so ν = 4. i = 1 + 3(0.8) = 3.4. The 1 mol dissolved gives n₂ = 3.4 mol of particles.'},
+      {tag:'Step 3: mole fraction and pressure', html:'n₁ = 17 mol. x₂ = 3.4 ÷ (17 + 3.4) = 3.4 ÷ 20.4 = 1/6. So <span class="m">p = p° (1 − 1/6) = 5p°/6</span>.'},
+      {tag:'Step 4: from grams to grams', html:'0.18 g is proportional to 5p°/6. The gain, proportional to p°, is 0.18 × 6/5 = 0.216 g.'},
+      {tag:'Step 5: cross-check with the shortcut', html:'(p° − p) ÷ p = n₂ ÷ n₁ = 3.4 ÷ 17 = 0.2. So the pure-water bulbs lose 0.2 × 0.18 = 0.036 g, and 0.18 + 0.036 = 0.216 g.<div class="final">Answer: 0.216 g</div><div class="trap-note">The trap: using 1 mol instead of 3.4 mol of particles. Then n₂ ÷ n₁ = 1/17 and the gain is 0.18 × 18/17 = 0.191 g, the number you marked.</div>'}
+    ]},
+  extra:[{label:'Your Q51 in four lines (your answer was not captured)',
+    html:'Absorbent gains 0.24 g and the pure-water bulbs lose 0.02 g, so x₂ = 0.02 ÷ 0.24 = 1/12. That means n(glucose) : n(water) = 1 : 11. Masses: 180 × 1 and 18 × 11 = 198. Mass % glucose = 180 ÷ (180 + 198) = 10/21, which is <strong>1000/21 %</strong> (47.6 %). No dissociation here, so the only traps are using x₂ as a mass fraction and using 1/11 as the answer.'}]
+},
+{ id:'s2', n:2, title:'Colligative numbers after a reaction, and rate statements', chip:'c1', chipText:'Recurring · Weak',
+  pattern:'solutions-kinetics-data-interpretation',
+  syl:'Syllabus: Solutions (osmotic pressure, colligative properties) and Chemical Kinetics (rate law, rate constant, catalysis, Arrhenius equation)',
+  cameBack:{
+    prev:'Skipped on this pattern: CTA17 Q42, CTA18 Q37, CTA19 Q39 and Q43. Wrong on osmotic pressure in CTA19 Q38, Q48 and Q52 (you answered 592 torr against 984.8).',
+    now:'CTA21 Q42 <strong>skipped</strong> (2 L of 1 M AgNO₃ + 3 L of 2 M NaCl, key 60 atm). Q47 partial: you ticked B and D, key <strong>A, B, D</strong>.',
+    verdict:'<strong>Q42 is the same skip again</strong>, the fourth test with a skip on this pattern (CTA17, CTA18, CTA19, CTA21). It is five lines of work. <strong>Q47 is a new kind of slip:</strong> a statement question where one true option was left blank. That is the multi-correct habit, recorded in 8 of 9 tests since CTA16.'},
+  why:'Osmotic pressure counts dissolved particles. If two solutions react when mixed, the count changes before you apply the formula. A precipitate stops counting. Ions that did not react (spectators) keep counting.',
+  rule:[
+    'Moles first: M × V in litres, for each reactant. Then the limiting reagent.',
+    'A precipitate (AgCl) is out of the solution. Do not count it.',
+    'Count every dissolved ion left, spectators included (Na⁺, NO₃⁻). Add the volumes. <span class="m">c = particle moles ÷ total volume</span>.',
+    '<span class="m">π = cRT</span>. With R = 0.0821 L atm K⁻¹ mol⁻¹ and T = 300 K, RT = 24.6 L atm mol⁻¹.'],
+  habit:'<strong>Skip habit:</strong> Q37, Q39, Q42, Q45 and Q46 were all skipped in CTA21, and you skipped in every Sunday test from CTA16 to CTA21. Here, Q42 needs five lines. Start with the mole table before you decide whether the question is long.',
+  ex:{ src:'CTA21 Q42',
+    q:'2 L of 1 M AgNO₃ is mixed with 3 L of 2 M NaCl at 300 K. Find the osmotic pressure of the resulting solution in atm. (AgCl is insoluble.)',
+    yours:'skipped', correct:'60 atm',
+    note:'Stem as saved in the CTA21 record. The stem’s value of R is not saved; with R = 0.0821 I get 59.1 atm, and the key 60 matches that rounded (RT ≈ 25).',
+    diag:'I skipped it in the test.',
+    steps:[
+      {tag:'Step 1: moles and total volume', html:'AgNO₃ = 2 L × 1 M = 2 mol. NaCl = 3 L × 2 M = 6 mol. Total volume = 5 L.'},
+      {tag:'Step 2: the reaction', html:'Ag⁺ + Cl⁻ → AgCl↓, one to one. 2 mol Ag⁺ uses 2 mol Cl⁻, so Cl⁻ left = 6 − 2 = 4 mol. The 2 mol of AgCl leaves the solution.'},
+      {tag:'Step 3: what is still dissolved', html:'Na⁺ = 6 mol (none of it reacted). Cl⁻ = 4 mol. NO₃⁻ = 2 mol (spectator). Total = 12 mol of particles.'},
+      {tag:'Step 4: concentration', html:'c = 12 mol ÷ 5 L = 2.4 mol L⁻¹.'},
+      {tag:'Step 5: π = cRT', html:'π = 2.4 × 0.0821 × 300 = 59.1 atm, which is the key’s 60 atm.<div class="final">Answer: 60 atm</div><div class="trap-note">The trap: skipping the reaction. Counting the ions as if nothing had precipitated gives 16 mol ÷ 5 L = 3.2 M and about 79 atm.</div>'}
+    ]},
+  extra:[{label:'Q47 (your B and D, key A, B, D): rules that settle a rate statement',
+    html:'The option texts were not saved, so I cannot say what A said and I will not invent it. These facts decide every statement of this kind:<ul><li>The rate constant <span class="m">k</span> depends only on temperature and on the catalyst (through E<sub>a</sub>). It does not depend on concentration, volume or pressure.</li><li>Rate = k × concentration terms. For a gas, concentration = n ÷ V, so halving the volume at constant T doubles it.</li><li>An inert gas at constant volume changes nothing. At constant total pressure it enlarges the volume, which lowers the concentration.</li><li>A catalyst lowers E<sub>a</sub>, raises k, and so raises the rate at the same concentrations.</li></ul><strong>Multi-correct habit:</strong> A was true and you left it blank. After ticking two options, ask of each blank one: “does this follow from a fact I just used?”'}]
+},
+{ id:'s3', n:3, title:'Hydrolysis: which ion reacts, and which formula follows', chip:'c6', chipText:'Recurring · Weak',
+  pattern:'ionic-equilibrium-buffers-hydrolysis-ksp-lists',
+  syl:'Syllabus: Chemical and Ionic Equilibrium (hydrolysis of salts, pH, acids and bases)',
+  cameBack:{
+    prev:'Mostly skips and partials: CTA16 Q37 partial and Q45, Q54 skipped; CTA17 Q53, Q54 skipped; CTA18 Q49 partial (NaA with Ka = 10⁻⁶: you found M and A⁻ but missed pH ≈ 4 and Kb, which follow from the same Kh); CTA19 Q51 wrong, Q40 skipped; CTA20 Q43 wrong (a buffer).',
+    now:'CTA21 Q53 <strong>correct</strong> (alum, only Al³⁺ hydrolyses: 1.87 × 10⁻³ M). Q54 wrong (same alum, only SO₄²⁻ hydrolyses: you marked D, key 1.58 × 10⁻⁸ M). Q46 skipped (key A, B, C, D).',
+    verdict:'<strong>A different error, and a more useful one.</strong> Until now this chapter was lost by skipping or stopping halfway. Q54 is a calculation you tried and got wrong. What you do right: when the cation hydrolyses, the formula √(K·C) hands you [H₃O⁺] directly. Where it breaks: for the anion, the same formula hands you [OH⁻], and converting to [H₃O⁺] is an extra step. Your option D is not saved, so I do not know which slip it was.'},
+  why:'The same square-root formula appears for both ions, so it feels like the same problem. The difference is what comes out. A cation gives an acid and the root is [H₃O⁺]. An anion gives a base and the root is [OH⁻]. Stopping at the root is the easiest way to lose the mark.',
+  rule:[
+    'Cation (Al³⁺): acts as an acid, <span class="m">[H₃O⁺] = √(Ka·C)</span>. One step.',
+    'Anion (SO₄²⁻, A⁻): acts as a base, <span class="m">Kh = Kw ÷ Ka(conjugate acid)</span>, <span class="m">[OH⁻] = √(Kh·C)</span>, then <span class="m">[H₃O⁺] = Kw ÷ [OH⁻]</span>. Two steps.',
+    'Ion concentration = salt concentration × number of that ion in the formula. Alum gives 2 SO₄²⁻ per formula unit.',
+    'If Ka(HA) and Kb(A⁻) are numerically equal, then Ka × Kb = Kw gives <span class="m">Ka = Kb = 10⁻⁷</span> at 25 °C.',
+    'Direction check: an anion salt must give pH above 7, so [H₃O⁺] must be below 10⁻⁷.'],
+  habit:'<strong>Skip habit:</strong> Q46 was skipped, and the key says all four options are true. When every option follows from one number (here Ka = Kb = 10⁻⁷), solve for that number first.',
+  ex:{ src:'CTA21 Q54',
+    q:'Potash alum, KAl(SO₄)₂·12H₂O (K = 39, Al = 27, S = 32, O = 16, H = 1). 11.85 g is dissolved in water to make 100 cm³. Only SO₄²⁻ hydrolyses, and Ka of HSO₄⁻ is 1.25 × 10⁻². Find [H₃O⁺].',
+    yours:'D (value not saved)', correct:'1.58 × 10⁻⁸ M',
+    note:'Stem as saved in the CTA21 record. The option texts are not saved, so I cannot tell which slip D was.',
+    diag:'My option D is not saved, so we do not know which step slipped.',
+    steps:[
+      {tag:'Step 1: concentration of the salt', html:'Molar mass = 39 + 27 + 2(96) + 12(18) = 474 g mol⁻¹. 11.85 ÷ 474 = 0.0250 mol in 0.100 L, so 0.250 M.'},
+      {tag:'Step 2: concentration of the reacting ion', html:'Each formula unit gives 2 SO₄²⁻, so [SO₄²⁻] = 0.500 M. Al³⁺ and K⁺ are told not to matter here.'},
+      {tag:'Step 3: Kh for the anion', html:'SO₄²⁻ + H₂O ⇌ HSO₄⁻ + OH⁻. Kh = Kw ÷ Ka(HSO₄⁻) = 10⁻¹⁴ ÷ 1.25 × 10⁻² = 8 × 10⁻¹³.'},
+      {tag:'Step 4: the root is [OH⁻]', html:'[OH⁻] = √(Kh·C) = √(8 × 10⁻¹³ × 0.5) = √(4 × 10⁻¹³) = 6.32 × 10⁻⁷ M. This is a base, so this number is not the answer yet.'},
+      {tag:'Step 5: convert, then check', html:'[H₃O⁺] = 10⁻¹⁴ ÷ 6.32 × 10⁻⁷ = 1.58 × 10⁻⁸ M. Direction check: below 10⁻⁷, so the solution is basic, as an anion salt must be.<div class="final">Answer: 1.58 × 10⁻⁸ M</div><div class="trap-note">The trap: quoting 6.32 × 10⁻⁷ as [H₃O⁺] (that would be pH 6.2, acidic, for a basic anion). Using 0.25 M instead of 0.50 M gives 2.24 × 10⁻⁸. Check your own D against these two.</div>'}
+    ]}
+},
+{ id:'s4', n:4, title:'Conductance: build Λ from other salts, then convert to Ksp', chip:'c4', chipText:'Shaky · was Strong',
+  pattern:'conductance-and-weak-electrolyte-calculations',
+  syl:'Syllabus: Electrochemistry (electrolytic conductance, specific and molar conductivity, Kohlrausch’s law) and Solubility product',
+  cameBack:{
+    prev:'Four correct in a row: CTA18 Q44, CTA19 Q37, CTA20 Q53, CTA21 Q40 (saturated AgBr plus AgNO₃, answer 55).',
+    now:'CTA21 Q41 wrong: you marked <strong>A</strong>, the key is <strong>B</strong>, Ksp = 10⁶y² ÷ (x₁ + x₂ − 2x₃)².',
+    verdict:'<strong>First miss after four correct, so the method works.</strong> Q40 and Q41 were in the same test and Q40 went right. Q41 asks for three jobs in a row: combine three salts into BaSO₄, convert to molarity, then square. The option texts are not saved, so I cannot say which job option A skipped.'},
+  why:'A saturated solution of a sparingly soluble salt is so dilute that its molar conductance equals the infinite-dilution value. You cannot measure that value for BaSO₄ directly, so you build it from three soluble salts that contain the same ions.',
+  rule:[
+    'Write each salt as ions and add or subtract salts until only Ba²⁺ and SO₄²⁻ are left.',
+    'Convert: <span class="m">s = 1000 κ ÷ Λm</span> (κ in S cm⁻¹, Λm in S cm² mol⁻¹, s in mol L⁻¹). Subtract the water’s own κ if the stem gives it.',
+    'Then Ksp from the formula: AB gives <span class="m">s²</span>, AB₂ gives <span class="m">4s³</span>.',
+    'Squaring s squares the 1000 as well, which is where the 10⁶ in the key comes from.'],
+  ex:{ src:'CTA21 Q41',
+    q:'The molar conductances of BaCl₂, H₂SO₄ and HCl at infinite dilution are x₁, x₂ and x₃ (S cm² mol⁻¹). A saturated solution of BaSO₄ has specific conductance y (S cm⁻¹, water’s conductance already subtracted). Find Ksp of BaSO₄.',
+    yours:'A (text not saved)', correct:'B: 10⁶y² ÷ (x₁ + x₂ − 2x₃)²',
+    note:'Stem as saved in the CTA21 record. The option texts are not saved; the key’s form was recorded.',
+    diag:'My option A is not saved, so we do not know which step it skipped.',
+    steps:[
+      {tag:'Step 1: the ions in each salt', html:'BaCl₂ = Ba²⁺ + 2Cl⁻ (x₁). H₂SO₄ = 2H⁺ + SO₄²⁻ (x₂). HCl = H⁺ + Cl⁻ (x₃).'},
+      {tag:'Step 2: combine to get BaSO₄', html:'BaCl₂ + H₂SO₄ − 2HCl = Ba²⁺ + 2Cl⁻ + 2H⁺ + SO₄²⁻ − 2H⁺ − 2Cl⁻ = Ba²⁺ + SO₄²⁻. So Λm(BaSO₄) = x₁ + x₂ − 2x₃. The 2 on x₃ is there to cancel two Cl⁻ and two H⁺.'},
+      {tag:'Step 3: conductivity to molarity', html:'s = 1000 y ÷ (x₁ + x₂ − 2x₃) mol L⁻¹. The 1000 converts cm³ to litres.'},
+      {tag:'Step 4: Ksp', html:'BaSO₄ ⇌ Ba²⁺ + SO₄²⁻, each at concentration s. Ksp = s² = 10⁶ y² ÷ (x₁ + x₂ − 2x₃)².<div class="final">Answer: option B</div><div class="trap-note">The three easy slips: −x₃ instead of −2x₃, a missing 1000, and writing s instead of s². Compare your option A with these.</div>'}
+    ]}
+},
+{ id:'s5', n:5, title:'n-factor check: whose normality is it?', chip:'c5', chipText:'Recurring · Weak',
+  pattern:'stoichiometry-n-factor-basis-and-last-step',
+  syl:'Syllabus: Mole concept (redox titrations, normality, equivalents)',
+  cameBack:{
+    prev:'Wrong in CTA16, CTA17 (three), CTA18 Q51 (mole % instead of mass %), WTA20 (two) and CTA20 Q44 (answered 2, key 0.1).',
+    now:'CTA21 Q39 <strong>skipped</strong> (key 50 %).',
+    verdict:'<strong>I cannot compare, because you did not attempt it.</strong> It is the same family: the setup is easy and the n-factor basis decides the answer. The trap here is that “1.25 N” belongs to a different reaction from the one being run.'},
+  why:'Normality is not a property of the substance. It is molarity times the n-factor of one particular reaction. If the reaction changes, the normality on the bottle no longer counts the electrons you are using.',
+  rule:[
+    'Convert the label back to molarity with the reaction it was made for: <span class="m">M = N ÷ n(label)</span>.',
+    'Then equivalents in this reaction = moles × n(this reaction).',
+    'MnO₄⁻ per ion: acid, Mn²⁺ gives 5. Neutral, MnO₂ gives 3. With fluoride, Mn³⁺ gives 4. Alkaline, MnO₄²⁻ gives 1.',
+    'The other side has its own n-factor: Mn²⁺ → Mn³⁺ is 1.'],
+  habit:'<strong>Skip habit:</strong> Q39 is solved in five lines below. The n-factor is the part of this page every other calculation leans on, so do this check on any N in a stem.',
+  ex:{ src:'CTA21 Q39',
+    q:'A 458 g sample of Mn₃O₄ (Mn = 55, O = 16) is dissolved to give Mn²⁺. The Mn²⁺ is titrated with 3 L of 1.25 N KMnO₄ in the presence of fluoride, which stabilises Mn(III). Find the percentage of Mn₃O₄ in the sample.',
+    yours:'skipped', correct:'50 %',
+    note:'Stem as saved in the CTA21 record. The record does not say which reaction the 1.25 N refers to. The only reading I found that gives the key is n = 5 on the label (the usual acid reaction).',
+    diag:'I skipped it in the test.',
+    steps:[
+      {tag:'Step 1: the target and the sample', html:'Asked: % Mn₃O₄ = mass of pure Mn₃O₄ ÷ 458 × 100. M(Mn₃O₄) = 3(55) + 4(16) = 229 g mol⁻¹, so 458 g is 2 mol if pure.'},
+      {tag:'Step 2: the reaction that runs', html:'MnO₄⁻ → Mn³⁺ (+7 to +3) gains 4 electrons. Mn²⁺ → Mn³⁺ loses 1. So MnO₄⁻ + 4Mn²⁺ → 5Mn³⁺, with n = 4 for permanganate.'},
+      {tag:'Step 3: undo the label', html:'1.25 N on a bottle means the acid reaction, n = 5. So M = 1.25 ÷ 5 = 0.25 M, and 3 L holds 0.75 mol of MnO₄⁻.'},
+      {tag:'Step 4: equivalents in this reaction', html:'0.75 mol × 4 = 3.0 eq. Each Mn²⁺ gives 1 eq, so 3.0 mol of Mn²⁺ was present.'},
+      {tag:'Step 5: back to Mn₃O₄', html:'Each Mn₃O₄ gives 3 Mn²⁺, so 3.0 ÷ 3 = 1.0 mol = 229 g. 229 ÷ 458 = 50 %.<div class="final">Answer: 50 %</div><div class="trap-note">The trap: using 3 L × 1.25 N = 3.75 eq straight away. That gives 1.25 mol and 62.5 %, which is not in the key.</div>'}
+    ]}
+}
+];
+
+var PROBS = [
+{ sec:1, type:'single',
+  q:'In an Ostwald–Walker experiment, dry air passes first through bulbs holding a solution of 1 mol CaCl₂ in 13 mol of water, then through bulbs of pure water, then through a drying tube. The solution bulbs lose 0.30 g and the pure-water bulbs lose 0.06 g. What is the degree of dissociation α of CaCl₂?',
+  opts:['0.58','0.80','0.53','0.67'], ans:[1],
+  why:'Solution bulbs lose in proportion to p and water bulbs in proportion to p° − p. So (p° − p) ÷ p = 0.06 ÷ 0.30 = 1/5 = n₂ ÷ n₁. With n₁ = 13 mol, n₂ = 2.6 mol of particles. CaCl₂ gives three ions, so i = 1 + 2α = 2.6 and α = 0.80. Check forwards: x₂ = 2.6 ÷ 15.6 = 1/6, p = 5p°/6, total gain = 0.30 × 6/5 = 0.36 g, and 0.36 − 0.30 = 0.06 g.',
+  mistakes:{0:'0.58: took 0.06 ÷ 0.36 = 1/6 as n₂ ÷ n₁. That ratio is x₂, which is n₂ ÷ (n₁ + n₂). It gives i = 13/6 and α = 0.58.',
+            2:'0.53: counted four ions (1 + 3α, as for AlCl₃). CaCl₂ gives three, so ν − 1 = 2.',
+            3:'0.67: used 13 + 1 = 14 as the denominator, as if dissociation added no particles. That gives i = 14/6 and α = 0.67.'} },
+{ sec:2, type:'single',
+  q:'500 mL of 0.20 M AgNO₃ is mixed with 500 mL of 0.30 M K₂CrO₄ at 300 K. Ag₂CrO₄ precipitates completely and its solubility is ignored. Take R = 0.082 L atm K⁻¹ mol⁻¹ and add the volumes. What is the osmotic pressure of the final solution?',
+  opts:['16.0 atm','12.3 atm','11.1 atm','24.6 atm'], ans:[1],
+  why:'Ag⁺ = 0.500 × 0.20 = 0.10 mol. CrO₄²⁻ = 0.15 mol and K⁺ = 0.30 mol. The reaction is 2Ag⁺ + CrO₄²⁻ → Ag₂CrO₄, so 0.10 mol Ag⁺ uses 0.05 mol CrO₄²⁻, leaving 0.10 mol. Dissolved: K⁺ 0.30 + CrO₄²⁻ 0.10 + NO₃⁻ 0.10 = 0.50 mol in 1.0 L. π = 0.50 × 0.082 × 300 = 12.3 atm.',
+  mistakes:{0:'16.0 atm: ignored the precipitation. Counting all ions, 0.20 + 0.45 = 0.65 mol in 1.0 L gives 16.0 atm.',
+            2:'11.1 atm: used a 1 : 1 reaction. Then CrO₄²⁻ left = 0.05 mol and the total is 0.30 + 0.05 + 0.10 = 0.45 mol.',
+            3:'24.6 atm: divided 0.50 mol by 0.5 L, the volume of one solution, instead of the total 1.0 L.'} },
+{ sec:2, type:'multi',
+  q:'A gas-phase reaction 2A → products has rate = k[A]². Unless stated otherwise it runs at constant temperature. Select the correct statement(s).',
+  opts:['Compressing the gas to one-third of its volume multiplies the rate by 9 and leaves k unchanged.','Adding helium at constant volume lowers the rate, because A is diluted.','Adding helium at constant total pressure lowers the rate, because the volume grows and [A] falls.','A catalyst that lowers the activation energy leaves the rate unchanged at the same [A], because [A] has not changed.'], ans:[0,2],
+  why:'A: [A] triples, so the rate goes up 3² = 9 times. k depends only on temperature and catalyst, so it is unchanged. True. B: at constant volume, [A] = n ÷ V does not change when helium is added. False. C: the total pressure is held fixed, so the volume expands, [A] falls and the rate falls. True. D: the catalyst raises k, and the rate is k[A]², so the rate rises at the same [A]. False.',
+  mistakes:{1:'B: thought any added gas dilutes A. Dilution needs the volume to grow, and here it does not.',
+            3:'D: treated the rate as depending on concentration only. A catalyst raises k, so the rate rises at the same [A].'} },
+{ sec:3, type:'multi',
+  q:'At 25 °C a weak acid HA has Ka(HA) numerically equal to Kb(A⁻). Use Kw = 1 × 10⁻¹⁴ and log 2 = 0.30 (so log 5 = 0.70). Select the correct statement(s).',
+  opts:['Ka of HA is 1 × 10⁻⁷.','A 0.10 M solution of HA has pH 4.','A 0.10 M solution of NaA has pH 10.','Mixing 100 mL of 0.10 M HA with 100 mL of 0.10 M NaOH gives a solution of pH 7.'], ans:[0,1,2],
+  why:'Ka × Kb = Kw and Ka = Kb, so Ka = Kb = 10⁻⁷ (A true). HA: [H₃O⁺] = √(10⁻⁷ × 0.10) = 10⁻⁴, pH 4 (B true; α is about 10⁻³, so the approximation holds). NaA: the anion is a base, [OH⁻] = √(Kb × 0.10) = 10⁻⁴, pOH 4, pH 10 (C true). D: the mixture is 0.050 M NaA. [OH⁻] = √(10⁻⁷ × 0.050) = √(5 × 10⁻⁹), so pOH = ½(9 − 0.70) = 4.15 and pH = 9.85, not 7 (D false).',
+  mistakes:{3:'D: thought Ka = Kb makes the salt neutral. Ka = Kb only fixes pKa = 7. A solution of NaA at the equivalence point is still basic, because A⁻ is a base.'} },
+{ sec:4, type:'single',
+  q:'Limiting molar conductivities (S cm² mol⁻¹): CaCl₂ 270, NaF 90, NaCl 126. A saturated solution of CaF₂ has specific conductance 1.98 × 10⁻⁵ S cm⁻¹ with the water’s conductance already subtracted. Treat the solution as infinitely dilute. What is Ksp of CaF₂? (The numbers are made up for practice.)',
+  opts:['4.0 × 10⁻¹²','1.0 × 10⁻¹²','1.0 × 10⁻⁸','2.4 × 10⁻¹²'], ans:[0],
+  why:'CaCl₂ + 2NaF − 2NaCl = Ca²⁺ + 2F⁻, so Λm(CaF₂) = 270 + 2(90) − 2(126) = 198. s = 1000 × 1.98 × 10⁻⁵ ÷ 198 = 1.0 × 10⁻⁴ mol L⁻¹. CaF₂ gives [Ca²⁺] = s and [F⁻] = 2s, so Ksp = s(2s)² = 4s³ = 4.0 × 10⁻¹².',
+  mistakes:{1:'1.0 × 10⁻¹²: wrote Ksp = s³ and forgot that [F⁻] = 2s.',
+            2:'1.0 × 10⁻⁸: treated CaF₂ as a 1 : 1 salt, Ksp = s².',
+            3:'2.4 × 10⁻¹²: subtracted NaCl and added NaF once instead of twice, so Λm = 234 and s = 8.46 × 10⁻⁵.'} },
+{ sec:5, type:'single',
+  q:'A KMnO₄ solution is labelled 0.50 N, which is its normality for the reaction in acid solution (MnO₄⁻ → Mn²⁺). It is used in neutral solution: 2MnO₄⁻ + 3SO₃²⁻ + H₂O → 2MnO₂ + 3SO₄²⁻ + 2OH⁻. What mass of Na₂SO₃ (M = 126 g mol⁻¹) is oxidised by 40.0 mL of this solution?',
+  opts:['0.756 g','1.26 g','3.78 g','1.51 g'], ans:[0],
+  why:'The label uses n = 5, so M = 0.50 ÷ 5 = 0.10 M, and 40.0 mL holds 4.0 mmol of MnO₄⁻. Neutral solution gives MnO₂, so n = 3 and 4.0 mmol is 12.0 meq. Sulfite goes to sulfate, n = 2, so 12.0 meq is 6.0 mmol of Na₂SO₃. Mass = 6.0 × 126 = 756 mg = 0.756 g. Check with the equation: 4.0 mmol MnO₄⁻ × 3/2 = 6.0 mmol SO₃²⁻.',
+  mistakes:{1:'1.26 g: took 0.50 N as the normality in this reaction, so 20 meq ÷ 2 = 10 mmol.',
+            2:'3.78 g: read 0.50 N as 0.50 M, so 20 mmol of MnO₄⁻ × 3/2 = 30 mmol.',
+            3:'1.51 g: used n = 1 for sulfite, so 12 meq = 12 mmol.'} }
+];
+
+/* ---------- helpers ---------- */
+var LET = ['A','B','C','D'];
+function plain(html){ var d=document.createElement('div'); d.innerHTML=html.replace(/<\/?(div|br|li|p|ul|figure)[^>]*>/g,' '); return d.textContent.replace(/\s+/g,' ').trim(); }
+var SUP={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁻':'-','⁺':'+'};
+var SUB={'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9','₊':'+','₋':'-'};
+function ascii(s){
+  return s.replace(/([EG])°/g,function(m,c){return c+'0';})
+          .replace(/p°/g,'p0')
+          .replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]+/g,function(r){return '^'+r.split('').map(function(c){return SUP[c];}).join('');})
+          .replace(/[₀-₉₊₋]+/g,function(r){return r.split('').map(function(c){return SUB[c];}).join('');})
+          .replace(/×/g,'x').replace(/→/g,'->').replace(/⇌/g,'<=>').replace(/√/g,'sqrt').replace(/≈/g,'~').replace(/−/g,'-')
+          .replace(/½/g,'1/2').replace(/Δ/g,'delta ').replace(/÷/g,'/').replace(/°/g,' deg').replace(/·/g,'*')
+          .replace(/∝/g,'proportional to ').replace(/α/g,'alpha').replace(/ν/g,'nu').replace(/κ/g,'kappa').replace(/Λ/g,'Lambda').replace(/π/g,'pi').replace(/↓/g,'(ppt)').replace(/⁄/g,'/')
+          .replace(/[–—]/g,'-').replace(/[“”]/g,'"').replace(/[’‘]/g,"'");
+}
+var TUTOR = 'I am a JEE aspirant preparing for JEE Advanced. Act as a patient tutor: use simple language, reply in chunks of under 10 lines, explain why and not just how, and wait for my reply before moving on.';
+function askUrl(parts){
+  var ps = parts.map(function(p){ return ascii(p); });
+  function build(){ return 'https://claude.ai/new?q=' + encodeURIComponent(ps.join('\n\n')); }
+  var u = build(), guard = 0;
+  while(u.length > 3300 && guard++ < 200){
+    var li = 1; for(var i=2;i<ps.length;i++){ if(ps[i].length > ps[li].length) li = i; }
+    ps[li] = ps[li].slice(0, Math.max(40, Math.floor(ps[li].length*0.9))) + '...';
+    u = build();
+  }
+  return u;
+}
+function askLink(parts, label){
+  var a = document.createElement('a');
+  a.className='ask'; a.target='_blank'; a.rel='noopener'; a.textContent = label || 'Ask Claude about this ↗';
+  a.href = askUrl([TUTOR].concat(parts));
+  return a;
+}
+function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
+
+/* ---------- build sections ---------- */
+function buildSections(){
+  var root = document.getElementById('sections');
+  SECTIONS.forEach(function(s){
+    var sec = el('section','pattern'); sec.id = s.id;
+    var head = el('div','pattern-head');
+    head.appendChild(el('h2',null, s.n+' · '+s.title));
+    head.appendChild(el('span','chip '+s.chip, s.chipText));
+    sec.appendChild(head);
+    sec.appendChild(el('div','syl', s.syl));
+    var cb = el('div','came-back');
+    cb.innerHTML = '<span class="lbl">This one came back</span>'
+      +'<div class="sbs"><div><span class="h">Earlier</span>'+s.cameBack.prev+'</div><div><span class="h">CTA21</span>'+s.cameBack.now+'</div></div>'
+      +'<div>'+s.cameBack.verdict+'</div>';
+    sec.appendChild(cb);
+    sec.appendChild(el('p','why', '<strong>Why this matters.</strong> '+s.why));
+    var rule = el('div','rule');
+    rule.innerHTML = '<span class="rule-label">Shortcut rules</span><ul>'+s.rule.map(function(r){return '<li>'+r+'</li>';}).join('')+'</ul>';
+    sec.appendChild(rule);
+
+    var ex = s.ex, st = el('div','stepper'); st.id = 'st-'+s.id;
+    st.appendChild(el('span','stepper-label','Worked example · '+ex.src));
+    st.appendChild(el('p',null, ex.q.replace(/\n/g,'<br>')));
+    st.appendChild(el('p','yours','Your answer: <strong>'+ex.yours+'</strong>. Correct answer: <strong>'+ex.correct+'</strong>.'));
+    st.appendChild(el('p','rebuilt', ex.note));
+    if(ex.fig){ var f = el('div'); f.innerHTML = ex.fig; st.appendChild(f); }
+    ex.steps.forEach(function(sp,i){
+      var d = el('div','step'); d.innerHTML='<span class="tag">'+sp.tag+'</span>'+sp.html; if(i>0) d.hidden = true; st.appendChild(d);
+    });
+    var b = el('button','step-btn','Show next step →'); b.type='button'; b.onclick=function(){ stepNext(st); }; st.appendChild(b);
+    sec.appendChild(st);
+
+    var secParts = ['Topic: '+s.title+' (JEE Advanced Chemistry). Pattern: '+s.pattern+'. This pattern is recurring or shaky on my tracker: '+plain(s.cameBack.verdict),
+                    'Why it matters: '+plain(s.why),
+                    'Shortcut rules: '+s.rule.map(plain).join(' | ')];
+    if(s.habit){ secParts.push('Habit note: '+plain(s.habit)); }
+    if(s.extra){ s.extra.forEach(function(x){ var xt='Extra: '+x.label+'. '+plain(x.html); secParts.push(xt.length>500? xt.slice(0,497)+'...' : xt); }); }
+    var figText = ex.fig ? ' Diagram: three boxes in a row joined by arrows, dry air entering from the left. Box 1 solution bulbs (1 mol AlCl3 in 17 mol water) loses 0.18 g, proportional to p. Box 2 pure-water bulbs loses an unknown amount, proportional to p0 - p. Box 3 absorbent tube gains an unknown amount, proportional to p0, the sum of the two losses.' : '';
+    var exParts = ['Worked example ('+ex.src+'). Question: '+plain(ex.q.replace(/\n/g,' '))+figText,
+                   'My real answer was '+ex.yours+' and the correct answer is '+ex.correct+'. '+ex.diag,
+                   'Steps: '+ex.steps.map(function(sp){ var t=plain(sp.tag+': '+sp.html); return t.length>230? t.slice(0,227)+'...' : t; }).join(' || ')];
+    var row = el('div');
+    row.appendChild(askLink(secParts, 'Ask Claude about this section ↗')); row.appendChild(document.createTextNode(' '));
+    row.appendChild(askLink(exParts, 'Ask Claude about the worked example ↗'));
+
+    if(s.extra){ s.extra.forEach(function(x){
+      var bx = el('div','rule'); bx.style.marginTop='14px';
+      bx.innerHTML = '<span class="rule-label">'+x.label+'</span>'+x.html; sec.appendChild(bx);
+    }); }
+    if(s.habit){ var hn = el('div','hero-note', s.habit); hn.style.marginTop='14px'; sec.appendChild(hn); }
+    sec.appendChild(row);
+    root.appendChild(sec);
+  });
+}
+
+/* ---------- build practice ---------- */
+function buildGrid(){
+  var grid = document.getElementById('grid');
+  PROBS.forEach(function(p,idx){
+    var sec = SECTIONS[p.sec-1];
+    var card = el('div','card'); card.id='p'+(idx+1);
+    var head = el('div','card-head');
+    head.appendChild(el('span','qnum', String(idx+1)));
+    head.appendChild(el('span','chip '+(p.type==='multi'?'c2':'c3'), p.type==='multi'?'Multi-correct':'Single-correct'));
+    head.appendChild(el('span','chip c4','Level 4'));
+    head.appendChild(el('span','chip '+sec.chip, 'Section '+sec.n));
+    card.appendChild(head);
+    card.appendChild(el('p',null,p.q));
+    if(p.type==='multi') card.appendChild(el('div','yours','Select all that apply.'));
+    var opts = el('div','opts'); var inputs=[];
+    p.opts.forEach(function(t,i){
+      var lab = el('label','opt');
+      var inp = document.createElement('input'); inp.type = p.type==='multi'?'checkbox':'radio'; inp.name='q'+idx; inp.id='q'+idx+'o'+i; inp.value=i;
+      lab.appendChild(inp); lab.appendChild(el('span','l',LET[i])); lab.appendChild(el('span','t',t));
+      opts.appendChild(lab); inputs.push(inp);
+    });
+    card.appendChild(opts);
+    var verdict = el('div'); verdict.hidden = true;
+    var actions = el('div');
+    var chk = null;
+    function grade(){
+      var sel=[]; inputs.forEach(function(i){ if(i.checked) sel.push(+i.value); });
+      if(!sel.length){ return; }
+      var ok = sel.length===p.ans.length && sel.every(function(x){ return p.ans.indexOf(x)>-1; });
+      inputs.forEach(function(inp,i){
+        var lab = inp.parentNode; lab.classList.remove('is-right','is-wrong','is-miss');
+        var isAns = p.ans.indexOf(i)>-1;
+        if(inp.checked && isAns) lab.classList.add('is-right');
+        else if(inp.checked && !isAns) lab.classList.add('is-wrong');
+        else if(!inp.checked && isAns) lab.classList.add('is-miss');
+      });
+      verdict.className = 'verdict '+(ok?'ok':'no'); verdict.hidden=false;
+      verdict.textContent = (ok?'Correct. ':'Not quite. ')+'Correct option'+(p.ans.length>1?'s':'')+': '+p.ans.map(function(i){return LET[i];}).join(', ')+'.';
+    }
+    if(p.type==='multi'){
+      chk = el('button','check-btn','Check answer'); chk.type='button'; chk.onclick=grade; actions.appendChild(chk);
+    } else {
+      inputs.forEach(function(i){ i.addEventListener('change', grade); });
+    }
+    var rev = el('button','reveal-btn','Show why'); rev.type='button'; actions.appendChild(rev);
+    card.appendChild(actions); card.appendChild(verdict);
+    var ans = el('div','answer'); ans.hidden = true;
+    var mk = Object.keys(p.mistakes).map(function(k){ return '<li>'+p.mistakes[k]+'</li>'; }).join('');
+    ans.innerHTML = '<div>'+p.why+'</div><ul>'+mk+'</ul>';
+    card.appendChild(ans);
+    rev.onclick = function(){ ans.hidden = !ans.hidden; rev.textContent = ans.hidden ? 'Show why' : 'Hide why'; };
+
+    var parts = ['Practice problem '+(idx+1)+' ('+(p.type==='multi'?'multi-correct: pick all correct options':'single-correct')+', level 4, topic: '+sec.title+').',
+                 'Problem: '+plain(p.q),
+                 'Options: '+p.opts.map(function(t,i){return LET[i]+') '+plain(t);}).join('  '),
+                 'For your reference only, do not reveal unless I ask or have made a real attempt. Correct: '+p.ans.map(function(i){return LET[i];}).join(', ')+'. Reasoning: '+plain(p.why),
+                 'Ask me what I have tried first, then give me one hint at a time.'];
+    card.appendChild(askLink(parts));
+    grid.appendChild(card);
+  });
+}
+
+function stepNext(st){
+  var steps = st.querySelectorAll('.step'), shown = 0;
+  steps.forEach(function(s){ if(!s.hidden) shown++; });
+  if(shown < steps.length){ steps[shown].hidden = false; shown++; }
+  if(shown >= steps.length){ st.querySelector('.step-btn').hidden = true; }
+}
+function setMode(mode, btn){
+  document.querySelectorAll('.mode-btn').forEach(function(b){ b.setAttribute('aria-pressed', b===btn?'true':'false'); });
+  document.getElementById('timerBar').hidden = (mode!=='timed');
+}
+var remaining = 40*60, timerId = null;
+function renderTime(){ var m=String(Math.floor(remaining/60)).padStart(2,'0'), s=String(remaining%60).padStart(2,'0'); document.getElementById('timeDisplay').textContent=m+':'+s; }
+function startTimer(){ if(timerId) return; timerId=setInterval(function(){ remaining--; if(remaining<=0){ clearInterval(timerId); timerId=null; document.getElementById('timeDisplay').textContent="Time's up"; } else renderTime(); },1000); }
+function resetTimer(){ clearInterval(timerId); timerId=null; remaining=40*60; renderTime(); }
+
+buildSections(); buildGrid(); renderTime();
+</script>

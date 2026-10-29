@@ -1,0 +1,620 @@
+<title>Elasticity and Viscosity Numericals</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one column. Hero, three sections (came-back box, rule, one worked example with a diagram), then a 6-problem MCQ grid. Blue-slate mechanics system, same family as the other physics pages. */
+  :root{
+    --bg:#F4F6FB;
+    --surface:#FFFFFF;
+    --surface-2:#EAEFF8;
+    --ink:#18223A;
+    --ink-soft:#4F5C78;
+    --border:#D6DEEC;
+    --accent:#2A5CAA;
+    --accent-ink:#FFFFFF;
+    --accent-soft:#DFE8F7;
+    --highlight-ink:#53390A;
+    --highlight-bg:#FFF4D6;
+    --highlight-border:#EBCF86;
+    --good:#217A4B;
+    --good-bg:#E2F4EA;
+    --trap:#B24A38;
+    --trap-bg:#FBE9E5;
+    --chip-1:#2A5CAA; --chip-1-bg:#DFE8F7;
+    --chip-2:#7A4FB5; --chip-2-bg:#EEE7F8;
+    --chip-3:#217A4B; --chip-3-bg:#E2F4EA;
+    --chip-4:#A9631A; --chip-4-bg:#FBEBD9;
+    --chip-5:#B24A38; --chip-5-bg:#FBE9E5;
+    --warm:#C2841B;
+    --shadow: 0 1px 2px rgba(24,34,58,.05), 0 8px 24px -12px rgba(24,34,58,.2);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0E1424; --surface:#151D33; --surface-2:#1D2744; --ink:#E6ECF8; --ink-soft:#A3AECA; --border:#2A3558;
+      --accent:#7FA9F0; --accent-ink:#0A1226; --accent-soft:#1B2A4D;
+      --highlight-ink:#FBE8B8; --highlight-bg:#3A2E10; --highlight-border:#5C4A1B;
+      --good:#5FCB8E; --good-bg:#12301F; --trap:#E58E7E; --trap-bg:#3A1E19;
+      --chip-1:#7FA9F0; --chip-1-bg:#1B2A4D; --chip-2:#C2A5EE; --chip-2-bg:#2A2140; --chip-3:#5FCB8E; --chip-3-bg:#12301F;
+      --chip-4:#E5A96B; --chip-4-bg:#3A2A14; --chip-5:#E58E7E; --chip-5-bg:#3A1E19;
+      --warm:#E8B84B;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.55);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0E1424; --surface:#151D33; --surface-2:#1D2744; --ink:#E6ECF8; --ink-soft:#A3AECA; --border:#2A3558;
+    --accent:#7FA9F0; --accent-ink:#0A1226; --accent-soft:#1B2A4D;
+    --highlight-ink:#FBE8B8; --highlight-bg:#3A2E10; --highlight-border:#5C4A1B;
+    --good:#5FCB8E; --good-bg:#12301F; --trap:#E58E7E; --trap-bg:#3A1E19;
+    --chip-1:#7FA9F0; --chip-1-bg:#1B2A4D; --chip-2:#C2A5EE; --chip-2-bg:#2A2140; --chip-3:#5FCB8E; --chip-3-bg:#12301F;
+    --chip-4:#E5A96B; --chip-4-bg:#3A2A14; --chip-5:#E58E7E; --chip-5-bg:#3A1E19;
+    --warm:#E8B84B;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.55);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body{
+    background: var(--bg); color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    padding-left: max(18px, env(safe-area-inset-left, 0px));
+    padding-right: max(18px, env(safe-area-inset-right, 0px));
+    padding-block: 28px 64px; line-height: 1.55; font-size: 16px;
+  }
+  .wrap{ max-width: 780px; margin: 0 auto; }
+  h1,h2,h3{ font-family: "Fraunces", Georgia, serif; font-weight: 600; text-wrap: balance; margin: 0; }
+  a{ color: var(--accent); }
+  .eyebrow{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); font-weight:600; }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  .hero{ padding-block: 6px 22px; }
+  .hero h1{ font-size: clamp(1.7rem, 5vw, 2.3rem); margin-top:10px; }
+  .hero p{ color:var(--ink-soft); max-width:62ch; }
+  .hero-note{ margin-top:14px; padding:13px 15px; border-radius:12px; background:var(--accent-soft); border:1px solid var(--border); font-size:.92rem; }
+  .meta{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .pill{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; padding:4px 10px; border-radius:999px; background:var(--surface-2); border:1px solid var(--border); color:var(--ink-soft); }
+  .pill b{ color:var(--ink); }
+
+  .pattern{ background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:22px 20px 24px; margin-block:18px; box-shadow:var(--shadow); min-width:0; }
+  .pattern-head{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:6px; }
+  .pattern-head h2{ font-size:1.25rem; }
+  .chip{ font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.05em; text-transform:uppercase; padding:3px 9px; border-radius:999px; font-weight:600; white-space:nowrap; }
+  .c1{ color:var(--chip-1); background:var(--chip-1-bg); } .c2{ color:var(--chip-2); background:var(--chip-2-bg); }
+  .c3{ color:var(--chip-3); background:var(--chip-3-bg); } .c4{ color:var(--chip-4); background:var(--chip-4-bg); }
+  .c5{ color:var(--chip-5); background:var(--chip-5-bg); }
+  .pattern p{ margin:10px 0; }
+  .why{ color:var(--ink-soft); font-size:.95rem; }
+  .syl{ font-family:"IBM Plex Mono",monospace; font-size:.74rem; color:var(--ink-soft); }
+
+  .came-back{ margin:12px 0; padding:12px 14px; border-radius:10px; border:1px solid var(--border); background:var(--surface-2); font-size:.92rem; }
+  .came-back .lbl{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; color:var(--trap); display:block; margin-bottom:6px; }
+  .came-back .lbl.new{ color:var(--accent); }
+  .sbs{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin:8px 0; }
+  .sbs > div{ background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:9px 11px; min-width:0; }
+  .sbs .h{ font-weight:600; font-size:.78rem; color:var(--ink-soft); display:block; margin-bottom:3px; }
+
+  .rule{ margin-top:14px; padding:14px 16px; border-radius:10px; background:var(--highlight-bg); border:1px solid var(--highlight-border); color:var(--highlight-ink); }
+  .rule-label{ font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; margin-bottom:6px; display:block; }
+  .rule ul, .rule ol{ margin:6px 0 0; padding-left:20px; } .rule li{ margin:4px 0; }
+
+  .stepper{ margin-top:16px; border-top:1px dashed var(--border); padding-top:14px; }
+  .stepper-label{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:8px; display:block; }
+  .step{ padding:10px 0; border-bottom:1px solid var(--border); }
+  .step:last-of-type{ border-bottom:none; }
+  .step .tag{ font-weight:600; font-size:.82rem; color:var(--accent); display:block; margin-bottom:4px; }
+  .step-btn{ margin-top:10px; font:inherit; font-weight:600; font-size:.88rem; background:var(--accent); color:var(--accent-ink); border:none; border-radius:8px; padding:9px 14px; cursor:pointer; }
+  .final{ background:var(--good-bg); color:var(--good); border-radius:8px; padding:10px 12px; font-weight:700; margin-top:8px; }
+  .trap-note{ background:var(--trap-bg); color:var(--trap); border-radius:8px; padding:10px 12px; font-size:.9rem; margin-top:10px; }
+  .yours{ font-size:.9rem; color:var(--ink-soft); }
+  .rebuilt{ font-size:.82rem; color:var(--ink-soft); font-style:italic; }
+  figure{ margin:14px 0 4px; }
+  figure svg{ width:100%; max-width:480px; height:auto; display:block; color:var(--ink); }
+  figcaption{ font-size:.82rem; color:var(--ink-soft); margin-top:4px; }
+  .figwrap{ overflow-x:auto; }
+  svg text{ font-family:"IBM Plex Sans", system-ui, sans-serif; }
+
+  .ask{ display:inline-block; margin-top:10px; font-size:.82rem; font-weight:600; color:var(--accent); text-decoration:none; border:1px solid var(--border); border-radius:999px; padding:5px 11px; background:var(--surface); }
+  .ask:hover{ background:var(--accent-soft); }
+
+  .practice-head{ padding-block:10px 4px; }
+  .mode-row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:14px 0 8px; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px 16px; box-shadow:var(--shadow); }
+  .mode-btn{ font:inherit; font-weight:600; font-size:.9rem; padding:8px 14px; border-radius:999px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); cursor:pointer; }
+  .mode-btn[aria-pressed="true"]{ background:var(--accent); color:var(--accent-ink); border-color:var(--accent); }
+  .timer-bar{ display:flex; align-items:center; gap:12px; margin-left:auto; flex-wrap:wrap; }
+  .time{ font-family:"IBM Plex Mono",monospace; font-size:1.3rem; font-variant-numeric:tabular-nums; min-width:64px; }
+  .timer-btn{ font:inherit; font-size:.85rem; font-weight:600; border-radius:8px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); padding:7px 12px; cursor:pointer; }
+  .mode-help{ font-size:.85rem; color:var(--ink-soft); margin:6px 2px 0; }
+
+  .grid{ display:grid; grid-template-columns:1fr; gap:14px; margin-top:16px; }
+  .card{ background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:16px 16px 14px; box-shadow:var(--shadow); min-width:0; }
+  .card-head{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+  .qnum{ font-family:"Fraunces",serif; font-weight:700; font-size:1.05rem; color:var(--accent); }
+  .opts{ display:grid; gap:7px; margin:10px 0 4px; }
+  .opt{ display:flex; gap:10px; align-items:flex-start; padding:9px 11px; border:1px solid var(--border); border-radius:10px; background:var(--surface-2); cursor:pointer; min-width:0; }
+  .opt input{ margin-top:5px; flex:none; accent-color:var(--accent); }
+  .opt .l{ font-family:"IBM Plex Mono",monospace; font-weight:600; color:var(--accent); flex:none; }
+  .opt .t{ min-width:0; overflow-wrap:anywhere; }
+  .opt.is-right{ border-color:var(--good); background:var(--good-bg); }
+  .opt.is-miss{ border-color:var(--good); border-style:dashed; background:var(--good-bg); }
+  .opt.is-wrong{ border-color:var(--trap); background:var(--trap-bg); }
+  .check-btn, .reveal-btn{ font:inherit; font-weight:600; font-size:.85rem; border-radius:8px; padding:7px 12px; cursor:pointer; margin-top:10px; margin-right:8px; }
+  .check-btn{ background:var(--accent); color:var(--accent-ink); border:none; }
+  .reveal-btn{ background:none; border:1.4px solid var(--accent); color:var(--accent); }
+  .verdict{ margin-top:10px; padding:9px 12px; border-radius:8px; font-weight:700; font-size:.92rem; }
+  .verdict.ok{ background:var(--good-bg); color:var(--good); }
+  .verdict.no{ background:var(--trap-bg); color:var(--trap); }
+  .answer{ margin-top:10px; padding:10px 12px; background:var(--surface-2); border-radius:8px; font-size:.9rem; }
+  .answer ul{ margin:6px 0 0; padding-left:18px; } .answer li{ margin:3px 0; }
+  footer{ margin-top:26px; color:var(--ink-soft); font-size:.88rem; text-align:center; }
+</style>
+
+<div class="wrap">
+  <section class="hero">
+    <span class="eyebrow">Physics · Focus Session · 29 Oct 2026</span>
+    <h1>Elasticity and viscosity numericals: build the stress, then the energy</h1>
+    <p>Built from WTA21 (Saturday 24 Oct). Three sections: elastic energy, moduli and breaking stress (the five misses in a row, Q26 to Q30), rods and wires where something changes along the length, and viscosity (terminal speed, drag work, shear in a velocity profile). Six practice problems follow.</p>
+    <div class="meta">
+      <span class="pill">Level used: <b>L4</b> (multi-concept, a trap in each)</span>
+      <span class="pill">Format: <b>MCQ A–D</b>, 3 single + 3 multi-correct</span>
+      <span class="pill">Source: <b>WTA21 (Sat 24 Oct)</b></span>
+    </div>
+    <div class="hero-note">
+      <strong>How to use this:</strong> read a section, click through its worked example, then do the two matching practice problems. Multi-correct problems are right only if you pick every correct option and nothing else. <strong>Ask Claude</strong> links open a new claude.ai chat with that item preloaded. You need to be signed in to claude.ai.
+    </div>
+    <div class="hero-note" style="margin-top:10px">
+      <strong>About the worked examples:</strong> they use your real WTA21 questions (Q27, Q19, Q22) with your real answers. The saved test file has short versions of the question text, no figures, and no key for the skipped and partial questions. Where a key is mine, the example says it was derived by hand and double-checked. Q26, Q28, Q29, Q30, Q21, Q20, Q23 and Q24 appear inside the rule boxes. For Q24 I could not derive a key, because its profile numbers and options are not in your file. Everything here uses the syllabus (Hooke’s law, Young’s modulus, modulus of rigidity, Stokes’ law, viscosity, circular motion, definite integrals, separable differential equations). Nothing marked “not yet” in your class-scope list is used.
+    </div>
+  </section>
+
+  <div id="sections"></div>
+
+  <section class="practice-head">
+    <span class="eyebrow">Practice Set</span>
+    <h2 style="margin-top:8px; font-size:1.4rem;">6 fresh problems, level 4</h2>
+    <p style="color:var(--ink-soft)">Two per section: a hollow punch and a twisted rod (energy and breaking numericals), a tapered rod and a rod pulled at one end (changing area, changing tension), then a particle with drag in water and a cone-shaped velocity profile in a pipe.</p>
+  </section>
+
+  <div class="mode-row">
+    <button class="mode-btn" aria-pressed="true" onclick="setMode('practice', this)">Practice (untimed)</button>
+    <button class="mode-btn" aria-pressed="false" onclick="setMode('timed', this)">Timed · 40 min</button>
+    <div class="timer-bar" id="timerBar" hidden>
+      <span class="time" id="timeDisplay">40:00</span>
+      <button class="timer-btn" onclick="startTimer()">Start</button>
+      <button class="timer-btn" onclick="resetTimer()">Reset</button>
+    </div>
+  </div>
+  <p class="mode-help">First pass: stay in Practice mode. Save Timed mode for a second pass.</p>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>Built from WTA21 (Sat 24 Oct). All three patterns are new and not yet proven. Not worked step by step: Q26, Q28, Q29, Q30 and Q21 (rule box, section 1), Q20 (rule box, section 2), Q23 and Q24 (rule box, section 3).</footer>
+</div>
+
+<script>
+/* ---------- diagrams (inline SVG, theme tokens) ---------- */
+function arr(x1,y1,x2,y2,col,w){
+  var a=Math.atan2(y2-y1,x2-x1), s=10, c=Math.cos(a), n=Math.sin(a);
+  var bx=x2-(s-1)*c, by=y2-(s-1)*n;
+  var p1=(x2-s*Math.cos(a-0.45)).toFixed(1)+','+(y2-s*Math.sin(a-0.45)).toFixed(1);
+  var p2=(x2-s*Math.cos(a+0.45)).toFixed(1)+','+(y2-s*Math.sin(a+0.45)).toFixed(1);
+  return '<line x1="'+x1+'" y1="'+y1+'" x2="'+bx.toFixed(1)+'" y2="'+by.toFixed(1)+'" stroke="'+col+'" stroke-width="'+(w||2.2)+'"/>'
+        +'<polygon points="'+x2+','+y2+' '+p1+' '+p2+'" fill="'+col+'"/>';
+}
+function fig(vb,label,inner,cap,text){
+  return { svg:'<figure><div class="figwrap"><svg viewBox="'+vb+'" role="img" aria-label="'+label+'">'+inner+'</svg></div><figcaption>'+cap+'</figcaption></figure>', text:' Diagram: '+text };
+}
+var TXT = function(x,y,s,o){ o=o||{}; return '<text x="'+x+'" y="'+y+'" font-size="'+(o.fs||12)+'"'+(o.anchor?' text-anchor="'+o.anchor+'"':'')+(o.bold?' font-weight="600"':'')+' fill="'+(o.fill||'currentColor')+'">'+s+'</text>'; };
+
+var FIG_RING = fig('0 0 440 250',
+ 'A thin ring seen from the front, rotating about its centre. A small piece at the top is cut out. Each end of the piece is pulled along the ring by a tension T, and the inward part of the two pulls keeps the piece moving in a circle.',
+ '<circle cx="150" cy="130" r="80" fill="none" stroke="var(--accent)" stroke-width="5"/>'
+ +'<path d="M125.3 53.9 A80 80 0 0 1 174.7 53.9" fill="none" stroke="var(--chip-4)" stroke-width="9"/>'
+ +arr(174.7,53.9,217.5,67.8,'currentColor',2.4)+arr(125.3,53.9,82.5,67.8,'currentColor',2.4)
+ +TXT(224,66,'T',{bold:1,fs:14})+TXT(76,66,'T',{bold:1,fs:14,anchor:'end'})
+ +arr(150,64,150,102,'var(--trap)',2.2)+TXT(156,96,'to the centre',{fs:11,fill:'var(--trap)'})
+ +'<circle cx="150" cy="130" r="3" fill="currentColor"/><line x1="150" y1="130" x2="230" y2="130" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 3"/>'
+ +TXT(184,124,'R',{bold:1})
+ +'<path d="M150 108 A22 22 0 1 1 128 130" fill="none" stroke="currentColor" stroke-width="1.6"/><polygon points="128,122 123,133 133,133" fill="currentColor"/>'
+ +TXT(150,178,'ω',{fs:15,bold:1,anchor:'middle'})
+ +TXT(250,112,'ring: mass M, radius R,',{fs:11})+TXT(250,128,'cross-section area A,',{fs:11})+TXT(250,144,'Young’s modulus Y,',{fs:11})+TXT(250,160,'spinning at ω about its centre',{fs:11}),
+ 'Drawn from the question text. The highlighted piece is the small element used in step 1. Each end of it is pulled by the tension T along the ring.',
+ 'a thin ring of mass M, radius R, cross-section area A and Young’s modulus Y, spinning at angular speed omega about its centre. A small piece of the ring at the top is cut out; each of its two ends is pulled along the ring by a tension T, and the inward part of the two pulls supplies the centripetal force.');
+
+var FIG_ROD = fig('0 0 440 190',
+ 'A uniform rod in gravity-free space, split into four equal segments numbered 1 to 4 from the left. A force F pulls the left end to the left and a force 3F pulls the right end to the right. The whole rod accelerates to the right with acceleration 2F over M.',
+ '<rect x="60" y="85" width="320" height="28" fill="var(--accent-soft)" stroke="currentColor" stroke-width="2"/>'
+ +'<g stroke="currentColor" stroke-width="1.4"><line x1="140" y1="85" x2="140" y2="113"/><line x1="220" y1="85" x2="220" y2="113"/><line x1="300" y1="85" x2="300" y2="113"/></g>'
+ +TXT(100,104,'1',{bold:1,anchor:'middle',fs:13})+TXT(180,104,'2',{bold:1,anchor:'middle',fs:13})+TXT(260,104,'3',{bold:1,anchor:'middle',fs:13})+TXT(340,104,'4',{bold:1,anchor:'middle',fs:13})
+ +arr(60,99,18,99,'var(--trap)',2.8)+TXT(26,86,'F',{bold:1,fs:14,fill:'var(--trap)'})
+ +arr(380,99,424,99,'var(--trap)',2.8)+TXT(396,86,'3F',{bold:1,fs:14,fill:'var(--trap)'})
+ +arr(150,56,270,56,'var(--accent)',2.2)+TXT(160,46,'a = 2F/M',{fs:12,fill:'var(--accent)',bold:1})
+ +'<g stroke="currentColor" stroke-width="1"><line x1="60" y1="140" x2="200" y2="140"/><line x1="60" y1="135" x2="60" y2="145"/><line x1="200" y1="135" x2="200" y2="145"/></g>'
+ +TXT(130,158,'x, from the F end',{fs:11,anchor:'middle'})
+ +TXT(220,180,'gravity-free space, rod mass M, length L',{fs:11,anchor:'middle'}),
+ 'Drawn from the question text, with the usual reading that both forces pull outwards along the rod (the original figure was not available). Segments are numbered from the F end.',
+ 'a uniform rod of mass M and length L in gravity-free space, divided into four equal segments numbered 1 to 4 from the left. A force F pulls the left end to the left and a force 3F pulls the right end to the right. The rod accelerates to the right at 2F/M.');
+
+var FIG_TWIST = fig('0 0 440 230',
+ 'A solid cylinder of radius R and length l, seen from the side. Its left end is fixed in a wall. The right end is twisted through an angle theta about the axis. A dashed line along the surface shows where a straight line was before the twist, and a solid line shows it after the twist.',
+ '<rect x="36" y="46" width="14" height="128" fill="var(--surface-2)" stroke="currentColor" stroke-width="2"/>'
+ +'<g stroke="currentColor" stroke-width="1"><line x1="36" y1="64" x2="28" y2="72"/><line x1="36" y1="86" x2="28" y2="94"/><line x1="36" y1="108" x2="28" y2="116"/><line x1="36" y1="130" x2="28" y2="138"/><line x1="36" y1="152" x2="28" y2="160"/></g>'
+ +'<rect x="50" y="70" width="276" height="80" fill="var(--accent-soft)" stroke="currentColor" stroke-width="2"/>'
+ +'<ellipse cx="326" cy="110" rx="14" ry="40" fill="var(--surface)" stroke="currentColor" stroke-width="2"/>'
+ +'<line x1="50" y1="110" x2="326" y2="110" stroke="currentColor" stroke-width="1.4" stroke-dasharray="6 4"/>'
+ +'<path d="M50 110 L326 134" fill="none" stroke="var(--trap)" stroke-width="2.4"/>'
+ +TXT(160,134,'line on the surface, after the twist',{fs:10,fill:'var(--trap)'})+TXT(160,102,'same line, before',{fs:10})
+ +'<path d="M346 78 A18 40 0 0 1 346 142" fill="none" stroke="currentColor" stroke-width="1.8"/><polygon points="346,144 340,133 352,134" fill="currentColor"/>'
+ +TXT(372,114,'θ',{fs:16,bold:1})
+ +'<line x1="326" y1="110" x2="326" y2="150" stroke="currentColor" stroke-width="1.4"/>'+TXT(300,140,'R',{bold:1})
+ +'<g stroke="currentColor" stroke-width="1"><line x1="50" y1="186" x2="326" y2="186"/><line x1="50" y1="181" x2="50" y2="191"/><line x1="326" y1="181" x2="326" y2="191"/></g>'
+ +TXT(188,206,'length l',{anchor:'middle',bold:1})+TXT(44,38,'fixed end',{fs:11})
+ +TXT(372,160,'twisted end',{fs:11,anchor:'middle'}),
+ 'A solid rod of radius R and length l. One end is fixed and the other is twisted through the angle θ. The strain is zero on the axis and largest at the surface.',
+ 'a solid cylindrical rod of radius R and length l, left end fixed in a wall, right end twisted through a small angle theta about its axis. A line drawn along the surface is tilted by the twist; the strain is zero on the axis and largest at the surface.');
+
+var FIG_PUNCH = fig('0 0 440 256',
+ 'A hollow tube punch of outer diameter 8.0 centimetres and inner diameter 4.0 centimetres stands on a plate of thickness t. A force F pushes the tube down. The plug under the tube is cut along the outer circle, shown by two dashed lines.',
+ '<rect x="30" y="150" width="350" height="40" fill="var(--chip-4-bg)" stroke="currentColor" stroke-width="2"/>'
+ +'<rect x="140" y="60" width="40" height="90" fill="var(--accent-soft)" stroke="currentColor" stroke-width="2"/><rect x="260" y="60" width="40" height="90" fill="var(--accent-soft)" stroke="currentColor" stroke-width="2"/>'
+ +TXT(220,104,'hollow,',{fs:11,anchor:'middle'})+TXT(220,119,'inner 4.0 cm',{fs:11,anchor:'middle'})
+ +arr(160,24,160,58,'var(--trap)',2.8)+arr(280,24,280,58,'var(--trap)',2.8)+TXT(220,16,'force F on the tube',{fs:12,anchor:'middle',fill:'var(--trap)',bold:1})
+ +'<g stroke="var(--trap)" stroke-width="2.4" stroke-dasharray="4 3"><line x1="140" y1="150" x2="140" y2="190"/><line x1="300" y1="150" x2="300" y2="190"/></g>'
+ +TXT(220,175,'plug',{fs:12,anchor:'middle'})
+ +'<g stroke="currentColor" stroke-width="1"><line x1="398" y1="150" x2="398" y2="190"/><line x1="393" y1="150" x2="403" y2="150"/><line x1="393" y1="190" x2="403" y2="190"/></g>'+TXT(406,174,'t',{bold:1,fs:14})
+ +TXT(36,142,'plate',{fs:11})
+ +'<g stroke="currentColor" stroke-width="1"><line x1="140" y1="222" x2="300" y2="222"/><line x1="140" y1="217" x2="140" y2="227"/><line x1="300" y1="217" x2="300" y2="227"/></g>'
+ +TXT(220,246,'outer D = 8.0 cm',{anchor:'middle',bold:1}),
+ 'Drawn from the problem text. The tube pushes on the plug through its ring-shaped end. The plug is cut along the outer circle only.',
+ 'a plate of thickness t. A hollow tube punch stands on it, with outer diameter D = 8.0 cm and inner diameter 4.0 cm. A force F pushes the tube down along its axis. The plug under the tube is cut along the outer circle (diameter 8.0 cm).');
+
+var FIG_TAPER = fig('0 0 440 180',
+ 'A rod that tapers uniformly from radius 1.0 millimetre at the left end to 2.0 millimetres at the right end, length 1.0 metre. A force of 100 newtons pulls on each end along the axis.',
+ '<polygon points="60,70 380,55 380,115 60,100" fill="var(--accent-soft)" stroke="currentColor" stroke-width="2"/>'
+ +'<line x1="40" y1="85" x2="400" y2="85" stroke="currentColor" stroke-width="1" stroke-dasharray="5 4"/>'
+ +arr(60,85,16,85,'var(--trap)',2.8)+arr(380,85,424,85,'var(--trap)',2.8)
+ +TXT(8,70,'100 N',{fs:12,bold:1,fill:'var(--trap)'})+TXT(386,70,'100 N',{fs:12,bold:1,fill:'var(--trap)'})
+ +TXT(60,120,'r = 1.0 mm',{fs:12})+TXT(376,134,'r = 2.0 mm',{fs:12,anchor:'end'})
+ +'<g stroke="currentColor" stroke-width="1"><line x1="60" y1="150" x2="380" y2="150"/><line x1="60" y1="145" x2="60" y2="155"/><line x1="380" y1="145" x2="380" y2="155"/></g>'
+ +TXT(220,172,'L = 1.0 m',{anchor:'middle',bold:1}),
+ 'Drawn from the problem text. The radius grows in a straight line along the rod. Not to scale.',
+ 'a rod of length L = 1.0 m that tapers uniformly (truncated cone) from radius 1.0 mm at the left end to radius 2.0 mm at the right end. A force of 100 N pulls on each end along the axis.');
+
+var FIG_PULL = fig('0 0 440 192',
+ 'A uniform rod in gravity-free space. A force F pulls the right end to the right. The left end is free. The rod accelerates to the right with acceleration F over M. A dashed cut at distance x from the free end marks where the tension is found.',
+ '<rect x="60" y="82" width="300" height="26" fill="var(--accent-soft)" stroke="currentColor" stroke-width="2"/>'
+ +arr(360,95,420,95,'var(--trap)',2.8)+TXT(394,84,'F',{bold:1,fs:14,fill:'var(--trap)'})
+ +arr(120,52,240,52,'var(--accent)',2.2)+TXT(130,42,'a = F/M',{fs:12,bold:1,fill:'var(--accent)'})
+ +'<line x1="200" y1="72" x2="200" y2="118" stroke="var(--trap)" stroke-width="2" stroke-dasharray="4 3"/>'+TXT(206,70,'cut here: tension T(x)',{fs:11,fill:'var(--trap)'})
+ +'<g stroke="currentColor" stroke-width="1"><line x1="60" y1="140" x2="200" y2="140"/><line x1="60" y1="135" x2="60" y2="145"/><line x1="200" y1="135" x2="200" y2="145"/></g>'
+ +TXT(130,158,'x, from the free end',{fs:11,anchor:'middle'})+TXT(60,128,'free end',{fs:11})
+ +TXT(220,184,'gravity-free space; mass M, length L, area A, Young’s modulus Y',{fs:11,anchor:'middle'}),
+ 'Drawn from the problem text. Only the right end is pulled. The left end carries no force, so the tension there is zero.',
+ 'a uniform rod of mass M, length L, area A and Young modulus Y in gravity-free space. A force F pulls the right end to the right; the left end is free. The rod accelerates to the right at F/M. A dashed cut at distance x from the free end marks the place where the tension T(x) is found.');
+
+var FIG_BALL = fig('0 0 440 292',
+ 'A tall column of glycerine. A ball is shown at three levels, each a distance h below the one before. At the top it is at rest. After the first h it moves with a speed below the terminal speed. After the second h it moves at the terminal speed, shown by a longer arrow that stays the same from there on.',
+ '<rect x="170" y="10" width="100" height="272" fill="var(--accent-soft)" stroke="currentColor" stroke-width="2"/>'
+ +TXT(178,26,'glycerine',{fs:11})
+ +'<g stroke="currentColor" stroke-width="1" stroke-dasharray="4 3"><line x1="150" y1="44" x2="290" y2="44"/><line x1="150" y1="144" x2="290" y2="144"/><line x1="150" y1="244" x2="290" y2="244"/></g>'
+ +'<g fill="var(--chip-4)" stroke="currentColor" stroke-width="1.6"><circle cx="220" cy="44" r="13"/><circle cx="220" cy="144" r="13"/><circle cx="220" cy="244" r="13"/></g>'
+ +arr(256,144,256,168,'var(--accent)',2.4)+arr(256,244,256,276,'var(--accent)',2.4)
+ +'<g stroke="currentColor" stroke-width="1"><line x1="150" y1="44" x2="150" y2="144"/><line x1="150" y1="144" x2="150" y2="244"/></g>'
+ +TXT(144,98,'h, time t₁',{anchor:'end',bold:1})+TXT(144,198,'h, time t₂',{anchor:'end',bold:1})
+ +TXT(282,48,'released: v = 0',{fs:11})+TXT(282,148,'v below v_T',{fs:11})+TXT(282,248,'v = v_T (terminal)',{fs:11}),
+ 'Drawn from the question text. The arrow at the second level is shorter than the one at the third: the ball is still speeding up there, and the third arrow is the terminal speed.',
+ 'a tall column of glycerine. A ball is released from rest at the top. It falls a distance h in time t1 (speeding up, always below its terminal speed v_T). It then falls the next distance h at the terminal speed v_T in time t2.');
+
+var FIG_PIPE = fig('0 0 440 232',
+ 'Side view of a horizontal pipe of radius 1.0 centimetre. The speed of the oil is zero at the wall and rises in a straight line to 2.0 metres per second on the axis, so the speed profile is a triangle, which is a cone when seen in three dimensions.',
+ '<g stroke="currentColor" stroke-width="3"><line x1="40" y1="40" x2="400" y2="40"/><line x1="40" y1="190" x2="400" y2="190"/></g>'
+ +'<line x1="40" y1="115" x2="400" y2="115" stroke="currentColor" stroke-width="1" stroke-dasharray="5 4"/>'
+ +'<polygon points="150,40 250,115 150,190" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>'
+ +arr(150,115,248,115,'var(--accent)',2)+arr(150,78,198,78,'var(--accent)',2)+arr(150,152,198,152,'var(--accent)',2)
+ +TXT(258,119,'v₀ = 2.0 m/s on the axis',{fs:11})+TXT(258,66,'v(r) = v₀ (1 − r/R)',{fs:12,bold:1})
+ +TXT(60,30,'wall: v = 0',{fs:11})+TXT(60,212,'wall: v = 0',{fs:11})
+ +'<g stroke="currentColor" stroke-width="1"><line x1="352" y1="115" x2="352" y2="190"/><line x1="347" y1="115" x2="357" y2="115"/><line x1="347" y1="190" x2="357" y2="190"/></g>'
+ +TXT(360,158,'R = 1.0 cm',{fs:11}),
+ 'Drawn from the problem text. Each arrow shows the speed at its height. The speed falls in a straight line from the axis to the wall.',
+ 'a horizontal pipe of radius R = 1.0 cm seen from the side. The oil speed is zero at the wall and rises in a straight line to v0 = 2.0 m/s on the axis, so the speed profile is a triangle (a cone in three dimensions), v(r) = v0(1 - r/R).');
+
+/* ---------- content ---------- */
+var SECTIONS = [
+{ id:'s1', n:1, title:'Elasticity numericals: build the stress first, then the energy', chip:'c1', chipText:'New · Weak',
+  pattern:'elasticity-moduli-energy-and-breaking-stress-numericals',
+  syl:'Syllabus: Mechanics (Hooke’s law, Young’s modulus, modulus of rigidity; circular motion) and Maths (definite integrals)',
+  isNew:true, lbl:'New in WTA21', leftH:'Before', rightH:'This time',
+  status:'Status: not yet proven (new, first seen in WTA21: 5 wrong and 1 skipped).',
+  cameBack:{
+    prev:'Nothing earlier on this pattern, so there is no old mistake to compare. In the same paper the standard set-ups were <strong>correct</strong>: Q25 (rod on two wires) and Q31 to Q33 (matching strain and energy density to the loading).',
+    now:'<strong>Q26 to Q30 were all wrong.</strong> Q26: you answered 4, key 3. Q27: 2, key 4. Q28: 3, key 8. Q29: 3, key 9. Q30: 8, key 5. <strong>Q21</strong> was skipped (it needs the figure).',
+    verdict:'<strong>Do the five share one cause? I can not prove one.</strong> Your guess was using the surface value of stress instead of integrating. It does not fit: Q26, Q27 and Q30 need no integral at all. For Q28, the surface value over the whole rod gives 16, not your 3. For Q29, the largest stress (d g L) gives 4, not your 3. The only slip I can match to a number is <strong>Q27</strong>: dropping the ½ in the energy density gives exactly your 2. For Q26, Q28, Q29 and Q30 I could not find one slip that lands on 4, 3, 3 and 8, and your working is not saved. What the five do share is the kind of question: each asks you to <em>build</em> the stress or energy from scratch (force on the cross-section, area, energy density, volume) instead of quoting a formula. The standard set-ups were right, so the formulas are not the problem. If you send me your rough work for those four, I can pin the cause down.'},
+  why:'Every one of these follows the same chain: force on the cross-section, then stress σ = F/A, then energy per volume ½σ²/Y, then × volume. A numerical asks you to build that chain yourself. Marks go when a link is skipped (a ½ dropped) or when a value comes from the wrong place (the surface, the top, the wrong area). Integrate only when the stress changes from point to point.',
+  rule:[
+    'The chain: <strong>F on the cross-section → σ = F/A → u = ½σ²/Y → U = u × volume</strong>. For shear, use τ and η in place of σ and Y. If σ is the same everywhere, multiply by the whole volume. If it changes, add up thin slices: U = ∫ u dV.',
+    'Keep the ½. Stress and strain grow together along a straight line, so the energy is the <em>area under the line</em>, ½σε, not σε. Dropping it doubles the answer.',
+    'Hanging rope (your Q29): the stress at a point is the weight <em>below</em> it divided by A. At L/3 from the ceiling the weight below is (2/3) of the rope, so σ = (2/3) d g L and u = ½σ²/Y = 2(d g L)²/(9Y). So x = 9, the key. (From the bottom it would be x = 36, so the key tells us the reading is from the ceiling.)',
+    'Twisted rod (your Q28): at radius r the shear strain is rθ/l, so u = ½η(rθ/l)². A shell of radius r and thickness dr has volume 2πr l dr. U = ∫₀ᴿ ½η(r²θ²/l²)(2πr l) dr = πηθ²R⁴/(4l) = 8 × (πηR⁴θ²/32l). So k = 8, the key. The strain grows with r, so the surface value over the whole volume is too big (it gives k = 16).',
+    'Punching (your Q30): the punch can push with at most σ<sub>c</sub> × (πd²/4), its compressive limit. Cutting the plug needs τ × (π d t), the shear strength times the side of the plug. Set them equal: t = σ<sub>c</sub>d/(4τ) = (4×10⁸)(0.10)/(4 × 2×10⁸) = 0.05 m. So y = 5, the key.',
+    'Poisson’s ratio (your Q26): σ = lateral strain ÷ longitudinal strain. The syllabus text does not name Poisson’s ratio, but Q26 asks for it directly, so only its definition is used here. Area goes as r², so the area strain is <em>twice</em> the lateral strain. The saved question text is short. The reading that matches the key 3 is: the tube lengthens by 0.12 cm, and the narrowing makes the water column longer by 0.08 cm, so 2σ × 0.12 = 0.08 and σ = 1/3 = 3/9. I rebuilt this reading to fit the key, so check it against the printed question.',
+    'Q21 (skipped, figure not available to me): <strong>this is my reading, not a verified key</strong>. If wire A holds the block from above and wire B hangs from the block with the pull F = mg/3, then A carries mg + F = 4mg/3 and B carries F = mg/3. The stresses are 4mg/(3πr<sub>A</sub>²) and mg/(3πr<sub>B</sub>²). A breaks first only if 4/r<sub>A</sub>² &gt; 1/r<sub>B</sub>², that is, if r<sub>A</sub> &lt; 2r<sub>B</sub>. Check it against your figure.'],
+  ruleFig: FIG_TWIST,
+  ex:{ src:'WTA21 Q27, your real question (short text from your test file)',
+    q:'A thin ring of mass M, radius R and cross-sectional area A is made of a material of Young’s modulus Y. It rotates about its own axis (perpendicular to its plane, through its centre) with angular speed ω. The elastic energy stored in it is U = M²ω⁴R³ / (λ π Y A). Find λ.',
+    yours:'2', correct:'4',
+    note:'The question text is the short version saved in your test file, so the wording may differ a little from the portal. Your working for 2 is not saved.',
+    diag:'My working for 2 is not saved. The only slip I found that gives exactly 2 is dropping the 1/2 in the energy density.',
+    fig:FIG_RING,
+    steps:[
+      {tag:'Step 1: the tension in the ring', html:'Cut out a small piece that spans an angle dφ at the centre. Its mass is M dφ/(2π). Each end is pulled by the tension T along the ring, so the two pulls have an inward part 2T sin(dφ/2) ≈ T dφ. That supplies the circular motion: T dφ = (M dφ/2π) ω²R. So <strong>T = Mω²R/(2π)</strong>.'},
+      {tag:'Step 2: stress and energy per volume', html:'The stress is σ = T/A = Mω²R/(2πA), the same all round the ring, so no integral is needed. The energy per volume is u = ½σ²/Y = ½ · M²ω⁴R²/(4π²A²Y) = M²ω⁴R²/(8π²A²Y). The ½ is the area under the straight stress–strain line.'},
+      {tag:'Step 3: the volume', html:'The ring is a thin wire of length 2πR and cross-section A, so V = 2πRA.'},
+      {tag:'Step 4: multiply and compare', html:'U = uV = [M²ω⁴R²/(8π²A²Y)] × 2πRA = M²ω⁴R³/(4πAY). Compare with M²ω⁴R³/(λπYA): <strong>λ = 4</strong>.<div class="final">Answer: 4</div><div class="trap-note">The trap: dropping the ½ (using u = σ²/Y). That gives U = M²ω⁴R³/(2πAY), so λ = 2, your answer. I can not see your working, but it is the only slip I found that lands on 2.</div>'}
+    ]}
+},
+{ id:'s2', n:2, title:'Rods and wires where the force, area or Y changes along the length', chip:'c2', chipText:'New · Weak (mixed)',
+  pattern:'elasticity-stress-strain-and-elongation-nonuniform-rods',
+  syl:'Syllabus: Mechanics (Hooke’s law, Young’s modulus; Newton’s laws) and Maths (definite integrals)',
+  isNew:true, lbl:'New in WTA21', leftH:'What you do right', rightH:'Where you stall',
+  status:'Status: not yet proven (new, first seen in WTA21: 2 skipped and 4 correct).',
+  cameBack:{
+    prev:'When the set-up is standard, you get it. <strong>Q25</strong> (rod on a steel wire and a brass wire, equal strain or equal stress) and <strong>Q31 to Q33</strong> (matching strain and energy density to the loading) were all correct. In those, the force on every cross-section is the same, and the area and Y are constant.',
+    now:'<strong>Q19</strong> (rod pulled by 3F at one end and F at the other, split into four segments) and <strong>Q20</strong> (wire whose Y rises linearly from Y₀ at the bottom to Y₀ + kL at the top, with load W) were both <strong>skipped</strong>. In both, something changes along the length: the tension in Q19, Y in Q20.',
+    verdict:'<strong>A new pattern, so there is no old mistake to compare.</strong> The split is clear: you are fine while F, A and Y are constant, and you stop when one of them varies. I can not see why you skipped, so it may be time or unfamiliarity rather than a slip. The fix is one question asked first: <em>what is the force on this cross-section, and is it the same further along?</em>'},
+  why:'The formula Δl = FL/(AY) quietly assumes F, A and Y are the same everywhere. When one of them changes, apply it to a thin slice dx, dl = T dx/(A Y), and add the slices. Nothing else changes. The harder part is usually finding T(x): a rod that is accelerating, hanging or spinning does not have the same tension everywhere.',
+  rule:[
+    'First ask: is the rod in equilibrium, with the same force at every cross-section? If yes, use FL/(AY) as always (your Q25 and Q31 to Q33).',
+    'If not (pulled in gravity-free space, hanging under its own weight, spinning), find T(x) from <strong>F = ma for the piece on one side of the cut</strong>: T(x) = (mass of that piece) × a, with the end force added or subtracted.',
+    'Slice and add: <strong>Δl = ∫ T dx/(A Y)</strong> and <strong>U = ∫ T² dx/(2 A Y)</strong>. Square the tension <em>before</em> you average. The average of T² is larger than the square of the average T.',
+    'Your Q20 (derived by hand, key not saved): the load W is the tension at every point (the wire’s own weight is ignored). With Y = Y₀ + kx, x measured up from the bottom: Δl = (W/A)∫₀ᴸ dx/(Y₀ + kx) = (W/(Ak)) ln(1 + kL/Y₀), and U = ½WΔl = (W²/(2Ak)) ln(1 + kL/Y₀). Check: as k → 0, ln(1 + u) ≈ u, so Δl → WL/(A Y₀), the standard formula.'],
+  ex:{ src:'WTA21 Q19, your real question (figure not available, rebuilt in words)',
+    q:'A uniform rod of length L and mass M, in gravity-free space, is pulled at its two ends by forces F and 3F along its length, in opposite directions (each pulling outwards). The rod is divided into four equal segments, numbered 1 to 4 from the F end. Compare the elongations (Δl) and the elastic energies (U) of the four segments.',
+    yours:'none (skipped)', correct:'derived by hand: Δl ∝ 5 : 7 : 9 : 11 and U ∝ 19 : 37 : 61 : 91',
+    note:'The portal did not show the figure or the key, and the four options were not saved. I read the figure as the two forces pulling outwards, the usual set-up, so check that against your figure. The results below are derived by hand and double-checked. Match them to your options.',
+    diag:'You skipped this question, so there is no wrong answer to compare. The key was derived by hand.',
+    fig:FIG_ROD,
+    steps:[
+      {tag:'Step 1: the rod is not in equilibrium', html:'The two end forces do not cancel. The net force is 3F − F = 2F, so the whole rod accelerates towards the 3F end with a = 2F/M. That means the tension is <em>not</em> the same along the rod.'},
+      {tag:'Step 2: tension at a distance x from the F end', html:'Take the piece from the F end to x. Its mass is Mx/L. The forces on it: F pulling left, and the tension T(x) pulling right. So T − F = (Mx/L)(2F/M) = 2Fx/L, and <strong>T(x) = F(1 + 2x/L)</strong>. Check: T = F at x = 0 and T = 3F at x = L.'},
+      {tag:'Step 3: the elongations', html:'Each segment has length L/4. T grows in a straight line, so the average T over a segment equals T at its middle (x = L/8, 3L/8, 5L/8, 7L/8): 1.25F, 1.75F, 2.25F, 2.75F. Elongation = (average T)(L/4)/(AY), so <strong>Δl₁ : Δl₂ : Δl₃ : Δl₄ = 5 : 7 : 9 : 11</strong>.'},
+      {tag:'Step 4: the energies', html:'For one segment, U = ∫T² dx/(2AY). If T goes in a straight line from T<sub>a</sub> to T<sub>b</sub> over a length ℓ, then ∫T² dx = ℓ(T<sub>a</sub>² + T<sub>a</sub>T<sub>b</sub> + T<sub>b</sub>²)/3. The segment ends are (F, 1.5F), (1.5F, 2F), (2F, 2.5F), (2.5F, 3F). The brackets, in units of F², are 4.75, 9.25, 15.25, 22.75. So <strong>U₁ : U₂ : U₃ : U₄ = 19 : 37 : 61 : 91</strong>.'},
+      {tag:'Step 5: check and finish', html:'Check: the four brackets add to 52, so the total ∫T² dx = (L/4)(52/3)F² = (13/3)F²L. A direct integral of F²(1 + 2x/L)² from 0 to L also gives (13/3)F²L. Both Δl and U increase from segment 1 to segment 4.<div class="final">Δl ∝ 5 : 7 : 9 : 11 and U ∝ 19 : 37 : 61 : 91</div><div class="trap-note">The trap: using the end force (F or 3F) as the tension for the whole rod, or squaring the mid-segment tension for the energy. That gives 25 : 49 : 81 : 121, which is wrong, because the average of T² is not the square of the average.</div>'}
+    ]}
+},
+{ id:'s3', n:3, title:'Viscosity: terminal speed, drag work and shear in a velocity profile', chip:'c3', chipText:'New · Weak',
+  pattern:'viscosity-terminal-velocity-drag-and-shear',
+  syl:'Syllabus: Mechanics (viscosity, Stokes’ law, terminal velocity) and Maths (first-order differential equations, variable separable)',
+  isNew:true, lbl:'New in WTA21', leftH:'Before', rightH:'This time',
+  status:'Status: not yet proven (new, first seen in WTA21: 1 wrong, 1 skipped, 1 partial).',
+  cameBack:{
+    prev:'Nothing earlier on this pattern. In the same paper the fluid-flow matching (pipe speed, pressure and kinetic energy per volume, Q34 to Q36) was <strong>correct</strong>.',
+    now:'<strong>Q22</strong> (ball in glycerine) wrong: you marked A (t₁ &lt; t₂), and the correct statements are t₁ &gt; t₂ and W₁ &lt; W₂. <strong>Q23</strong> (particle in water with drag −kmv) skipped. <strong>Q24</strong> (cone-shaped velocity profile in a pipe) partial: you marked B and C, and the full correct set was not shown.',
+    verdict:'<strong>A new pattern, so there is no old mistake to compare.</strong> Q22 is a reasoning slip that a quick limit check catches: a ball released from rest can only be slower than terminal speed in the first stretch, so t₁ can never be shorter than t₂. Q23 needs two things stacked (buoyancy and an exponential decay). For Q24 I can not see the profile numbers or the options, so I can not say which statement went wrong.'},
+  why:'In a viscous liquid the drag grows with speed, so the motion has two stages: speeding up, then a steady terminal speed where the drag balances the effective weight. Most questions ask which quantity is smaller or larger in each stage. A check at the two extremes (speed zero, speed terminal) settles most of them. The harder ones add buoyancy and write the motion as an equation you can solve.',
+  rule:[
+    'Effective weight = weight − buoyancy. Terminal speed is where drag = effective weight. For a sphere (Stokes): 6πηr v<sub>T</sub> = (4/3)πr³(ρ − σ)g, so v<sub>T</sub> = 2r²(ρ − σ)g/(9η).',
+    'From rest, the speed rises towards v<sub>T</sub> but never reaches it. Before the ball is at terminal speed, its speed is below v<sub>T</sub> and the drag is below the effective weight. That gives t₁ &gt; t₂ and W₁ &lt; W₂ in your Q22.',
+    'Drag F = −kmv (Q23): write each direction on its own, as acceleration = (push) − kv. With no push, v = v₀e<sup>−kt</sup>. With a constant push a₀ from rest, v = (a₀/k)(1 − e<sup>−kt</sup>), and the terminal speed is a₀/k. Both come from separating the variables in dv/dt = a₀ − kv.',
+    'Your Q23, worked (derived by hand; the figure and options are not saved, and I included buoyancy because the question gives the density ratio): the particle is twice as dense as water, so buoyancy is mg/2 and the net downward push is g/2 per unit mass. Horizontal: v<sub>x</sub> = v₀e<sup>−kt</sup>, x(t) = (v₀/k)(1 − e<sup>−kt</sup>), so the x-range is v₀/k. Vertical: v<sub>y</sub> = (g/2k)(1 − e<sup>−kt</sup>), the terminal speed is g/(2k), and y(t) = (g/2k)t − (g/2k²)(1 − e<sup>−kt</sup>).',
+    'Shear in a velocity profile (Q24): shear stress τ = μ|dv/dr|. A straight-sided cone profile has the same slope at every radius, so τ is the same at the wall and on the axis (not zero on the axis, unlike a parabola). The friction on the wall per unit length = τ × 2πR. The flow rate is the volume under the profile (for a full cone, (1/3)πR²v₀). If part of the profile is flat, τ = 0 in the flat part.',
+    'I can not give the Q24 key: its profile numbers and the four options are not in your test file. Send me the options and the figure’s numbers and I will work it out.'],
+  ex:{ src:'WTA21 Q22, your real question (options not saved, correct set derived by hand)',
+    q:'A small ball is released from rest at the surface of a deep column of glycerine. It falls a distance h in time t₁. It then falls the next distance h at its terminal speed, in time t₂. Let W₁ and W₂ be the work done against the viscous drag in the first and in the second distance h. Which statements are correct?',
+    yours:'A (t₁ &lt; t₂)', correct:'B and D (t₁ &gt; t₂ and W₁ &lt; W₂)',
+    note:'The saved test file has the statements only in short form. You marked A, which says t₁ &lt; t₂. The portal marks B and D as correct. I take those to be t₁ &gt; t₂ and W₁ &lt; W₂, and I derived both by hand below. I read W as the work done against the drag.',
+    diag:'You marked A (t1 < t2). The correct statements are t1 > t2 and W1 < W2, derived by hand. I can not see why you chose t1 < t2.',
+    fig:FIG_BALL,
+    steps:[
+      {tag:'Step 1: the forces', html:'Three forces act on the ball: its weight mg down, buoyancy B up, and the Stokes drag 6πηrv up. The effective weight W′ = mg − B is a constant. The terminal speed v<sub>T</sub> is where 6πηr v<sub>T</sub> = W′.'},
+      {tag:'Step 2: the speed in the first h', html:'The net force is W′ − 6πηrv, which shrinks to zero as v → v<sub>T</sub>. So the ball speeds up towards v<sub>T</sub> but only reaches it after an infinite time. During the first h its speed is below v<sub>T</sub> at every point.'},
+      {tag:'Step 3: the times', html:'Second h: constant speed v<sub>T</sub>, so t₂ = h/v<sub>T</sub>. First h: covered at speeds below v<sub>T</sub>, so t₁ &gt; h/v<sub>T</sub>. So <strong>t₁ &gt; t₂</strong>. Quick check: if the first h were already at v<sub>T</sub>, then t₁ = t₂. Starting from rest can only make it slower, so t₁ &lt; t₂ is impossible.'},
+      {tag:'Step 4: the work against drag', html:'W = ∫F dx, with F = 6πηrv. In the second h, v = v<sub>T</sub>, so F = W′ throughout and W₂ = W′h. In the first h, v &lt; v<sub>T</sub>, so F &lt; W′ at every point and W₁ &lt; W′h. So <strong>W₁ &lt; W₂</strong>.'},
+      {tag:'Step 5: energy check', html:'First h: gravity and buoyancy together do W′h. Part goes to the drag (W₁) and the rest raises the kinetic energy, so W₁ &lt; W′h, as found. Second h: the kinetic energy does not change, so all of W′h goes to the drag.<div class="final">Answer: t₁ &gt; t₂ and W₁ &lt; W₂</div><div class="trap-note">The trap: forgetting that the speed only approaches v<sub>T</sub>. Use the two extremes. At the start (v = 0) the drag is zero. At terminal speed the drag equals W′. In between it is always smaller than W′.</div>'}
+    ]}
+}
+];
+
+var PROBS = [
+{ sec:1, type:'single', fig:FIG_PUNCH,
+  q:'A hollow tube is used as a punch to cut a circular plug out of a thick steel plate. The tube has an outer diameter D = 8.0 cm and an inner diameter of 4.0 cm, and it is pushed along its axis by a force F, as in the figure. The tube material can bear a compressive stress of at most 4.0 × 10⁸ Pa. The plate material has a shear strength of 1.5 × 10⁸ Pa, and the plug is cut along the outer circle of diameter D. What is the greatest thickness of plate that this punch can cut?',
+  opts:['1.3 cm','2.7 cm','4.0 cm','5.3 cm'], ans:[2],
+  why:'The most the tube can push with is (compressive limit) × (ring area) = 4.0 × 10⁸ × (π/4)(0.080² − 0.040²) = 4.0 × 10⁸ × 3.77 × 10⁻³ = 1.51 × 10⁶ N. Cutting the plug needs (shear strength) × (π D t) = 1.5 × 10⁸ × π × 0.080 × t = 3.77 × 10⁷ t newtons. Set them equal: t = 0.040 m = 4.0 cm.',
+  mistakes:{0:'1.3 cm: used (D − d)² instead of D² − d² for the ring, so the area came out as (π/4)(0.040)² = 1.26 × 10⁻³ m², far too small.',
+            1:'2.7 cm: counted the shear area on both circles, outer and inner (π(D + d)t). The plug is cut along the outer circle only.',
+            3:'5.3 cm: used the full disc area πD²/4 for the tube and forgot the hole.'} },
+{ sec:1, type:'multi', fig:FIG_TWIST,
+  q:'A solid cylindrical rod of radius R and length l, made of a material of modulus of rigidity η, has one end fixed. The other end is twisted through a small angle θ about the axis, and the rod stays straight. Which statements are correct?',
+  opts:['The elastic energy per unit volume is the same at every radius, equal to ½η(Rθ/l)².','The total elastic energy stored is πηR⁴θ²/(4l).','If R is doubled, with l and θ unchanged, the stored energy becomes 16 times as large.','The part of the rod with r &gt; R/2 holds 75% of the stored energy, because it has 75% of the volume.'], ans:[1,2],
+  why:'At radius r the shear strain is rθ/l, so the energy per volume is ½η(rθ/l)². It grows as r², so A is false. A shell of radius r and thickness dr has volume 2πr l dr, so U = ∫₀ᴿ ½η(r²θ²/l²)(2πr l) dr = πηθ²R⁴/(4l). B is true. U ∝ R⁴, so doubling R gives 2⁴ = 16 times. C is true. The energy in the part from R/2 to R is the ratio of the r³ integrals: (R⁴ − R⁴/16)/R⁴ = 15/16 = 93.75%, not 75%. D is false.',
+  mistakes:{0:'A: used the surface value for the whole rod. That gives U = πηR⁴θ²/(2l), twice the true value. The strain is zero on the axis and largest at the surface.',
+            3:'D: shared the energy by volume (75%). The energy per volume grows as r², so the outer part holds far more: 93.75%.'} },
+{ sec:2, type:'single', fig:FIG_TAPER,
+  q:'A rod of length 1.0 m tapers uniformly, in the shape of a truncated cone, from a radius of 1.0 mm at one end to 2.0 mm at the other. It is held in equilibrium by a force of 100 N pulling at each end along its axis. Young’s modulus of the material is 2.0 × 10¹¹ Pa. Neglect the weight of the rod. What are the total elongation and the elastic energy stored?',
+  opts:['0.040 mm and 2.0 mJ','0.080 mm and 4.0 mJ','0.071 mm and 3.5 mJ','0.064 mm and 3.2 mJ'], ans:[1],
+  why:'The force is 100 N at every cross-section (equilibrium), but the area changes, so slice the rod. At distance x from the thin end, r = r₁ + (r₂ − r₁)x/L, and dl = F dx/(Yπr²). So Δl = (F/πY)∫₀ᴸ dx/r². With r linear in x, ∫dx/r² = L/(r₁r₂). Then Δl = FL/(πY r₁r₂) = 100 × 1.0/(π × 2.0 × 10¹¹ × 1.0 × 10⁻³ × 2.0 × 10⁻³) = 7.96 × 10⁻⁵ m ≈ 0.080 mm. The force is the same all along, so U = ½FΔl = ½ × 100 × 7.96 × 10⁻⁵ = 3.98 × 10⁻³ J ≈ 4.0 mJ.',
+  mistakes:{0:'0.040 mm: used the area of the thick end (π r₂²) for the whole rod, so the rod looks too stiff.',
+            2:'0.071 mm: used the area of the mean radius, π(1.5 mm)².',
+            3:'0.064 mm: used the mean of the two end areas. The effective area is πr₁r₂ (the geometric mean of the end areas), not the arithmetic mean.'} },
+{ sec:2, type:'multi', fig:FIG_PULL,
+  q:'A uniform rod of mass M, length L, cross-section A and Young’s modulus Y lies in gravity-free space. A force F along its length is applied at one end only, and the other end is free. The rod accelerates along its length, and the elongation is small. Which statements are correct?',
+  opts:['The total elongation is FL/(AY), as for a rod held with F at each end.','The tension at the middle of the rod is F/2.','The elastic energy stored is F²L/(4AY).','The elastic energy stored is F²L/(6AY).'], ans:[1,3],
+  why:'The rod accelerates at a = F/M. The piece of length x from the free end has mass Mx/L, so the tension there is T = (Mx/L)(F/M) = Fx/L. It is zero at the free end, F at the end where F is applied, and F/2 at the middle. B is true. Δl = ∫₀ᴸ T dx/(AY) = (F/(AYL))(L²/2) = FL/(2AY), half of FL/(AY), so A is false. U = ∫₀ᴸ T² dx/(2AY) = (F²/(2AYL²))(L³/3) = F²L/(6AY). D is true. F²L/(4AY) is ½FΔl, which needs the full force F on every cross-section, so C is false.',
+  mistakes:{0:'A: used T = F at every section. Only the end where F is applied carries F. The tension falls to zero at the free end, so the elongation is half as much.',
+            2:'C: used U = ½FΔl. That holds only when the same force acts across every section. Here T varies along the rod, and squaring it before adding up gives F²L/(6AY).'} },
+{ sec:3, type:'single',
+  q:'A small particle of density 3 times that of water is projected horizontally with a speed of 6.0 m/s in a large tank of water. Besides gravity and buoyancy, the water exerts a drag force −kmv on the particle (m is its mass, v its velocity vector), with k = 2.0 s⁻¹. Take g = 10 m/s². What is the speed of the particle at time t = (ln 2)/k after it is projected?',
+  opts:['3.9 m/s','4.5 m/s','6.2 m/s','3.4 m/s'], ans:[3],
+  why:'Buoyancy is mg/3 (the water is a third as dense as the particle), so the net downward push is (2/3)g = 20/3 m/s² per unit mass. At t = ln 2/k, e<sup>−kt</sup> = ½. Horizontal: v<sub>x</sub> = v₀e<sup>−kt</sup> = 6.0 × ½ = 3.0 m/s. Vertical: v<sub>y</sub> = ((2g/3)/k)(1 − e<sup>−kt</sup>) = (10/3)(½) = 5/3 m/s. Speed = √(3.0² + (5/3)²) = √(9 + 2.78) = 3.4 m/s.',
+  mistakes:{0:'3.9 m/s: left out buoyancy and used g = 10 for the push, so v<sub>y</sub> = 5 × ½ = 2.5 m/s.',
+            1:'4.5 m/s: put v<sub>y</sub> at its terminal value 10/3 m/s straight away. It only reaches that after a long time. At t = ln 2/k it is half of it.',
+            2:'6.2 m/s: left v<sub>x</sub> at 6.0 m/s. The drag acts on the horizontal motion too, so v<sub>x</sub> has already halved.'} },
+{ sec:3, type:'multi', fig:FIG_PIPE,
+  q:'Oil of viscosity μ = 0.020 Pa·s and density 900 kg/m³ flows in a long horizontal pipe of radius R = 1.0 cm. The speed varies with the distance r from the axis as v(r) = v₀(1 − r/R), with v₀ = 2.0 m/s on the axis (a cone-shaped profile, see the figure). Which statements are correct?',
+  opts:['The shear stress at the wall is 4.0 Pa.','The shear stress on the axis is zero.','The viscous force of the oil on the wall, per metre of pipe, is 1.3 × 10⁻³ N.','The volume flow rate is 2.1 × 10⁻⁴ m³/s.'], ans:[0,3],
+  why:'dv/dr = −v₀/R = −200 s⁻¹ at every radius. The shear stress τ = μ|dv/dr| = 0.020 × 200 = 4.0 Pa everywhere, at the wall (A true) and on the axis (B false). The force on the wall per metre = τ × (wall area per metre) = 4.0 × 2πR × 1 = 4.0 × 0.0628 = 0.25 N, so C is false. The flow rate = ∫₀ᴿ v 2πr dr = 2πv₀(R²/2 − R²/3) = πR²v₀/3 = π(1.0 × 10⁻⁴)(2.0)/3 = 2.1 × 10⁻⁴ m³/s (the volume of a cone). D is true. The density 900 kg/m³ is not needed.',
+  mistakes:{1:'B: carried over the parabolic profile, where the slope is zero on the axis. A cone has the same slope everywhere, so the shear stress on the axis is not zero.',
+            2:'C: multiplied τ by the cross-section area πR² instead of the wall area 2πR per metre. 4.0 × π × 10⁻⁴ = 1.3 × 10⁻³ N.'} }
+];
+
+/* ---------- helpers ---------- */
+var LET = ['A','B','C','D'];
+function plain(html){ var d=document.createElement('div'); d.innerHTML=html.replace(/<\/?(div|br|li|p|ul|ol|figure)[^>]*>/g,' '); return d.textContent.replace(/\s+/g,' ').trim(); }
+var SUP={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁻':'-','⁺':'+'};
+var SUB={'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9','₊':'+','₋':'-'};
+var GREEK={'θ':'theta','α':'alpha','μ':'mu','λ':'lambda','π':'pi','ℓ':'l','ω':'omega','Δ':'delta ','∫':'integral ','≤':'<=','≥':'>=','∝':'prop to','ρ':'rho','≪':'<<','ṡ':'s-dot','ẋ':'x-dot'};
+function ascii(s){
+  return s.replace(/[θαμλπℓωΔ∫≤≥∝ρ≪]|ṡ|ẋ/g,function(c){return GREEK[c];})
+          .replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]+/g,function(r){return '^'+r.split('').map(function(c){return SUP[c];}).join('');})
+          .replace(/[₀-₉₊₋]+/g,function(r){return r.split('').map(function(c){return SUB[c];}).join('');})
+          .replace(/×/g,'x').replace(/→/g,'->').replace(/√/g,'sqrt').replace(/≈/g,'~').replace(/−/g,'-')
+          .replace(/½/g,'1/2').replace(/¼/g,'1/4').replace(/÷/g,'/').replace(/°/g,' deg').replace(/·/g,'*').replace(/✓/g,'(checked)')
+          .replace(/[–—]/g,'-').replace(/[“”]/g,'"').replace(/[’‘]/g,"'");
+}
+var TUTOR = 'I am a JEE aspirant preparing for JEE Advanced. Act as a patient tutor: use simple language, reply in chunks of under 10 lines, explain why and not just how, and wait for my reply before moving on.';
+function askUrl(parts){
+  var ps = parts.map(function(p){ return ascii(p); });
+  function build(){ return 'https://claude.ai/new?q=' + encodeURIComponent(ps.join('\n\n')); }
+  var u = build(), guard = 0;
+  while(u.length > 3300 && guard++ < 200){
+    var li = -1, soft = /^(Steps:|For your reference|Why it matters|Shortcut rules)/;
+    for(var i=1;i<ps.length;i++){ if(soft.test(ps[i]) && ps[i].length > 120 && (li<0 || ps[i].length > ps[li].length)) li = i; }
+    if(li < 0){ li = 1; for(var j=2;j<ps.length;j++){ if(ps[j].length > ps[li].length) li = j; } }
+    ps[li] = ps[li].slice(0, Math.max(40, Math.floor(ps[li].length*0.9))) + '...';
+    u = build();
+  }
+  return u;
+}
+function askLink(parts, label){
+  var a = document.createElement('a');
+  a.className='ask'; a.target='_blank'; a.rel='noopener'; a.textContent = label || 'Ask Claude about this ↗';
+  a.href = askUrl([TUTOR].concat(parts));
+  return a;
+}
+function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
+
+/* ---------- build sections ---------- */
+function buildSections(){
+  var root = document.getElementById('sections');
+  SECTIONS.forEach(function(s){
+    var sec = el('section','pattern'); sec.id = s.id;
+    var head = el('div','pattern-head');
+    head.appendChild(el('h2',null, s.n+' · '+s.title));
+    head.appendChild(el('span','chip '+s.chip, s.chipText));
+    sec.appendChild(head);
+    sec.appendChild(el('div','syl', s.syl));
+    var cb = el('div','came-back');
+    cb.innerHTML = '<span class="lbl'+(s.isNew?' new':'')+'">'+s.lbl+'</span>'
+      +'<div class="sbs"><div><span class="h">'+s.leftH+'</span>'+s.cameBack.prev+'</div><div><span class="h">'+s.rightH+'</span>'+s.cameBack.now+'</div></div>'
+      +'<div>'+s.cameBack.verdict+'</div>';
+    sec.appendChild(cb);
+    sec.appendChild(el('p','why', '<strong>Why this matters.</strong> '+s.why));
+    var rule = el('div','rule');
+    rule.innerHTML = '<span class="rule-label">Shortcut rules</span><ul>'+s.rule.map(function(r){return '<li>'+r+'</li>';}).join('')+'</ul>';
+    sec.appendChild(rule);
+    if(s.ruleFig){ var rf = el('div'); rf.innerHTML = s.ruleFig.svg; sec.appendChild(rf); }
+
+    var ex = s.ex, st = el('div','stepper'); st.id = 'st-'+s.id;
+    st.appendChild(el('span','stepper-label','Worked example · '+ex.src));
+    st.appendChild(el('p',null, ex.q.replace(/\n/g,'<br>')));
+    st.appendChild(el('p','yours','Your answer: <strong>'+ex.yours+'</strong>. Correct answer: <strong>'+ex.correct+'</strong>.'));
+    st.appendChild(el('p','rebuilt', ex.note));
+    if(ex.fig){ var f = el('div'); f.innerHTML = ex.fig.svg; st.appendChild(f); }
+    ex.steps.forEach(function(sp,i){
+      var d = el('div','step'); d.innerHTML='<span class="tag">'+sp.tag+'</span>'+sp.html; if(i>0) d.hidden = true; st.appendChild(d);
+    });
+    var b = el('button','step-btn','Show next step →'); b.type='button'; b.onclick=function(){ stepNext(st); }; st.appendChild(b);
+    sec.appendChild(st);
+
+    var secParts = ['Topic: '+s.title+' (JEE Advanced Physics, Elasticity and Viscosity). Pattern: '+s.pattern+'. '+s.status+(s.isNew?'':' '+plain(s.cameBack.verdict)),
+                    'Why it matters: '+plain(s.why),
+                    'Shortcut rules: '+s.rule.map(plain).join(' | ')+(s.ruleFig?s.ruleFig.text:'')];
+    var exParts = ['Worked example ('+ex.src+'). Question: '+plain(ex.q.replace(/\n/g,' '))+(ex.fig?ex.fig.text:''),
+                   'My real answer was '+plain(ex.yours)+' and the correct answer is '+plain(ex.correct)+'. '+ex.diag,
+                   'Steps: '+ex.steps.map(function(sp){ var t=plain(sp.tag+': '+sp.html); return t.length>230? t.slice(0,227)+'...' : t; }).join(' || ')];
+    var row = el('div');
+    row.appendChild(askLink(secParts, 'Ask Claude about this section ↗')); row.appendChild(document.createTextNode(' '));
+    row.appendChild(askLink(exParts, 'Ask Claude about the worked example ↗'));
+    sec.appendChild(row);
+    root.appendChild(sec);
+  });
+}
+
+/* ---------- build practice ---------- */
+function buildGrid(){
+  var grid = document.getElementById('grid');
+  PROBS.forEach(function(p,idx){
+    var sec = SECTIONS[p.sec-1];
+    var card = el('div','card'); card.id='p'+(idx+1);
+    var head = el('div','card-head');
+    head.appendChild(el('span','qnum', String(idx+1)));
+    head.appendChild(el('span','chip '+(p.type==='multi'?'c2':'c3'), p.type==='multi'?'Multi-correct':'Single-correct'));
+    head.appendChild(el('span','chip c4','Level 4'));
+    head.appendChild(el('span','chip '+sec.chip, 'Section '+sec.n));
+    card.appendChild(head);
+    card.appendChild(el('p',null,p.q));
+    if(p.fig){ var fg = el('div'); fg.innerHTML = p.fig.svg; card.appendChild(fg); }
+    if(p.type==='multi') card.appendChild(el('div','yours','Select all that apply.'));
+    var opts = el('div','opts'); var inputs=[];
+    p.opts.forEach(function(t,i){
+      var lab = el('label','opt');
+      var inp = document.createElement('input'); inp.type = p.type==='multi'?'checkbox':'radio'; inp.name='q'+idx; inp.id='q'+idx+'o'+i; inp.value=i;
+      lab.appendChild(inp); lab.appendChild(el('span','l',LET[i])); lab.appendChild(el('span','t',t));
+      opts.appendChild(lab); inputs.push(inp);
+    });
+    card.appendChild(opts);
+    var verdict = el('div'); verdict.hidden = true;
+    var actions = el('div');
+    var chk = null;
+    function grade(){
+      var sel=[]; inputs.forEach(function(i){ if(i.checked) sel.push(+i.value); });
+      if(!sel.length){ return; }
+      var ok = sel.length===p.ans.length && sel.every(function(x){ return p.ans.indexOf(x)>-1; });
+      inputs.forEach(function(inp,i){
+        var lab = inp.parentNode; lab.classList.remove('is-right','is-wrong','is-miss');
+        var isAns = p.ans.indexOf(i)>-1;
+        if(inp.checked && isAns) lab.classList.add('is-right');
+        else if(inp.checked && !isAns) lab.classList.add('is-wrong');
+        else if(!inp.checked && isAns) lab.classList.add('is-miss');
+      });
+      verdict.className = 'verdict '+(ok?'ok':'no'); verdict.hidden=false;
+      verdict.textContent = (ok?'Correct. ':'Not quite. ')+'Correct option'+(p.ans.length>1?'s':'')+': '+p.ans.map(function(i){return LET[i];}).join(', ')+'.';
+    }
+    if(p.type==='multi'){
+      chk = el('button','check-btn','Check answer'); chk.type='button'; chk.onclick=grade; actions.appendChild(chk);
+    } else {
+      inputs.forEach(function(i){ i.addEventListener('change', grade); });
+    }
+    var rev = el('button','reveal-btn','Show why'); rev.type='button'; actions.appendChild(rev);
+    card.appendChild(actions); card.appendChild(verdict);
+    var ans = el('div','answer'); ans.hidden = true;
+    var mk = Object.keys(p.mistakes).map(function(k){ return '<li>'+p.mistakes[k]+'</li>'; }).join('');
+    ans.innerHTML = '<div>'+p.why+'</div><ul>'+mk+'</ul>';
+    card.appendChild(ans);
+    rev.onclick = function(){ ans.hidden = !ans.hidden; rev.textContent = ans.hidden ? 'Show why' : 'Hide why'; };
+
+    var parts = ['Practice problem '+(idx+1)+' ('+(p.type==='multi'?'multi-correct: pick all correct options':'single-correct')+', level 4, topic: '+sec.title+').',
+                 'Problem: '+plain(p.q)+(p.fig?p.fig.text:''),
+                 'Options: '+p.opts.map(function(t,i){return LET[i]+') '+plain(t);}).join('  '),
+                 'For your reference only, do not reveal unless I ask or have made a real attempt. Correct: '+p.ans.map(function(i){return LET[i];}).join(', ')+'. Reasoning: '+plain(p.why),
+                 'Ask me what I have tried first, then give me one hint at a time.'];
+    card.appendChild(askLink(parts));
+    grid.appendChild(card);
+  });
+}
+
+function stepNext(st){
+  var steps = st.querySelectorAll('.step'), shown = 0;
+  steps.forEach(function(s){ if(!s.hidden) shown++; });
+  if(shown < steps.length){ steps[shown].hidden = false; shown++; }
+  if(shown >= steps.length){ st.querySelector('.step-btn').hidden = true; }
+}
+function setMode(mode, btn){
+  document.querySelectorAll('.mode-btn').forEach(function(b){ b.setAttribute('aria-pressed', b===btn?'true':'false'); });
+  document.getElementById('timerBar').hidden = (mode!=='timed');
+}
+var remaining = 40*60, timerId = null;
+function renderTime(){ var m=String(Math.floor(remaining/60)).padStart(2,'0'), s=String(remaining%60).padStart(2,'0'); document.getElementById('timeDisplay').textContent=m+':'+s; }
+function startTimer(){ if(timerId) return; timerId=setInterval(function(){ remaining--; if(remaining<=0){ clearInterval(timerId); timerId=null; document.getElementById('timeDisplay').textContent="Time's up"; } else renderTime(); },1000); }
+function resetTimer(){ clearInterval(timerId); timerId=null; remaining=40*60; renderTime(); }
+
+buildSections(); buildGrid(); renderTime();
+</script>

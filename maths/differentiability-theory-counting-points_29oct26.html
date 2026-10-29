@@ -1,0 +1,722 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Counting Non-Derivable Points</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&amp;family=IBM+Plex+Mono:wght@400;600;700&amp;family=IBM+Plex+Sans:wght@400;600&amp;display=swap">
+<style>
+  :root{
+    --bg:#F5F7FB;
+    --surface:#FFFFFF;
+    --surface-2:#EDF1F8;
+    --ink:#1B2436;
+    --ink-soft:#535F76;
+    --border:#DBE1ED;
+    --accent:#2F5A8A;
+    --accent-soft:#E7EEF7;
+    --highlight:#D99A12;
+    --highlight-ink:#5C4008;
+    --highlight-bg:#FFF6DE;
+    --highlight-border:#F0D796;
+    --good:#2F8F5B;
+    --good-bg:#E5F5EC;
+    --trap:#B8503F;
+    --trap-bg:#FBEAE6;
+    --chip-1:#2F5A8A;
+    --chip-1-bg:#E7EEF7;
+    --chip-2:#7C4FBF;
+    --chip-2-bg:#F0E9FA;
+    --chip-3:#2F8F5B;
+    --chip-3-bg:#E5F5EC;
+    --chip-4:#B4681F;
+    --chip-4-bg:#FBEEDF;
+    --chip-5:#535F76;
+    --chip-5-bg:#EDF1F8;
+    --shadow: 0 1px 2px rgba(27,36,54,.04), 0 8px 24px -12px rgba(27,36,54,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0F131C;
+      --surface:#161C29;
+      --surface-2:#1E2635;
+      --ink:#E7ECF6;
+      --ink-soft:#A6B1C6;
+      --border:#2B3448;
+      --accent:#7BAAE0;
+      --accent-soft:#1B2A3E;
+      --highlight:#E8B84B;
+      --highlight-ink:#FBE8B8;
+      --highlight-bg:#3A2E10;
+      --highlight-border:#5C4A1B;
+      --good:#5FC98C;
+      --good-bg:#12301F;
+      --trap:#E1897A;
+      --trap-bg:#3A1E19;
+      --chip-1:#7BAAE0; --chip-1-bg:#1B2A3E;
+      --chip-2:#C0A2EC; --chip-2-bg:#2A2140;
+      --chip-3:#5FC98C; --chip-3-bg:#12301F;
+      --chip-4:#E3A768; --chip-4-bg:#3A2A14;
+      --chip-5:#A6B1C6; --chip-5-bg:#1E2635;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0F131C;
+    --surface:#161C29;
+    --surface-2:#1E2635;
+    --ink:#E7ECF6;
+    --ink-soft:#A6B1C6;
+    --border:#2B3448;
+    --accent:#7BAAE0;
+    --accent-soft:#1B2A3E;
+    --highlight:#E8B84B;
+    --highlight-ink:#FBE8B8;
+    --highlight-bg:#3A2E10;
+    --highlight-border:#5C4A1B;
+    --good:#5FC98C;
+    --good-bg:#12301F;
+    --trap:#E1897A;
+    --trap-bg:#3A1E19;
+    --chip-1:#7BAAE0; --chip-1-bg:#1B2A3E;
+    --chip-2:#C0A2EC; --chip-2-bg:#2A2140;
+    --chip-3:#5FC98C; --chip-3-bg:#12301F;
+    --chip-4:#E3A768; --chip-4-bg:#3A2A14;
+    --chip-5:#A6B1C6; --chip-5-bg:#1E2635;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+
+  * { box-sizing: border-box; }
+  body{
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    padding-inline: 20px;
+    padding-block: 28px 64px;
+    line-height: 1.55;
+  }
+  .wrap{ max-width: 760px; margin: 0 auto; }
+  h1,h2,h3{ font-family: "Fraunces", Georgia, serif; font-weight: 600; text-wrap: balance; margin: 0; }
+  a { color: var(--accent); }
+  .eyebrow{
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+
+  /* ---------- math helpers ---------- */
+  .m{ font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .97em; }
+  .f{ display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; font-size:.88em; line-height:1.15; margin:0 .15em; }
+  .f .fn{ border-bottom:1.4px solid currentColor; padding:0 .22em .04em; }
+  .f .fd{ padding:.04em .22em 0; }
+  .lim{ display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; font-style:italic; line-height:1.05; margin-right:.18em; }
+  .lim .sub{ font-size:.66em; font-style:normal; color: var(--ink-soft); }
+  .eq{ display:block; margin: 14px 0; padding: 14px 16px; background: var(--surface-2); border-radius: 10px; overflow-x:auto; }
+
+  /* ---------- hero ---------- */
+  .hero{ padding-block: 8px 30px; }
+  .hero h1{ font-size: clamp(1.7rem, 5vw, 2.35rem); margin-top: 10px; }
+  .hero p{ color: var(--ink-soft); max-width: 60ch; }
+  .hero-note{
+    margin-top: 18px; padding: 14px 16px; border-radius: 12px;
+    background: var(--accent-soft); border: 1px solid var(--border);
+    font-size: .93rem;
+  }
+  .asymptote-fig{ width: 100%; max-width: 420px; height: auto; display:block; margin: 18px 0 4px; }
+  @media (prefers-reduced-motion: no-preference){
+    .dot{ animation: approach 3.2s ease-in-out infinite; }
+    @keyframes approach{
+      0%{ transform: translateX(0); }
+      55%{ transform: translateX(190px); }
+      100%{ transform: translateX(190px); }
+    }
+  }
+
+  /* ---------- pattern sections ---------- */
+  .pattern{
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 22px 22px 24px; margin-block: 18px; box-shadow: var(--shadow);
+  }
+  .pattern-head{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom: 6px; }
+  .pattern-head h2{ font-size: 1.28rem; }
+  .chip{
+    font-family:"IBM Plex Mono", monospace; font-size:.68rem; letter-spacing:.05em; text-transform:uppercase;
+    padding: 3px 9px; border-radius: 999px; font-weight: 600; white-space:nowrap;
+  }
+  .chip-1{ color:var(--chip-1); background:var(--chip-1-bg); }
+  .chip-2{ color:var(--chip-2); background:var(--chip-2-bg); }
+  .chip-3{ color:var(--chip-3); background:var(--chip-3-bg); }
+  .chip-4{ color:var(--chip-4); background:var(--chip-4-bg); }
+  .chip-5{ color:var(--chip-5); background:var(--chip-5-bg); }
+  .pattern p{ margin: 10px 0; }
+  .why{ color: var(--ink-soft); font-size: .95rem; }
+
+  .rule{
+    margin-top: 14px; padding: 14px 16px; border-radius: 10px;
+    background: var(--highlight-bg); border: 1px solid var(--highlight-border); color: var(--highlight-ink);
+  }
+  .rule-label{ font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; margin-bottom:6px; display:block; }
+  .rule ul{ margin: 6px 0 0; padding-left: 20px; }
+  .rule li{ margin: 3px 0; }
+
+  /* ---------- stepper (worked examples) ---------- */
+  .stepper{ margin-top: 16px; border-top: 1px dashed var(--border); padding-top: 14px; }
+  .stepper-label{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color: var(--ink-soft); margin-bottom: 8px; display:block; }
+  .step{ padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .step:last-of-type{ border-bottom: none; }
+  .step .tag{ font-weight:600; font-size:.82rem; color: var(--accent); display:block; margin-bottom: 4px; }
+  .step-btn{
+    margin-top: 10px; font: inherit; font-weight: 600; font-size: .88rem;
+    background: var(--accent); color: white; border: none; border-radius: 8px;
+    padding: 9px 14px; cursor: pointer;
+  }
+  .step-btn:hover{ filter: brightness(1.08); }
+  .final{ background: var(--good-bg); color: var(--good); border-radius: 8px; padding: 10px 12px; font-weight: 700; margin-top: 6px; }
+  .trap-note{ background: var(--trap-bg); color: var(--trap); border-radius: 8px; padding: 10px 12px; font-size: .9rem; margin-top: 10px; }
+
+  /* ---------- practice section ---------- */
+  .practice-head{ padding-block: 6px 4px; }
+  .mode-row{
+    display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin: 14px 0 8px;
+    background: var(--surface); border:1px solid var(--border); border-radius: 14px; padding: 14px 16px;
+    box-shadow: var(--shadow);
+  }
+  .mode-btn{
+    font: inherit; font-weight:600; font-size:.9rem; padding: 8px 14px; border-radius: 999px;
+    border:1px solid var(--border); background: var(--surface-2); color: var(--ink); cursor:pointer;
+  }
+  .mode-btn[aria-pressed="true"]{ background: var(--accent); color: white; border-color: var(--accent); }
+  .timer-bar{ display:flex; align-items:center; gap:12px; margin-left:auto; flex-wrap:wrap; }
+  .time{ font-family:"IBM Plex Mono",monospace; font-size:1.3rem; font-variant-numeric: tabular-nums; min-width: 64px; }
+  .timer-btn{ font: inherit; font-size:.85rem; font-weight:600; border-radius:8px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); padding:7px 12px; cursor:pointer; }
+  .mode-help{ font-size:.85rem; color: var(--ink-soft); margin: 6px 2px 0; }
+
+  .grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin-top: 16px; }
+  .card{
+    background: var(--surface); border:1px solid var(--border); border-radius: 14px; padding: 16px 16px 14px;
+    box-shadow: var(--shadow); display:flex; flex-direction:column;
+  }
+  .card-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom: 8px; }
+  .qnum{ font-family:"Fraunces",serif; font-weight:700; font-size:1.05rem; color: var(--accent); }
+  .card ol{ padding-left: 20px; margin: 6px 0; }
+  .card li{ margin: 3px 0; }
+  .reveal-btn{
+    align-self:flex-start; margin-top:10px; font: inherit; font-weight:600; font-size:.85rem;
+    background: none; border: 1.4px solid var(--accent); color: var(--accent); border-radius: 8px;
+    padding: 7px 12px; cursor: pointer;
+  }
+  .reveal-btn:hover{ background: var(--accent-soft); }
+  .answer{ margin-top: 10px; padding: 10px 12px; background: var(--good-bg); border-radius: 8px; }
+  .answer .val{ color: var(--good); font-weight: 700; font-family:"IBM Plex Mono",monospace; }
+  .answer .why{ margin-top: 4px; font-size: .88rem; }
+
+  footer{ margin-top: 26px; color: var(--ink-soft); font-size: .88rem; text-align:center; }
+
+  .hero-fig{ width:100%; max-width:440px; height:auto; display:block; margin:18px 0 4px; }
+  .cmp{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px; margin:14px 0 6px; }
+  .cmp .box{ background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:11px 13px; font-size:.9rem; min-width:0; }
+  .cmp .box.now{ background:var(--trap-bg); border-color:var(--trap); }
+  .cmp .box .tagline{ display:block; font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; font-weight:700; color:var(--ink-soft); margin-bottom:5px; }
+  .cmp .box.now .tagline{ color:var(--trap); }
+  .verdict{ font-size:.93rem; margin:10px 0 4px; padding:10px 13px; border-left:3px solid var(--highlight); background:var(--highlight-bg); color:var(--highlight-ink); border-radius:0 8px 8px 0; }
+  .back{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; font-weight:700; color:var(--trap); background:var(--trap-bg); padding:3px 9px; border-radius:999px; white-space:nowrap; }
+  .note{ font-size:.88rem; color:var(--ink-soft); margin-top:8px; }
+  .step, .rule, .cmp, .answer, .eq { overflow-wrap:anywhere; }
+  .eq{ font-size:.93rem; }
+  .ask-row{ margin-top:14px; display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; }
+  .ask{ display:inline-flex; align-items:center; gap:6px; font:inherit; font-weight:600; font-size:.85rem; color:var(--accent); background:var(--accent-soft); border:1.4px solid var(--accent); border-radius:8px; padding:7px 12px; text-decoration:none; }
+  .ask:hover{ filter:brightness(.97); text-decoration:underline; }
+  .ask:focus-visible{ outline:2px solid var(--highlight); outline-offset:2px; }
+  .ask-hint{ font-size:.8rem; color:var(--ink-soft); }
+  .card .ask-row{ margin-top:10px; }
+
+  .card-tags{ display:flex; align-items:center; gap:6px; }
+  .lvl{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; font-weight:700; letter-spacing:.06em; color:var(--highlight-ink); background:var(--highlight-bg); border:1px solid var(--highlight-border); padding:2px 8px; border-radius:999px; }
+  .answer ol{ margin:6px 0 0 1.2em; padding:0; font-size:.88rem; color:var(--ink-soft); }
+  .answer ol li{ margin:3px 0; }
+  .answer .trap-note{ margin-top:8px; }
+
+  :root{ --on-accent:#FFFFFF; }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --on-accent:#0F131C; } }
+  :root[data-theme="dark"]{ --on-accent:#0F131C; }
+  .step-btn{ color:var(--on-accent); }
+  .mode-btn[aria-pressed="true"]{ color:var(--on-accent); }
+  .qtype{ font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.05em; text-transform:uppercase; font-weight:700; padding:3px 9px; border-radius:999px; color:var(--ink-soft); background:var(--surface-2); border:1px solid var(--border); white-space:nowrap; }
+  .card-tags{ flex-wrap:wrap; justify-content:flex-end; }
+  .opts{ display:grid; gap:8px; margin:12px 0 4px; }
+  .opt{ display:flex; gap:10px; align-items:flex-start; padding:9px 12px; border:1.4px solid var(--border); border-radius:10px; background:var(--surface-2); cursor:pointer; min-width:0; overflow-wrap:anywhere; }
+  .opt:hover{ border-color:var(--accent); }
+  .opt input{ margin-top:4px; accent-color:var(--accent); flex:none; }
+  .opt .ol{ font-family:"IBM Plex Mono",monospace; font-weight:700; color:var(--accent); flex:none; }
+  .opt .ot{ min-width:0; }
+  .opt.ok{ border-color:var(--good); background:var(--good-bg); }
+  .opt.bad{ border-color:var(--trap); background:var(--trap-bg); }
+  .opt.miss{ border-color:var(--good); border-style:dashed; background:var(--good-bg); }
+  .opt .mark{ margin-left:auto; flex:none; font-weight:700; font-size:.82rem; }
+  .opt.ok .mark,.opt.miss .mark{ color:var(--good); } .opt.bad .mark{ color:var(--trap); }
+  .result{ margin-top:10px; padding:9px 12px; border-radius:8px; font-weight:600; font-size:.92rem; }
+  .result.right{ background:var(--good-bg); color:var(--good); }
+  .result.wrong{ background:var(--trap-bg); color:var(--trap); }
+  .btn-row{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:10px; }
+  .btn-row .reveal-btn{ margin-top:0; }
+  .check-btn{ font:inherit; font-weight:600; font-size:.85rem; background:var(--accent); color:var(--on-accent); border:none; border-radius:8px; padding:8px 13px; cursor:pointer; }
+  .check-btn:focus-visible,.reveal-btn:focus-visible,.opt:focus-within{ outline:2px solid var(--highlight); outline-offset:2px; }
+  .pfig{ margin:10px 0 2px; }
+  .pfig svg{ display:block; width:100%; max-width:340px; height:auto; color:var(--ink); }
+  .pfig svg text{ font-family:"IBM Plex Mono",monospace; font-size:11px; fill:currentColor; }
+  .pfig figcaption{ font-size:.8rem; color:var(--ink-soft); margin-top:4px; }
+  .mistakes{ margin:6px 0 0; padding-left:18px; font-size:.86rem; }
+  .grid{ grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr)); }
+  .mat{display:inline-block;vertical-align:middle;border-left:1.6px solid currentColor;border-right:1.6px solid currentColor;border-radius:5px;padding:2px 8px;margin:0 3px;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.88em;max-width:100%;overflow-x:auto}
+  .mat .mr{display:grid;grid-template-columns:repeat(var(--c),auto);gap:1px 14px;text-align:center}
+  .pattern > .pfig{margin:14px 0 4px}
+</style>
+<div class="wrap">
+<section class="hero">
+<span class="eyebrow">Maths · Focus Session · WTA20 · WTA21 · CTA21</span>
+<h1>Counting Non-Derivable Points</h1>
+<p>This session is built from three papers: WTA20 (10 Oct), WTA21 (24 Oct) and CTA21 (25 Oct). It covers continuity and differentiability, with the differentiation techniques that went wrong next to them. Every worked example is a real question from those papers, with the answer you gave. The practice set has 6 fresh problems at level L4.</p>
+<div class="hero-note"><strong>How to use this:</strong> go section by section. Read the comparison, click through the worked example, then do the matching practice problems. Section 1 is the biggest because that pattern has now cost you marks in two papers in a row. Every practice problem is multiple choice (A to D). Some have one correct option, others need every correct option ticked. Do all 6 once, untimed.<br><br><strong>Stuck on something?</strong> Every pattern, worked example and practice problem has an "Ask Claude" link. It opens a new claude.ai chat with that item already filled in, and you need to be signed in to claude.ai. Claude will ask what you have tried, and give hints one at a time.</div>
+<p class="note level-note"><strong>Level L4.</strong> The practice problems are set at the level of your Sunday ADV-CTA papers: more than one concept, 6 or more steps, and a trap or boundary check. Every problem carries its level tag. The worked examples are your real questions, kept at their real level. Nothing here uses a technique marked "not yet" in your class scope.</p>
+<p class="note"><strong>One thing to know about the saved questions.</strong> My record of your tests keeps the question, your answer and the key, but for a few questions (WTA21 Q4, CTA21 Q6 and Q11) it does not keep the exact wording of the options. For those I rebuilt the options from the saved topic lines and the key, and I say so on the page. The letters you marked and the keys are real.</p>
+</section>
+<section class="pattern">
+<div class="pattern-head"><h2>1 · Counting jumps, kinks and joins</h2><span class="chip chip-1">Continuity</span><span class="back">Came back</span><span class="chip chip-3">Sat · WTA20 + WTA21</span></div>
+<p class="why">This pattern came back. Questions that ask for the number of points where a function is discontinuous or not derivable are bookkeeping questions. You missed Q9, Q10 and Q12 on WTA20 and Q12 on WTA21: four wrong answers on one skill in two papers. The count is only right if the list of candidate points is complete first. Then each point needs one test.</p>
+<div class="cmp"><div class="box"><span class="tagline">WTA20 Q9 · before</span><strong>[5x] + {3x}</strong>, number of discontinuities on <span class='m'>[0, 5]</span>. You answered <strong>15</strong>. Key: <strong>30</strong>. 15 is exactly the number of breaks of <span class='m'>{3x}</span> alone (<span class='m'>x = k/3</span>, <span class='m'>k = 1…15</span>). The 25 breaks of <span class='m'>[5x]</span> were never added, and the 5 shared points were never taken off twice.</div><div class="box now"><span class="tagline">WTA21 Q12 · now</span><strong>Piecewise f with [3x]</strong>, non-derivable at exactly 7 points, find <span class='m'>α + β + k</span>. You answered <strong>4</strong>. Key: <strong>9</strong>. 4 is what you get for <span class='m'>k = 1, α = 1, β = 2</span>, and that function has only 4 non-derivable points (<span class='m'>−1, 0, 1/3, 2/3</span>). Seven points need the jumps at <span class='m'>1, 4/3, 5/3</span> as well, so <span class='m'>k = 2</span>.</div></div>
+<p class="verdict"><strong>Same habit, different slip.</strong> In both questions the list of candidate points was too short when you started counting. In Q9 a whole list went missing (15 is one list). In Q12 the list stopped after 2 of the 5 jumps. So it is not the identical error: Q9 was about combining two lists, and Q12 was about knowing how far the jump list runs and where the join sits. I can't see your working, so these are readings of the numbers. If either is wrong, tell me what you did. WTA20 Q10 (key 19) and Q12 (key 5) were solved in the 16 Oct session.</p>
+<div class="stepper" id="st1">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p>A function is defined by <span class='m'>f(x) = sin⁻¹(2x/(1+x²))</span> for <span class='m'>x ≤ 0</span>, <span class='m'>f(x) = [3x]</span> for <span class='m'>0 &lt; x &lt; k</span>, and <span class='m'>f(x) = (x − α)² + β</span> for <span class='m'>x ≥ k</span>. It is non-derivable at exactly 7 points. Find <span class='m'>α + β + k</span>. (<span class='m'>[·]</span> is the greatest integer function.) My saved copy does not show the condition on <span class='m'>k</span>. The key 9 needs <span class='m'>k = 2</span>, so I take <span class='m'>k</span> to be a positive integer.</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">Your answer was <strong>4</strong>. Correct answer: <strong>9</strong>. Here's why.</p>
+<figure class="pfig" data-desc="Diagram: graph for k = 2, alpha = 2, beta = 5. Kinks at x = -1 and x = 0. For 0 < x < 2 a staircase of [3x] with 5 jumps at 1/3, 2/3, 1, 4/3, 5/3, reaching level 5. At x = 2 it joins the parabola (x-2)^2 + 5 at its flat vertex, smoothly."><svg viewBox="0 0 460 262" role="img" aria-label="Graph of f for WTA21 Q12 with k = 2, alpha = 2, beta = 5: two kinks at x = -1 and x = 0, five jumps of the staircase, and a smooth join at x = 2"><line x1="36" y1="236" x2="444" y2="236" stroke="var(--border)" stroke-width="1.2"/><line x1="36" y1="188.6" x2="444" y2="188.6" stroke="var(--border)" stroke-width="1" stroke-dasharray="3 4"/><line x1="52.3" y1="236" x2="52.3" y2="241" stroke="currentColor"/><text x="52.3" y="254" text-anchor="middle">-2</text><line x1="133.9" y1="236" x2="133.9" y2="241" stroke="currentColor"/><text x="133.9" y="254" text-anchor="middle">-1</text><line x1="215.5" y1="236" x2="215.5" y2="241" stroke="currentColor"/><text x="215.5" y="254" text-anchor="middle">0</text><line x1="297.1" y1="236" x2="297.1" y2="241" stroke="currentColor"/><text x="297.1" y="254" text-anchor="middle">1</text><line x1="378.7" y1="236" x2="378.7" y2="241" stroke="currentColor"/><text x="378.7" y="254" text-anchor="middle">2</text><text x="30" y="192.6" text-anchor="end">0</text><text x="30" y="166.2" text-anchor="end">1</text><text x="30" y="139.9" text-anchor="end">2</text><text x="30" y="113.6" text-anchor="end">3</text><text x="30" y="87.2" text-anchor="end">4</text><text x="30" y="60.9" text-anchor="end">5</text><polyline points="36.0,211.1 40.1,211.5 44.2,212.0 48.2,212.5 52.3,213.0 56.4,213.5 60.5,214.1 64.6,214.7 68.6,215.3 72.7,215.9 76.8,216.6 80.9,217.3 85.0,218.0 89.0,218.8 93.1,219.6 97.2,220.4 101.3,221.3 105.4,222.2 109.4,223.1 113.5,224.1 117.6,225.2 121.7,226.3 125.8,227.5 129.8,228.7 133.9,230.0 138.0,228.6 142.1,227.2 146.2,225.7 150.2,224.1 154.3,222.5 158.4,220.8 162.5,219.0 166.6,217.1 170.6,215.1 174.7,213.0 178.8,210.9 182.9,208.6 187.0,206.3 191.0,203.9 195.1,201.5 199.2,199.0 203.3,196.4 207.4,193.8 211.4,191.2 215.5,188.6 215.5,188.6" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/><line x1="215.5" y1="188.6" x2="242.7" y2="188.6" stroke="var(--accent)" stroke-width="2.5"/><line x1="242.7" y1="162.2" x2="269.9" y2="162.2" stroke="var(--accent)" stroke-width="2.5"/><line x1="269.9" y1="135.9" x2="297.1" y2="135.9" stroke="var(--accent)" stroke-width="2.5"/><line x1="297.1" y1="109.6" x2="324.3" y2="109.6" stroke="var(--accent)" stroke-width="2.5"/><line x1="324.3" y1="83.2" x2="351.5" y2="83.2" stroke="var(--accent)" stroke-width="2.5"/><line x1="351.5" y1="56.9" x2="378.7" y2="56.9" stroke="var(--accent)" stroke-width="2.5"/><circle cx="242.7" cy="188.6" r="3.8" fill="var(--surface)" stroke="var(--accent)" stroke-width="1.8"/><circle cx="242.7" cy="162.2" r="3.8" fill="var(--accent)"/><circle cx="269.9" cy="162.2" r="3.8" fill="var(--surface)" stroke="var(--accent)" stroke-width="1.8"/><circle cx="269.9" cy="135.9" r="3.8" fill="var(--accent)"/><circle cx="297.1" cy="135.9" r="3.8" fill="var(--surface)" stroke="var(--accent)" stroke-width="1.8"/><circle cx="297.1" cy="109.6" r="3.8" fill="var(--accent)"/><circle cx="324.3" cy="109.6" r="3.8" fill="var(--surface)" stroke="var(--accent)" stroke-width="1.8"/><circle cx="324.3" cy="83.2" r="3.8" fill="var(--accent)"/><circle cx="351.5" cy="83.2" r="3.8" fill="var(--surface)" stroke="var(--accent)" stroke-width="1.8"/><circle cx="351.5" cy="56.9" r="3.8" fill="var(--accent)"/><polyline points="378.7,56.9 382.8,56.8 386.9,56.6 391.0,56.3 395.0,55.8 399.1,55.2 403.2,54.5 407.3,53.7 411.4,52.7 415.4,51.5 419.5,50.3 423.6,48.9 427.7,47.4 431.8,45.7 435.8,44.0 439.9,42.1 444.0,40.0" fill="none" stroke="var(--accent)" stroke-width="2.5"/><circle cx="133.9" cy="230.0" r="5.5" fill="var(--trap)" stroke="currentColor" stroke-width="1.2"/><circle cx="215.5" cy="188.6" r="5.5" fill="var(--trap)" stroke="currentColor" stroke-width="1.2"/><circle cx="378.7" cy="56.9" r="5" fill="var(--highlight)" stroke="currentColor" stroke-width="1.2"/><text x="142.9" y="218.0">kink, x = −1</text><text x="224.5" y="205.6">kink, x = 0</text><text x="50" y="62">five jumps of [3x]</text><text x="50" y="76">at 1/3, 2/3, 1, 4/3, 5/3</text><text x="372.7" y="76">join, x = 2</text><text x="372.7" y="90">flat and smooth</text></svg><figcaption>f for WTA21 Q12 with k = 2, α = 2, β = 5. Two kinks (red), five jumps (staircase) and a smooth join at (2, 5): 7 points in all.</figcaption></figure>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · the left piece changes formula at x = −1</span>
+Put <span class='m'>x = tan t</span>. For <span class='m'>−1 ≤ x ≤ 0</span>, <span class='m'>2x/(1+x²) = sin 2t</span> with <span class='m'>2t ∈ [−π/2, 0]</span>, so <span class='m'>f = 2tan⁻¹x</span>, slope <span class='m'>2/(1+x²)</span>. For <span class='m'>x &lt; −1</span>, <span class='m'>2t ∈ (−π, −π/2)</span> and <span class='m'>f = −π − 2tan⁻¹x</span>, slope <span class='m'>−2/(1+x²)</span>. At <span class='m'>x = −1</span> the value is <span class='m'>−π/2</span> on both sides, the slopes are <span class='m'>−1</span> (left) and <span class='m'>+1</span> (right). A kink: <strong>1 point</strong>.
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · the kink at x = 0</span>
+At <span class='m'>x = 0</span>, <span class='m'>f(0) = sin⁻¹0 = 0</span>. The left slope is <span class='m'>2/(1+0) = 2</span>. On the right, <span class='m'>[3x] = 0</span> for <span class='m'>0 &lt; x &lt; 1/3</span>, so the function is continuous (0 = 0) with slope 0. <span class='m'>2 ≠ 0</span>: another kink. <strong>2 points so far.</strong>
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · the jumps inside (0, k)</span>
+<span class='m'>[3x]</span> is flat between jumps and goes up by 1 at every <span class='m'>x = m/3</span>. A jump is a break of continuity, so it is a non-derivable point. The candidates are <span class='m'>1/3, 2/3, 1, 4/3, 5/3, 2, …</span> as long as they are below <span class='m'>k</span>.
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · the join at x = k</span>
+Just left of <span class='m'>k</span> the function is flat at some level <span class='m'>c</span>. Right of <span class='m'>k</span> the parabola has slope <span class='m'>2(k − α)</span>. For <span class='m'>x = k</span> to be derivable you need <span class='m'>β = c</span> (continuity) and <span class='m'>2(k − α) = 0</span>, so <span class='m'>α = k</span>. If either failed, <span class='m'>α</span> and <span class='m'>β</span> would not be pinned down and the question could not ask for <span class='m'>α + β + k</span>. A flat vertex at the join also hides a jump that sits exactly at <span class='m'>x = k</span>.
+</div>
+<div class="step" data-n="5" hidden>
+<span class="tag">Step 5 · count to 7, then fix k</span>
+Two points come from the kinks (<span class='m'>−1</span> and <span class='m'>0</span>). The other 5 must be jumps: <span class='m'>1/3, 2/3, 1, 4/3, 5/3</span>. The next jump, <span class='m'>x = 2</span>, must not be inside <span class='m'>(0, k)</span>, so <span class='m'>5/3 &lt; k ≤ 2</span>. For an integer <span class='m'>k</span> that is <span class='m'>k = 2</span>. (Any <span class='m'>k</span> in that range gives 7 points and the sum <span class='m'>2k + 5</span>, so the integer condition is what makes the answer 9.)
+</div>
+<div class="step" data-n="6" hidden>
+<span class="tag">Step 6 · read off β and α</span>
+For <span class='m'>x</span> just below 2, <span class='m'>[3x] = 5</span>, so <span class='m'>β = 5</span>. Then <span class='m'>α = k = 2</span>. The jump at <span class='m'>x = 2</span> is hidden by the join, so it is not extra. <span class='m'>α + β + k = 2 + 5 + 2 = 9</span>.<div class="final">Answer: 9</div><div class="trap-note">The trap: stopping the jump list early, and forgetting that the join at <span class='m'>x = k</span> decides α and β. With only the jumps at 1/3 and 2/3 (k = 1) you get the sum 4 and a function with 4 points, not 7. Also easy to miss: the kink at <span class='m'>x = −1</span>, because <span class='m'>sin⁻¹(2x/(1+x²))</span> equals <span class='m'>2tan⁻¹x</span> only for <span class='m'>|x| ≤ 1</span>.</div>
+</div>
+<button class="step-btn" type="button" onclick="stepNext('st1')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<div class="rule">
+<span class="rule-label">The shortcuts</span>
+<ul>
+<li><strong>Write the whole list before you count.</strong> Kinks of every piece, jumps of every <span class='m'>[·]</span> and <span class='m'>{·}</span>, and every join. Then test each point once.</li>
+<li><strong>Jumps cancel only when their signs are opposite.</strong> <span class='m'>[kx]</span> jumps +1 and <span class='m'>{kx}</span> jumps −1 at multiples of <span class='m'>1/k</span>, so <span class='m'>[5x] + {3x}</span> cancels at shared points. <span class='m'>[3x] − {4x}</span> does not (+1 and +1 add to +2).</li>
+<li><strong>Inverse trig changes formula.</strong> <span class='m'>sin⁻¹(2x/(1+x²)) = 2tan⁻¹x</span> only for <span class='m'>|x| ≤ 1</span>. Outside it is <span class='m'>±π − 2tan⁻¹x</span>, so there is a kink at <span class='m'>x = ±1</span>.</li>
+<li><strong>A smooth join needs two things:</strong> equal values and equal slopes. A flat piece meeting a parabola needs the vertex at the join. That also hides a jump sitting at the join.</li>
+<li><strong>A zero factor helps differently for continuity and derivability.</strong> <span class='m'>[x]·sin πx</span> is continuous at integers (the factor is 0) but not derivable. <span class='m'>[x]·sin²πx</span> is derivable (the factor is 0 to second order).</li>
+</ul>
+</div>
+<div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this pattern ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
+</section>
+<section class="pattern">
+<div class="pattern-head"><h2>2 · Piecewise continuity and differentiability theory</h2><span class="chip chip-2">Continuity</span><span class="back">Slipped</span><span class="chip chip-4">Sun · CTA21</span></div>
+<p class="why">This pattern was strong and is now shaky. Two kinds of question are here: statements about derivatives, and a function defined by a limit that has to be turned into pieces first. In both, you test each join carefully with one-sided values.</p>
+<div class="cmp"><div class="box"><span class="tagline">Before this paper</span>On this pattern you got WTA20 Q1 and CTA20 Q11 and Q16 right. So there is no earlier mistake to set beside the new ones. The pattern was solid.</div><div class="box now"><span class="tagline">CTA21 · now</span><strong>Q11 wrong:</strong> you marked A, C, D, key A, B. <strong>Q6 skipped:</strong> a function defined by a limit, with continuity and the left-hand derivative at <span class='m'>x = 1</span> and <span class='m'>x = −1</span>; key C. Two questions, two different gaps.</div></div>
+<p class="verdict"><strong>New slip on a pattern that was strong.</strong> Q11 is one idea: "f'(a) exists" and "f' is continuous at a" are different statements, and you ticked C and D, which treat them as the same. Q6 was skipped, so I can't say if it was a knowledge gap or time. The page shows both, because both are quick to fix.</p>
+<div class="stepper" id="st2">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p>Select the correct statements. (A) If <span class='m'>f′(x)</span> is continuous at <span class='m'>x = a</span>, then <span class='m'>f</span> is differentiable at <span class='m'>a</span>. (B) <span class='m'>f′(x)</span> can be discontinuous at a point where <span class='m'>f</span> is differentiable. (C) <span class='m'>f</span> is smooth at <span class='m'>a</span> if and only if <span class='m'>f′(a)</span> exists. (D) If <span class='m'>f</span> is differentiable at <span class='m'>a</span>, then <span class='m'>lim f′(x) = f′(a)</span> as <span class='m'>x → a</span>.</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">Your answer was <strong>A, C, D</strong>. Correct answer: <strong>A, B</strong>. I rebuilt the four statements from the saved topic lines, so check the wording against your paper. Here's why.</p>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · what the words mean</span>
+<strong>Differentiable at a</strong> means <span class='m'>f′(a)</span> exists (the difference quotient has a limit). <strong><span class='m'>f′</span> continuous at a</strong> means <span class='m'>lim f′(x) = f′(a)</span>. <strong>Smooth</strong> here means <span class='m'>f′</span> is continuous at <span class='m'>a</span>. Differentiable is the weaker condition.
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · statement A</span>
+To say <span class='m'>f′</span> is continuous at <span class='m'>a</span>, the value <span class='m'>f′(a)</span> must exist. So <span class='m'>f</span> is differentiable at <span class='m'>a</span>. <strong>A is true</strong> (you had this).
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · one test function settles B, C and D</span>
+Take <span class='m'>f(x) = x² sin(1/x)</span> with <span class='m'>f(0) = 0</span>. Then <span class='m'>f′(0) = lim h² sin(1/h)/h = lim h sin(1/h) = 0</span> (a bounded factor times something going to 0). So <span class='m'>f</span> is differentiable at 0.
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · f′ near 0</span>
+For <span class='m'>x ≠ 0</span>: <span class='m'>f′(x) = 2x sin(1/x) − cos(1/x)</span>. The first term goes to 0, but <span class='m'>cos(1/x)</span> keeps swinging between −1 and 1. So <span class='m'>lim f′(x)</span> does not exist, and <span class='m'>f′</span> is discontinuous at 0 although <span class='m'>f′(0) = 0</span> exists. <strong>B is true. D is false.</strong>
+</div>
+<div class="step" data-n="5" hidden>
+<span class="tag">Step 5 · statement C</span>
+Smooth needs <span class='m'>f′</span> continuous at <span class='m'>a</span>. In the example <span class='m'>f′(0)</span> exists, yet <span class='m'>f′</span> is not continuous at 0. So existence of <span class='m'>f′(a)</span> is not enough. <strong>C is false.</strong><div class="final">Answer: A, B</div><div class="trap-note">Likely cause: "f′(a) exists" and "f′ is continuous at a" felt like one idea, so C and D looked true and B looked impossible. One test function, <span class='m'>x² sin(1/x)</span>, settles A to D at once.</div>
+</div>
+<button class="step-btn" type="button" onclick="stepNext('st2')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<div class="stepper" id="st3">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p>Let <span class='m'>f(x) = lim<sub>θ→0⁻</sub> [cos(πx) − (x²)^(1/θ) sin(πx/2)] / [1 + (x²)^(1/θ)]</span>. Which statement about continuity and the left-hand derivative of <span class='m'>f</span> at <span class='m'>x = 1</span> and <span class='m'>x = −1</span> is <strong>NOT</strong> true?</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">You skipped this one. Key: <strong>C</strong>. My saved copy does not have the wording of the four statements. So below is every fact about <span class='m'>f</span> at <span class='m'>±1</span>, which is enough to judge any of them.</p>
+<figure class="pfig" data-desc="Diagram: f is -sin(pi x/2) for |x| < 1 and cos(pi x) for |x| > 1. At x = 1 both pieces reach -1 with slope 0 (smooth). At x = -1 the left limit is -1, the right limit is 1 and f(-1) = 0."><svg viewBox="0 0 440 222" role="img" aria-label="Graph of f for CTA21 Q6: continuous and smooth at x = 1, but at x = -1 the left limit is -1, the right limit is 1 and the value is 0"><line x1="30" y1="115" x2="420" y2="115" stroke="var(--border)" stroke-width="1.2"/><line x1="225.0" y1="25" x2="225.0" y2="205" stroke="var(--border)" stroke-width="1"/><line x1="55.4" y1="115" x2="55.4" y2="120" stroke="currentColor"/><text x="55.4" y="133" text-anchor="middle">-2</text><line x1="140.2" y1="115" x2="140.2" y2="120" stroke="currentColor"/><text x="140.2" y="133" text-anchor="middle">-1</text><line x1="309.8" y1="115" x2="309.8" y2="120" stroke="currentColor"/><text x="309.8" y="133" text-anchor="middle">1</text><line x1="394.6" y1="115" x2="394.6" y2="120" stroke="currentColor"/><text x="394.6" y="133" text-anchor="middle">2</text><polyline points="30.0,79.7 33.4,73.9 36.8,68.8 40.2,64.3 43.6,60.7 47.0,57.9 50.3,56.1 53.7,55.1 57.1,55.1 60.5,56.1 63.9,57.9 67.3,60.7 70.7,64.3 74.1,68.8 77.5,73.9 80.9,79.7 84.3,86.1 87.7,92.9 91.0,100.1 94.4,107.5 97.8,115.0 101.2,122.5 104.6,129.9 108.0,137.1 111.4,143.9 114.8,150.3 118.2,156.1 121.6,161.2 125.0,165.7 128.3,169.3 131.7,172.1 135.1,173.9 138.5,174.9" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/><polyline points="140.2,55.0 143.6,55.1 147.0,55.5 150.4,56.1 153.8,56.9 157.2,57.9 160.6,59.2 164.0,60.7 167.3,62.4 170.7,64.3 174.1,66.5 177.5,68.8 180.9,71.3 184.3,73.9 187.7,76.8 191.1,79.7 194.5,82.9 197.9,86.1 201.3,89.5 204.7,92.9 208.0,96.5 211.4,100.1 214.8,103.8 218.2,107.5 221.6,111.2 225.0,115.0 228.4,118.8 231.8,122.5 235.2,126.2 238.6,129.9 242.0,133.5 245.3,137.1 248.7,140.5 252.1,143.9 255.5,147.1 258.9,150.3 262.3,153.2 265.7,156.1 269.1,158.7 272.5,161.2 275.9,163.5 279.3,165.7 282.7,167.6 286.0,169.3 289.4,170.8 292.8,172.1 296.2,173.1 299.6,173.9 303.0,174.5 306.4,174.9 309.8,175.0" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/><polyline points="309.8,175.0 313.2,174.5 316.6,173.1 320.0,170.8 323.3,167.6 326.7,163.5 330.1,158.7 333.5,153.2 336.9,147.1 340.3,140.5 343.7,133.5 347.1,126.2 350.5,118.8 353.9,111.2 357.3,103.8 360.7,96.5 364.0,89.5 367.4,82.9 370.8,76.8 374.2,71.3 377.6,66.5 381.0,62.4 384.4,59.2 387.8,56.9 391.2,55.5 394.6,55.0 398.0,55.5 401.3,56.9 404.7,59.2 408.1,62.4 411.5,66.5 414.9,71.3 418.3,76.8" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/><circle cx="140.2" cy="175.0" r="4" fill="var(--surface)" stroke="var(--trap)" stroke-width="2"/><circle cx="140.2" cy="55.0" r="4" fill="var(--surface)" stroke="var(--trap)" stroke-width="2"/><circle cx="140.2" cy="115.0" r="5" fill="var(--trap)" stroke="currentColor" stroke-width="1.2"/><circle cx="309.8" cy="175.0" r="5" fill="var(--highlight)" stroke="currentColor" stroke-width="1.2"/><text x="132.2" y="191.0" text-anchor="end">left limit −1</text><text x="132.2" y="47.0" text-anchor="end">right limit 1</text><text x="131.2" y="107.0" text-anchor="end">f(−1) = 0</text><text x="319.8" y="201.0">f(1) = −1 on both sides,</text><text x="319.8" y="215.0">slope 0: smooth</text></svg><figcaption>f from CTA21 Q6. Smooth at x = 1 (yellow dot). At x = −1 the two limits and the value are three different numbers (red).</figcaption></figure>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · what (x²)^(1/θ) does</span>
+Write <span class='m'>T = (x²)^(1/θ)</span>. As <span class='m'>θ → 0⁻</span>, <span class='m'>1/θ → −∞</span>. If <span class='m'>|x| &lt; 1</span>, <span class='m'>x² &lt; 1</span> and a number below 1 to a huge negative power is huge: <span class='m'>T → ∞</span>. If <span class='m'>|x| &gt; 1</span>: <span class='m'>T → 0</span>. If <span class='m'>|x| = 1</span>: <span class='m'>T = 1</span>.
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · the three formulas</span>
+For <span class='m'>|x| &lt; 1</span> divide top and bottom by <span class='m'>T</span>: <span class='m'>f = −sin(πx/2)</span>. For <span class='m'>|x| &gt; 1</span>: <span class='m'>f = cos πx</span>. For <span class='m'>|x| = 1</span>: <span class='m'>f = (cos πx − sin(πx/2))/2</span>.
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · x = 1 is fine</span>
+<span class='m'>f(1) = (−1 − 1)/2 = −1</span>. Left limit <span class='m'>−sin(π/2) = −1</span>, right limit <span class='m'>cos π = −1</span>. Continuous. Slopes: left <span class='m'>−(π/2)cos(πx/2) = 0</span>, right <span class='m'>−π sin πx = 0</span>. So <span class='m'>f</span> is differentiable at 1, and the left-hand derivative is 0.
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · x = −1 is not</span>
+<span class='m'>f(−1) = (cos(−π) − sin(−π/2))/2 = (−1 + 1)/2 = 0</span>. Left limit (|x| &gt; 1): <span class='m'>cos(−π) = −1</span>. Right limit (|x| &lt; 1): <span class='m'>−sin(−π/2) = +1</span>. Three different numbers, so <span class='m'>f</span> is <strong>not continuous at −1</strong>, and the left-hand derivative there does not exist (the left limit −1 is not <span class='m'>f(−1) = 0</span>).
+</div>
+<div class="step" data-n="5" hidden>
+<span class="tag">Step 5 · which statement fails</span>
+True: continuous at 1, left-hand derivative at 1 equal to 0, differentiable at 1. False: continuous at −1, any left-hand derivative at −1. The key letter C must be the statement that claims something at <span class='m'>x = −1</span>, which is the only place <span class='m'>f</span> misbehaves. I can't confirm the wording of C.<div class="final">x = 1: continuous and differentiable. x = −1: not continuous.</div><div class="trap-note">The trap: <span class='m'>x²</span> and <span class='m'>x^(1/θ)</span> are even in <span class='m'>x</span>, so <span class='m'>x = 1</span> and <span class='m'>x = −1</span> feel the same. They are not, because <span class='m'>cos πx</span> is even but <span class='m'>sin(πx/2)</span> is odd. The pieces meet at 1 but not at −1.</div>
+</div>
+<button class="step-btn" type="button" onclick="stepNext('st3')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<div class="rule">
+<span class="rule-label">The shortcuts</span>
+<ul>
+<li><strong>Differentiable implies continuous, not the other way round.</strong> And "f′(a) exists" is not "f′ is continuous at a". <span class='m'>x² sin(1/x)</span> has the first without the second.</li>
+<li><strong>Continuity at a join needs three numbers:</strong> left limit, right limit and the value. Derivability needs two slopes, and only after continuity holds.</li>
+<li><strong>If f is defined by a limit,</strong> first find f in each region (<span class='m'>|x| &lt; 1</span>, <span class='m'>|x| &gt; 1</span>, <span class='m'>|x| = 1</span>). The value at the boundary is its own third case.</li>
+<li><strong>Do not copy a result from <span class='m'>x = 1</span> to <span class='m'>x = −1</span></strong> unless the pieces are even functions.</li>
+</ul>
+</div>
+<div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this pattern ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
+</section>
+<section class="pattern">
+<div class="pattern-head"><h2>3 · Log differentiation of nested powers</h2><span class="chip chip-3">Differentiation</span><span class="chip chip-5">New</span><span class="chip chip-3">Sat · WTA21</span></div>
+<p class="why">Log differentiation is the tool for <span class='m'>y = u^v</span> when both parts depend on x. Here the exponent is itself a power of a log, so the log has to be taken twice. This was new on WTA21, where you skipped Q4.</p>
+<p class="verdict"><strong>New pattern.</strong> You did not attempt WTA21 Q4, so there is no wrong answer to compare. It looks like unfamiliar territory, not a slip. Log differentiation of nested powers is mechanical once you name the pieces.</p>
+<div class="stepper" id="st4">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p>Let <span class='m'>y = x^((ln x)^(ln ln x))</span> for <span class='m'>x &gt; 1</span>. Find <span class='m'>dy/dx</span>.</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">You skipped this one (not visited). Key: <strong>B and D</strong>. My saved copy keeps the key but not the option wording. B and D are the two equal forms of the answer: one written with <span class='m'>y</span>, one with <span class='m'>y = x^u</span> put back in.</p>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · take the first log</span>
+Let <span class='m'>u = (ln x)^(ln ln x)</span>. Then <span class='m'>y = x^u</span> and <span class='m'>ln y = u ln x</span>. Both <span class='m'>u</span> and <span class='m'>ln x</span> depend on <span class='m'>x</span>, so you need the product rule.
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · the exponent needs its own log</span>
+Put <span class='m'>L = ln x</span> (<span class='m'>L &gt; 0</span> for <span class='m'>x &gt; 1</span>). Then <span class='m'>u = L^(ln L)</span>, so <span class='m'>ln u = (ln L)²</span>. That is a second log, and it is what makes <span class='m'>u</span> differentiable.
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · differentiate u</span>
+<span class='m'>u′/u = 2 ln L · (1/L) · (1/x)</span>: the <span class='m'>2 ln L</span> is from the square, <span class='m'>1/L</span> from <span class='m'>ln L</span>, and <span class='m'>1/x</span> from <span class='m'>L = ln x</span>. So <span class='m'>u′ = 2u ln L / (x L)</span>.
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · differentiate ln y</span>
+<span class='m'>(ln y)′ = u′ ln x + u · (1/x)</span>. Since <span class='m'>ln x = L</span>: <span class='m'>u′ ln x = 2u ln L / x</span>. So <span class='m'>(ln y)′ = (u/x)(2 ln L + 1)</span>.
+</div>
+<div class="step" data-n="5" hidden>
+<span class="tag">Step 5 · multiply back by y</span>
+<span class='m'>dy/dx = (y/x) · (ln x)^(ln ln x) · (1 + 2 ln ln x)</span>. Replace <span class='m'>y = x^u</span>: <span class='m'>dy/dx = x^(u−1) · u · (1 + 2 ln ln x)</span> with <span class='m'>u = (ln x)^(ln ln x)</span>. These are the two forms the key marks, B and D.<div class="final">Answer: B and D</div><div class="trap-note">The trap: the exponent is itself a power, so one log is not enough. Take a second log of the exponent before you differentiate it. The second trap is dropping the <span class='m'>u/x</span> term, which comes from the product <span class='m'>u · ln x</span>.</div>
+</div>
+<button class="step-btn" type="button" onclick="stepNext('st4')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<div class="rule">
+<span class="rule-label">The shortcuts</span>
+<ul>
+<li><strong>Base and exponent both depend on x?</strong> Take ln: <span class='m'>ln y = (exponent) · ln(base)</span>, then use the product rule. The power rule <span class='m'>u x^(u−1)</span> alone gives only one of the two terms.</li>
+<li><strong>The exponent is itself a power or a log?</strong> Take ln a second time on it. <span class='m'>ln(L^(ln L)) = (ln L)²</span> is easy to differentiate.</li>
+<li><strong>Name the repeated pieces</strong> (<span class='m'>L = ln x</span>, <span class='m'>u = exponent</span>) and differentiate one layer at a time. Each layer gives one factor.</li>
+<li><strong>Check with a second point.</strong> A check at one convenient value can hide a missing term.</li>
+</ul>
+</div>
+<div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this pattern ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
+</section>
+<section class="pattern">
+<div class="pattern-head"><h2>4 · Inverse trig simplification, derivative with respect to a function</h2><span class="chip chip-3">Differentiation</span><span class="back">Slipped</span><span class="chip chip-4">Sun · CTA21</span></div>
+<p class="why">The skill here is to simplify an inverse trig expression with a substitution and then divide two derivatives. You did it right in WTA21 Q11 and Q6, and skipped it in CTA21 Q7, which makes the pattern shaky.</p>
+<div class="cmp"><div class="box"><span class="tagline">WTA21 · before</span>You got <strong>Q6 and Q11</strong> right: <span class='m'>sin⁻¹(sin x)</span> by interval, and a derivative with respect to another function using <span class='m'>x = tan t</span>. The method was working.</div><div class="box now"><span class="tagline">CTA21 Q7 · now</span><strong>Skipped.</strong> <span class='m'>dy/dz</span> at <span class='m'>x = 1/2</span> with two different inverse-trig functions. Key: <strong>√3/10</strong>. It needs two different substitutions, one for each function.</div></div>
+<p class="verdict"><strong>Not an error to compare.</strong> There is no wrong answer here, only a skip, and a skip counts against the pattern. The method you used in Q11 is half of this question. The new part is that <span class="m">z</span> needs <span class="m">x = sin φ</span>, not <span class="m">x = tan θ</span>, plus a range check for each.</p>
+<div class="stepper" id="st5">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p>For <span class='m'>x ∈ (0, 1/√2)</span>, let <span class='m'>y = tan⁻¹((√(1+x²) − 1)/x)</span> and <span class='m'>z = tan⁻¹(2x√(1−x²)/(1 − 2x²))</span>. Find <span class='m'>dy/dz</span> at <span class='m'>x = 1/2</span>.</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">You skipped this one. Key: <strong>√3/10</strong>. Here's the working.</p>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · simplify y with x = tan θ</span>
+<span class='m'>(√(1+x²) − 1)/x = (sec θ − 1)/tan θ = (1 − cos θ)/sin θ = tan(θ/2)</span>. For <span class='m'>x ∈ (0, 1/√2)</span> we have <span class='m'>θ ∈ (0, π/2)</span>, so <span class='m'>θ/2</span> is inside the principal range and <span class='m'>y = θ/2 = ½ tan⁻¹x</span>. So <span class='m'>dy/dx = 1/(2(1+x²))</span>.
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · simplify z with x = sin φ</span>
+<span class='m'>2x√(1−x²) = sin 2φ</span> and <span class='m'>1 − 2x² = cos 2φ</span>, so the fraction is <span class='m'>tan 2φ</span>. Here <span class='m'>x &lt; 1/√2</span> gives <span class='m'>φ &lt; π/4</span>, so <span class='m'>2φ &lt; π/2</span> and <span class='m'>tan⁻¹(tan 2φ) = 2φ</span> with no shift. That is why the interval is given. So <span class='m'>z = 2 sin⁻¹x</span> and <span class='m'>dz/dx = 2/√(1−x²)</span>.
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · divide the derivatives</span>
+<span class='m'>dy/dz = (dy/dx)/(dz/dx) = [1/(2(1+x²))] · [√(1−x²)/2] = √(1−x²) / (4(1+x²))</span>.
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · plug in x = 1/2</span>
+<span class='m'>√(1 − 1/4) = √3/2</span> and <span class='m'>1 + x² = 5/4</span>, so the denominator is <span class='m'>4 · 5/4 = 5</span>. <span class='m'>dy/dz = (√3/2)/5 = √3/10</span>.<div class="final">Answer: √3/10</div><div class="trap-note">The trap: using one substitution for both. The root <span class='m'>√(1+x²)</span> asks for <span class='m'>tan</span>, the root <span class='m'>√(1−x²)</span> asks for <span class='m'>sin</span>. Check where <span class='m'>2θ</span> or <span class='m'>2φ</span> lands before you drop the inverse function.</div>
+</div>
+<button class="step-btn" type="button" onclick="stepNext('st5')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<div class="rule">
+<span class="rule-label">The shortcuts</span>
+<ul>
+<li><strong>Spot the substitution.</strong> <span class='m'>√(1+x²)</span>, <span class='m'>(1−x²)/(1+x²)</span>, <span class='m'>2x/(1+x²)</span>, <span class='m'>2x/(1−x²)</span> → <span class='m'>x = tan θ</span>. <span class='m'>√(1−x²)</span> → <span class='m'>x = sin θ</span> (or cos).</li>
+<li><strong>An inverse function undoes its function only on its principal range:</strong> <span class='m'>tan⁻¹(tan t) = t</span> for <span class='m'>t ∈ (−π/2, π/2)</span>; <span class='m'>sin⁻¹(sin t) = t</span> for <span class='m'>t ∈ [−π/2, π/2]</span>; <span class='m'>cos⁻¹(cos t) = t</span> for <span class='m'>t ∈ [0, π]</span>. Outside, shift by <span class='m'>π</span> or flip the sign.</li>
+<li><strong>Derivative with respect to another function:</strong> <span class='m'>dy/dz = (dy/dx)/(dz/dx)</span>, never the other way round.</li>
+<li><strong>Simplify both functions first.</strong> Direct differentiation of <span class='m'>tan⁻¹(…)</span> with roots inside is long and error-prone.</li>
+</ul>
+</div>
+<div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this pattern ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
+</section>
+<section class="practice-head">
+<span class="eyebrow">Practice Set</span>
+<h2 style="margin-top:8px; font-size:1.4rem;">6 fresh problems, same four patterns</h2>
+<p style="color:var(--ink-soft)">Not copies of the test questions: same techniques, new problems at level L4. Pattern 1 gets the most (problems 1 to 3), and patterns 2, 3 and 4 get one each (problems 4, 5 and 6). Two of the six are multi-correct (problems 2 and 4). Every wrong option is a mistake you could really make, and each answer says which. Single-correct problems mark themselves when you pick. In multi-correct problems tick all the correct options, then press Check answer. Every answer was solved by hand, checked twice, and also checked by computer.</p>
+</section>
+<div class="mode-row">
+<button class="mode-btn" data-mode="practice" aria-pressed="true" onclick="setMode('practice', this)">Practice (untimed)</button>
+<button class="mode-btn" data-mode="timed" aria-pressed="false" onclick="setMode('timed', this)">Timed — 40 min</button>
+<div class="timer-bar" id="timerBar" hidden>
+<span class="time" id="timeDisplay">40:00</span>
+<button class="timer-btn" id="startBtn" onclick="startTimer()">Start</button>
+<button class="timer-btn" id="resetBtn" onclick="resetTimer()">Reset</button>
+</div>
+</div>
+<p class="mode-help">First pass: stay in Practice mode. In Timed mode all 6 fit in 40 minutes, about 6 minutes each, which is the top of the L4 range.</p>
+<div class="grid">
+<div class="card" id="q1" data-kind="single" data-correct="B">
+<div class="card-head"><span class="qnum">1</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-1">Counting breaks</span><span class="lvl">L4</span></span></div>
+<p class="stem"><span class='m'>f(x) = [3x] − {4x}</span>, where <span class='m'>[·]</span> is the greatest integer function and <span class='m'>{·}</span> the fractional part function. The number of points in <span class='m'>[0, 2]</span> at which <span class='m'>f</span> is discontinuous is:</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 1"><label class="opt"><input type="radio" name="q1" value="A"><span class="ol">A</span><span class="ot">14</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q1" value="B"><span class="ol">B</span><span class="ot">12</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q1" value="C"><span class="ol">C</span><span class="ot">10</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q1" value="D"><span class="ol">D</span><span class="ot">8</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: B · 12</span><div class="why"><ol><li>Write <span class='m'>−{4x} = [4x] − 4x</span>, so <span class='m'>f = [3x] + [4x] − 4x</span>. The line is continuous, so only the floors matter.</li><li><span class='m'>[3x]</span> jumps by <strong>+1</strong> at <span class='m'>x = k/3, k = 1…6</span> in <span class='m'>(0, 2]</span>: 6 points. <span class='m'>[4x]</span> jumps by <strong>+1</strong> at <span class='m'>x = k/4, k = 1…8</span>: 8 points.</li><li>Both jumps are +1, so at a shared point they add to +2. They do <strong>not</strong> cancel, and <span class='m'>f</span> is discontinuous there.</li><li>Shared points are multiples of both 1/3 and 1/4: <span class='m'>x = 1, 2</span>. Distinct points: <span class='m'>6 + 8 − 2 = 12</span>.</li><li>Ends: at <span class='m'>x = 0</span>, <span class='m'>f(0) = 0</span> and the right limit is 0, so continuous. At <span class='m'>x = 2</span>: left limit <span class='m'>5 + 7 − 8 = 4</span>, <span class='m'>f(2) = 6</span>: a break, already counted.</li></ol></div><ul class="mistakes"><li><strong>A (14)</strong>: added 6 + 8 and counted the shared points <span class='m'>1, 2</span> twice</li><li><strong>C (10)</strong>: subtracted <span class='m'>2 × 2</span>, as if the jumps cancelled. That is true for <span class='m'>[5x] + {3x}</span> but here both jumps are +1</li><li><strong>D (8)</strong>: counted only the breaks of <span class='m'>{4x}</span> (<span class='m'>k/4</span>, 8 points) and never added the <span class='m'>[3x]</span> list</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q2" data-kind="multi" data-correct="ABD">
+<div class="card-head"><span class="qnum">2</span><span class="card-tags"><span class="qtype">Multi-correct</span><span class="chip chip-1">Kinks and jumps together</span><span class="lvl">L4</span></span></div>
+<p class="stem">Let <span class='m'>F(x) = sin⁻¹(2x/(1+x²)) + [x/2]</span> for <span class='m'>x ∈ (−3, 3)</span>. Select all correct statements.</p>
+<p class="note" style="margin:6px 0 0">Select every correct option. It counts only if your set matches exactly.</p>
+<div class="opts" role="group" aria-label="Options for problem 2"><label class="opt"><input type="checkbox" name="q2" value="A"><span class="ol">A</span><span class="ot">F is discontinuous at exactly 3 points of <span class='m'>(−3, 3)</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q2" value="B"><span class="ol">B</span><span class="ot">F is non-derivable at exactly 5 points of <span class='m'>(−3, 3)</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q2" value="C"><span class="ol">C</span><span class="ot">F is differentiable at <span class='m'>x = 1</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q2" value="D"><span class="ol">D</span><span class="ot">F is continuous at <span class='m'>x = −1</span></span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="check-btn" type="button" onclick="checkCard(this)">Check answer</button><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: A, B, D</span><div class="why"><ol><li><span class='m'>sin⁻¹(2x/(1+x²))</span> equals <span class='m'>2tan⁻¹x</span> for <span class='m'>|x| ≤ 1</span>, <span class='m'>π − 2tan⁻¹x</span> for <span class='m'>x &gt; 1</span>, <span class='m'>−π − 2tan⁻¹x</span> for <span class='m'>x &lt; −1</span>. It is continuous everywhere, with slopes <span class='m'>±1</span> meeting at <span class='m'>x = ±1</span>: kinks there.</li><li><span class='m'>[x/2]</span> on <span class='m'>(−3, 3)</span> jumps by 1 where <span class='m'>x/2</span> is an integer: <span class='m'>x = −2, 0, 2</span>. So <strong>A is true</strong> (3 discontinuities).</li><li>Non-derivable points: the 3 jumps plus the kinks at <span class='m'>x = ±1</span>, where <span class='m'>[x/2]</span> is constant. That is 5. <strong>B is true.</strong></li><li>At <span class='m'>x = 1</span>: <span class='m'>[x/2] = 0</span> on both sides, so <span class='m'>F</span> has the kink of the arcsin part. Continuous, not differentiable. <strong>C is false.</strong></li><li>At <span class='m'>x = −1</span>: <span class='m'>[x/2] = −1</span> on both sides and the arcsin part is continuous. <strong>D is true.</strong></li></ol></div><ul class="mistakes"><li><strong>C is a trap</strong>: used <span class='m'>sin⁻¹(2x/(1+x²)) = 2tan⁻¹x</span> for every x, so the kinks at <span class='m'>±1</span> never appear. The same slip gives "3 non-derivable points" instead of 5</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q3" data-kind="single" data-correct="B">
+<div class="card-head"><span class="qnum">3</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-1">Join and parameters</span><span class="lvl">L4</span></span></div>
+<p class="stem">Let <span class='m'>f(x) = |x² − 1|</span> for <span class='m'>x ≤ 0</span>, <span class='m'>f(x) = [x]</span> for <span class='m'>0 &lt; x &lt; k</span>, and <span class='m'>f(x) = (x − α)² + β</span> for <span class='m'>x ≥ k</span>, where <span class='m'>k</span> is a positive integer. If <span class='m'>f</span> is non-derivable at exactly 6 points, find <span class='m'>k + α + β</span>.</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 3"><label class="opt"><input type="radio" name="q3" value="A"><span class="ol">A</span><span class="ot">11</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q3" value="B"><span class="ol">B</span><span class="ot">14</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q3" value="C"><span class="ol">C</span><span class="ot">15</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q3" value="D"><span class="ol">D</span><span class="ot">17</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: B · 14</span><div class="why"><ol><li>On <span class='m'>x ≤ 0</span>, <span class='m'>|x² − 1|</span> has a kink where <span class='m'>x² − 1 = 0</span>: <span class='m'>x = −1</span> (the point <span class='m'>x = 1</span> is not in this piece). <strong>1 point.</strong></li><li>At <span class='m'>x = 0</span>: <span class='m'>f(0) = 1</span> but <span class='m'>[x] = 0</span> on <span class='m'>(0, 1)</span>, so the right limit is 0. Discontinuous. <strong>2 points.</strong></li><li><span class='m'>[x]</span> jumps at every integer inside <span class='m'>(0, k)</span>: <span class='m'>1, 2, …, k−1</span>, which is <span class='m'>k − 1</span> points.</li><li>At the join, the left level is <span class='m'>[x] = k − 1</span>. A smooth join needs <span class='m'>β = k − 1</span> and <span class='m'>α = k</span>. This also hides the jump at <span class='m'>x = k</span>.</li><li>Count: <span class='m'>2 + (k − 1) = k + 1 = 6</span>, so <span class='m'>k = 5, α = 5, β = 4</span>.</li><li><span class='m'>k + α + β = 5 + 5 + 4 = 14</span>.</li></ol></div><ul class="mistakes"><li><strong>A (11)</strong>: counted the jump at <span class='m'>x = k</span> as one of the six, so used <span class='m'>k = 4, α = 4, β = 3</span>. The join hides that jump</li><li><strong>C (15)</strong>: took <span class='m'>β = [k] = 5</span> instead of the level just left of the join, 4. That leaves a jump at the join</li><li><strong>D (17)</strong>: missed the kink at <span class='m'>x = −1</span>, so needed five jumps: <span class='m'>k = 6, α = 6, β = 5</span></li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q4" data-kind="multi" data-correct="AB">
+<div class="card-head"><span class="qnum">4</span><span class="card-tags"><span class="qtype">Multi-correct</span><span class="chip chip-2">Derivative theory</span><span class="lvl">L4</span></span></div>
+<p class="stem">Let <span class='m'>f(x) = x³ sin(1/x)</span> for <span class='m'>x ≠ 0</span> and <span class='m'>f(0) = 0</span>. Select all correct statements.</p>
+<p class="note" style="margin:6px 0 0">Select every correct option. It counts only if your set matches exactly.</p>
+<div class="opts" role="group" aria-label="Options for problem 4"><label class="opt"><input type="checkbox" name="q4" value="A"><span class="ol">A</span><span class="ot"><span class='m'>f′(0) = 0</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q4" value="B"><span class="ol">B</span><span class="ot"><span class='m'>f′</span> is continuous at <span class='m'>x = 0</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q4" value="C"><span class="ol">C</span><span class="ot"><span class='m'>f″(0)</span> exists</span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q4" value="D"><span class="ol">D</span><span class="ot"><span class='m'>lim f″(x)</span> exists as <span class='m'>x → 0</span></span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="check-btn" type="button" onclick="checkCard(this)">Check answer</button><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: A, B</span><div class="why"><ol><li><span class='m'>f′(0) = lim h³ sin(1/h)/h = lim h² sin(1/h) = 0</span>. <strong>A is true.</strong></li><li>For <span class='m'>x ≠ 0</span>: <span class='m'>f′(x) = 3x² sin(1/x) − x cos(1/x)</span>. Both terms go to 0 (bounded times a factor going to 0), so <span class='m'>lim f′(x) = 0 = f′(0)</span>. <strong>B is true.</strong></li><li><span class='m'>f″(0) = lim [f′(h) − f′(0)]/h = lim [3h sin(1/h) − cos(1/h)]</span>. The <span class='m'>cos(1/h)</span> term swings between −1 and 1, so no limit. <strong>C is false.</strong></li><li>For <span class='m'>x ≠ 0</span>: <span class='m'>f″(x) = 6x sin(1/x) − 4cos(1/x) − sin(1/x)/x</span>. The last term is unbounded and oscillates, so no limit. <strong>D is false.</strong></li></ol></div><ul class="mistakes"><li><strong>C</strong>: "f′ is continuous, so f″ must exist." Continuity of a function does not give its derivative</li><li><strong>D</strong>: "a high power of x kills everything." Each derivative lowers the power by one, and after two derivatives a <span class='m'>1/x</span> appears</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q5" data-kind="single" data-correct="B">
+<div class="card-head"><span class="qnum">5</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-3">Double log</span><span class="lvl">L4</span></span></div>
+<p class="stem">Let <span class='m'>y = (ln x)^(ln ln x)</span> for <span class='m'>x &gt; 1</span>. The value of <span class='m'>dy/dx</span> at <span class='m'>x = e^e</span> is:</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 5"><label class="opt"><input type="radio" name="q5" value="A"><span class="ol">A</span><span class="ot"><span class='m'>2</span></span><span class="mark"></span></label><label class="opt"><input type="radio" name="q5" value="B"><span class="ol">B</span><span class="ot"><span class='m'>2e^(−e)</span></span><span class="mark"></span></label><label class="opt"><input type="radio" name="q5" value="C"><span class="ol">C</span><span class="ot"><span class='m'>e^(−e)</span></span><span class="mark"></span></label><label class="opt"><input type="radio" name="q5" value="D"><span class="ol">D</span><span class="ot"><span class='m'>2e^(−e−1)</span></span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: B · <span class='m'>2e^(−e)</span></span><div class="why"><ol><li>Let <span class='m'>L = ln x</span>. Then <span class='m'>y = L^(ln L)</span> and <span class='m'>ln y = ln L · ln L = (ln L)²</span>.</li><li><span class='m'>(ln y)′ = 2 ln L · (1/L) · (1/x)</span>: the square, then <span class='m'>ln L</span>, then <span class='m'>L = ln x</span>.</li><li><span class='m'>y′ = y · 2 ln L / (x L)</span>.</li><li>At <span class='m'>x = e^e</span>: <span class='m'>L = e</span>, <span class='m'>ln L = 1</span>, <span class='m'>y = e^1 = e</span>.</li><li><span class='m'>y′ = e · 2 · 1 / (e^e · e) = 2e^(−e)</span>.</li></ol></div><ul class="mistakes"><li><strong>A (2)</strong>: dropped the chain factor <span class='m'>1/x</span>: <span class='m'>y′/y = 2/e</span>, <span class='m'>y′ = 2</span></li><li><strong>C (e^−e)</strong>: lost the factor 2 from the square</li><li><strong>D (2e^(−e−1))</strong>: forgot to multiply by <span class='m'>y = e</span></li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q6" data-kind="single" data-correct="A">
+<div class="card-head"><span class="qnum">6</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-4">Derivative with respect to a function</span><span class="lvl">L4</span></span></div>
+<p class="stem">Let <span class='m'>y = tan⁻¹(√(1 + x²) − x)</span> and <span class='m'>z = sin⁻¹x</span>. Find <span class='m'>dy/dz</span> at <span class='m'>x = √3/2</span>.</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 6"><label class="opt"><input type="radio" name="q6" value="A"><span class="ol">A</span><span class="ot"><span class='m'>−1/7</span></span><span class="mark"></span></label><label class="opt"><input type="radio" name="q6" value="B"><span class="ol">B</span><span class="ot"><span class='m'>−2/7</span></span><span class="mark"></span></label><label class="opt"><input type="radio" name="q6" value="C"><span class="ol">C</span><span class="ot"><span class='m'>1/7</span></span><span class="mark"></span></label><label class="opt"><input type="radio" name="q6" value="D"><span class="ol">D</span><span class="ot"><span class='m'>−7</span></span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: A · <span class='m'>−1/7</span></span><div class="why"><ol><li>Put <span class='m'>x = tan θ</span>: <span class='m'>√(1 + x²) − x = sec θ − tan θ = (1 − sin θ)/cos θ = tan(π/4 − θ/2)</span>.</li><li>For any real <span class='m'>x</span>, <span class='m'>θ ∈ (−π/2, π/2)</span> and <span class='m'>π/4 − θ/2 ∈ (0, π/2)</span>, inside the principal range. So <span class='m'>y = π/4 − ½ tan⁻¹x</span>.</li><li><span class='m'>dy/dx = −1/(2(1 + x²))</span> and <span class='m'>dz/dx = 1/√(1 − x²)</span>.</li><li><span class='m'>dy/dz = −√(1 − x²) / (2(1 + x²))</span>.</li><li>At <span class='m'>x = √3/2</span>: <span class='m'>√(1 − x²) = 1/2</span> and <span class='m'>1 + x² = 7/4</span>, so <span class='m'>dy/dz = −(1/2) / (7/2) = −1/7</span>.</li></ol></div><ul class="mistakes"><li><strong>B (−2/7)</strong>: forgot the half angle: took <span class='m'>y = π/4 − θ</span></li><li><strong>C (1/7)</strong>: sign slip: treated <span class='m'>√(1 + x²) − x</span> as increasing in <span class='m'>x</span></li><li><strong>D (−7)</strong>: divided the wrong way round: <span class='m'>dz/dy</span></li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+</div>
+<footer>Built from WTA20 (10 Oct), WTA21 (24 Oct) and CTA21 (25 Oct). Methods used, all inside the official syllabus: continuity and limits, derivatives and the chain rule, logarithmic differentiation, inverse trigonometric functions (principal values), derivatives of order two, greatest integer and fractional part functions. No technique marked "not yet" in the class scope is used.</footer>
+</div>
+<script>
+
+  function stepNext(id){
+    var root = document.getElementById(id);
+    var steps = root.querySelectorAll('.step');
+    var btn = root.querySelector('.step-btn');
+    var shown = 0;
+    steps.forEach(function(s){ if(!s.hidden) shown++; });
+    if(shown < steps.length){
+      steps[shown].hidden = false;
+      shown++;
+    }
+    if(shown >= steps.length){ btn.hidden = true; }
+  }
+
+  function toggleAnswer(btn){
+    var ans = btn.closest('.card').querySelector('.answer');
+    ans.hidden = !ans.hidden;
+    btn.textContent = ans.hidden ? 'Show answer and why' : 'Hide answer and why';
+  }
+  function checkCard(el){
+    var card = el.closest('.card');
+    var correct = card.dataset.correct.split('');
+    var chosen = [].slice.call(card.querySelectorAll('input:checked')).map(function(i){return i.value;});
+    if(!chosen.length) return;
+    var exact = chosen.length === correct.length && chosen.every(function(c){return correct.indexOf(c) > -1;});
+    card.querySelectorAll('.opt').forEach(function(o){
+      var v = o.querySelector('input').value, isC = correct.indexOf(v) > -1, isS = chosen.indexOf(v) > -1;
+      o.classList.remove('ok','bad','miss');
+      var m = o.querySelector('.mark');
+      if(isC && isS){ o.classList.add('ok'); m.textContent = '✓ correct'; }
+      else if(isC){ o.classList.add('miss'); m.textContent = '✓ also correct'; }
+      else if(isS){ o.classList.add('bad'); m.textContent = '✗ wrong'; }
+      else { m.textContent = ''; }
+      o.querySelector('input').disabled = true;
+    });
+    var r = card.querySelector('.result');
+    r.hidden = false;
+    r.className = 'result ' + (exact ? 'right' : 'wrong');
+    r.textContent = exact ? 'Right. Correct: ' + correct.join(', ') + '.' : 'Not quite. Correct: ' + correct.join(', ') + '.';
+  }
+  function resetCard(el){
+    var card = el.closest('.card');
+    card.querySelectorAll('.opt').forEach(function(o){
+      o.classList.remove('ok','bad','miss'); o.querySelector('.mark').textContent = '';
+      var i = o.querySelector('input'); i.checked = false; i.disabled = false;
+    });
+    var r = card.querySelector('.result'); r.hidden = true;
+  }
+  document.querySelectorAll('.card[data-kind="single"] input').forEach(function(i){
+    i.addEventListener('change', function(){ checkCard(i); });
+  });
+
+  function setMode(mode, btn){
+    document.querySelectorAll('.mode-btn').forEach(function(b){
+      b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+    });
+    document.getElementById('timerBar').hidden = (mode !== 'timed');
+  }
+
+  var remaining = 40 * 60;
+  var timerId = null;
+  function renderTime(){
+    var m = String(Math.floor(remaining/60)).padStart(2,'0');
+    var s = String(remaining%60).padStart(2,'0');
+    document.getElementById('timeDisplay').textContent = m + ':' + s;
+  }
+  function startTimer(){
+    if(timerId) return;
+    timerId = setInterval(function(){
+      remaining--;
+      if(remaining <= 0){
+        clearInterval(timerId); timerId = null;
+        document.getElementById('timeDisplay').textContent = "Time's up";
+      } else {
+        renderTime();
+      }
+    }, 1000);
+  }
+  function resetTimer(){
+    clearInterval(timerId); timerId = null;
+    remaining = 40*60;
+    renderTime();
+  }
+  renderTime();
+
+  (function buildAskLinks(){
+    var TUTOR = "I'm a JEE aspirant preparing for JEE Advanced. Please act as a patient Maths tutor. Use simple language. Reply in chunks of under 10 lines. Explain why, not just how. Wait for my reply before moving on.";
+    var MAXLEN = 3300;
+    function clean(el){
+      var c = el.cloneNode(true);
+      c.querySelectorAll('.mat').forEach(function(m){ m.replaceWith(document.createTextNode(m.getAttribute('data-t') || '[matrix]')); });
+      c.querySelectorAll('.ask-row,.step-btn,.reveal-btn,.check-btn,.pfig,svg').forEach(function(x){ x.remove(); });
+      c.querySelectorAll('br').forEach(function(b){ b.replaceWith(document.createTextNode(' ')); });
+      c.querySelectorAll('li,p,div,.tag,.eq,.val,.final').forEach(function(x){ x.appendChild(document.createTextNode(' ')); });
+      c.querySelectorAll('.final,.trap-note,.eq').forEach(function(x){ x.insertBefore(document.createTextNode(' '), x.firstChild); });
+      return c.textContent.replace(/\s+/g,' ').trim();
+    }
+    function cut(s, n){ return s.length <= n ? s : s.slice(0, n - 1).trim() + '…'; }
+    function diagram(root){
+      var f = root.querySelector('.pfig');
+      return f ? ' ' + f.getAttribute('data-desc') : '';
+    }
+    function fit(parts){
+      for (var guard = 0; guard < 400; guard++){
+        var url = 'https://claude.ai/new?q=' + encodeURIComponent(parts.map(function(p){ return p.t; }).join(' '));
+        if (url.length <= MAXLEN) return url;
+        var longest = null;
+        parts.forEach(function(p){ if (!p.fixed && (!longest || p.t.length > longest.t.length)) longest = p; });
+        if (!longest || longest.t.length < 60) return url;
+        longest.t = cut(longest.t, Math.floor(longest.t.length * 0.9));
+      }
+    }
+    function sectionPrompt(sec){
+      var rules = Array.prototype.map.call(sec.querySelectorAll('.rule li'), clean).join(' | ');
+      var why = sec.querySelector('.why');
+      return [
+        {t: TUTOR, fixed: true},
+        {t: 'Topic: ' + clean(sec.querySelector('h2')) + '.', fixed: true},
+        {t: 'Why it matters: ' + (why ? clean(why) : ''), fixed: false},
+        {t: 'Key shortcuts: ' + rules, fixed: false},
+        {t: 'Please start by asking which part I want to understand better.', fixed: true}
+      ];
+    }
+    function examplePrompt(box){
+      var sec = box.closest('section.pattern');
+      var ps = box.querySelectorAll(':scope > p');
+      var steps = Array.prototype.map.call(box.querySelectorAll('.step'), function(s, i){
+        return 'Step ' + (i + 1) + ' · ' + cut(clean(s).replace(/^Step \d+\s*·\s*/, ''), 230);
+      }).join(' ');
+      return [
+        {t: TUTOR, fixed: true},
+        {t: "I'm going through a worked example from my own test. Topic: " + clean(sec.querySelector('h2')) + '.', fixed: true},
+        {t: 'Question: ' + clean(ps[0]) + diagram(box), fixed: true},
+        {t: 'My result: ' + (ps[1] ? clean(ps[1]) : ''), fixed: false},
+        {t: 'Steps in the solution: ' + steps, fixed: false},
+        {t: 'Please ask me which step I find hardest, then explain it and give me a similar example to try.', fixed: true}
+      ];
+    }
+    function problemPrompt(card){
+      var lvl = card.querySelector('.lvl');
+      var multi = card.getAttribute('data-kind') === 'multi';
+      var opts = Array.prototype.map.call(card.querySelectorAll('.opt'), function(o){
+        return '(' + o.querySelector('.ol').textContent.trim() + ') ' + clean(o.querySelector('.ot'));
+      }).join(' ');
+      var ans = card.querySelector('.answer');
+      return [
+        {t: TUTOR, fixed: true},
+        {t: 'I want to practise this problem' + (lvl ? ' (level ' + lvl.textContent.trim() + ')' : '') + ': ' + clean(card.querySelector('.stem')) + diagram(card), fixed: true},
+        {t: 'Type: ' + (multi ? 'multi-correct (one or more options are correct; I must pick all of them).' : 'single-correct (exactly one option is correct).') + ' Options: ' + opts, fixed: true},
+        {t: 'For your reference only, do not reveal unless the student asks or has made a real attempt: ' + clean(ans), fixed: false},
+        {t: 'Please ask me what I have tried so far, then give me one hint at a time.', fixed: true}
+      ];
+    }
+    document.querySelectorAll('a.ask').forEach(function(a){
+      var kind = a.getAttribute('data-ask'), parts;
+      if (kind === 'section') parts = sectionPrompt(a.closest('section.pattern'));
+      else if (kind === 'example') parts = examplePrompt(a.closest('.stepper'));
+      else parts = problemPrompt(a.closest('.card'));
+      a.href = fit(parts);
+    });
+  })();
+</script>

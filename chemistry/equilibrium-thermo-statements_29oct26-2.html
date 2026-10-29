@@ -1,0 +1,556 @@
+<title>Equilibrium, Thermodynamics, Statements</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one column. Hero, five sections (came-back or improved box, rule box, one worked example), then a 6-problem MCQ practice grid. Same teal chemistry system as the 6 Oct and 16 Oct pages. */
+  :root{
+    --bg:#F3F8F7;
+    --surface:#FFFFFF;
+    --surface-2:#E8F1EF;
+    --ink:#14262B;
+    --ink-soft:#4A6168;
+    --border:#D3E2DF;
+    --accent:#0F6E7A;
+    --accent-ink:#FFFFFF;
+    --accent-soft:#DDEFF0;
+    --highlight-ink:#53390A;
+    --highlight-bg:#FFF4D6;
+    --highlight-border:#EBCF86;
+    --good:#217A4B;
+    --good-bg:#E2F4EA;
+    --trap:#B24A38;
+    --trap-bg:#FBE9E5;
+    --chip-1:#0F6E7A; --chip-1-bg:#DDEFF0;
+    --chip-2:#7A4FB5; --chip-2-bg:#EEE7F8;
+    --chip-3:#217A4B; --chip-3-bg:#E2F4EA;
+    --chip-4:#A9631A; --chip-4-bg:#FBEBD9;
+    --chip-5:#B24A38; --chip-5-bg:#FBE9E5;
+    --chip-6:#3F5BA9; --chip-6-bg:#E4EAF8;
+    --atom-a:#0F6E7A; --atom-b:#C2841B;
+    --shadow: 0 1px 2px rgba(20,38,43,.05), 0 8px 24px -12px rgba(20,38,43,.2);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0D1A1D; --surface:#13252A; --surface-2:#1B3036; --ink:#E4F0EF; --ink-soft:#9FB7BC; --border:#27424A;
+      --accent:#5CC4D0; --accent-ink:#06191C; --accent-soft:#16363C;
+      --highlight-ink:#FBE8B8; --highlight-bg:#3A2E10; --highlight-border:#5C4A1B;
+      --good:#5FCB8E; --good-bg:#12301F; --trap:#E58E7E; --trap-bg:#3A1E19;
+      --chip-1:#5CC4D0; --chip-1-bg:#16363C; --chip-2:#C2A5EE; --chip-2-bg:#2A2140; --chip-3:#5FCB8E; --chip-3-bg:#12301F;
+      --chip-4:#E5A96B; --chip-4-bg:#3A2A14; --chip-5:#E58E7E; --chip-5-bg:#3A1E19; --chip-6:#8FA9E8; --chip-6-bg:#1B2642;
+      --atom-a:#5CC4D0; --atom-b:#E8B84B;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.55);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0D1A1D; --surface:#13252A; --surface-2:#1B3036; --ink:#E4F0EF; --ink-soft:#9FB7BC; --border:#27424A;
+    --accent:#5CC4D0; --accent-ink:#06191C; --accent-soft:#16363C;
+    --highlight-ink:#FBE8B8; --highlight-bg:#3A2E10; --highlight-border:#5C4A1B;
+    --good:#5FCB8E; --good-bg:#12301F; --trap:#E58E7E; --trap-bg:#3A1E19;
+    --chip-1:#5CC4D0; --chip-1-bg:#16363C; --chip-2:#C2A5EE; --chip-2-bg:#2A2140; --chip-3:#5FCB8E; --chip-3-bg:#12301F;
+    --chip-4:#E5A96B; --chip-4-bg:#3A2A14; --chip-5:#E58E7E; --chip-5-bg:#3A1E19; --chip-6:#8FA9E8; --chip-6-bg:#1B2642;
+    --atom-a:#5CC4D0; --atom-b:#E8B84B;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.55);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body{
+    background: var(--bg); color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    padding-left: max(18px, env(safe-area-inset-left, 0px));
+    padding-right: max(18px, env(safe-area-inset-right, 0px));
+    padding-block: 28px 64px; line-height: 1.55; font-size: 16px;
+  }
+  .wrap{ max-width: 780px; margin: 0 auto; }
+  h1,h2,h3{ font-family: "Fraunces", Georgia, serif; font-weight: 600; text-wrap: balance; margin: 0; }
+  a{ color: var(--accent); }
+  .eyebrow{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); font-weight:600; }
+  .m{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.93em; }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  .hero{ padding-block: 6px 22px; }
+  .hero h1{ font-size: clamp(1.7rem, 5vw, 2.3rem); margin-top:10px; }
+  .hero p{ color:var(--ink-soft); max-width:62ch; }
+  .hero-note{ margin-top:14px; padding:13px 15px; border-radius:12px; background:var(--accent-soft); border:1px solid var(--border); font-size:.92rem; }
+  .meta{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .pill{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; padding:4px 10px; border-radius:999px; background:var(--surface-2); border:1px solid var(--border); color:var(--ink-soft); }
+  .pill b{ color:var(--ink); }
+
+  .pattern{ background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:22px 20px 24px; margin-block:18px; box-shadow:var(--shadow); min-width:0; }
+  .pattern-head{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:6px; }
+  .pattern-head h2{ font-size:1.25rem; }
+  .chip{ font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.05em; text-transform:uppercase; padding:3px 9px; border-radius:999px; font-weight:600; white-space:nowrap; }
+  .c1{ color:var(--chip-1); background:var(--chip-1-bg); } .c2{ color:var(--chip-2); background:var(--chip-2-bg); }
+  .c3{ color:var(--chip-3); background:var(--chip-3-bg); } .c4{ color:var(--chip-4); background:var(--chip-4-bg); }
+  .c5{ color:var(--chip-5); background:var(--chip-5-bg); } .c6{ color:var(--chip-6); background:var(--chip-6-bg); }
+  .pattern p{ margin:10px 0; }
+  .why{ color:var(--ink-soft); font-size:.95rem; }
+  .syl{ font-family:"IBM Plex Mono",monospace; font-size:.74rem; color:var(--ink-soft); }
+
+  .came-back{ margin:12px 0; padding:12px 14px; border-radius:10px; border:1px solid var(--border); background:var(--surface-2); font-size:.92rem; }
+  .came-back .lbl{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; color:var(--trap); display:block; margin-bottom:6px; }
+  .came-back.better .lbl{ color:var(--good); }
+  .sbs{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin:8px 0; }
+  .sbs > div{ background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:9px 11px; min-width:0; }
+  .sbs .h{ font-weight:600; font-size:.78rem; color:var(--ink-soft); display:block; margin-bottom:3px; }
+
+  .rule{ margin-top:14px; padding:14px 16px; border-radius:10px; background:var(--highlight-bg); border:1px solid var(--highlight-border); color:var(--highlight-ink); }
+  .rule-label{ font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; margin-bottom:6px; display:block; }
+  .rule ul{ margin:6px 0 0; padding-left:20px; } .rule li{ margin:4px 0; }
+  .mini{ margin-top:12px; padding:12px 14px; border-radius:10px; background:var(--surface-2); border:1px solid var(--border); font-size:.9rem; }
+  .mini .lbl{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; color:var(--accent); display:block; margin-bottom:4px; }
+
+  .stepper{ margin-top:16px; border-top:1px dashed var(--border); padding-top:14px; }
+  .stepper-label{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:8px; display:block; }
+  .step{ padding:10px 0; border-bottom:1px solid var(--border); }
+  .step:last-of-type{ border-bottom:none; }
+  .step .tag{ font-weight:600; font-size:.82rem; color:var(--accent); display:block; margin-bottom:4px; }
+  .step-btn{ margin-top:10px; font:inherit; font-weight:600; font-size:.88rem; background:var(--accent); color:var(--accent-ink); border:none; border-radius:8px; padding:9px 14px; cursor:pointer; }
+  .final{ background:var(--good-bg); color:var(--good); border-radius:8px; padding:10px 12px; font-weight:700; margin-top:8px; }
+  .trap-note{ background:var(--trap-bg); color:var(--trap); border-radius:8px; padding:10px 12px; font-size:.9rem; margin-top:10px; }
+  .yours{ font-size:.9rem; color:var(--ink-soft); }
+  .rebuilt{ font-size:.82rem; color:var(--ink-soft); font-style:italic; }
+  figure{ margin:14px 0 4px; }
+  figure svg{ width:100%; max-width:520px; height:auto; display:block; color:var(--ink); }
+  figcaption{ font-size:.82rem; color:var(--ink-soft); margin-top:4px; }
+  .figwrap{ overflow-x:auto; }
+
+  .ask{ display:inline-block; margin-top:10px; font-size:.82rem; font-weight:600; color:var(--accent); text-decoration:none; border:1px solid var(--border); border-radius:999px; padding:5px 11px; background:var(--surface); }
+  .ask:hover{ background:var(--accent-soft); }
+
+  .practice-head{ padding-block:10px 4px; }
+  .mode-row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:14px 0 8px; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px 16px; box-shadow:var(--shadow); }
+  .mode-btn{ font:inherit; font-weight:600; font-size:.9rem; padding:8px 14px; border-radius:999px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); cursor:pointer; }
+  .mode-btn[aria-pressed="true"]{ background:var(--accent); color:var(--accent-ink); border-color:var(--accent); }
+  .timer-bar{ display:flex; align-items:center; gap:12px; margin-left:auto; flex-wrap:wrap; }
+  .time{ font-family:"IBM Plex Mono",monospace; font-size:1.3rem; font-variant-numeric:tabular-nums; min-width:64px; }
+  .timer-btn{ font:inherit; font-size:.85rem; font-weight:600; border-radius:8px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); padding:7px 12px; cursor:pointer; }
+  .mode-help{ font-size:.85rem; color:var(--ink-soft); margin:6px 2px 0; }
+
+  .grid{ display:grid; grid-template-columns:1fr; gap:14px; margin-top:16px; }
+  .card{ background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:16px 16px 14px; box-shadow:var(--shadow); min-width:0; }
+  .card-head{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+  .qnum{ font-family:"Fraunces",serif; font-weight:700; font-size:1.05rem; color:var(--accent); }
+  .opts{ display:grid; gap:7px; margin:10px 0 4px; }
+  .opt{ display:flex; gap:10px; align-items:flex-start; padding:9px 11px; border:1px solid var(--border); border-radius:10px; background:var(--surface-2); cursor:pointer; min-width:0; }
+  .opt input{ margin-top:5px; flex:none; accent-color:var(--accent); }
+  .opt .l{ font-family:"IBM Plex Mono",monospace; font-weight:600; color:var(--accent); flex:none; }
+  .opt .t{ min-width:0; overflow-wrap:anywhere; }
+  .opt.is-right{ border-color:var(--good); background:var(--good-bg); }
+  .opt.is-miss{ border-color:var(--good); border-style:dashed; background:var(--good-bg); }
+  .opt.is-wrong{ border-color:var(--trap); background:var(--trap-bg); }
+  .check-btn, .reveal-btn{ font:inherit; font-weight:600; font-size:.85rem; border-radius:8px; padding:7px 12px; cursor:pointer; margin-top:10px; margin-right:8px; }
+  .check-btn{ background:var(--accent); color:var(--accent-ink); border:none; }
+  .reveal-btn{ background:none; border:1.4px solid var(--accent); color:var(--accent); }
+  .verdict{ margin-top:10px; padding:9px 12px; border-radius:8px; font-weight:700; font-size:.92rem; }
+  .verdict.ok{ background:var(--good-bg); color:var(--good); }
+  .verdict.no{ background:var(--trap-bg); color:var(--trap); }
+  .answer{ margin-top:10px; padding:10px 12px; background:var(--surface-2); border-radius:8px; font-size:.9rem; }
+  .answer ul{ margin:6px 0 0; padding-left:18px; } .answer li{ margin:3px 0; }
+  footer{ margin-top:26px; color:var(--ink-soft); font-size:.88rem; text-align:center; }
+</style>
+
+<div class="wrap">
+  <section class="hero">
+    <span class="eyebrow">Chemistry · Focus Session · 29 Oct 2026</span>
+    <h1>Equilibrium, Thermodynamics and Statement Questions</h1>
+    <p>Built from CTA21 (Sun 25 Oct) and WTA21 (Sat 24 Oct). All four patterns were already on your tracker as recurring. Equilibrium is first and gets half of the practice set. Entropy is second because it shares its formula with equilibrium. Each section opens with your earlier misses next to the new one, then the rule and one worked example. Six practice problems follow.</p>
+    <div class="meta">
+      <span class="pill">Level used: <b>L4</b> (multi-concept, a trap in each)</span>
+      <span class="pill">Format: <b>MCQ A–D</b>, 3 single + 3 multi-correct</span>
+      <span class="pill">Sources: <b>CTA21 (Sun) · WTA21 (Sat)</b></span>
+    </div>
+    <div class="hero-note">
+      <strong>How to use this:</strong> read a section, click through its worked example, then do the matching practice problem. Multi-correct problems are right only if you pick every correct option and nothing else. <strong>Ask Claude</strong> links open a new claude.ai chat with that item preloaded. You need to be signed in to claude.ai.
+    </div>
+    <div class="hero-note" style="margin-top:10px">
+      <strong>Routine for every problem on this page:</strong> (1) write one equation first, before any number; (2) write true or false beside every option before you tick. This is your multi-correct and skip habit, used inside each section instead of in a section of its own.
+    </div>
+    <div class="hero-note" style="margin-top:10px">
+      <strong>What is real and what is not:</strong> the questions, your marked options and the keys come from your CTA21 and WTA21 records. The stems were not saved in full. In section 3 the saved ratios give +4.2, your answer, and not the key −0.84, so I show both readings and ask you to check the paper. In section 2 I could not rebuild the Q49 numbers (P₁ = 100 atm, K<sub>p</sub> = 36 atm, P₂ = 56.25 atm), so that example uses my own numbers and your method. Option texts for Q37, Q44 and WTA21 Q39 were not saved, so I test my own candidates or say so.
+    </div>
+  </section>
+
+  <div id="sections"></div>
+
+  <section class="practice-head">
+    <span class="eyebrow">Practice Set</span>
+    <h2 style="margin-top:8px; font-size:1.4rem;">6 fresh problems, level 4</h2>
+    <p style="color:var(--ink-soft)">Three on equilibrium (problems 1 to 3), one on entropy, one on s-block statements and one on silicones. Problems 2, 5 and 6 are multi-correct. Problems 1 and 3 reuse ΔG° = −RT ln K; problem 4 reuses the entropy formula.</p>
+  </section>
+
+  <div class="mode-row">
+    <button class="mode-btn" aria-pressed="true" onclick="setMode('practice', this)">Practice (untimed)</button>
+    <button class="mode-btn" aria-pressed="false" onclick="setMode('timed', this)">Timed · 40 min</button>
+    <div class="timer-bar" id="timerBar" hidden>
+      <span class="time" id="timeDisplay">40:00</span>
+      <button class="timer-btn" onclick="startTimer()">Start</button>
+      <button class="timer-btn" onclick="resetTimer()">Reset</button>
+    </div>
+  </div>
+  <p class="mode-help">First pass: stay in Practice mode. Save Timed mode for a second pass.</p>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>Built from CTA21 (Sun 25 Oct) and WTA21 (Sat 24 Oct) · Chemistry only. Not on this page: CTA21 Q38 follow-ups beyond entropy, and the other CTA21 chemistry misses (see the first 29 Oct chemistry page).</footer>
+</div>
+
+<script>
+/* ---------- diagram helpers (inline SVG, theme tokens) ---------- */
+var FIG_PVSA =
+`<figure><div class="figwrap"><svg viewBox="0 0 460 262" role="img" aria-label="Graph of total pressure against alpha for N2O4 going to 2NO2 in a rigid vessel, illustration with P0 = 8 atm. A straight line rises from 8 atm at alpha 0 to 16 atm at alpha 1. The equilibrium point is marked at alpha 0.5 and total pressure 12 atm, where N2O4 is 4 atm and NO2 is 8 atm.">
+<g stroke="var(--border)" stroke-width="1" stroke-dasharray="4 4"><line x1="60" y1="75" x2="240" y2="75"/><line x1="240" y1="75" x2="240" y2="210"/><line x1="60" y1="30" x2="420" y2="30"/><line x1="420" y1="30" x2="420" y2="210"/></g>
+<g stroke="currentColor" stroke-width="1.6"><line x1="60" y1="210" x2="430" y2="210"/><line x1="60" y1="210" x2="60" y2="20"/></g>
+<line x1="60" y1="120" x2="420" y2="30" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
+<circle cx="60" cy="120" r="5" fill="var(--accent)"/><circle cx="420" cy="30" r="5" fill="var(--accent)"/>
+<circle cx="240" cy="75" r="7" fill="var(--atom-b)" stroke="var(--surface)" stroke-width="2"/>
+<g font-size="12" fill="currentColor"><text x="52" y="124" text-anchor="end">8</text><text x="52" y="79" text-anchor="end">12</text><text x="52" y="34" text-anchor="end">16</text><text x="52" y="214" text-anchor="end">0</text>
+<text x="60" y="226" text-anchor="middle">0</text><text x="240" y="226" text-anchor="middle">0.5</text><text x="420" y="226" text-anchor="middle">1</text></g>
+<g font-size="12" font-weight="600" fill="currentColor"><text x="245" y="248" text-anchor="middle">α (degree of dissociation)</text><text x="70" y="14">P total (atm)</text></g>
+<g font-size="12" fill="currentColor"><text x="72" y="140">P₀ = 8 atm at α = 0</text><text x="248" y="98">α = 0.5, P = 12 atm</text><text x="248" y="114" fill="var(--ink-soft)">N₂O₄ 4 atm + NO₂ 8 atm</text><text x="412" y="20" text-anchor="end">2P₀ = 16 atm at α = 1</text></g>
+</svg></div><figcaption>Illustration with my numbers (P₀ = 8 atm). The total pressure is P₀(1 + α), so the graph is a straight line that starts at P₀ and ends at 2P₀.</figcaption></figure>`;
+
+/* ---------- content ---------- */
+var SECTIONS = [
+{ id:'s1', n:1, title:'Equilibrium and ΔG°: they carry the same number', chip:'c1', chipText:'Recurring · Weak', status:'recurring',
+  pattern:'chemical-equilibrium-kp-kc-calculations',
+  syl:'Syllabus: Chemical and Ionic Equilibrium (law of mass action; significance of ΔG and ΔG° in chemical equilibrium; K<sub>p</sub> and K<sub>c</sub>) and Chemical Thermodynamics (Gibbs energy; criteria of equilibrium)',
+  cb:{ label:'This one came back', h1:'Earlier (CTA17 to CTA19)', h2:'This time (CTA21)',
+    prev:'CTA17 Q44 and CTA18 Q50 were right. CTA19 Q49 wrong: NH₄Cl(s) ⇌ NH₃ + HCl in 500 mL, K<sub>c</sub> = 1.6×10⁻³, “1000x for HCl”. You answered <strong>800</strong>, the key was <strong>20</strong>.',
+    now:'CTA21 Q37 <strong>skipped</strong>: ΔG° = −1743 J at 300 K, 3 mol A, 6 mol B, 3 mol C in 1 L at equilibrium, which reaction. Key: 2A ⇌ B + C. CTA21 Q49 <strong>partial</strong>: see section 2.',
+    verdict:'<strong>A different error each time, so this is not the same slip repeating, but the pattern is not settling either.</strong> It went right, right, wrong, skipped, partial: a miss in each of the last three tests that had it. CTA19 Q49 was a calculation: the key is 1000 × (√1.6×10⁻³ × 0.5) = 1000 × 0.02 = 20. Your 800 equals 1000 × 1.6×10⁻³ × 500, which looks like K<sub>c</sub> × volume with no square root. That is a guess, because your working is not saved. CTA21 Q37 was not an error at all but a skip: the stem gives ΔG° and no K, so it looked like a thermodynamics question. It is an equilibrium question in disguise, and it needs three lines.'},
+  why:'ΔG° and K are the same information written two ways. If a stem gives one, you can always get the other, and then every candidate reaction can be tested by plugging in concentrations. The questions that cost you marks all had one extra step before the plug-in step: take a square root, turn ΔG° into K, or read a second option from the same K.',
+  rule:[
+    'At equilibrium ΔG = 0, so ΔG° = −RT ln K. With ΔG° in joules use R = 8.3 J K⁻¹ mol⁻¹. If the paper gives ln 2 = 0.7, the answer is built so that ln K comes out as a multiple of 0.7.',
+    'K uses concentrations (mol per litre), not moles, unless Δn = 0. Divide each amount by the volume first.',
+    'The coefficient is the exponent: 2A on the left means [A]² in the denominator. Products on top, reactants below.',
+    'Test each candidate reaction by computing its K from the equilibrium amounts. Reverse a reaction and K becomes 1/K.',
+    'Routine for every problem: write one equation first, then write true or false beside every option before you tick anything.'],
+  extra:`<div class="mini"><span class="lbl">Shared formula, used in sections 1, 2 and 3</span>ΔG° = −RT ln K = ΔH° − TΔS°, and for an ideal gas ΔS = n[C<sub>v</sub> ln(T₂/T₁) + R ln(V₂/V₁)].<br>Every term is a constant times the ln of a ratio. Write the ratio first and decide which way round it goes. Use R = 8.3 J K⁻¹ mol⁻¹ when energy is in joules and R = 2 cal K⁻¹ mol⁻¹ when it is in calories. Never mix the two.</div>`,
+  ex:{ src:'CTA21 Q37 (skipped)',
+    q:'At 300 K, ΔG° = −1743 J for a reaction. A 1 L vessel at equilibrium holds 3 mol A, 6 mol B and 3 mol C. Which reaction is it? (ln 2 = 0.7, R = 8.3 J K⁻¹ mol⁻¹)',
+    yours:'skipped', correct:'2A ⇌ B + C (option C)',
+    note:'Stem as recorded in your CTA21 file; the option texts were not saved, so step 4 tests candidates of my own. The key (2A ⇌ B + C) is from the portal tick.',
+    diag:'I skipped this one.',
+    steps:[
+      {tag:'Step 1: turn ΔG° into ln K', html:'At equilibrium ΔG° = −RT ln K. RT = 8.3 × 300 = 2490 J. So ln K = 1743 ÷ 2490 = <strong>0.7</strong>. Check: 2490 × 0.7 = 1743.'},
+      {tag:'Step 2: ln K = ln 2', html:'The stem tells you ln 2 = 0.7, so K = 2. That is all the thermodynamics in this question.'},
+      {tag:'Step 3: concentrations', html:'The volume is 1 L, so [A] = 3, [B] = 6, [C] = 3 mol L⁻¹.'},
+      {tag:'Step 4: test candidate reactions (mine)', html:'2A ⇌ B + C: K = (6)(3) ÷ 3² = 18 ÷ 9 = <strong>2</strong>, which matches.<br>A ⇌ B + C: K = 18 ÷ 3 = 6, no.<br>B + C ⇌ 2A: K = 3² ÷ 18 = 0.5, no (the reverse of the first).'},
+      {tag:'Step 5: answer', html:'<div class="final">2A ⇌ B + C</div><div class="trap-note">The trap: skipping because there is no K in the stem. ΔG° is K in disguise. Three lines of work, nothing outside the syllabus.</div>'}
+    ] } },
+
+{ id:'s2', n:2, title:'K<sub>p</sub> from a total-pressure graph: find it once, test every option', chip:'c1', chipText:'Recurring · Weak (same pattern)', status:'recurring',
+  pattern:'chemical-equilibrium-kp-kc-calculations (second half, with chem-multi-correct-incomplete)',
+  syl:'Syllabus: Chemical and Ionic Equilibrium (K<sub>p</sub>, K<sub>c</sub>, law of partial pressures from States of Matter)',
+  cb:{ label:'Second half of the same pattern', h1:'What you did', h2:'What the key said',
+    prev:'CTA21 Q49: N₂O₄ ⇌ 2NO₂, graph of total pressure against α with P₁ = 100 atm. You marked <strong>A</strong> (K<sub>p</sub> = 36 atm).',
+    now:'The key was <strong>A and B</strong>. B said P₂ = 56.25 atm. So K<sub>p</sub> = 36 atm was right, and B was also true.',
+    verdict:'<strong>This is the multi-correct habit, not a K<sub>p</sub> error.</strong> You had the hard part (A). The second option needed the same K<sub>p</sub> and the same two formulas. The tracker shows the same shape in CTA18 Q49: the missed option followed from one already checked. I cannot tell from your record whether you ran out of time or judged B false.'},
+  why:'In a statements question the options usually share one calculation. Once K<sub>p</sub> is fixed, the other options are only plug-ins. Stopping after the first true option is how an easy second mark is lost.',
+  rule:[
+    'Pure N₂O₄ at pressure P₀ in a rigid vessel, constant T. A fraction α dissociates. Partial pressures: P(N₂O₄) = P₀(1 − α), P(NO₂) = 2αP₀. The gas moles go from 1 to 1 + α, so the total is P₀(1 + α).',
+    'On a graph of total pressure against α this is a straight line from P₀ at α = 0 to 2P₀ at α = 1. The intercept gives P₀.',
+    'K<sub>p</sub> = P(NO₂)² ÷ P(N₂O₄) = 4α²P₀ ÷ (1 − α). In terms of the total equilibrium pressure P it is 4α²P ÷ (1 − α²). They are the same number: P = P₀(1 + α) turns one into the other.',
+    'Same temperature means same K<sub>p</sub>. A second experiment with a different starting pressure only needs that K<sub>p</sub> and the same formulas.',
+    'Routine: once one option is true, box K<sub>p</sub> and test every other option against it before you stop.'],
+  ex:{ src:'CTA21 Q49 (partial), numbers mine',
+    q:'Pure N₂O₄ is sealed in a rigid vessel at constant temperature with P₀ = 8 atm and reaches equilibrium N₂O₄(g) ⇌ 2NO₂(g) with α = 0.5.\n(a) Find K<sub>p</sub>.\n(b) At the same temperature a second vessel starts with pure N₂O₄ at 48 atm. What is its total pressure at equilibrium?',
+    yours:'marked A only (K<sub>p</sub> = 36 atm)', correct:'A and B (the key). For my numbers: K<sub>p</sub> = 16 atm and 60 atm',
+    note:'The Q49 stem is not saved. From what is recorded (P₁ = 100 atm, K<sub>p</sub> = 36 atm, P₂ = 56.25 atm) I could not rebuild a version that gives both 36 and 56.25, so the numbers in this example are mine and only the method is yours. Send me the question and I will redo this example with the real numbers.',
+    diag:'I marked A (Kp = 36 atm); the key was A and B (B: P2 = 56.25 atm). The paper stem is not saved, so this example uses my own numbers: P0 = 8 atm, alpha = 0.5.',
+    fig:FIG_PVSA, figText:' Diagram: a graph of total pressure (atm) against alpha. A straight line rises from 8 atm at alpha 0 to 16 atm at alpha 1. The equilibrium point is marked at alpha 0.5 and 12 atm, where N2O4 is 4 atm and NO2 is 8 atm.',
+    steps:[
+      {tag:'Step 1: partial pressures at α = 0.5', html:'N₂O₄: 8 × (1 − 0.5) = 4 atm. NO₂: 2 × 0.5 × 8 = 8 atm. Total = 12 atm, which is 8 × 1.5.'},
+      {tag:'Step 2: K<sub>p</sub>', html:'K<sub>p</sub> = 8² ÷ 4 = <strong>16 atm</strong>. Check with the formula: 4α²P₀ ÷ (1 − α) = 4 × 0.25 × 8 ÷ 0.5 = 16.'},
+      {tag:'Step 3: read the graph', html:'The point (0.5, 12) is halfway up the line from P₀ = 8 to 2P₀ = 16, as it should be for α = 0.5.'},
+      {tag:'Step 4: second option, same K<sub>p</sub>', html:'Start at P₀′ = 48 atm: 4α² × 48 ÷ (1 − α) = 16, so 12α² = 1 − α, so 12α² + α − 1 = 0, so (4α − 1)(3α + 1) = 0 and α = 0.25 (the negative root is rejected).<br>Total = 48 × 1.25 = 60 atm. Check: N₂O₄ = 36, NO₂ = 24, K<sub>p</sub> = 24² ÷ 36 = 16 ✓.'},
+      {tag:'Step 5: answer', html:'<div class="final">K<sub>p</sub> = 16 atm, second total pressure = 60 atm</div><div class="trap-note">The trap: stopping after the first true option. The second option needed no new idea, only the boxed K<sub>p</sub>.</div>'}
+    ] } },
+
+{ id:'s3', n:3, title:'Entropy of an ideal gas: which way round is the ratio?', chip:'c2', chipText:'Recurring · Weak', status:'recurring',
+  pattern:'thermo-entropy-work-and-real-gas-concepts',
+  syl:'Syllabus: Chemical Thermodynamics (entropy; second law; Gibbs energy) and States of Matter (ideal gas equation)',
+  cb:{ label:'This one came back', h1:'Earlier mistakes (CTA16 to CTA20)', h2:'This time (CTA21)',
+    prev:'CTA16 Q49 (entropy, 3 mol gas) you 3, key 35: the cooling step to T = 100 K was not found. CTA16 Q50 you 40, key 36 (used all 20 kcal, not the 90% reacted). CTA17 Q43: missed that an irreversible adiabatic expansion still has ΔS &gt; 0. CTA19 Q41 skipped (entropy of mixing). CTA20 Q45 you 0.05, key −10.7, and Q46 you 250, key 31.08.',
+    now:'CTA21 Q38: 1.2 mol He in each of two vessels, V₂/V₁ = 2, T₂/T₁ = 2, ln 2 = 0.7, find S₂ − S₁. You marked <strong>4.2 cal/K</strong>. The key is <strong>−0.84 cal/K</strong>.',
+    verdict:'<strong>Possibly a new kind of slip, and one I cannot fully confirm.</strong> With the ratios as saved (both 2), the formula gives exactly +4.2: your number. The key −0.84 is what you get if T₂/T₁ = ½. So either the saved ratio is upside down and the real slip was reading which vessel is hotter, or the stem has something I cannot see. Check the printed stem. If it is a ratio reading, it matches CTA16 Q49, where a temperature ratio was also missed. This pattern had a miss in 5 of 6 tests. The 6 Oct and 16 Oct sessions covered it, and CTA20 and CTA21 still went wrong, so reading and setup (not formula recall) are where the marks go.'},
+  why:'Entropy questions are short: the formula is one line. The marks go in the ratios, their direction and the units. A ratio written the wrong way round flips the sign of its ln term, and the answer can change sign and size at once.',
+  rule:[
+    'For n mol of an ideal gas going from state 1 to state 2: ΔS = S₂ − S₁ = n[C<sub>v</sub> ln(T₂/T₁) + R ln(V₂/V₁)]. Always final over initial, because the question asks S₂ − S₁.',
+    'Monatomic gas: C<sub>v</sub> = 3R/2 and C<sub>p</sub> = 5R/2. With R = 2 cal K⁻¹ mol⁻¹, C<sub>v</sub> = 3 and C<sub>p</sub> = 5 cal K⁻¹ mol⁻¹.',
+    'Second route as a check: ΔS = n[C<sub>p</sub> ln(T₂/T₁) − R ln(P₂/P₁)]. Do not mix C<sub>p</sub> with the volume term.',
+    'Entropy is a state function: only the two end states matter, whatever the path. Use a reversible path to compute it.',
+    'Link to section 1: this is the same “constant × ln(ratio)” shape as ΔG° = −RT ln K, so ln 2 = 0.7 does the work in both.'],
+  ex:{ src:'CTA21 Q38 (wrong)',
+    q:'Two vessels each hold 1.2 mol of helium (ideal, monatomic). V₂/V₁ = 2 and T₂/T₁ = 2. Find S₂ − S₁ in cal K⁻¹. (ln 2 = 0.7, R = 2 cal K⁻¹ mol⁻¹)',
+    yours:'4.2 cal/K', correct:'−0.84 cal/K (key)',
+    note:'Stem as recorded in your CTA21 file. With T₂/T₁ = 2 as saved I get +4.2 (your answer), not the key. The key fits T₂/T₁ = ½. Look at the printed ratios in your paper before you trust either reading.',
+    diag:'With the ratios as saved (both 2) the formula gives +4.2, my answer. The key -0.84 fits T2/T1 = 1/2. The saved ratio may be upside down.',
+    steps:[
+      {tag:'Step 1: the formula and the constants', html:'ΔS = n[C<sub>v</sub> ln(T₂/T₁) + R ln(V₂/V₁)]. For He, C<sub>v</sub> = 3R/2 = 3 cal K⁻¹ mol⁻¹ and R = 2. So per mole: ΔS = 3 ln(T₂/T₁) + 2 ln(V₂/V₁).'},
+      {tag:'Step 2: the ratios as saved', html:'T₂/T₁ = 2 and V₂/V₁ = 2: 3(0.7) + 2(0.7) = 3.5 per mole. Times 1.2 = <strong>+4.2</strong>. This is your answer, so your formula was fine for these numbers.'},
+      {tag:'Step 3: what the key needs', html:'−0.84 ÷ 1.2 = −0.7 per mole. With V₂/V₁ = 2 the volume term is +1.4, so the temperature term must be −2.1 = 3 ln(T₂/T₁). That gives ln(T₂/T₁) = −0.7, so T₂/T₁ = ½.'},
+      {tag:'Step 4: redo with T₂/T₁ = ½', html:'Per mole: 3(−0.7) + 2(0.7) = −2.1 + 1.4 = −0.7. Times 1.2 = <strong>−0.84</strong> ✓.<br>Second route: P₂/P₁ = (T₂/T₁) ÷ (V₂/V₁) = ½ ÷ 2 = ¼, so ΔS = 1.2[5 ln ½ − 2 ln ¼] = 1.2[−3.5 + 2.8] = −0.84 ✓.'},
+      {tag:'Step 5: answer', html:'<div class="final">−0.84 cal K⁻¹ (when T₂/T₁ = ½)</div><div class="trap-note">The trap: the direction of a ratio. Before you substitute, write “T₂ is hotter or colder than T₁?” and “V₂ is bigger or smaller?”. The sign of each ln term follows from that. Hotter and bigger both raise S; colder and bigger pull in opposite directions.</div>'}
+    ] } },
+
+{ id:'s4', n:4, title:'s-block statements: unsure is not the same as false', chip:'c3', chipText:'Recurring · was Strong', status:'recurring',
+  pattern:'s-block-and-periodic-property-statements',
+  syl:'Syllabus: s-Block Elements (reactivity, reducing nature including solutions in liquid ammonia, oxides, salts of oxoacids, anomalous behaviour of lithium, compounds of sodium and calcium) and Classification of Elements (periodic trends)',
+  cb:{ label:'This one came back, but it is narrow', h1:'What went right and wrong before', h2:'This time (CTA21)',
+    prev:'Right: CTA17 Q41, CTA18 Q40 and Q54, CTA19 Q42, CTA20 Q42 and Q47. Wrong: WTA19 Q50 and Q52 (Q52, salt trends: you 10, key 8).',
+    now:'CTA21 Q43 <strong>right</strong>: the incorrect statement among Ca in plasma, limewater, Na⁺ and K⁺ permeability. CTA21 Q44 <strong>partial</strong>: statements on C–C &gt; Si–Si bond strength, flame colours, Li–Pb white metal and Li/Na in liquid NH₃. You marked A, B, D; all four were correct, so you missed C.',
+    verdict:'<strong>This topic is mostly fine: 7 of the 10 questions in your tracker are right.</strong> What you do right: statements you can reason about or place (Q43; the bond strength, flame colour and ammonia statements in Q44). Where the last option slips past you: a true statement that is a plain fact you have not met much. The option text for Q44 is not saved, but in your list the third statement is the Li–Pb white-metal alloy, so I read C as that one. That is my inference. The habit looks like “I am not sure, so I leave it unmarked”. In a “correct statements” question that is the same as calling it false.'},
+  why:'Statement questions in the s-block mix reasoning (trends) with plain facts (uses, colours, alloys). The reasoning ones you handle. The plain facts are short and finite, so they can simply be learned, and then the “unsure” case disappears.',
+  rule:[
+    'Flame colours: Li crimson red, Na golden yellow, K violet, Rb red-violet, Cs blue, Ca brick red, Sr crimson red, Ba apple green.',
+    'Alloys and uses: Li–Pb “white metal” (bearings); Na–Pb alloy to make tetraethyl lead; Na–K alloy as a coolant; Cs in photoelectric cells.',
+    'Liquid ammonia: alkali metals give a blue, conducting, paramagnetic solution (ammoniated electron) that is a strong reducing agent. A concentrated solution turns bronze and diamagnetic.',
+    'Bond strength: C–C (about 348 kJ mol⁻¹) is stronger than Si–Si (about 226 kJ mol⁻¹).',
+    'Routine: write T or F beside every option. If you are unsure, hunt for a reason it must be false. If you find none and the other options are true, tick it.'],
+  ex:{ src:'CTA21 Q44 (partial), statements paraphrased',
+    q:'Identify the correct statements:\nA. The C–C bond is stronger than the Si–Si bond.\nB. A statement on flame colours of s-block metals.\nC. Lithium forms the alloy known as “white metal” with lead.\nD. Li and Na dissolve in liquid NH₃ to give blue, reducing solutions.',
+    yours:'A, B, D', correct:'A, B, C, D (all four)',
+    note:'The statement wording is not saved. A, C and D are paraphrased from the topic list in your CTA21 file; B stands for the flame colour statement, which I cannot check without its text. The key (all four correct) is from the portal ticks, and the match of C to the Li–Pb alloy is my reading of the list order.',
+    diag:'I marked A, B and D. The key says all four are correct, so I missed C. I think C is the Li-Pb white metal alloy statement, but the option text is not saved.',
+    steps:[
+      {tag:'Statement A: C–C versus Si–Si', html:'About 348 versus 226 kJ mol⁻¹. Carbon is small, so its orbitals overlap well. <strong>True.</strong> You marked it.'},
+      {tag:'Statement B: flame colours', html:'The colours are the table in the rule box. Without the exact text I rely on the key, which marks it true. You marked it.'},
+      {tag:'Statement C: Li–Pb white metal', html:'Lithium alloys with lead to give “white metal”, used for bearings. It is a plain fact from the uses of lithium. If it felt unfamiliar, ask: is there any reason it must be false? There is none. <strong>True.</strong> This is the one you left out.'},
+      {tag:'Statement D: Li and Na in liquid NH₃', html:'Blue solutions of ammoniated electrons, good reducing agents. <strong>True.</strong> You marked it.'},
+      {tag:'Step 5: answer', html:'<div class="final">A, B, C and D are all correct</div><div class="trap-note">The trap: treating “I do not remember this” as “this is false”. Three true statements are a strong hint that the fourth is not a trick.</div>'}
+    ] } },
+
+{ id:'s5', n:5, title:'Silicones: how many Cl, how many bonds', chip:'c4', chipText:'Recurring · Weak', status:'recurring',
+  pattern:'silicon-silicates-and-silicones-structure-and-molar-mass',
+  syl:'Syllabus: p-Block Elements, Group 14 (preparation, properties and uses of silicones, silicates)',
+  cb:{ label:'This one came back', h1:'Earlier (WTA20, CTA20)', h2:'This time (WTA21)',
+    prev:'WTA20 Q43 wrong (shared oxygens: you 1.5, key 2) and Q44 wrong (chain molar mass: you 77.9, key 60.3). CTA20 Q54 and five WTA20 questions were right. The 16 Oct session covered the chain and its Cl count.',
+    now:'WTA21 Q39 wrong: statements on silicones (R₃SiCl, water repellency, skeleton, CH₃SiCl₃ blocking chains). You marked <strong>A and C</strong>. The key was not shown; by hand, A is false because R₃SiCl gives only the dimer.',
+    verdict:'<strong>A different error.</strong> Before, the slips were counting and molar mass. Now it is the idea behind the counting: a unit with one Cl can only end a chain. The text of C is not saved, so I cannot say whether C was right. This section is short on purpose.'},
+  why:'Every silicone question comes down to the number of Cl on each starting unit. Each Cl becomes one Si–O link, so the Cl count decides if the product is a dimer, a chain or a network.',
+  rule:[
+    'R₃SiCl (1 Cl): one link only, so it gives the dimer R₃Si–O–SiR₃. It is the chain stopper.',
+    'R₂SiCl₂ (2 Cl): two links, so linear chains (or rings), repeat unit –R₂Si–O–.',
+    'RSiCl₃ (3 Cl): three links, so a cross-linked network. CH₃SiCl₃ cross-links; it does not “block” a chain.',
+    'More R₃SiCl in the mix means more chain ends, so shorter chains on average. The alkyl groups point outward and make silicones water repellent.'],
+  ex:{ src:'WTA21 Q39 (wrong), key derived by hand',
+    q:'Select the correct statements on silicones. The statements covered R₃SiCl, water repellency, the skeleton and CH₃SiCl₃ blocking chains. Statement A said R₃SiCl can build a chain.',
+    yours:'A and C', correct:'A is false (derived by hand). C cannot be scored without its text',
+    note:'The statement texts and the key were not saved. The truth of A comes from the chemistry below, as in your note. I make no claim about C.',
+    diag:'I marked A and C. By hand, A is false because R3SiCl gives only the dimer. The statement texts are not saved.',
+    steps:[
+      {tag:'Step 1: hydrolysis', html:'R₃SiCl + H₂O → R₃SiOH + HCl. One Cl gives one OH.'},
+      {tag:'Step 2: condensation', html:'2 R₃SiOH → R₃Si–O–SiR₃ + H₂O. Each Si has only one OH, so after one link there is nothing left to react. The product is a <strong>dimer</strong> and the growth stops.'},
+      {tag:'Step 3: compare with the others', html:'R₂Si(OH)₂ has two OH, so both ends can link: a chain. RSi(OH)₃ has three OH: a network. If an option says CH₃SiCl₃ blocks chains, note that blocking is the job of R₃SiCl.'},
+      {tag:'Step 4: answer', html:'<div class="final">A is false: R₃SiCl cannot build a chain</div><div class="trap-note">The trap: assuming any chlorosilane can extend a chain. Count the Cl first.</div>'}
+    ] } }
+];
+
+var PROBS = [
+{ sec:1, type:'single',
+  q:'At 500 K, ΔG° = −2905 J for a gas-phase reaction. A 2 L vessel at equilibrium holds 4 mol A, 2 mol B and 2 mol C. Which reaction is it? Take R = 8.3 J K⁻¹ mol⁻¹ and ln 2 = 0.7.',
+  opts:['B + C ⇌ A','A ⇌ B + C','B + C ⇌ 2A','2A ⇌ B + C'], ans:[0],
+  why:'ln K = −ΔG°/RT = 2905 ÷ (8.3 × 500) = 2905 ÷ 4150 = 0.7, so K = 2. Concentrations: [A] = 4 ÷ 2 = 2, [B] = 1, [C] = 1 mol L⁻¹. B + C ⇌ A gives K = 2 ÷ (1 × 1) = 2 ✓. A ⇌ B + C gives 0.5. B + C ⇌ 2A gives 4. 2A ⇌ B + C gives 0.25. Using moles instead of concentrations gives K = 1 for the first option and nothing matches, because Δn is not zero here.',
+  mistakes:{1:'A ⇌ B + C: K = 0.5, the reaction written backwards.',
+            2:'B + C ⇌ 2A: K = 4. Copied the shape of the CTA21 Q37 answer (a 2 on A) instead of testing K.',
+            3:'2A ⇌ B + C: K = 0.25. The Q37 answer again; here the amounts and the 2 L volume change which reaction fits.'} },
+{ sec:2, type:'multi',
+  q:'Pure N₂O₄ at 6 atm is sealed in a rigid vessel at constant temperature and reaches equilibrium N₂O₄(g) ⇌ 2NO₂(g) with α = 0.5. Which statements are correct?',
+  opts:['K<sub>p</sub> = 12 atm','K<sub>p</sub> = 8 atm','The total pressure at equilibrium is 9 atm','On a graph of total pressure against α for this vessel (P₀ = 6 atm) the line is straight and reaches 12 atm at α = 1'], ans:[0,2,3],
+  why:'N₂O₄: 6 × 0.5 = 3 atm. NO₂: 2 × 0.5 × 6 = 6 atm. K<sub>p</sub> = 6² ÷ 3 = 12 atm (A true, B false). Total = 3 + 6 = 9 atm (C true). Total = P₀(1 + α) = 6(1 + α), a straight line from 6 atm at α = 0 to 12 atm at α = 1 (D true). Correct set: A, C, D. Once A is found, C and D need no new calculation.',
+  mistakes:{1:'B: 4α²P₀ ÷ (1 − α²) = 4 × 0.25 × 6 ÷ 0.75 = 8. This mixes the two forms. (1 − α) goes with P₀; (1 − α²) goes with the total P.'} },
+{ sec:1, type:'single',
+  q:'For A(g) ⇌ 2B(g) at 300 K, ΔG° = −3486 J. Starting from pure A, the mixture is held at a constant total pressure of 3 atm. Find the degree of dissociation α. Take R = 8.3 J K⁻¹ mol⁻¹, ln 2 = 0.7 and a standard pressure of 1 atm.',
+  opts:['0.50','0.14','0.76','0.43'], ans:[0],
+  why:'ln K<sub>p</sub> = 3486 ÷ (8.3 × 300) = 3486 ÷ 2490 = 1.4 = 2 ln 2 = ln 4, so K<sub>p</sub> = 4. At constant total pressure P = 3: P(A) = (1 − α)P ÷ (1 + α), P(B) = 2αP ÷ (1 + α). K<sub>p</sub> = 4α²P ÷ (1 − α²) = 12α² ÷ (1 − α²) = 4. So 12α² = 4 − 4α², 16α² = 4, α² = ¼, α = 0.50.',
+  mistakes:{1:'0.14 (= 1/7): read ΔG° with the wrong sign, so K<sub>p</sub> = ¼; then 12α² = ¼(1 − α²) gives α² = 1/49.',
+            2:'0.76: dropped the 4 in 4α²P ÷ (1 − α²), so 3α² = 4 − 4α² and α² = 4/7.',
+            3:'0.43: used (1 − α) in the denominator, which belongs to the rigid-vessel P₀ form, not the constant-pressure form: 3α² + α − 1 = 0.'} },
+{ sec:3, type:'single',
+  q:'Vessel 1 holds 1.5 mol of neon (ideal, monatomic) at V₁ = 4 L and T₁ = 200 K. Vessel 2 holds 1.5 mol of neon at V₂ = 2 L and T₂ = 400 K. Find S₂ − S₁ in cal K⁻¹. Take R = 2 cal K⁻¹ mol⁻¹ and ln 2 = 0.7.',
+  opts:['+1.05','+5.25','−1.05','+3.15'], ans:[0],
+  why:'C<sub>v</sub> = 3R/2 = 3 cal K⁻¹ mol⁻¹. T₂/T₁ = 2 and V₂/V₁ = ½. Per mole: 3 ln 2 + 2 ln ½ = 2.1 − 1.4 = 0.7. Times 1.5 = +1.05 cal K⁻¹. Second route: P₂/P₁ = (T₂/T₁) ÷ (V₂/V₁) = 2 ÷ ½ = 4, so ΔS = 1.5[5 ln 2 − 2 ln 4] = 1.5[3.5 − 2.8] = +1.05 ✓.',
+  mistakes:{1:'+5.25: wrote V₁/V₂ = 2 for the volume, so the volume term became +1.4 instead of −1.4: 1.5 × (2.1 + 1.4).',
+            2:'−1.05: wrote both ratios initial over final, which gives S₁ − S₂.',
+            3:'+3.15: used C<sub>p</sub> = 5 with the volume term: 1.5 × (3.5 − 1.4).'} },
+{ sec:4, type:'multi',
+  q:'Which of the following statements are correct?',
+  opts:['A sodium–lead alloy is used to make tetraethyl lead, PbEt₄.','Li₂CO₃ is thermally more stable than Cs₂CO₃, because the small Li⁺ ion gives the strongest lattice.','Among the alkali metals lithium has the most negative standard electrode potential, so it is the strongest reducing agent in water, even though it reacts with water the least vigorously.','Magnesium burning in air forms both MgO and Mg₃N₂.'], ans:[0,2,3],
+  why:'A: true, Na–Pb alloy is the starting point for PbEt₄. B: false. The stability of alkali metal carbonates rises down the group, and Li₂CO₃ decomposes on heating to Li₂O and CO₂ because the small Li⁺ polarises CO₃²⁻ strongly. C: true. E° of Li is about −3.04 V, the most negative, owing to the high hydration enthalpy of Li⁺. How fast it reacts is a separate matter. D: true, Mg is active enough to react with N₂ in air as well. Correct set: A, C, D.',
+  mistakes:{1:'B: reasoned “smaller ion, stronger lattice, more stable”. For carbonates the small cation instead polarises the anion, so stability rises down the group.',
+            0:'Leaving A out because the use is unfamiliar. Unfamiliar is not false: no reason for it to be false, so tick it.',
+            2:'Leaving C out because “reacts least vigorously” sounds like “weakest reductant”. Rate and E° are different things.'} },
+{ sec:5, type:'multi',
+  q:'Which statements about silicones made from methylchlorosilanes are correct?',
+  opts:['(CH₃)₃SiCl on hydrolysis and condensation gives a long linear silicone chain.','Adding (CH₃)₃SiCl to (CH₃)₂SiCl₂ before hydrolysis makes the average chain shorter.','Hydrolysis of CH₃SiCl₃ gives a cross-linked network.','In the chain (CH₃)₃Si–O–[Si(CH₃)₂–O]ₙ–Si(CH₃)₃ the number of O atoms is one less than the number of Si atoms.'], ans:[1,2,3],
+  why:'A: false. One Cl gives one OH and one link, so (CH₃)₃SiCl gives only the dimer (CH₃)₃Si–O–Si(CH₃)₃. B: true. Each (CH₃)₃SiCl caps one chain end, so more of it means more ends and shorter chains. C: true. Three Cl give three links, so the product is cross-linked. D: true. Si atoms = 1 + n + 1 = n + 2 and O atoms = 1 + n, one fewer. Correct set: B, C, D.',
+  mistakes:{0:'A: the same slip as WTA21 Q39. A unit with one Cl can only end a chain.'} }
+];
+
+/* ---------- helpers ---------- */
+var LET = ['A','B','C','D'];
+function plain(html){ var d=document.createElement('div'); d.innerHTML=html.replace(/<\/?(div|br|li|p|ul|figure)[^>]*>/g,' '); return d.textContent.replace(/\s+/g,' ').trim(); }
+var SUP={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁻':'-','⁺':'+'};
+var SUB={'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9','₊':'+','₋':'-'};
+function ascii(s){
+  return s.replace(/([EG])°/g,function(m,c){return c+'0';})
+          .replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]+/g,function(r){return '^'+r.split('').map(function(c){return SUP[c];}).join('');})
+          .replace(/[₀-₉₊₋]+/g,function(r){return r.split('').map(function(c){return SUB[c];}).join('');})
+          .replace(/×/g,'x').replace(/→/g,'->').replace(/⇌/g,'<=>').replace(/√/g,'sqrt').replace(/≈/g,'~').replace(/−/g,'-')
+          .replace(/½/g,'1/2').replace(/Δ/g,'delta ').replace(/÷/g,'/').replace(/°/g,' deg').replace(/·/g,'*')
+          .replace(/μ/g,'mu').replace(/θ/g,'theta').replace(/σ/g,'sigma').replace(/π/g,'pi')
+          .replace(/①/g,'(1)').replace(/②/g,'(2)').replace(/③/g,'(3)').replace(/④/g,'(4)')
+          .replace(/[–—]/g,'-').replace(/[“”]/g,'"').replace(/[’‘]/g,"'");
+}
+var TUTOR = 'I am a JEE aspirant preparing for JEE Advanced. Act as a patient tutor: use simple language, reply in chunks of under 10 lines, explain why and not just how, and wait for my reply before moving on.';
+function askUrl(parts){
+  var ps = parts.map(function(p){ return ascii(p); });
+  function build(){ return 'https://claude.ai/new?q=' + encodeURIComponent(ps.join('\n\n')); }
+  var u = build(), guard = 0;
+  while(u.length > 3300 && guard++ < 200){
+    var li = 1; for(var i=2;i<ps.length;i++){ if(ps[i].length > ps[li].length) li = i; }
+    ps[li] = ps[li].slice(0, Math.max(40, Math.floor(ps[li].length*0.9))) + '...';
+    u = build();
+  }
+  return u;
+}
+function askLink(parts, label){
+  var a = document.createElement('a');
+  a.className='ask'; a.target='_blank'; a.rel='noopener'; a.textContent = label || 'Ask Claude about this ↗';
+  a.href = askUrl([TUTOR].concat(parts));
+  return a;
+}
+function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
+
+/* ---------- build sections ---------- */
+function buildSections(){
+  var root = document.getElementById('sections');
+  SECTIONS.forEach(function(s){
+    var sec = el('section','pattern'); sec.id = s.id;
+    var head = el('div','pattern-head');
+    head.appendChild(el('h2',null, s.n+' · '+s.title));
+    head.appendChild(el('span','chip '+s.chip, s.chipText));
+    sec.appendChild(head);
+    sec.appendChild(el('div','syl', s.syl));
+    if(s.cb){
+    var cb = el('div','came-back'+(s.cb.better?' better':''));
+      cb.innerHTML = '<span class="lbl">'+s.cb.label+'</span>'
+        +'<div class="sbs"><div><span class="h">'+s.cb.h1+'</span>'+s.cb.prev+'</div><div><span class="h">'+s.cb.h2+'</span>'+s.cb.now+'</div></div>'
+        +'<div>'+s.cb.verdict+'</div>';
+      sec.appendChild(cb);
+    }
+    sec.appendChild(el('p','why', '<strong>Why this matters.</strong> '+s.why));
+    var rule = el('div','rule');
+    rule.innerHTML = '<span class="rule-label">Shortcut rules</span><ul>'+s.rule.map(function(r){return '<li>'+r+'</li>';}).join('')+'</ul>';
+    sec.appendChild(rule);
+    if(s.extra){ var xt = el('div'); xt.innerHTML = s.extra; sec.appendChild(xt); }
+
+    var ex = s.ex, st = el('div','stepper'); st.id = 'st-'+s.id;
+    st.appendChild(el('span','stepper-label','Worked example · '+ex.src));
+    st.appendChild(el('p',null, ex.q.replace(/\n/g,'<br>')));
+    st.appendChild(el('p','yours','Your answer: <strong>'+ex.yours+'</strong>. Correct answer: <strong>'+ex.correct+'</strong>.'));
+    st.appendChild(el('p','rebuilt', ex.note));
+    if(ex.fig){ var f = el('div'); f.innerHTML = ex.fig; st.appendChild(f); }
+    ex.steps.forEach(function(sp,i){
+      var d = el('div','step'); d.innerHTML='<span class="tag">'+sp.tag+'</span>'+sp.html; if(i>0) d.hidden = true; st.appendChild(d);
+    });
+    var b = el('button','step-btn','Show next step →'); b.type='button'; b.onclick=function(){ stepNext(st); }; st.appendChild(b);
+    sec.appendChild(st);
+
+    var figText = ex.figText || '';
+    var secParts = ['Topic: '+s.title+' (JEE Advanced Chemistry). Pattern: '+s.pattern+'. This pattern is '+s.status+': '+plain(s.cb.verdict),
+                    'Why it matters: '+plain(s.why),
+                    'Shortcut rules: '+s.rule.map(plain).join(' | ')];
+    var exParts = ['Worked example ('+ex.src+'). Question: '+plain(ex.q.replace(/\n/g,' '))+figText,
+                   'My real answer was '+plain(ex.yours)+' and the correct answer is '+plain(ex.correct)+'. '+ex.diag,
+                   'Steps: '+ex.steps.map(function(sp){ var t=plain(sp.tag+': '+sp.html); return t.length>230? t.slice(0,227)+'...' : t; }).join(' || ')];
+    var row = el('div');
+    row.appendChild(askLink(secParts, 'Ask Claude about this section ↗')); row.appendChild(document.createTextNode(' '));
+    row.appendChild(askLink(exParts, 'Ask Claude about the worked example ↗'));
+    sec.appendChild(row);
+    root.appendChild(sec);
+  });
+}
+
+/* ---------- build practice ---------- */
+function buildGrid(){
+  var grid = document.getElementById('grid');
+  PROBS.forEach(function(p,idx){
+    var sec = SECTIONS[p.sec-1];
+    var card = el('div','card'); card.id='p'+(idx+1);
+    var head = el('div','card-head');
+    head.appendChild(el('span','qnum', String(idx+1)));
+    head.appendChild(el('span','chip '+(p.type==='multi'?'c2':'c3'), p.type==='multi'?'Multi-correct':'Single-correct'));
+    head.appendChild(el('span','chip c4','Level 4'));
+    head.appendChild(el('span','chip '+sec.chip, 'Section '+sec.n));
+    card.appendChild(head);
+    card.appendChild(el('p',null,p.q.replace(/\n/g,'<br>')));
+    if(p.type==='multi') card.appendChild(el('div','yours','Select all that apply.'));
+    var opts = el('div','opts'); var inputs=[];
+    p.opts.forEach(function(t,i){
+      var lab = el('label','opt');
+      var inp = document.createElement('input'); inp.type = p.type==='multi'?'checkbox':'radio'; inp.name='q'+idx; inp.id='q'+idx+'o'+i; inp.value=i;
+      lab.appendChild(inp); lab.appendChild(el('span','l',LET[i])); lab.appendChild(el('span','t',t));
+      opts.appendChild(lab); inputs.push(inp);
+    });
+    card.appendChild(opts);
+    var verdict = el('div'); verdict.hidden = true;
+    var actions = el('div');
+    var chk = null;
+    function grade(){
+      var sel=[]; inputs.forEach(function(i){ if(i.checked) sel.push(+i.value); });
+      if(!sel.length){ return; }
+      var ok = sel.length===p.ans.length && sel.every(function(x){ return p.ans.indexOf(x)>-1; });
+      inputs.forEach(function(inp,i){
+        var lab = inp.parentNode; lab.classList.remove('is-right','is-wrong','is-miss');
+        var isAns = p.ans.indexOf(i)>-1;
+        if(inp.checked && isAns) lab.classList.add('is-right');
+        else if(inp.checked && !isAns) lab.classList.add('is-wrong');
+        else if(!inp.checked && isAns) lab.classList.add('is-miss');
+      });
+      verdict.className = 'verdict '+(ok?'ok':'no'); verdict.hidden=false;
+      verdict.textContent = (ok?'Correct. ':'Not quite. ')+'Correct option'+(p.ans.length>1?'s':'')+': '+p.ans.map(function(i){return LET[i];}).join(', ')+'.';
+    }
+    if(p.type==='multi'){
+      chk = el('button','check-btn','Check answer'); chk.type='button'; chk.onclick=grade; actions.appendChild(chk);
+    } else {
+      inputs.forEach(function(i){ i.addEventListener('change', grade); });
+    }
+    var rev = el('button','reveal-btn','Show why'); rev.type='button'; actions.appendChild(rev);
+    card.appendChild(actions); card.appendChild(verdict);
+    var ans = el('div','answer'); ans.hidden = true;
+    var mk = Object.keys(p.mistakes).map(function(k){ return '<li>'+p.mistakes[k]+'</li>'; }).join('');
+    ans.innerHTML = '<div>'+p.why+'</div><ul>'+mk+'</ul>';
+    card.appendChild(ans);
+    rev.onclick = function(){ ans.hidden = !ans.hidden; rev.textContent = ans.hidden ? 'Show why' : 'Hide why'; };
+
+    var parts = ['Practice problem '+(idx+1)+' ('+(p.type==='multi'?'multi-correct: pick all correct options':'single-correct')+', level 4, topic: '+sec.title+').',
+                 'Problem: '+plain(p.q.replace(/\n/g,' ')),
+                 'Options: '+p.opts.map(function(t,i){return LET[i]+') '+plain(t);}).join('  '),
+                 'For your reference only, do not reveal unless I ask or have made a real attempt. Correct: '+p.ans.map(function(i){return LET[i];}).join(', ')+'. Reasoning: '+plain(p.why),
+                 'Ask me what I have tried first, then give me one hint at a time.'];
+    card.appendChild(askLink(parts));
+    grid.appendChild(card);
+  });
+}
+
+function stepNext(st){
+  var steps = st.querySelectorAll('.step'), shown = 0;
+  steps.forEach(function(s){ if(!s.hidden) shown++; });
+  if(shown < steps.length){ steps[shown].hidden = false; shown++; }
+  if(shown >= steps.length){ st.querySelector('.step-btn').hidden = true; }
+}
+function setMode(mode, btn){
+  document.querySelectorAll('.mode-btn').forEach(function(b){ b.setAttribute('aria-pressed', b===btn?'true':'false'); });
+  document.getElementById('timerBar').hidden = (mode!=='timed');
+}
+var remaining = 40*60, timerId = null;
+function renderTime(){ var m=String(Math.floor(remaining/60)).padStart(2,'0'), s=String(remaining%60).padStart(2,'0'); document.getElementById('timeDisplay').textContent=m+':'+s; }
+function startTimer(){ if(timerId) return; timerId=setInterval(function(){ remaining--; if(remaining<=0){ clearInterval(timerId); timerId=null; document.getElementById('timeDisplay').textContent="Time's up"; } else renderTime(); },1000); }
+function resetTimer(){ clearInterval(timerId); timerId=null; remaining=40*60; renderTime(); }
+
+buildSections(); buildGrid(); renderTime();
+</script>

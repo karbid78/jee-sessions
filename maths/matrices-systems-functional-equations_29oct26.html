@@ -1,0 +1,738 @@
+<title>Matrices, Systems and Option Checks</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&amp;family=IBM+Plex+Mono:wght@400;600;700&amp;family=IBM+Plex+Sans:wght@400;600&amp;display=swap">
+<style>
+  :root{
+    --bg:#F5F7FB;
+    --surface:#FFFFFF;
+    --surface-2:#EDF1F8;
+    --ink:#1B2436;
+    --ink-soft:#535F76;
+    --border:#DBE1ED;
+    --accent:#2F5A8A;
+    --accent-soft:#E7EEF7;
+    --highlight:#D99A12;
+    --highlight-ink:#5C4008;
+    --highlight-bg:#FFF6DE;
+    --highlight-border:#F0D796;
+    --good:#2F8F5B;
+    --good-bg:#E5F5EC;
+    --trap:#B8503F;
+    --trap-bg:#FBEAE6;
+    --chip-1:#2F5A8A;
+    --chip-1-bg:#E7EEF7;
+    --chip-2:#7C4FBF;
+    --chip-2-bg:#F0E9FA;
+    --chip-3:#2F8F5B;
+    --chip-3-bg:#E5F5EC;
+    --chip-4:#B4681F;
+    --chip-4-bg:#FBEEDF;
+    --chip-5:#535F76;
+    --chip-5-bg:#EDF1F8;
+    --shadow: 0 1px 2px rgba(27,36,54,.04), 0 8px 24px -12px rgba(27,36,54,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0F131C;
+      --surface:#161C29;
+      --surface-2:#1E2635;
+      --ink:#E7ECF6;
+      --ink-soft:#A6B1C6;
+      --border:#2B3448;
+      --accent:#7BAAE0;
+      --accent-soft:#1B2A3E;
+      --highlight:#E8B84B;
+      --highlight-ink:#FBE8B8;
+      --highlight-bg:#3A2E10;
+      --highlight-border:#5C4A1B;
+      --good:#5FC98C;
+      --good-bg:#12301F;
+      --trap:#E1897A;
+      --trap-bg:#3A1E19;
+      --chip-1:#7BAAE0; --chip-1-bg:#1B2A3E;
+      --chip-2:#C0A2EC; --chip-2-bg:#2A2140;
+      --chip-3:#5FC98C; --chip-3-bg:#12301F;
+      --chip-4:#E3A768; --chip-4-bg:#3A2A14;
+      --chip-5:#A6B1C6; --chip-5-bg:#1E2635;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0F131C;
+    --surface:#161C29;
+    --surface-2:#1E2635;
+    --ink:#E7ECF6;
+    --ink-soft:#A6B1C6;
+    --border:#2B3448;
+    --accent:#7BAAE0;
+    --accent-soft:#1B2A3E;
+    --highlight:#E8B84B;
+    --highlight-ink:#FBE8B8;
+    --highlight-bg:#3A2E10;
+    --highlight-border:#5C4A1B;
+    --good:#5FC98C;
+    --good-bg:#12301F;
+    --trap:#E1897A;
+    --trap-bg:#3A1E19;
+    --chip-1:#7BAAE0; --chip-1-bg:#1B2A3E;
+    --chip-2:#C0A2EC; --chip-2-bg:#2A2140;
+    --chip-3:#5FC98C; --chip-3-bg:#12301F;
+    --chip-4:#E3A768; --chip-4-bg:#3A2A14;
+    --chip-5:#A6B1C6; --chip-5-bg:#1E2635;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+
+  * { box-sizing: border-box; }
+  body{
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    padding-inline: 20px;
+    padding-block: 28px 64px;
+    line-height: 1.55;
+  }
+  .wrap{ max-width: 760px; margin: 0 auto; }
+  h1,h2,h3{ font-family: "Fraunces", Georgia, serif; font-weight: 600; text-wrap: balance; margin: 0; }
+  a { color: var(--accent); }
+  .eyebrow{
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+
+  /* ---------- math helpers ---------- */
+  .m{ font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .97em; }
+  .f{ display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; font-size:.88em; line-height:1.15; margin:0 .15em; }
+  .f .fn{ border-bottom:1.4px solid currentColor; padding:0 .22em .04em; }
+  .f .fd{ padding:.04em .22em 0; }
+  .lim{ display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; font-style:italic; line-height:1.05; margin-right:.18em; }
+  .lim .sub{ font-size:.66em; font-style:normal; color: var(--ink-soft); }
+  .eq{ display:block; margin: 14px 0; padding: 14px 16px; background: var(--surface-2); border-radius: 10px; overflow-x:auto; }
+
+  /* ---------- hero ---------- */
+  .hero{ padding-block: 8px 30px; }
+  .hero h1{ font-size: clamp(1.7rem, 5vw, 2.35rem); margin-top: 10px; }
+  .hero p{ color: var(--ink-soft); max-width: 60ch; }
+  .hero-note{
+    margin-top: 18px; padding: 14px 16px; border-radius: 12px;
+    background: var(--accent-soft); border: 1px solid var(--border);
+    font-size: .93rem;
+  }
+  .asymptote-fig{ width: 100%; max-width: 420px; height: auto; display:block; margin: 18px 0 4px; }
+  @media (prefers-reduced-motion: no-preference){
+    .dot{ animation: approach 3.2s ease-in-out infinite; }
+    @keyframes approach{
+      0%{ transform: translateX(0); }
+      55%{ transform: translateX(190px); }
+      100%{ transform: translateX(190px); }
+    }
+  }
+
+  /* ---------- pattern sections ---------- */
+  .pattern{
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 22px 22px 24px; margin-block: 18px; box-shadow: var(--shadow);
+  }
+  .pattern-head{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom: 6px; }
+  .pattern-head h2{ font-size: 1.28rem; }
+  .chip{
+    font-family:"IBM Plex Mono", monospace; font-size:.68rem; letter-spacing:.05em; text-transform:uppercase;
+    padding: 3px 9px; border-radius: 999px; font-weight: 600; white-space:nowrap;
+  }
+  .chip-1{ color:var(--chip-1); background:var(--chip-1-bg); }
+  .chip-2{ color:var(--chip-2); background:var(--chip-2-bg); }
+  .chip-3{ color:var(--chip-3); background:var(--chip-3-bg); }
+  .chip-4{ color:var(--chip-4); background:var(--chip-4-bg); }
+  .chip-5{ color:var(--chip-5); background:var(--chip-5-bg); }
+  .pattern p{ margin: 10px 0; }
+  .why{ color: var(--ink-soft); font-size: .95rem; }
+
+  .rule{
+    margin-top: 14px; padding: 14px 16px; border-radius: 10px;
+    background: var(--highlight-bg); border: 1px solid var(--highlight-border); color: var(--highlight-ink);
+  }
+  .rule-label{ font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; margin-bottom:6px; display:block; }
+  .rule ul{ margin: 6px 0 0; padding-left: 20px; }
+  .rule li{ margin: 3px 0; }
+
+  /* ---------- stepper (worked examples) ---------- */
+  .stepper{ margin-top: 16px; border-top: 1px dashed var(--border); padding-top: 14px; }
+  .stepper-label{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color: var(--ink-soft); margin-bottom: 8px; display:block; }
+  .step{ padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .step:last-of-type{ border-bottom: none; }
+  .step .tag{ font-weight:600; font-size:.82rem; color: var(--accent); display:block; margin-bottom: 4px; }
+  .step-btn{
+    margin-top: 10px; font: inherit; font-weight: 600; font-size: .88rem;
+    background: var(--accent); color: white; border: none; border-radius: 8px;
+    padding: 9px 14px; cursor: pointer;
+  }
+  .step-btn:hover{ filter: brightness(1.08); }
+  .final{ background: var(--good-bg); color: var(--good); border-radius: 8px; padding: 10px 12px; font-weight: 700; margin-top: 6px; }
+  .trap-note{ background: var(--trap-bg); color: var(--trap); border-radius: 8px; padding: 10px 12px; font-size: .9rem; margin-top: 10px; }
+
+  /* ---------- practice section ---------- */
+  .practice-head{ padding-block: 6px 4px; }
+  .mode-row{
+    display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin: 14px 0 8px;
+    background: var(--surface); border:1px solid var(--border); border-radius: 14px; padding: 14px 16px;
+    box-shadow: var(--shadow);
+  }
+  .mode-btn{
+    font: inherit; font-weight:600; font-size:.9rem; padding: 8px 14px; border-radius: 999px;
+    border:1px solid var(--border); background: var(--surface-2); color: var(--ink); cursor:pointer;
+  }
+  .mode-btn[aria-pressed="true"]{ background: var(--accent); color: white; border-color: var(--accent); }
+  .timer-bar{ display:flex; align-items:center; gap:12px; margin-left:auto; flex-wrap:wrap; }
+  .time{ font-family:"IBM Plex Mono",monospace; font-size:1.3rem; font-variant-numeric: tabular-nums; min-width: 64px; }
+  .timer-btn{ font: inherit; font-size:.85rem; font-weight:600; border-radius:8px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); padding:7px 12px; cursor:pointer; }
+  .mode-help{ font-size:.85rem; color: var(--ink-soft); margin: 6px 2px 0; }
+
+  .grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin-top: 16px; }
+  .card{
+    background: var(--surface); border:1px solid var(--border); border-radius: 14px; padding: 16px 16px 14px;
+    box-shadow: var(--shadow); display:flex; flex-direction:column;
+  }
+  .card-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom: 8px; }
+  .qnum{ font-family:"Fraunces",serif; font-weight:700; font-size:1.05rem; color: var(--accent); }
+  .card ol{ padding-left: 20px; margin: 6px 0; }
+  .card li{ margin: 3px 0; }
+  .reveal-btn{
+    align-self:flex-start; margin-top:10px; font: inherit; font-weight:600; font-size:.85rem;
+    background: none; border: 1.4px solid var(--accent); color: var(--accent); border-radius: 8px;
+    padding: 7px 12px; cursor: pointer;
+  }
+  .reveal-btn:hover{ background: var(--accent-soft); }
+  .answer{ margin-top: 10px; padding: 10px 12px; background: var(--good-bg); border-radius: 8px; }
+  .answer .val{ color: var(--good); font-weight: 700; font-family:"IBM Plex Mono",monospace; }
+  .answer .why{ margin-top: 4px; font-size: .88rem; }
+
+  footer{ margin-top: 26px; color: var(--ink-soft); font-size: .88rem; text-align:center; }
+
+  .hero-fig{ width:100%; max-width:440px; height:auto; display:block; margin:18px 0 4px; }
+  .cmp{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px; margin:14px 0 6px; }
+  .cmp .box{ background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:11px 13px; font-size:.9rem; min-width:0; }
+  .cmp .box.now{ background:var(--trap-bg); border-color:var(--trap); }
+  .cmp .box .tagline{ display:block; font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; font-weight:700; color:var(--ink-soft); margin-bottom:5px; }
+  .cmp .box.now .tagline{ color:var(--trap); }
+  .verdict{ font-size:.93rem; margin:10px 0 4px; padding:10px 13px; border-left:3px solid var(--highlight); background:var(--highlight-bg); color:var(--highlight-ink); border-radius:0 8px 8px 0; }
+  .back{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; font-weight:700; color:var(--trap); background:var(--trap-bg); padding:3px 9px; border-radius:999px; white-space:nowrap; }
+  .note{ font-size:.88rem; color:var(--ink-soft); margin-top:8px; }
+  .step, .rule, .cmp, .answer, .eq { overflow-wrap:anywhere; }
+  .eq{ font-size:.93rem; }
+  .ask-row{ margin-top:14px; display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; }
+  .ask{ display:inline-flex; align-items:center; gap:6px; font:inherit; font-weight:600; font-size:.85rem; color:var(--accent); background:var(--accent-soft); border:1.4px solid var(--accent); border-radius:8px; padding:7px 12px; text-decoration:none; }
+  .ask:hover{ filter:brightness(.97); text-decoration:underline; }
+  .ask:focus-visible{ outline:2px solid var(--highlight); outline-offset:2px; }
+  .ask-hint{ font-size:.8rem; color:var(--ink-soft); }
+  .card .ask-row{ margin-top:10px; }
+
+  .card-tags{ display:flex; align-items:center; gap:6px; }
+  .lvl{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; font-weight:700; letter-spacing:.06em; color:var(--highlight-ink); background:var(--highlight-bg); border:1px solid var(--highlight-border); padding:2px 8px; border-radius:999px; }
+  .answer ol{ margin:6px 0 0 1.2em; padding:0; font-size:.88rem; color:var(--ink-soft); }
+  .answer ol li{ margin:3px 0; }
+  .answer .trap-note{ margin-top:8px; }
+
+  :root{ --on-accent:#FFFFFF; }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --on-accent:#0F131C; } }
+  :root[data-theme="dark"]{ --on-accent:#0F131C; }
+  .step-btn{ color:var(--on-accent); }
+  .mode-btn[aria-pressed="true"]{ color:var(--on-accent); }
+  .qtype{ font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.05em; text-transform:uppercase; font-weight:700; padding:3px 9px; border-radius:999px; color:var(--ink-soft); background:var(--surface-2); border:1px solid var(--border); white-space:nowrap; }
+  .card-tags{ flex-wrap:wrap; justify-content:flex-end; }
+  .opts{ display:grid; gap:8px; margin:12px 0 4px; }
+  .opt{ display:flex; gap:10px; align-items:flex-start; padding:9px 12px; border:1.4px solid var(--border); border-radius:10px; background:var(--surface-2); cursor:pointer; min-width:0; overflow-wrap:anywhere; }
+  .opt:hover{ border-color:var(--accent); }
+  .opt input{ margin-top:4px; accent-color:var(--accent); flex:none; }
+  .opt .ol{ font-family:"IBM Plex Mono",monospace; font-weight:700; color:var(--accent); flex:none; }
+  .opt .ot{ min-width:0; }
+  .opt.ok{ border-color:var(--good); background:var(--good-bg); }
+  .opt.bad{ border-color:var(--trap); background:var(--trap-bg); }
+  .opt.miss{ border-color:var(--good); border-style:dashed; background:var(--good-bg); }
+  .opt .mark{ margin-left:auto; flex:none; font-weight:700; font-size:.82rem; }
+  .opt.ok .mark,.opt.miss .mark{ color:var(--good); } .opt.bad .mark{ color:var(--trap); }
+  .result{ margin-top:10px; padding:9px 12px; border-radius:8px; font-weight:600; font-size:.92rem; }
+  .result.right{ background:var(--good-bg); color:var(--good); }
+  .result.wrong{ background:var(--trap-bg); color:var(--trap); }
+  .btn-row{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:10px; }
+  .btn-row .reveal-btn{ margin-top:0; }
+  .check-btn{ font:inherit; font-weight:600; font-size:.85rem; background:var(--accent); color:var(--on-accent); border:none; border-radius:8px; padding:8px 13px; cursor:pointer; }
+  .check-btn:focus-visible,.reveal-btn:focus-visible,.opt:focus-within{ outline:2px solid var(--highlight); outline-offset:2px; }
+  .pfig{ margin:10px 0 2px; }
+  .pfig svg{ display:block; width:100%; max-width:340px; height:auto; color:var(--ink); }
+  .pfig svg text{ font-family:"IBM Plex Mono",monospace; font-size:11px; fill:currentColor; }
+  .pfig figcaption{ font-size:.8rem; color:var(--ink-soft); margin-top:4px; }
+  .mistakes{ margin:6px 0 0; padding-left:18px; font-size:.86rem; }
+  .grid{ grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr)); }
+  .mat{display:inline-block;vertical-align:middle;border-left:1.6px solid currentColor;border-right:1.6px solid currentColor;border-radius:5px;padding:2px 8px;margin:0 3px;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.88em;max-width:100%;overflow-x:auto}
+  .mat .mr{display:grid;grid-template-columns:repeat(var(--c),auto);gap:1px 14px;text-align:center}
+  .stepper .pfig svg{max-width:400px}
+</style>
+<div class="wrap">
+<section class="hero">
+<span class="eyebrow">Maths · Focus Session · CTA20 to CTA21</span>
+<h1>Matrices, linear systems, functional equations and the multi-correct habit</h1>
+<p>CTA21 (25 Oct) cost you marks on four patterns that have all come up before. Every worked example below is a real question you missed, with your real answer. The practice set has six fresh problems at level L4, three of them multi-correct.</p>
+<div class="hero-note"><strong>How to use this:</strong> go section by section. Read the comparison with your earlier mistakes, click through the worked example, then do the practice problems for that pattern. Section 2 is a routine, not a topic: use it on every multi-correct problem in the set. Every problem is multiple choice (A to D). Do all 6 once, untimed. The 40-minute timed mode is for a later pass.<br><br><strong>Stuck on something?</strong> Every section, worked example and practice problem has an <em>Ask Claude</em> link. It opens a new claude.ai chat with that topic already typed in, set up so Claude explains step by step and does not just hand over answers. You need to be signed in to claude.ai.</div>
+<p class="note level-note"><strong>Level L4.</strong> The practice problems are set at the level of your Sunday ADV-CTA papers: more than one concept, 6 or more steps, and one trap or boundary check. Every problem carries its level tag. The worked examples are your real questions, kept at their real level. Only methods from the JEE Advanced syllabus and from what your class has taught are used. Adjoint and inverse stay at order 3.</p>
+<p class="note"><strong>About the keys:</strong> for CTA21 Q8, Q9, Q12 and Q15 the portal did not save the option wording (Q9 and Q12 show their ticks, Q12's last option is cut off). I derived each answer by hand and checked it by computer. Where an option's exact text is unknown, the page says so and shows the facts the options rest on.</p>
+</section>
+<section class="pattern">
+<div class="pattern-head"><h2>1 · Matrices: find what the question forces, then test every option</h2><span class="chip chip-3">Matrices</span><span class="back">Came back</span></div>
+<p class="why">Matrix questions on the Sunday paper are multi-correct or count answers, and one hidden fact usually decides every option. In CTA21 you missed that fact twice. In Q8 it was <span class='m'>det(A + B) = 0</span>. In Q15 it was whether the system is consistent at all.</p>
+<div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this pattern ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
+<div class="cmp">
+<div class="box"><span class="tagline">Before</span><strong>CTA16 Q6</strong>: found det M = 1, marked only D (key B, C, D). <strong>CTA16 Q2</strong>, <strong>CTA19 Q8</strong>, <strong>Q12</strong> and <strong>CTA20 Q3</strong>: partial each time, with a subset of the correct options ticked. <strong>CTA17</strong>: Q6 and Q8 skipped (8m32s and 4m18s), Q14 wrong (<strong>1024</strong>, key 16).</div>
+<div class="box now"><span class="tagline">Now</span><strong>CTA21 Q8</strong>: partial, marked C and D, all four were correct. <strong>CTA21 Q15</strong>: wrong, answered <strong>2</strong>, key <strong>0</strong>.</div>
+</div>
+<p class="verdict"><strong>Q8 is the same error again.</strong> Five earlier questions on this pattern were partial, each with only some of the true options ticked. This pattern has already had two focus sessions (30 Sep and 6 Oct), and the advice then was to give every option a True or False verdict. That is not enough on its own, so add a step before it: ask what the question forces (here <span class='m'>det(A + B) = 0</span>) before you read any option. <strong>Q15 is a different error.</strong> Your earlier linear-system questions (CTA17 Q8, CTA19 Q12) were skipped or partial, and this time you attempted it and reached a number. That is progress. Your working is not saved, so I can't say where 2 came from. The usual gap is stopping at “determinant = 0” without checking consistency.</p>
+<div class="stepper" id="st1a">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p><span class='m'>A</span> and <span class='m'>B</span> are 3×3 matrices with <span class='m'>A² = B² = I</span>, <span class='m'>det A = 1</span> and <span class='m'>det B = −1</span>. Then <span class='m'>det(A + B)</span> <strong>cannot be</strong> ... (four numbers in the options).</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">You marked <strong>C and D</strong>. The portal ticks <strong>all four</strong> options, A, B, C and D, so you missed A and B. The four option values were not saved.</p>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · what you are given</span>
+You know <span class='m'>A² = I</span>, <span class='m'>B² = I</span> and the two determinants. <span class='m'>A + B</span> cannot be simplified by itself, so look for a product that contains <span class='m'>A + B</span>.
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · the trick</span>
+Compute <span class='m'>A(A + B)B</span>. Expand: <span class='m'>A·A·B + A·B·B = A²B + AB² = IB + AI = B + A</span>. So <span class='eq m'>A(A + B)B = A + B</span>
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · take determinants</span>
+<span class='m'>det A · det(A + B) · det B = det(A + B)</span>. Put in <span class='m'>det A = 1</span> and <span class='m'>det B = −1</span>: <span class='eq m'>(1)(−1) · det(A + B) = det(A + B)</span>
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · the value is forced</span>
+Let <span class='m'>d = det(A + B)</span>. Then <span class='m'>−d = d</span>, so <span class='m'>2d = 0</span> and <span class='m'>d = 0</span>. The determinant is not “one of several possible values”. It is forced to be exactly 0.
+</div>
+<div class="step" data-n="5" hidden>
+<span class="tag">Step 5 · read the words “cannot be”</span>
+If <span class='m'>det(A + B)</span> is always 0, it cannot be any non-zero number. So every option that lists a non-zero number is correct. That is why the portal ticks all four. Quick check with real matrices: <span class='m'>A = diag(1, −1, −1)</span> (det 1) and <span class='m'>B = diag(1, 1, −1)</span> (det −1) give <span class='m'>A + B = diag(2, 0, −2)</span>, whose determinant is 0.<div class="final">Answer: A, B, C, D</div><div class="trap-note">The trap: ticking the first options that look fine and stopping. When a question gives you determinants and <span class='m'>A² = I</span>, the first move is to look for a product like <span class='m'>A(A + B)B</span> and see which value is forced. After that, each option takes five seconds. Only <span class='m'>det(XY) = det X · det Y</span> was used.</div>
+</div>
+<button class="step-btn" onclick="stepNext('st1a')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<div class="stepper" id="st1b">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p><span class='m'>AX = B</span>, where <span class='m'>A</span> = <span class="mat" data-t="[[a,b,c],[sin t,cos t,−sin t],[cos t,sin t,cos t]]"><span class="mr" style="--c:3"><span>a</span><span>b</span><span>c</span><span>sin t</span><span>cos t</span><span>−sin t</span><span>cos t</span><span>sin t</span><span>cos t</span></span></span>, <span class='m'>X = (x, y, z)ᵀ</span> and <span class='m'>B = (1, 0, 0)ᵀ</span>. The number of triples <span class='m'>(a, b, c)</span> for which the system has infinitely many solutions is ...</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">You marked option <strong>C</strong>, which is <strong>2</strong>. The key is option <strong>A</strong>, which is <strong>0</strong>. Your working is not saved, so the steps below show the whole route.</p>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · write the three equations</span>
+<span class='eq m'>E1: ax + by + cz = 1<br>E2: sin t·x + cos t·y − sin t·z = 0<br>E3: cos t·x + sin t·y + cos t·z = 0</span>Only E1 contains <span class='m'>a, b, c</span>. E2 and E3 contain only <span class='m'>t</span>, so solve them first.
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · solve E2 and E3</span>
+The two rows are never parallel. If <span class='m'>(sin t, cos t, −sin t) = k(cos t, sin t, cos t)</span>, the first and third entries give <span class='m'>sin t = kcos t</span> and <span class='m'>−sin t = kcos t</span>, so <span class='m'>sin t = 0</span>; then the second entry gives <span class='m'>cos t = 0</span>, which cannot be. So E2 and E3 leave exactly one free direction. Try <span class='m'>(x, y, z) = λ(1, −sin 2t, −cos 2t)</span>. E2: <span class='m'>sin t − cos t sin 2t + sin t cos 2t = sin t + sin(t − 2t) = 0</span>. E3: <span class='m'>cos t − sin t sin 2t − cos t cos 2t = cos t − cos(2t − t) = 0</span>. Both hold, so all solutions of E2 and E3 are <span class='m'>λ(1, −sin 2t, −cos 2t)</span>.
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · put that line into E1</span>
+<span class='eq m'>λ · (a − b sin 2t − c cos 2t) = 1</span>Call the bracket <span class='m'>K</span>. Expanding <span class='m'>det A</span> along row 1 gives exactly this: <span class='m'>det A = K</span>.
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · count the solutions</span>
+If <span class='m'>K ≠ 0</span>: <span class='m'>λ = 1/K</span>, so exactly one solution. If <span class='m'>K = 0</span>: the equation reads <span class='m'>0 = 1</span>, so no solution. No value of <span class='m'>K</span> leaves <span class='m'>λ</span> free, so the system is never consistent with a whole line of solutions.
+</div>
+<div class="step" data-n="5" hidden>
+<span class="tag">Step 5 · answer and sanity check</span>
+No triple works, so the count is 0. Sanity check: <span class='m'>K = 0</span> describes a whole plane of triples, so the count could only be 0 (none of them consistent) or infinite. A small number like 2 could never be the answer.<div class="final">Answer: 0 (option A)</div><div class="trap-note">The trap: “determinant = 0” is needed for infinitely many solutions, but it is not enough. The only non-zero right side sits in E1. When <span class='m'>det A = 0</span>, E1 is a combination of E2 and E3, and the same combination of their right sides is 0, so E1 would read <span class='m'>0 = 1</span>. Always ask: if this row depends on the others, do the right sides agree?</div>
+</div>
+<button class="step-btn" onclick="stepNext('st1b')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<div class="rule">
+<span class="rule-label">The shortcuts</span>
+<ul>
+<li><strong>Given determinants and <span class='m'>A² = I</span>:</strong> look for a product like <span class='m'>A(A + B)B</span> that contains the thing you want, then take determinants. <span class='m'>det(XY) = det X · det Y</span> is all you need.</li>
+<li><strong>A forced value changes how you read the options.</strong> “Cannot be” options are true for every other value. “Must be” options are true for exactly that value. Test each option against it.</li>
+<li><strong>3×3 facts:</strong> <span class='m'>det(kX) = k³ det X</span>, <span class='m'>det(Xᵀ) = det X</span>, <span class='m'>det(adj X) = (det X)²</span>.</li>
+<li><strong>System <span class='m'>AX = B</span> with <span class='m'>det A = 0</span>:</strong> do not stop. If a row equals <span class='m'>α·Row 2 + β·Row 3</span>, the right sides must satisfy the same combination. If they do, infinitely many solutions. If not, it reads <span class='m'>0 = 1</span> and there is none.</li>
+<li><strong>Counting <span class='m'>(a, b, c)</span> over all real numbers:</strong> <span class='m'>det A = 0</span> is a plane of triples, so the count is 0 or infinite. A small count needs a finite set of allowed values (problem 2).</li>
+</ul>
+</div>
+</section>
+<section class="pattern">
+<div class="pattern-head"><h2>2 · The multi-correct habit: check every option</h2><span class="chip chip-2">All maths</span><span class="back">Came back</span></div>
+<p class="why">In a multi-correct question every true option you miss costs marks, and every false option you tick costs more. In your last three tests this happened in 8 questions. In all 8 you missed at least one true option. In 7 of the 8, everything you did tick was correct. So your judgement is good. The problem is that you stop looking.</p>
+<div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this pattern ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
+<div class="cmp">
+<div class="box"><span class="tagline">Before</span><strong>WTA20</strong>: Q2 missed B, Q6 missed D. <strong>CTA20</strong>: Q1 missed C, Q2 missed A and C, Q5 missed A and D.</div>
+<div class="box now"><span class="tagline">Now</span><strong>CTA21</strong>: Q8 missed A and B, Q10 missed D, Q11 ticked C and D (both wrong) and missed B.</div>
+</div>
+<p class="verdict"><strong>The same error, again, in 7 of 8 questions:</strong> stopping before the last true option. The missed option was usually checkable in under a minute. <strong>Q11 is a second, different error:</strong> accepting two options that were wrong. So the routine below has two jobs. No option is left unchecked, and no option is ticked without a reason.</p>
+<div class="rule">
+<span class="rule-label">The check-every-option routine</span>
+<ul>
+<li><strong>Before the options:</strong> ask what the question forces (a value, a range, a form) and find it. In Q8 it was <span class='m'>det(A + B) = 0</span>.</li>
+<li><strong>Write T or F beside all four options before you tick anything.</strong> No option stays blank.</li>
+<li><strong>Each T needs a one-line reason. Each F needs a counterexample or a failed check.</strong> “It feels true” is not a reason. That is what Q11 cost you.</li>
+<li><strong>Stuck on one option?</strong> Test one concrete case for 30 seconds: <span class='m'>x = 0</span>, an end point of the range, or a diagonal 3×3 matrix.</li>
+<li><strong>Count before you submit.</strong> Only 1 or 2 options ticked? Re-check the rest once more. Four options at 45 seconds each is 3 minutes.</li>
+</ul>
+</div>
+<div class="stepper" id="st2">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p><span class='m'>h(x) = sin⁻¹(2x/(1 + x²)) − cos⁻¹((1 − x²)/(1 + x²))</span>. Select all correct statements. <strong>A</strong>: h is continuous at every real x. <strong>B</strong>: h is differentiable at x = 1. <strong>C</strong>: h′(x) = 0 for x &gt; 1. <strong>D</strong>: the range of h is [−π, 0].</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">You marked <strong>A only</strong>. The portal key is <strong>A and D</strong>. (The option wording is shortened from the saved test file.)</p>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · put x = tan θ</span>
+Then <span class='m'>2x/(1 + x²) = sin 2θ</span> and <span class='m'>(1 − x²)/(1 + x²) = cos 2θ</span>. So <span class='m'>h = sin⁻¹(sin 2θ) − cos⁻¹(cos 2θ)</span>. Each inverse function returns 2θ only when 2θ is in its own principal range, so split by x.
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · pieces for x ≥ 0</span>
+For <span class='m'>0 ≤ x ≤ 1</span>, 2θ is in <span class='m'>[0, π/2]</span>: both terms equal 2θ, so <span class='m'>h = 0</span>. For <span class='m'>x &gt; 1</span>, 2θ is in <span class='m'>(π/2, π)</span>: <span class='m'>sin⁻¹(sin 2θ) = π − 2θ</span> and <span class='m'>cos⁻¹(cos 2θ) = 2θ</span>, so <span class='m'>h = π − 4 tan⁻¹x</span>.
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · pieces for x &lt; 0</span>
+Now 2θ is in <span class='m'>(−π, 0)</span>, and <span class='m'>cos⁻¹(cos 2θ) = −2θ</span>. For <span class='m'>−1 ≤ x &lt; 0</span>, <span class='m'>sin⁻¹(sin 2θ) = 2θ</span>, so <span class='m'>h = 4 tan⁻¹x</span>. For <span class='m'>x &lt; −1</span>, <span class='m'>sin⁻¹(sin 2θ) = −π − 2θ</span>, so <span class='m'>h = −π</span>.<figure class="pfig" data-desc="Diagram: the graph of h(x). It is flat at h = -pi for x up to -1, rises along 4 arctan x to 0 at x = 0, stays flat at 0 up to x = 1, then falls along pi - 4 arctan x towards -pi (about -2.36 at x = 5). There is a kink at x = 1 with slope 0 on the left and slope -2 on the right. Dashed lines at h = 0 and h = -pi show the range [-pi, 0]."><svg viewBox="0 0 340 180" role="img" aria-label="Graph of h of x: flat at minus pi, rising to 0, flat to x equals 1, then falling again"><line x1="26" y1="44.0" x2="326" y2="44.0" stroke="var(--border)" stroke-width="1.5"/><line x1="26" y1="144.0" x2="326" y2="144.0" stroke="var(--border)" stroke-width="1.2" stroke-dasharray="4 4"/><line x1="142.0" y1="44.0" x2="142.0" y2="156.0" stroke="var(--border)" stroke-width="1.2" stroke-dasharray="4 4"/><line x1="198.0" y1="44.0" x2="198.0" y2="156.0" stroke="var(--border)" stroke-width="1.2" stroke-dasharray="4 4"/><polyline points="30.0,144.0 31.4,144.0 32.8,144.0 34.2,144.0 35.6,144.0 37.0,144.0 38.4,144.0 39.8,144.0 41.2,144.0 42.6,144.0 44.0,144.0 45.4,144.0 46.8,144.0 48.2,144.0 49.6,144.0 51.0,144.0 52.4,144.0 53.8,144.0 55.2,144.0 56.6,144.0 58.0,144.0 59.4,144.0 60.8,144.0 62.2,144.0 63.6,144.0 65.0,144.0 66.4,144.0 67.8,144.0 69.2,144.0 70.6,144.0 72.0,144.0 73.4,144.0 74.8,144.0 76.2,144.0 77.6,144.0 79.0,144.0 80.4,144.0 81.8,144.0 83.2,144.0 84.6,144.0 86.0,144.0 87.4,144.0 88.8,144.0 90.2,144.0 91.6,144.0 93.0,144.0 94.4,144.0 95.8,144.0 97.2,144.0 98.6,144.0 100.0,144.0 101.4,144.0 102.8,144.0 104.2,144.0 105.6,144.0 107.0,144.0 108.4,144.0 109.8,144.0 111.2,144.0 112.6,144.0 114.0,144.0 115.4,144.0 116.8,144.0 118.2,144.0 119.6,144.0 121.0,144.0 122.4,144.0 123.8,144.0 125.2,144.0 126.6,144.0 128.0,144.0 129.4,144.0 130.8,144.0 132.2,144.0 133.6,144.0 135.0,144.0 136.4,144.0 137.8,144.0 139.2,144.0 140.6,144.0 142.0,144.0 143.4,140.7 144.8,137.3 146.2,133.7 147.6,129.9 149.0,125.9 150.4,121.8 151.8,117.4 153.2,112.8 154.6,108.0 156.0,103.0 157.4,97.8 158.8,92.4 160.2,86.9 161.6,81.1 163.0,75.2 164.4,69.1 165.8,63.0 167.2,56.7 168.6,50.4 170.0,44.0 171.4,44.0 172.8,44.0 174.2,44.0 175.6,44.0 177.0,44.0 178.4,44.0 179.8,44.0 181.2,44.0 182.6,44.0 184.0,44.0 185.4,44.0 186.8,44.0 188.2,44.0 189.6,44.0 191.0,44.0 192.4,44.0 193.8,44.0 195.2,44.0 196.6,44.0 198.0,44.0 199.4,47.1 200.8,50.1 202.2,52.9 203.6,55.5 205.0,58.1 206.4,60.5 207.8,62.8 209.2,65.0 210.6,67.1 212.0,69.1 213.4,71.0 214.8,72.9 216.2,74.6 217.6,76.3 219.0,77.9 220.4,79.4 221.8,80.9 223.2,82.3 224.6,83.7 226.0,85.0 227.4,86.2 228.8,87.4 230.2,88.6 231.6,89.7 233.0,90.8 234.4,91.8 235.8,92.8 237.2,93.7 238.6,94.7 240.0,95.6 241.4,96.4 242.8,97.2 244.2,98.1 245.6,98.8 247.0,99.6 248.4,100.3 249.8,101.0 251.2,101.7 252.6,102.4 254.0,103.0 255.4,103.7 256.8,104.3 258.2,104.9 259.6,105.4 261.0,106.0 262.4,106.5 263.8,107.1 265.2,107.6 266.6,108.1 268.0,108.6 269.4,109.0 270.8,109.5 272.2,110.0 273.6,110.4 275.0,110.8 276.4,111.2 277.8,111.6 279.2,112.0 280.6,112.4 282.0,112.8 283.4,113.2 284.8,113.5 286.2,113.9 287.6,114.2 289.0,114.6 290.4,114.9 291.8,115.2 293.2,115.5 294.6,115.9 296.0,116.2 297.4,116.5 298.8,116.7 300.2,117.0 301.6,117.3 303.0,117.6 304.4,117.8 305.8,118.1 307.2,118.4 308.6,118.6 310.0,118.9" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="198.0" cy="44.0" r="4" fill="var(--highlight)"/><text x="4" y="48.0">0</text><text x="2" y="148.0">-π</text><text x="142.0" y="168.0" text-anchor="middle">x = -1</text><text x="198.0" y="168.0" text-anchor="middle">x = 1</text><text x="206" y="32">slopes 0 | -2</text><text x="40" y="26">range -π to 0</text><text x="318" y="40.0" text-anchor="end">x</text></svg><figcaption>h(x) from your CTA21 Q10. The flat pieces and the end values give the range at a glance, and the kink at x = 1 settles option B.</figcaption></figure>
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · option A: continuity</span>
+Check the joins. At <span class='m'>x = −1</span>: <span class='m'>4 tan⁻¹(−1) = −π</span>, matching the flat piece. At <span class='m'>x = 0</span>: both pieces are 0. At <span class='m'>x = 1</span>: <span class='m'>π − 4·(π/4) = 0</span>. No jumps, so A is true.
+</div>
+<div class="step" data-n="5" hidden>
+<span class="tag">Step 5 · options B and C: derivative</span>
+At x = 1 the left slope is 0 and the right slope is <span class='m'>−4/(1 + x²) = −2</span>. They differ, so h is not differentiable at 1: B is false. For <span class='m'>x &gt; 1</span>, <span class='m'>h′ = −4/(1 + x²) ≠ 0</span>: C is false.
+</div>
+<div class="step" data-n="6" hidden>
+<span class="tag">Step 6 · option D: range, the one you skipped</span>
+h is continuous. Its smallest value is <span class='m'>−π</span> (flat for x ≤ −1, and also the limit as x → ∞) and its largest value is 0 (on [0, 1]). So the range is <span class='m'>[−π, 0]</span>: D is true. A direct check takes seconds: <span class='m'>h(0) = 0</span> and <span class='m'>h(−2) = sin⁻¹(−4/5) − cos⁻¹(−3/5) = −0.927 − 2.214 = −π</span>.<div class="final">Answer: A, D</div><div class="trap-note">The trap: ticking A, the first true option, and moving on. D needed only the two end values, 0 and −π, about thirty seconds of work. <strong>Q11 was the opposite problem:</strong> you ticked C and D, which were wrong, and missed B. Both slips come from not giving every option its own verdict.</div>
+</div>
+<button class="step-btn" onclick="stepNext('st2')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+</section>
+<section class="pattern">
+<div class="pattern-head"><h2>3 · Adjoint and determinant identities: turn A·uᵢ = bᵢ into one equation</h2><span class="chip chip-1">Matrices</span><span class="back">Came back</span></div>
+<p class="why">This pattern was Strong and is now Shaky. Questions about <span class='m'>adj</span>, <span class='m'>det</span> and inverse of an unknown matrix are fast when you use the determinant rules and slow when you solve for every entry. Q12 hid its matrix inside three vector equations. It looks like three systems to solve. It is one matrix equation.</p>
+<div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this pattern ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
+<div class="cmp">
+<div class="box"><span class="tagline">Before</span><strong>Correct</strong> in CTA16 (Q4, Q18), CTA18 (Q16) and CTA21 (Q4, Q5, Q16): determinants, adjoints and inverses computed from a matrix you were given.</div>
+<div class="box now"><span class="tagline">Now</span><strong>CTA21 Q12</strong>: skipped. The matrix <span class='m'>u</span> had to be built from <span class='m'>A uᵢ = bᵢ</span> before any rule could be used.</div>
+</div>
+<p class="verdict"><strong>Not a repeat of an old mistake, a new gap.</strong> Everything you got right was direct computation. Nothing you got wrong here was arithmetic. Q12 was skipped because the setup was unfamiliar, and you got the other three CTA21 matrix questions right in the same test, so the formulas themselves are in place.</p>
+<div class="stepper" id="st3">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p><span class='m'>A</span> = <span class="mat" data-t="[[1,0,0],[2,1,0],[3,2,1]]"><span class="mr" style="--c:3"><span>1</span><span>0</span><span>0</span><span>2</span><span>1</span><span>0</span><span>3</span><span>2</span><span>1</span></span></span>. The columns <span class='m'>u₁, u₂, u₃</span> satisfy <span class='m'>A u₁ = e₁ = (1, 0, 0)ᵀ</span>, <span class='m'>A u₂ = (2, 3, 0)ᵀ</span> and <span class='m'>A u₃ = (2, 3, 1)ᵀ</span>. Let <span class='m'>u = [u₁ u₂ u₃]</span>. Statements about <span class='m'>adj u</span> and <span class='m'>det u</span> are given.</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">You <strong>skipped</strong> this one. The portal ticks A, B and C (D is cut off), and the option wording was not saved, so there is no single number to match. The steps below find every value such statements rest on.</p>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · stack the three equations into one</span>
+<span class='m'>A [u₁ u₂ u₃] = [e₁ | (2,3,0)ᵀ | (2,3,1)ᵀ]</span>, that is <span class='m'>A u = M</span> with <span class='eq m'>M = <span class="mat" data-t="[[1,2,2],[0,3,3],[0,0,1]]"><span class="mr" style="--c:3"><span>1</span><span>2</span><span>2</span><span>0</span><span>3</span><span>3</span><span>0</span><span>0</span><span>1</span></span></span></span>
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · det u without finding u</span>
+<span class='m'>A</span> is triangular, so <span class='m'>det A = 1·1·1 = 1</span>. <span class='m'>M</span> is triangular, so <span class='m'>det M = 1·3·1 = 3</span>. From <span class='m'>det A · det u = det M</span>: <span class='eq m'>det u = 3</span>
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · adjoint rules (order 3)</span>
+<span class='m'>adj u = (det u) · u⁻¹ = 3u⁻¹</span> and <span class='m'>det(adj u) = (det u)² = 9</span>. Also <span class='m'>u⁻¹ = M⁻¹A</span> from <span class='m'>u = A⁻¹M</span>.
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · if you need u itself, go column by column</span>
+<span class='m'>A</span> is lower triangular, so solve from the top. For <span class='m'>u₁</span>: row 1 gives <span class='m'>x = 1</span>; row 2 gives <span class='m'>2x + y = 0</span>, so <span class='m'>y = −2</span>; row 3 gives <span class='m'>3x + 2y + z = 0</span>, so <span class='m'>z = 1</span>. In the same way <span class='m'>u₂ = (2, −1, −4)ᵀ</span> and <span class='m'>u₃ = (2, −1, −3)ᵀ</span>, so <span class='eq m'>u = <span class="mat" data-t="[[1,2,2],[−2,−1,−1],[1,−4,−3]]"><span class="mr" style="--c:3"><span>1</span><span>2</span><span>2</span><span>−2</span><span>−1</span><span>−1</span><span>1</span><span>−4</span><span>−3</span></span></span></span>Its trace is <span class='m'>tr u = 1 − 1 − 3 = −3</span>.
+</div>
+<div class="step" data-n="5" hidden>
+<span class="tag">Step 5 · write adj u and check it</span>
+<span class='eq m'>adj u = 3u⁻¹ = <span class="mat" data-t="[[−1,−2,0],[−7,−5,−3],[9,6,3]]"><span class="mr" style="--c:3"><span>−1</span><span>−2</span><span>0</span><span>−7</span><span>−5</span><span>−3</span><span>9</span><span>6</span><span>3</span></span></span></span>Check one row of <span class='m'>u · adj u</span>, which must be <span class='m'>3I</span>: row 1 of u is <span class='m'>(1, 2, 2)</span>, so the entries are <span class='m'>−1 − 14 + 18 = 3</span>, <span class='m'>−2 − 10 + 12 = 0</span> and <span class='m'>0 − 6 + 6 = 0</span>. Also <span class='m'>tr(adj u) = −1 − 5 + 3 = −3</span>.<div class="final">Facts: det u = 3 · det(adj u) = 9 · tr u = −3</div><div class="trap-note">The trap: reading three equations <span class='m'>A uᵢ = bᵢ</span> as three systems to solve, then expanding determinants and adjugates by hand. That is dozens of places to slip. One matrix equation <span class='m'>A u = M</span> and <span class='m'>det(XY) = det X · det Y</span> give <span class='m'>det u</span> in two lines.</div>
+</div>
+<button class="step-btn" onclick="stepNext('st3')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<div class="rule">
+<span class="rule-label">The shortcuts</span>
+<ul>
+<li><strong>Columns defined by <span class='m'>A uᵢ = bᵢ</span>:</strong> stack them into <span class='m'>A u = M</span>. Then <span class='m'>det u = det M / det A</span> (when <span class='m'>det A ≠ 0</span>).</li>
+<li><strong>3×3 only:</strong> <span class='m'>adj X = (det X) X⁻¹</span>, <span class='m'>det(adj X) = (det X)²</span>, <span class='m'>adj(kX) = k² adj X</span>, <span class='m'>det(kX) = k³ det X</span>.</li>
+<li><strong>Triangular matrix:</strong> the determinant is the product of the diagonal, and you solve <span class='m'>A x = b</span> from the top row down.</li>
+<li><strong>Check any adjoint you compute:</strong> one row of <span class='m'>X · adj X</span> must give <span class='m'>(det X)</span> on the diagonal and 0 elsewhere.</li>
+</ul>
+</div>
+</section>
+<section class="pattern">
+<div class="pattern-head"><h2>4 · Functional equations: plug in 0, then use the definition</h2><span class="chip chip-4">Functions</span><span class="back">Came back</span></div>
+<p class="why">A functional equation gives you a rule for f without giving f. The first job is to find <span class='m'>f(0)</span>, or <span class='m'>f′</span>, or the form of f. The options come after that. In CTA21 Q9 one equation plus the single number <span class='m'>f′(0) = −1</span> decided all four options.</p>
+<div class="ask-row"><a class="ask" data-ask="section" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this pattern ↗</a><span class="ask-hint">Opens a claude.ai chat about this pattern</span></div>
+<div class="cmp">
+<div class="box"><span class="tagline">Before</span><strong>CTA20 Q7</strong>: <span class='m'>f(x²) = x³f(x) + x³ − 1</span>, <span class='m'>f(2) = 7</span>, find <span class='m'>f(5)</span>. You answered <strong>119</strong>, key <strong>124</strong>. Correct: CTA18 Q15 and WTA21 Q1.</div>
+<div class="box now"><span class="tagline">Now</span><strong>CTA21 Q9</strong>: skipped. <strong>CTA21 Q18</strong>: correct (the <span class='m'>f(x) + f(x + 1/2) = 1</span> type).</div>
+</div>
+<p class="verdict"><strong>A different error, and partly better news.</strong> Q7 was an attempt that ended on a wrong number, and your working is not saved, so I can't name the slip. Q9 had no attempt. The two questions need different tools: comparing degrees in Q7, the derivative definition in Q9. The shift-and-substitute type (Q18, WTA21 Q1, CTA18 Q15) is working. The weak spot is the type where you must first find <span class='m'>f′</span> or the form of f.</p>
+<div class="stepper" id="st4">
+<span class="stepper-label">Worked example · the exact problem you saw</span>
+<p><span class='m'>f(x + y) = f(x) + f(y) + xy(x + y)</span> for all real <span class='m'>x, y</span>, and <span class='m'>f′(0) = −1</span>. Select all correct statements. <strong>A</strong>: f is differentiable for every x. <strong>B</strong>: f′ is differentiable for every x. <strong>C</strong>: f′(3) = 8. <strong>D</strong>: a relation between f′(x) and f′(1/x).</p>
+<p style="font-size:.88rem;color:var(--ink-soft)">You <strong>skipped</strong> this one. The portal ticks <strong>all four</strong> options. The wording of option D was not saved, so the steps show the relation that any version of D rests on.</p>
+<div class="step" data-n="1">
+<span class="tag">Step 1 · plug in zero</span>
+Put <span class='m'>x = y = 0</span>: <span class='m'>f(0) = f(0) + f(0) + 0</span>, so <span class='eq m'>f(0) = 0</span>
+</div>
+<div class="step" data-n="2" hidden>
+<span class="tag">Step 2 · set up the definition of the derivative</span>
+<span class='m'>f′(x) = lim<sub>h→0</sub> [f(x + h) − f(x)]/h</span>. Put <span class='m'>y = h</span> in the equation: <span class='eq m'>f(x + h) − f(x) = f(h) + xh(x + h)</span>
+</div>
+<div class="step" data-n="3" hidden>
+<span class="tag">Step 3 · divide by h and let h → 0</span>
+<span class='m'>[f(x + h) − f(x)]/h = f(h)/h + x(x + h)</span>. Since <span class='m'>f(0) = 0</span>, <span class='m'>f(h)/h = (f(h) − f(0))/h → f′(0) = −1</span>. And <span class='m'>x(x + h) → x²</span>. The limit exists for every x, so <span class='eq m'>f′(x) = x² − 1</span>You were given differentiability only at 0, and the equation carries it to every point. Option A is true.
+</div>
+<div class="step" data-n="4" hidden>
+<span class="tag">Step 4 · read the options</span>
+<span class='m'>f′(x) = x² − 1</span> is a polynomial, so f′ is differentiable (B true). <span class='m'>f′(3) = 9 − 1 = 8</span> (C true). And <span class='eq m'>f′(x) + f′(1/x) = x² + 1/x² − 2 = (x − 1/x)²</span>which is the relation option D rests on.
+</div>
+<div class="step" data-n="5" hidden>
+<span class="tag">Step 5 · check by finding f</span>
+<span class='m'>f(x) = x³/3 − x</span> fits: <span class='m'>f(x + y) − f(x) − f(y) = [(x + y)³ − x³ − y³]/3 = xy(x + y)</span> and <span class='m'>f′(0) = −1</span>. You did not need this to answer, but it confirms the whole chain.<div class="final">Answer: A, B, C, D</div><div class="trap-note">The trap: trying to guess f first, or leaving the question because no formula for f is given. The options ask about <span class='m'>f′</span>, and one substitution plus the definition of the derivative gives <span class='m'>f′</span> directly.</div>
+</div>
+<button class="step-btn" onclick="stepNext('st4')">Show next step →</button>
+<div class="ask-row"><a class="ask" data-ask="example" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this example ↗</a><span class="ask-hint">Opens a claude.ai chat about this example</span></div>
+</div>
+<div class="rule">
+<span class="rule-label">The shortcuts</span>
+<ul>
+<li><strong>First substitution:</strong> <span class='m'>x = y = 0</span> (or <span class='m'>x = 0</span>). It gives <span class='m'>f(0)</span>, which unlocks the rest.</li>
+<li><strong>Additive with an extra term, and <span class='m'>f′(0)</span> given:</strong> put <span class='m'>y = h</span>, divide by h, let <span class='m'>h → 0</span>. You get <span class='m'>f′(x)</span> directly, and differentiability at every point comes with it.</li>
+<li><strong>Product type <span class='m'>f(x + y) = f(x)f(y)</span>, f not zero:</strong> <span class='m'>f(0) = 1</span> and <span class='m'>f′(x) = f(x) · f′(0)</span> (problem 6).</li>
+<li><strong>Polynomial f:</strong> compare degrees, use <span class='m'>x = 0</span> for the constant, then match coefficients. CTA20 Q7: <span class='m'>2d = d + 3</span> gives <span class='m'>d = 3</span>, <span class='m'>f(0) = −1</span>, so <span class='m'>f = x³ − 1</span> and <span class='m'>f(5) = 124</span>.</li>
+<li><strong>Arguments that cycle</strong> (<span class='m'>x → 1/(1−x) → (x−1)/x → x</span>): write the equation at all three, then solve the three linear equations for the f-values (problem 5).</li>
+<li><strong>Always:</strong> put your answer back into the original equation.</li>
+</ul>
+</div>
+</section>
+<section class="practice-head">
+<span class="eyebrow">Practice Set</span>
+<h2 style="margin-top:8px; font-size:1.4rem;">6 fresh problems, same four patterns</h2>
+<p style="color:var(--ink-soft)">Not copies of the test questions: same technique, new problems at level L4. Matrices and the multi-correct habit came back most, so they get problems 1 to 3. Adjoint and determinant identities get problem 4. Functional equations get problems 5 and 6. Three of the six are multi-correct, and the check-every-option routine from section 2 applies to every one of them. Single-correct problems mark themselves as soon as you pick. In multi-correct problems you must tick all the correct options, then press Check answer. Every answer was solved by hand, checked twice, and also checked by computer.</p>
+</section>
+<div class="mode-row">
+<button class="mode-btn" data-mode="practice" aria-pressed="true" onclick="setMode('practice', this)">Practice (untimed)</button>
+<button class="mode-btn" data-mode="timed" aria-pressed="false" onclick="setMode('timed', this)">Timed — 40 min</button>
+<div class="timer-bar" id="timerBar" hidden>
+<span class="time" id="timeDisplay">40:00</span>
+<button class="timer-btn" id="startBtn" onclick="startTimer()">Start</button>
+<button class="timer-btn" id="resetBtn" onclick="resetTimer()">Reset</button>
+</div>
+</div>
+<p class="mode-help">First pass: stay in Practice mode. In Timed mode, do all 6 in 40 minutes, about 6 minutes each.</p>
+<div class="grid">
+<div class="card" id="q1" data-kind="multi" data-correct="ACD">
+<div class="card-head"><span class="qnum">1</span><span class="card-tags"><span class="qtype">Multi-correct</span><span class="chip chip-3">Matrices</span><span class="lvl">L4</span></span></div>
+<p class="stem"><span class='m'>A</span> and <span class='m'>B</span> are 3×3 real matrices with <span class='m'>AB = −BA</span>, and <span class='m'>A</span> is invertible. Select all statements that are ALWAYS true.</p>
+<p class="note" style="margin:6px 0 0">Select every correct option. It counts only if your set matches exactly.</p>
+<div class="opts" role="group" aria-label="Options for problem 1"><label class="opt"><input type="checkbox" name="q1" value="A"><span class="ol">A</span><span class="ot"><span class='m'>det B = 0</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q1" value="B"><span class="ol">B</span><span class="ot"><span class='m'>B</span> is the zero matrix</span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q1" value="C"><span class="ol">C</span><span class="ot"><span class='m'>tr(AB) = 0</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q1" value="D"><span class="ol">D</span><span class="ot"><span class='m'>A²B = BA²</span></span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="check-btn" type="button" onclick="checkCard(this)">Check answer</button><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: A, C, D</span><div class="why"><ol><li>Take determinants of <span class='m'>AB = −BA</span>: <span class='m'>det A · det B = det(−BA)</span>. For a 3×3 matrix <span class='m'>det(−X) = (−1)³ det X = −det X</span>, so <span class='m'>det(−BA) = −det B · det A</span>.</li><li>So <span class='m'>det A · det B = −det A · det B</span>, which gives <span class='m'>2 det A · det B = 0</span>. A is invertible, so <span class='m'>det A ≠ 0</span>, so <span class='m'>det B = 0</span>. A is true. This is the forced fact. Now give the other options their own verdicts.</li><li>B: <span class='m'>B = 0</span> works but is not forced. Take <span class='m'>A = diag(1, −1, 1)</span> and <span class='m'>B</span> with 1 in positions (1,2) and (2,1) and 0 elsewhere. Then <span class='m'>AB</span> has rows <span class='m'>(0,1,0), (−1,0,0), (0,0,0)</span> and <span class='m'>BA</span> has rows <span class='m'>(0,−1,0), (1,0,0), (0,0,0)</span>, so <span class='m'>AB = −BA</span> with <span class='m'>B ≠ 0</span>. B is false.</li><li>C: <span class='m'>tr(AB) = tr(−BA) = −tr(BA)</span>. Also <span class='m'>tr(AB) = tr(BA)</span>, because both equal the sum of all products <span class='m'>aᵢⱼbⱼᵢ</span>. So <span class='m'>tr(AB) = −tr(AB)</span>, hence <span class='m'>tr(AB) = 0</span>. C is true.</li><li>D: <span class='m'>A²B = A(AB) = A(−BA) = −(AB)A = −(−BA)A = BA²</span>. D is true.</li><li>Habit used: find what <span class='m'>AB = −BA</span> forces first (<span class='m'>det B = 0</span>), then a reason or counterexample for each option.</li></ol></div><ul class="mistakes"><li><strong>B</strong>: treated <span class='m'>AB = −BA</span> like the number equation <span class='m'>2ab = 0</span> with <span class='m'>a ≠ 0</span>, which would force <span class='m'>b = 0</span>. Matrices are not numbers.</li><li><strong>Only A ticked</strong>: stopped after the first fact (<span class='m'>det B = 0</span>) and never tested C and D, the stop-early habit from CTA21 Q8.</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q2" data-kind="single" data-correct="B">
+<div class="card-head"><span class="qnum">2</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-3">Linear systems</span><span class="lvl">L4</span></span></div>
+<p class="stem">Consider the system <span class='m'>ax + by + cz = 0</span>, <span class='m'>x + y + z = 1</span>, <span class='m'>x + 2y + 3z = 2</span>, where <span class='m'>a, b, c</span> are each chosen from <span class='m'>{−1, 0, 1, 2}</span>. For how many ordered triples <span class='m'>(a, b, c)</span> does the system have infinitely many solutions?</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 2"><label class="opt"><input type="radio" name="q2" value="A"><span class="ol">A</span><span class="ot">0</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q2" value="B"><span class="ol">B</span><span class="ot">3</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q2" value="C"><span class="ol">C</span><span class="ot">5</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q2" value="D"><span class="ol">D</span><span class="ot">8</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: B · 3</span><div class="why"><ol><li>Coefficient determinant, expanding along row 1: <span class='m'>a(3 − 2) − b(3 − 1) + c(2 − 1) = a − 2b + c</span>.</li><li>Infinitely many solutions needs this to be 0, but that alone is not enough. Consistency must be checked too.</li><li>Solve the last two equations. Subtracting gives <span class='m'>y + 2z = 1</span>. Take <span class='m'>z = t</span>: <span class='m'>y = 1 − 2t</span> and <span class='m'>x = 1 − y − z = t</span>. Every solution of those two is <span class='m'>(t, 1 − 2t, t)</span>.</li><li>Put this into the first equation: <span class='m'>at + b(1 − 2t) + ct = 0</span>, that is <span class='m'>(a − 2b + c)t + b = 0</span>.</li><li>Infinitely many solutions means this holds for every <span class='m'>t</span>, so both the coefficient of <span class='m'>t</span> and the constant are 0: <span class='m'>b = 0</span> and <span class='m'>a + c = 0</span>.</li><li>With entries from <span class='m'>{−1, 0, 1, 2}</span>: <span class='m'>a = −1, 0, 1</span> give <span class='m'>c = 1, 0, −1</span>. But <span class='m'>a = 2</span> needs <span class='m'>c = −2</span>, which is not allowed. That is 3 triples.</li><li>Check against the determinant: <span class='m'>a − 2b + c = 0</span> has 8 triples. Of these, 3 have <span class='m'>b = 0</span>. The other 5 have <span class='m'>b ≠ 0</span>: the <span class='m'>t</span>-term vanishes and the equation becomes <span class='m'>b = 0</span>, which is false, so they have no solution.</li></ol></div><ul class="mistakes"><li><strong>A (0)</strong>: carried over the CTA21 Q15 result without checking. There the non-zero right side sat in the row with the unknown entries. Here that row has right side 0, so it can depend on the others and stay consistent.</li><li><strong>C (5)</strong>: counted the triples with determinant 0 that are inconsistent, the ones that give no solution.</li><li><strong>D (8)</strong>: stopped at determinant = 0 and counted every such triple.</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q3" data-kind="multi" data-correct="BCD">
+<div class="card-head"><span class="qnum">3</span><span class="card-tags"><span class="qtype">Multi-correct</span><span class="chip chip-2">Check every option</span><span class="lvl">L4</span></span></div>
+<p class="stem"><span class='m'>A</span> is a 3×3 real skew-symmetric matrix and <span class='m'>A ≠ O</span> (the zero matrix). Select all statements that are ALWAYS true.</p>
+<p class="note" style="margin:6px 0 0">Select every correct option. It counts only if your set matches exactly.</p>
+<div class="opts" role="group" aria-label="Options for problem 3"><label class="opt"><input type="checkbox" name="q3" value="A"><span class="ol">A</span><span class="ot"><span class='m'>A²</span> is skew-symmetric</span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q3" value="B"><span class="ol">B</span><span class="ot"><span class='m'>det A = 0</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q3" value="C"><span class="ol">C</span><span class="ot"><span class='m'>tr(A²) &lt; 0</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q3" value="D"><span class="ol">D</span><span class="ot"><span class='m'>det(I + A) ≥ 1</span></span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="check-btn" type="button" onclick="checkCard(this)">Check answer</button><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: B, C, D</span><div class="why"><ol><li>General form: <span class='m'>Aᵀ = −A</span> forces a zero diagonal, so <span class='m'>A</span> = <span class="mat" data-t="[[0,p,q],[−p,0,r],[−q,−r,0]]"><span class="mr" style="--c:3"><span>0</span><span>p</span><span>q</span><span>−p</span><span>0</span><span>r</span><span>−q</span><span>−r</span><span>0</span></span></span> with <span class='m'>p, q, r</span> not all 0.</li><li>B: <span class='m'>det A = det Aᵀ = det(−A) = (−1)³ det A = −det A</span>, so <span class='m'>det A = 0</span>. B is true.</li><li>C: the diagonal of <span class='m'>A²</span> is <span class='m'>−p² − q²</span>, <span class='m'>−p² − r²</span>, <span class='m'>−q² − r²</span>. So <span class='m'>tr(A²) = −2(p² + q² + r²)</span>, which is negative because <span class='m'>A ≠ O</span>. C is true.</li><li>A: a skew-symmetric matrix has a zero diagonal. But <span class='m'>A²</span> has at least one negative diagonal entry (step 3), so it is not skew-symmetric. In fact <span class='m'>(A²)ᵀ = (Aᵀ)² = A²</span>, so it is symmetric. A is false.</li><li>D: expand <span class='m'>det(I + A)</span> along row 1: <span class='m'>1·(1 + r²) − p(−p + qr) + q(pr + q) = 1 + p² + q² + r²</span>, the <span class='m'>pqr</span> terms cancel. This is at least 1. D is true.</li><li>Habit used: A needs a counter-check, B a one-line proof, C and D short computations. D is the longest and the easiest to skip.</li></ol></div><ul class="mistakes"><li><strong>A</strong>: assumed the square of a skew-symmetric matrix is skew-symmetric. <span class='m'>(Aᵀ)² = (−A)² = A²</span>, so the square is symmetric.</li><li><strong>Only B and C ticked</strong>: skipped D because it needs a determinant expansion.</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q4" data-kind="single" data-correct="C">
+<div class="card-head"><span class="qnum">4</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-1">Adjoint and det</span><span class="lvl">L4</span></span></div>
+<p class="stem"><span class='m'>B</span> = <span class="mat" data-t="[[1,0,0],[1,1,0],[2,1,1]]"><span class="mr" style="--c:3"><span>1</span><span>0</span><span>0</span><span>1</span><span>1</span><span>0</span><span>2</span><span>1</span><span>1</span></span></span>. The columns <span class='m'>v₁, v₂, v₃</span> of <span class='m'>V</span> satisfy <span class='m'>B v₁ = (1, 0, 0)ᵀ</span>, <span class='m'>B v₂ = (1, 2, 0)ᵀ</span> and <span class='m'>B v₃ = (1, 2, 3)ᵀ</span>. Then <span class='m'>det(adj(2V))</span> equals:</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 4"><label class="opt"><input type="radio" name="q4" value="A"><span class="ol">A</span><span class="ot">36</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q4" value="B"><span class="ol">B</span><span class="ot">288</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q4" value="C"><span class="ol">C</span><span class="ot">2304</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q4" value="D"><span class="ol">D</span><span class="ot">576</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: C · 2304</span><div class="why"><ol><li>Stack the three equations: <span class='m'>B V = M</span> with <span class='m'>M</span> = <span class="mat" data-t="[[1,1,1],[0,2,2],[0,0,3]]"><span class="mr" style="--c:3"><span>1</span><span>1</span><span>1</span><span>0</span><span>2</span><span>2</span><span>0</span><span>0</span><span>3</span></span></span>.</li><li><span class='m'>B</span> is lower triangular, so <span class='m'>det B = 1·1·1 = 1</span>. <span class='m'>M</span> is upper triangular, so <span class='m'>det M = 1·2·3 = 6</span>.</li><li><span class='m'>det B · det V = det M</span>, so <span class='m'>det V = 6</span>.</li><li>For a 3×3 matrix <span class='m'>det(kX) = k³ det X</span>. So <span class='m'>det(2V) = 8 · 6 = 48</span>.</li><li>For a 3×3 matrix <span class='m'>det(adj X) = (det X)²</span>. With <span class='m'>X = 2V</span>: <span class='m'>det(adj(2V)) = 48² = 2304</span>.</li><li>Check by the other route: <span class='m'>adj(2V) = 4 adj V</span>, so <span class='m'>det(adj(2V)) = 4³ · (det V)² = 64 · 36 = 2304</span>.</li></ol></div><ul class="mistakes"><li><strong>A (36)</strong>: ignored the 2 and used <span class='m'>(det V)²</span>.</li><li><strong>B (288)</strong>: used <span class='m'>adj(2V) = 2 adj V</span> (k instead of k²), giving <span class='m'>2³ · 36 = 288</span>.</li><li><strong>D (576)</strong>: used <span class='m'>det(2V) = 2² · 6 = 24</span> (k² instead of k³) and then squared.</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q5" data-kind="single" data-correct="D">
+<div class="card-head"><span class="qnum">5</span><span class="card-tags"><span class="qtype">Single-correct</span><span class="chip chip-4">Functional equation</span><span class="lvl">L4</span></span></div>
+<p class="stem">A function <span class='m'>f</span> satisfies <span class='m'>f(x) + f(1/(1 − x)) = x</span> for all real <span class='m'>x ≠ 0, 1</span>. Then <span class='m'>4f(2)</span> equals:</p>
+<p class="note" style="margin:6px 0 0">Pick one option.</p>
+<div class="opts" role="group" aria-label="Options for problem 5"><label class="opt"><input type="radio" name="q5" value="A"><span class="ol">A</span><span class="ot">−5</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q5" value="B"><span class="ol">B</span><span class="ot">1</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q5" value="C"><span class="ol">C</span><span class="ot">3</span><span class="mark"></span></label><label class="opt"><input type="radio" name="q5" value="D"><span class="ol">D</span><span class="ot">7</span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: D · 7</span><div class="why"><ol><li>Let <span class='m'>y = 1/(1 − x)</span> and <span class='m'>z = (x − 1)/x</span>. Then <span class='m'>1/(1 − y) = z</span> and <span class='m'>1/(1 − z) = x</span>, so the arguments cycle <span class='m'>x → y → z → x</span>. All three are defined for <span class='m'>x ≠ 0, 1</span>.</li><li>Write the equation at x, y and z: <span class='m'>f(x) + f(y) = x</span>, <span class='m'>f(y) + f(z) = y</span>, <span class='m'>f(z) + f(x) = z</span>.</li><li>Add the three: <span class='m'>2[f(x) + f(y) + f(z)] = x + y + z</span>.</li><li>Subtract the second equation from the half-sum: <span class='m'>f(x) = (x + y + z)/2 − y = (x − y + z)/2</span>.</li><li>At <span class='m'>x = 2</span>: <span class='m'>y = 1/(1 − 2) = −1</span> and <span class='m'>z = (2 − 1)/2 = 1/2</span>. So <span class='m'>f(2) = (2 + 1 + 1/2)/2 = 7/4</span>, and <span class='m'>4f(2) = 7</span>.</li><li>Check: at <span class='m'>x = −1</span>, <span class='m'>y = 1/2</span>, <span class='m'>z = 2</span>, so <span class='m'>f(−1) = (−1 − 1/2 + 2)/2 = 1/4</span>. Then <span class='m'>f(2) + f(−1) = 7/4 + 1/4 = 2</span>, which is the right side at <span class='m'>x = 2</span>.</li></ol></div><ul class="mistakes"><li><strong>A (−5)</strong>: subtracted the first equation instead of the second, giving <span class='m'>(y + z − x)/2 = −5/4</span>.</li><li><strong>B (1)</strong>: subtracted the third equation instead of the second, giving <span class='m'>(x + y − z)/2 = 1/4</span>.</li><li><strong>C (3)</strong>: stopped at the half-sum <span class='m'>(x + y + z)/2 = 3/4</span> and forgot to subtract.</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+<div class="card" id="q6" data-kind="multi" data-correct="ABD">
+<div class="card-head"><span class="qnum">6</span><span class="card-tags"><span class="qtype">Multi-correct</span><span class="chip chip-4">Functional equation</span><span class="lvl">L4</span></span></div>
+<p class="stem">A function <span class='m'>f : ℝ → ℝ</span> satisfies <span class='m'>f(x + y) = f(x) · f(y)</span> for all real <span class='m'>x, y</span>. Also <span class='m'>f(1) ≠ 0</span> and <span class='m'>f′(0) = 3</span>. Select all correct statements.</p>
+<p class="note" style="margin:6px 0 0">Select every correct option. It counts only if your set matches exactly.</p>
+<div class="opts" role="group" aria-label="Options for problem 6"><label class="opt"><input type="checkbox" name="q6" value="A"><span class="ol">A</span><span class="ot"><span class='m'>f(0) = 1</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q6" value="B"><span class="ol">B</span><span class="ot"><span class='m'>f(x) &gt; 0</span> for every real <span class='m'>x</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q6" value="C"><span class="ol">C</span><span class="ot"><span class='m'>f(−1) = −f(1)</span></span><span class="mark"></span></label><label class="opt"><input type="checkbox" name="q6" value="D"><span class="ol">D</span><span class="ot"><span class='m'>f′(x) = 3f(x)</span> for every real <span class='m'>x</span></span><span class="mark"></span></label></div>
+<div class="btn-row"><button class="check-btn" type="button" onclick="checkCard(this)">Check answer</button><button class="reveal-btn" type="button" onclick="toggleAnswer(this)">Show answer and why</button><button class="reveal-btn" type="button" onclick="resetCard(this)">Try again</button></div>
+<div class="result" hidden aria-live="polite"></div>
+<div class="answer" hidden><span class="val">Answer: A, B, D</span><div class="why"><ol><li>A: put <span class='m'>x = y = 0</span>: <span class='m'>f(0) = f(0)²</span>, so <span class='m'>f(0)</span> is 0 or 1. Put <span class='m'>x = 1, y = 0</span>: <span class='m'>f(1) = f(1)f(0)</span>. Since <span class='m'>f(1) ≠ 0</span>, <span class='m'>f(0) = 1</span>. A is true.</li><li>For any x: <span class='m'>f(x)f(−x) = f(0) = 1</span>, so <span class='m'>f(x) ≠ 0</span> and <span class='m'>f(−x) = 1/f(x)</span>.</li><li>B: <span class='m'>f(x) = f(x/2 + x/2) = f(x/2)² ≥ 0</span>, and it is not 0, so <span class='m'>f(x) &gt; 0</span>. B is true.</li><li>C: by step 2, <span class='m'>f(−1) = 1/f(1)</span>, which is positive by step 3. But <span class='m'>−f(1)</span> is negative. So C is false.</li><li>D: <span class='m'>f′(x) = lim [f(x + h) − f(x)]/h = lim f(x)[f(h) − 1]/h = f(x) · lim [f(h) − f(0)]/h = f(x) f′(0) = 3f(x)</span>. D is true.</li><li>Habit used: A and B came from the same two substitutions, C needed the sign from B, and D needed the definition. Stopping after A and B would lose D.</li></ol></div><ul class="mistakes"><li><strong>C</strong>: assumed <span class='m'>f(−x) = −f(x)</span>, the behaviour of the additive equation <span class='m'>f(x + y) = f(x) + f(y)</span>. Here the equation is multiplicative, and <span class='m'>f(x)f(−x) = 1</span>.</li><li><strong>A missed</strong>: allowing <span class='m'>f(0) = 0</span>. That would force <span class='m'>f ≡ 0</span>, which <span class='m'>f(1) ≠ 0</span> rules out.</li></ul></div>
+<div class="ask-row"><a class="ask" data-ask="problem" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude about this problem ↗</a><span class="ask-hint">Opens a claude.ai chat about this problem</span></div>
+</div>
+</div>
+<footer>Built from CTA21 (25 Oct), CTA20 (11 Oct), WTA20 (10 Oct) and your earlier matrix results (CTA16 to CTA19) · Maths only · Option wording for CTA21 Q8, Q9, Q12 and Q15 was not saved by the portal, so those keys are derived by hand.</footer>
+</div>
+<script>
+
+  function stepNext(id){
+    var root = document.getElementById(id);
+    var steps = root.querySelectorAll('.step');
+    var btn = root.querySelector('.step-btn');
+    var shown = 0;
+    steps.forEach(function(s){ if(!s.hidden) shown++; });
+    if(shown < steps.length){
+      steps[shown].hidden = false;
+      shown++;
+    }
+    if(shown >= steps.length){ btn.hidden = true; }
+  }
+
+  function toggleAnswer(btn){
+    var ans = btn.closest('.card').querySelector('.answer');
+    ans.hidden = !ans.hidden;
+    btn.textContent = ans.hidden ? 'Show answer and why' : 'Hide answer and why';
+  }
+  function checkCard(el){
+    var card = el.closest('.card');
+    var correct = card.dataset.correct.split('');
+    var chosen = [].slice.call(card.querySelectorAll('input:checked')).map(function(i){return i.value;});
+    if(!chosen.length) return;
+    var exact = chosen.length === correct.length && chosen.every(function(c){return correct.indexOf(c) > -1;});
+    card.querySelectorAll('.opt').forEach(function(o){
+      var v = o.querySelector('input').value, isC = correct.indexOf(v) > -1, isS = chosen.indexOf(v) > -1;
+      o.classList.remove('ok','bad','miss');
+      var m = o.querySelector('.mark');
+      if(isC && isS){ o.classList.add('ok'); m.textContent = '✓ correct'; }
+      else if(isC){ o.classList.add('miss'); m.textContent = '✓ also correct'; }
+      else if(isS){ o.classList.add('bad'); m.textContent = '✗ wrong'; }
+      else { m.textContent = ''; }
+      o.querySelector('input').disabled = true;
+    });
+    var r = card.querySelector('.result');
+    r.hidden = false;
+    r.className = 'result ' + (exact ? 'right' : 'wrong');
+    r.textContent = exact ? 'Right. Correct: ' + correct.join(', ') + '.' : 'Not quite. Correct: ' + correct.join(', ') + '.';
+  }
+  function resetCard(el){
+    var card = el.closest('.card');
+    card.querySelectorAll('.opt').forEach(function(o){
+      o.classList.remove('ok','bad','miss'); o.querySelector('.mark').textContent = '';
+      var i = o.querySelector('input'); i.checked = false; i.disabled = false;
+    });
+    var r = card.querySelector('.result'); r.hidden = true;
+  }
+  document.querySelectorAll('.card[data-kind="single"] input').forEach(function(i){
+    i.addEventListener('change', function(){ checkCard(i); });
+  });
+
+  function setMode(mode, btn){
+    document.querySelectorAll('.mode-btn').forEach(function(b){
+      b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+    });
+    document.getElementById('timerBar').hidden = (mode !== 'timed');
+  }
+
+  var remaining = 40 * 60;
+  var timerId = null;
+  function renderTime(){
+    var m = String(Math.floor(remaining/60)).padStart(2,'0');
+    var s = String(remaining%60).padStart(2,'0');
+    document.getElementById('timeDisplay').textContent = m + ':' + s;
+  }
+  function startTimer(){
+    if(timerId) return;
+    timerId = setInterval(function(){
+      remaining--;
+      if(remaining <= 0){
+        clearInterval(timerId); timerId = null;
+        document.getElementById('timeDisplay').textContent = "Time's up";
+      } else {
+        renderTime();
+      }
+    }, 1000);
+  }
+  function resetTimer(){
+    clearInterval(timerId); timerId = null;
+    remaining = 40*60;
+    renderTime();
+  }
+  renderTime();
+
+  (function buildAskLinks(){
+    var TUTOR = "I'm a JEE aspirant preparing for JEE Advanced. Please act as a patient Maths tutor. Use simple language. Reply in chunks of under 10 lines. Explain why, not just how. Wait for my reply before moving on.";
+    var MAXLEN = 3300;
+    function clean(el){
+      var c = el.cloneNode(true);
+      c.querySelectorAll('.mat').forEach(function(m){ m.replaceWith(document.createTextNode(m.getAttribute('data-t') || '[matrix]')); });
+      c.querySelectorAll('.ask-row,.step-btn,.reveal-btn,.check-btn,.pfig,svg').forEach(function(x){ x.remove(); });
+      c.querySelectorAll('br').forEach(function(b){ b.replaceWith(document.createTextNode(' ')); });
+      c.querySelectorAll('li,p,div,.tag,.eq,.val,.final').forEach(function(x){ x.appendChild(document.createTextNode(' ')); });
+      c.querySelectorAll('.final,.trap-note,.eq').forEach(function(x){ x.insertBefore(document.createTextNode(' '), x.firstChild); });
+      return c.textContent.replace(/\s+/g,' ').trim();
+    }
+    function cut(s, n){ return s.length <= n ? s : s.slice(0, n - 1).trim() + '…'; }
+    function diagram(root){
+      var f = root.querySelector('.pfig');
+      return f ? ' ' + f.getAttribute('data-desc') : '';
+    }
+    function fit(parts){
+      for (var guard = 0; guard < 400; guard++){
+        var url = 'https://claude.ai/new?q=' + encodeURIComponent(parts.map(function(p){ return p.t; }).join(' '));
+        if (url.length <= MAXLEN) return url;
+        var longest = null;
+        parts.forEach(function(p){ if (!p.fixed && (!longest || p.t.length > longest.t.length)) longest = p; });
+        if (!longest || longest.t.length < 60) return url;
+        longest.t = cut(longest.t, Math.floor(longest.t.length * 0.9));
+      }
+    }
+    function sectionPrompt(sec){
+      var rules = Array.prototype.map.call(sec.querySelectorAll('.rule li'), clean).join(' | ');
+      var why = sec.querySelector('.why');
+      return [
+        {t: TUTOR, fixed: true},
+        {t: 'Topic: ' + clean(sec.querySelector('h2')) + '.', fixed: true},
+        {t: 'Why it matters: ' + (why ? clean(why) : ''), fixed: false},
+        {t: 'Key shortcuts: ' + rules, fixed: false},
+        {t: 'Please start by asking which part I want to understand better.', fixed: true}
+      ];
+    }
+    function examplePrompt(box){
+      var sec = box.closest('section.pattern');
+      var ps = box.querySelectorAll(':scope > p');
+      var steps = Array.prototype.map.call(box.querySelectorAll('.step'), function(s, i){
+        return 'Step ' + (i + 1) + ' · ' + cut(clean(s).replace(/^Step \d+\s*·\s*/, ''), 230);
+      }).join(' ');
+      return [
+        {t: TUTOR, fixed: true},
+        {t: "I'm going through a worked example from my own test. Topic: " + clean(sec.querySelector('h2')) + '.', fixed: true},
+        {t: 'Question: ' + clean(ps[0]) + diagram(box), fixed: true},
+        {t: 'My result: ' + (ps[1] ? clean(ps[1]) : ''), fixed: false},
+        {t: 'Steps in the solution: ' + steps, fixed: false},
+        {t: 'Please ask me which step I find hardest, then explain it and give me a similar example to try.', fixed: true}
+      ];
+    }
+    function problemPrompt(card){
+      var lvl = card.querySelector('.lvl');
+      var multi = card.getAttribute('data-kind') === 'multi';
+      var opts = Array.prototype.map.call(card.querySelectorAll('.opt'), function(o){
+        return '(' + o.querySelector('.ol').textContent.trim() + ') ' + clean(o.querySelector('.ot'));
+      }).join(' ');
+      var ans = card.querySelector('.answer');
+      return [
+        {t: TUTOR, fixed: true},
+        {t: 'I want to practise this problem' + (lvl ? ' (level ' + lvl.textContent.trim() + ')' : '') + ': ' + clean(card.querySelector('.stem')) + diagram(card), fixed: true},
+        {t: 'Type: ' + (multi ? 'multi-correct (one or more options are correct; I must pick all of them).' : 'single-correct (exactly one option is correct).') + ' Options: ' + opts, fixed: true},
+        {t: 'For your reference only, do not reveal unless the student asks or has made a real attempt: ' + clean(ans), fixed: false},
+        {t: 'Please ask me what I have tried so far, then give me one hint at a time.', fixed: true}
+      ];
+    }
+    document.querySelectorAll('a.ask').forEach(function(a){
+      var kind = a.getAttribute('data-ask'), parts;
+      if (kind === 'section') parts = sectionPrompt(a.closest('section.pattern'));
+      else if (kind === 'example') parts = examplePrompt(a.closest('.stepper'));
+      else parts = problemPrompt(a.closest('.card'));
+      a.href = fit(parts);
+    });
+  })();
+</script>

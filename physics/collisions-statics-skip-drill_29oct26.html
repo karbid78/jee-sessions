@@ -1,0 +1,798 @@
+<meta charset="utf-8">
+<title>Collisions, Statics, Skip Drill</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one column. Hero, four sections (came-back box, rule, worked examples with diagrams; section 4 adds a first-equation table), then an 8-problem MCQ grid. Blue-slate mechanics system, same family as the other physics pages. */
+  :root{
+    --bg:#F4F6FB;
+    --surface:#FFFFFF;
+    --surface-2:#EAEFF8;
+    --ink:#18223A;
+    --ink-soft:#4F5C78;
+    --border:#D6DEEC;
+    --accent:#2A5CAA;
+    --accent-ink:#FFFFFF;
+    --accent-soft:#DFE8F7;
+    --highlight-ink:#53390A;
+    --highlight-bg:#FFF4D6;
+    --highlight-border:#EBCF86;
+    --good:#217A4B;
+    --good-bg:#E2F4EA;
+    --trap:#B24A38;
+    --trap-bg:#FBE9E5;
+    --chip-1:#2A5CAA; --chip-1-bg:#DFE8F7;
+    --chip-2:#7A4FB5; --chip-2-bg:#EEE7F8;
+    --chip-3:#217A4B; --chip-3-bg:#E2F4EA;
+    --chip-4:#A9631A; --chip-4-bg:#FBEBD9;
+    --chip-5:#B24A38; --chip-5-bg:#FBE9E5;
+    --warm:#C2841B;
+    --shadow: 0 1px 2px rgba(24,34,58,.05), 0 8px 24px -12px rgba(24,34,58,.2);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0E1424; --surface:#151D33; --surface-2:#1D2744; --ink:#E6ECF8; --ink-soft:#A3AECA; --border:#2A3558;
+      --accent:#7FA9F0; --accent-ink:#0A1226; --accent-soft:#1B2A4D;
+      --highlight-ink:#FBE8B8; --highlight-bg:#3A2E10; --highlight-border:#5C4A1B;
+      --good:#5FCB8E; --good-bg:#12301F; --trap:#E58E7E; --trap-bg:#3A1E19;
+      --chip-1:#7FA9F0; --chip-1-bg:#1B2A4D; --chip-2:#C2A5EE; --chip-2-bg:#2A2140; --chip-3:#5FCB8E; --chip-3-bg:#12301F;
+      --chip-4:#E5A96B; --chip-4-bg:#3A2A14; --chip-5:#E58E7E; --chip-5-bg:#3A1E19;
+      --warm:#E8B84B;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.55);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0E1424; --surface:#151D33; --surface-2:#1D2744; --ink:#E6ECF8; --ink-soft:#A3AECA; --border:#2A3558;
+    --accent:#7FA9F0; --accent-ink:#0A1226; --accent-soft:#1B2A4D;
+    --highlight-ink:#FBE8B8; --highlight-bg:#3A2E10; --highlight-border:#5C4A1B;
+    --good:#5FCB8E; --good-bg:#12301F; --trap:#E58E7E; --trap-bg:#3A1E19;
+    --chip-1:#7FA9F0; --chip-1-bg:#1B2A4D; --chip-2:#C2A5EE; --chip-2-bg:#2A2140; --chip-3:#5FCB8E; --chip-3-bg:#12301F;
+    --chip-4:#E5A96B; --chip-4-bg:#3A2A14; --chip-5:#E58E7E; --chip-5-bg:#3A1E19;
+    --warm:#E8B84B;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.55);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body{
+    background: var(--bg); color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    padding-left: max(18px, env(safe-area-inset-left, 0px));
+    padding-right: max(18px, env(safe-area-inset-right, 0px));
+    padding-block: 28px 64px; line-height: 1.55; font-size: 16px;
+  }
+  .wrap{ max-width: 780px; margin: 0 auto; }
+  h1,h2,h3{ font-family: "Fraunces", Georgia, serif; font-weight: 600; text-wrap: balance; margin: 0; }
+  a{ color: var(--accent); }
+  .eyebrow{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); font-weight:600; }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  .hero{ padding-block: 6px 22px; }
+  .hero h1{ font-size: clamp(1.7rem, 5vw, 2.3rem); margin-top:10px; }
+  .hero p{ color:var(--ink-soft); max-width:62ch; }
+  .hero-note{ margin-top:14px; padding:13px 15px; border-radius:12px; background:var(--accent-soft); border:1px solid var(--border); font-size:.92rem; }
+  .meta{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .pill{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; padding:4px 10px; border-radius:999px; background:var(--surface-2); border:1px solid var(--border); color:var(--ink-soft); }
+  .pill b{ color:var(--ink); }
+
+  .pattern{ background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:22px 20px 24px; margin-block:18px; box-shadow:var(--shadow); min-width:0; }
+  .pattern-head{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:6px; }
+  .pattern-head h2{ font-size:1.25rem; }
+  .chip{ font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.05em; text-transform:uppercase; padding:3px 9px; border-radius:999px; font-weight:600; white-space:nowrap; }
+  .c1{ color:var(--chip-1); background:var(--chip-1-bg); } .c2{ color:var(--chip-2); background:var(--chip-2-bg); }
+  .c3{ color:var(--chip-3); background:var(--chip-3-bg); } .c4{ color:var(--chip-4); background:var(--chip-4-bg); }
+  .c5{ color:var(--chip-5); background:var(--chip-5-bg); }
+  .pattern p{ margin:10px 0; }
+  .why{ color:var(--ink-soft); font-size:.95rem; }
+  .syl{ font-family:"IBM Plex Mono",monospace; font-size:.74rem; color:var(--ink-soft); }
+
+  .came-back{ margin:12px 0; padding:12px 14px; border-radius:10px; border:1px solid var(--border); background:var(--surface-2); font-size:.92rem; }
+  .came-back .lbl{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; color:var(--trap); display:block; margin-bottom:6px; }
+  .came-back .lbl.new{ color:var(--accent); }
+  .sbs{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin:8px 0; }
+  .sbs > div{ background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:9px 11px; min-width:0; }
+  .sbs .h{ font-weight:600; font-size:.78rem; color:var(--ink-soft); display:block; margin-bottom:3px; }
+
+  .rule{ margin-top:14px; padding:14px 16px; border-radius:10px; background:var(--highlight-bg); border:1px solid var(--highlight-border); color:var(--highlight-ink); }
+  .rule-label{ font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; margin-bottom:6px; display:block; }
+  .rule ul, .rule ol{ margin:6px 0 0; padding-left:20px; } .rule li{ margin:4px 0; }
+
+  .stepper{ margin-top:16px; border-top:1px dashed var(--border); padding-top:14px; }
+  .stepper-label{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:8px; display:block; }
+  .step{ padding:10px 0; border-bottom:1px solid var(--border); }
+  .step:last-of-type{ border-bottom:none; }
+  .step .tag{ font-weight:600; font-size:.82rem; color:var(--accent); display:block; margin-bottom:4px; }
+  .step-btn{ margin-top:10px; font:inherit; font-weight:600; font-size:.88rem; background:var(--accent); color:var(--accent-ink); border:none; border-radius:8px; padding:9px 14px; cursor:pointer; }
+  .final{ background:var(--good-bg); color:var(--good); border-radius:8px; padding:10px 12px; font-weight:700; margin-top:8px; }
+  .trap-note{ background:var(--trap-bg); color:var(--trap); border-radius:8px; padding:10px 12px; font-size:.9rem; margin-top:10px; }
+  .yours{ font-size:.9rem; color:var(--ink-soft); }
+  .rebuilt{ font-size:.82rem; color:var(--ink-soft); font-style:italic; }
+  figure{ margin:14px 0 4px; }
+  figure svg{ width:100%; max-width:480px; height:auto; display:block; color:var(--ink); }
+  figcaption{ font-size:.82rem; color:var(--ink-soft); margin-top:4px; }
+  .figwrap{ overflow-x:auto; }
+  svg text{ font-family:"IBM Plex Sans", system-ui, sans-serif; }
+
+  .ask{ display:inline-block; margin-top:10px; font-size:.82rem; font-weight:600; color:var(--accent); text-decoration:none; border:1px solid var(--border); border-radius:999px; padding:5px 11px; background:var(--surface); }
+  .ask:hover{ background:var(--accent-soft); }
+
+  .practice-head{ padding-block:10px 4px; }
+  .mode-row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:14px 0 8px; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px 16px; box-shadow:var(--shadow); }
+  .mode-btn{ font:inherit; font-weight:600; font-size:.9rem; padding:8px 14px; border-radius:999px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); cursor:pointer; }
+  .mode-btn[aria-pressed="true"]{ background:var(--accent); color:var(--accent-ink); border-color:var(--accent); }
+  .timer-bar{ display:flex; align-items:center; gap:12px; margin-left:auto; flex-wrap:wrap; }
+  .time{ font-family:"IBM Plex Mono",monospace; font-size:1.3rem; font-variant-numeric:tabular-nums; min-width:64px; }
+  .timer-btn{ font:inherit; font-size:.85rem; font-weight:600; border-radius:8px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); padding:7px 12px; cursor:pointer; }
+  .mode-help{ font-size:.85rem; color:var(--ink-soft); margin:6px 2px 0; }
+
+  .grid{ display:grid; grid-template-columns:1fr; gap:14px; margin-top:16px; }
+  .card{ background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:16px 16px 14px; box-shadow:var(--shadow); min-width:0; }
+  .card-head{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+  .qnum{ font-family:"Fraunces",serif; font-weight:700; font-size:1.05rem; color:var(--accent); }
+  .opts{ display:grid; gap:7px; margin:10px 0 4px; }
+  .opt{ display:flex; gap:10px; align-items:flex-start; padding:9px 11px; border:1px solid var(--border); border-radius:10px; background:var(--surface-2); cursor:pointer; min-width:0; }
+  .opt input{ margin-top:5px; flex:none; accent-color:var(--accent); }
+  .opt .l{ font-family:"IBM Plex Mono",monospace; font-weight:600; color:var(--accent); flex:none; }
+  .opt .t{ min-width:0; overflow-wrap:anywhere; }
+  .opt.is-right{ border-color:var(--good); background:var(--good-bg); }
+  .opt.is-miss{ border-color:var(--good); border-style:dashed; background:var(--good-bg); }
+  .opt.is-wrong{ border-color:var(--trap); background:var(--trap-bg); }
+  .check-btn, .reveal-btn{ font:inherit; font-weight:600; font-size:.85rem; border-radius:8px; padding:7px 12px; cursor:pointer; margin-top:10px; margin-right:8px; }
+  .check-btn{ background:var(--accent); color:var(--accent-ink); border:none; }
+  .reveal-btn{ background:none; border:1.4px solid var(--accent); color:var(--accent); }
+  .verdict{ margin-top:10px; padding:9px 12px; border-radius:8px; font-weight:700; font-size:.92rem; }
+  .verdict.ok{ background:var(--good-bg); color:var(--good); }
+  .verdict.no{ background:var(--trap-bg); color:var(--trap); }
+  .answer{ margin-top:10px; padding:10px 12px; background:var(--surface-2); border-radius:8px; font-size:.9rem; }
+  .answer ul{ margin:6px 0 0; padding-left:18px; } .answer li{ margin:3px 0; }
+  footer{ margin-top:26px; color:var(--ink-soft); font-size:.88rem; text-align:center; }
+
+  h3.sub{ font-size:1.02rem; margin:18px 0 6px; }
+  .extra{ margin-top:12px; }
+  .tblwrap{ overflow-x:auto; border:1px solid var(--border); border-radius:10px; }
+  .tbl{ border-collapse:collapse; width:100%; font-size:.88rem; }
+  .tbl th, .tbl td{ text-align:left; vertical-align:top; padding:8px 10px; border-bottom:1px solid var(--border); }
+  .tbl th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); }
+  .tbl tr:last-child td{ border-bottom:none; }
+  .tbl td:first-child{ min-width:150px; font-weight:600; }
+  .slips{ margin:6px 0 0; padding-left:20px; font-size:.92rem; } .slips li{ margin:6px 0; }
+  .first{ margin-top:10px; padding:9px 12px; border-radius:8px; background:var(--highlight-bg); border:1px solid var(--highlight-border); color:var(--highlight-ink); font-size:.9rem; }
+  .came-back ul{ font-size:.9rem; }
+  .stepper + .stepper{ margin-top:22px; }
+</style>
+
+
+<div class="wrap">
+  <section class="hero">
+    <span class="eyebrow">Physics · Focus Session · 29 Oct 2026</span>
+    <h1>Collisions, rigid-body impacts, statics, and the skip habit</h1>
+    <p>Built from CTA21 (Sunday) with WTA21 (Saturday) checked. Four sections in your priority order: energy and momentum bookkeeping (it came back, so it gets half of the practice), rigid-body collisions, statics, and a skip drill that writes the first equation for the 11 questions you left. Eight practice problems follow.</p>
+    <div class="meta">
+      <span class="pill">Level used: <b>L4</b> (multi-concept, a trap in each)</span>
+      <span class="pill">Format: <b>MCQ A–D</b>, 4 single + 4 multi-correct</span>
+      <span class="pill">Sources: <b>CTA21 (Sun 25 Oct) · WTA21 (Sat 24 Oct)</b></span>
+    </div>
+    <div class="hero-note">
+      <strong>How to use this:</strong> read a section, click through its worked example, then do the matching practice problems. Multi-correct problems are right only if you pick every correct option and nothing else. Problems 1, 5 and 8 carry a <strong>First equation</strong> button: write your own first equation, then open it. <strong>Ask Claude</strong> links open a new claude.ai chat with that item preloaded. You need to be signed in to claude.ai.
+    </div>
+    <div class="hero-note" style="margin-top:10px">
+      <strong>What is real, and what is not.</strong> The nLearn record has the question text but not the figures, and cut off some options.
+      <ul style="margin:6px 0 0;padding-left:18px">
+        <li><b>Real, with keys:</b> Q28 (key A and C) and Q30 (key A and C; I derived both displacements because the option text is cut off, so the letters are unmatched).</li>
+        <li><b>Real, derived by hand, flagged:</b> Q20 (assumes a light rod) and Q31 (the record has one line, so I state my reading; the numbers L/6 and L/9 are only valid on that reading).</li>
+        <li><b>Stand-in, not your question:</b> the hinged-rod example in section 3 (built from your 5 m and 4 m).</li>
+        <li><b>Not rebuilt, because the figure is missing:</b> Q19, Q35, Q36 (and Q21, Q23, Q24 beyond their first equation). I did not invent numbers. Paste the figures and I will add them.</li>
+      </ul>
+    </div>
+  </section>
+
+  <div id="sections"></div>
+
+  <section class="practice-head">
+    <span class="eyebrow">Practice Set</span>
+    <h2 style="margin-top:8px; font-size:1.4rem;">8 fresh problems, level 4</h2>
+    <p style="color:var(--ink-soft)">Four on energy and momentum (the biggest share, because it came back), two on rigid-body impacts, two on statics. Problems 1, 3, 5 and 8 are multi-correct. Problems 1, 5 and 8 are the skip drill: long stems where the first equation is the way in.</p>
+  </section>
+
+  <div class="mode-row">
+    <button class="mode-btn" aria-pressed="true" onclick="setMode('practice', this)">Practice (untimed)</button>
+    <button class="mode-btn" aria-pressed="false" onclick="setMode('timed', this)">Timed · 40 min</button>
+    <div class="timer-bar" id="timerBar" hidden>
+      <span class="time" id="timeDisplay">40:00</span>
+      <button class="timer-btn" onclick="startTimer()">Start</button>
+      <button class="timer-btn" onclick="resetTimer()">Reset</button>
+    </div>
+  </div>
+  <p class="mode-help">First pass: stay in Practice mode. In Timed mode do 6 of the 8 (problems 1, 2, 4, 5, 6, 8), since L4 problems take about 6 minutes each.</p>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>Built from CTA21 (Sun 25 Oct) and WTA21 (Sat 24 Oct). WTA21 physics was elasticity, fluids and drag, so only its skips and the Q24 multi-correct slip appear here. CTA21 Q32 to Q36 beyond what is stated above (waves, Doppler) are not on this page.</footer>
+</div>
+
+<script>
+/* ---------- diagrams (inline SVG, theme tokens) ---------- */
+function ARROW(x1,y1,x2,y2,col,w){ // line with a filled head at (x2,y2)
+  var dx=x2-x1, dy=y2-y1, L=Math.sqrt(dx*dx+dy*dy), ux=dx/L, uy=dy/L, hx=x2-ux*9, hy=y2-uy*9;
+  return '<line x1="'+x1+'" y1="'+y1+'" x2="'+hx.toFixed(1)+'" y2="'+hy.toFixed(1)+'" stroke="'+col+'" stroke-width="'+(w||2.4)+'"/>'
+       + '<polygon points="'+x2+','+y2+' '+(hx-uy*5).toFixed(1)+','+(hy+ux*5).toFixed(1)+' '+(hx+uy*5).toFixed(1)+','+(hy-ux*5).toFixed(1)+'" fill="'+col+'"/>';
+}
+function FIG(svg, cap, text, label){
+  return { svg:'<figure><div class="figwrap"><svg viewBox="0 0 440 '+svg.h+'" role="img" aria-label="'+label+'">'+svg.body+'</svg></div><figcaption>'+cap+'</figcaption></figure>', text:' Diagram: '+text };
+}
+var AC='var(--accent)', WM='var(--warm)', INK='currentColor';
+
+/* worked example 1a: CTA21 Q30, block on plank */
+var FIG_Q30 = FIG({h:170, body:
+ '<line x1="20" y1="140" x2="420" y2="140" stroke="'+INK+'" stroke-width="1.5"/><text x="30" y="160" font-size="11" fill="'+INK+'">smooth floor (no friction below the plank)</text>'
++'<rect x="60" y="106" width="300" height="30" fill="var(--accent-soft)" stroke="'+INK+'" stroke-width="2"/><text x="210" y="126" font-size="12" text-anchor="middle" fill="'+INK+'">plank, mass M</text>'
++'<rect x="72" y="68" width="48" height="38" fill="var(--surface-2)" stroke="'+INK+'" stroke-width="2"/><text x="96" y="92" font-size="12" text-anchor="middle" fill="'+INK+'" font-weight="600">m = αM</text>'
++ ARROW(128,87,205,87,WM,2.6)+'<text x="166" y="78" font-size="13" text-anchor="middle" fill="'+WM+'" font-weight="600">u₀</text>'
++'<text x="230" y="70" font-size="12" fill="'+INK+'">friction μ between block and plank only</text>'
++'<text x="330" y="100" font-size="11" fill="'+INK+'" text-anchor="middle">plank is longer than the slide</text>'},
+ 'The block starts at the left end with speed u₀. The plank is at rest and free to move.',
+ 'a small block of mass m = alpha M with speed u0 to the right on the left end of a longer plank of mass M. Friction coefficient mu between block and plank. The floor under the plank is smooth.',
+ 'A block of mass alpha M with speed u0 on a longer plank of mass M. Friction mu between them, smooth floor under the plank.');
+
+/* worked example 1b: CTA21 Q31, boat and melon */
+var FIG_Q31 = FIG({h:200, body:
+ '<path d="M0 150 Q 55 160 110 150 T 220 150 T 330 150 T 440 150" fill="none" stroke="'+AC+'" stroke-width="2.5"/>'
++'<path d="M60 120 L 380 120 L 350 150 L 90 150 Z" fill="var(--accent-soft)" stroke="'+INK+'" stroke-width="2"/><text x="220" y="141" font-size="12" text-anchor="middle" fill="'+INK+'">boat, mass M₀ (people included, my reading)</text>'
++'<circle cx="90" cy="100" r="8" fill="none" stroke="'+INK+'" stroke-width="2"/><line x1="90" y1="108" x2="90" y2="120" stroke="'+INK+'" stroke-width="2"/><text x="90" y="86" font-size="12" text-anchor="middle" fill="'+INK+'" font-weight="600">A</text>'
++'<circle cx="350" cy="100" r="8" fill="none" stroke="'+INK+'" stroke-width="2"/><line x1="350" y1="108" x2="350" y2="120" stroke="'+INK+'" stroke-width="2"/><text x="350" y="86" font-size="12" text-anchor="middle" fill="'+INK+'" font-weight="600">B</text>'
++'<circle cx="120" cy="60" r="9" fill="'+WM+'" stroke="'+INK+'" stroke-width="1.5"/><text x="120" y="44" font-size="12" text-anchor="middle" fill="'+WM+'" font-weight="600">melon M</text>'
++'<path d="M132 56 Q 220 8 330 56" fill="none" stroke="'+WM+'" stroke-width="2" stroke-dasharray="5 4"/>'
++'<line x1="90" y1="178" x2="350" y2="178" stroke="'+INK+'" stroke-width="1"/><line x1="90" y1="173" x2="90" y2="183" stroke="'+INK+'" stroke-width="1"/><line x1="350" y1="173" x2="350" y2="183" stroke="'+INK+'" stroke-width="1"/><text x="220" y="193" font-size="12" text-anchor="middle" fill="'+INK+'">L (A to B)</text>'},
+ 'Drawn from the one-line record: people at the two ends, a melon of mass M thrown back and forth, water with no horizontal force on the boat.',
+ 'a boat of mass M0 floating on still water with a person A at the left end and a person B at the right end, a distance L apart. A watermelon of mass M is thrown back and forth between them. No horizontal force from the water.',
+ 'A boat with a person at each end, a melon thrown between them.');
+
+/* worked example 2a: CTA21 Q28, rod and particle (top view) */
+var FIG_Q28 = FIG({h:230, body:
+ '<rect x="10" y="8" width="420" height="214" fill="none" stroke="'+INK+'" stroke-width="1" stroke-dasharray="5 5"/><text x="20" y="26" font-size="11" fill="'+INK+'">smooth horizontal table, top view</text>'
++'<line x1="250" y1="50" x2="250" y2="190" stroke="'+INK+'" stroke-width="8" stroke-linecap="round"/>'
++'<text x="268" y="76" font-size="12" fill="'+INK+'">rod, mass 2m, length l</text>'
++'<circle cx="200" cy="190" r="9" fill="'+WM+'" stroke="'+INK+'" stroke-width="1.5"/><text x="188" y="212" font-size="12" fill="'+INK+'" font-weight="600">m</text>'
++ ARROW(90,190,186,190,WM,2.6)+'<text x="128" y="180" font-size="13" fill="'+WM+'" font-weight="600">v</text>'
++'<text x="262" y="196" font-size="11" fill="'+INK+'">hit end: particle sticks here</text>'
++'<circle cx="250" cy="143.3" r="4.5" fill="'+AC+'"/><text x="262" y="147" font-size="12" fill="'+AC+'" font-weight="600">COM of rod + particle</text>'
++'<line x1="318" y1="190" x2="318" y2="143.3" stroke="'+INK+'" stroke-width="1"/><text x="326" y="170" font-size="11" fill="'+INK+'">l/3</text>'},
+ 'The particle comes in at right angles to the rod and sticks to one end. The combined centre of mass is l/3 from that end.',
+ 'top view of a smooth table. A rod of mass 2m and length l lies along the y direction. A particle of mass m moving at speed v along x hits the rod at its lower end at right angles and sticks. The combined centre of mass is l/3 from the hit end.',
+ 'Top view: a particle of mass m hits one end of a rod of mass 2m and length l and sticks.');
+
+/* worked example 2b + practice 5: dumbbell on a light rod */
+function dumbbellFig(m1,m2,Ltxt,Jtxt,extra){
+  return FIG({h:170, body:
+   '<line x1="90" y1="110" x2="350" y2="110" stroke="'+INK+'" stroke-width="3"/>'
+  +'<circle cx="90" cy="110" r="13" fill="var(--surface-2)" stroke="'+INK+'" stroke-width="2"/><text x="90" y="115" font-size="12" text-anchor="middle" fill="'+INK+'" font-weight="600">'+m1+'</text>'
+  +'<circle cx="350" cy="110" r="19" fill="var(--accent-soft)" stroke="'+INK+'" stroke-width="2"/><text x="350" y="115" font-size="12" text-anchor="middle" fill="'+INK+'" font-weight="600">'+m2+'</text>'
+  + ARROW(90,92,90,30,WM,2.8)+'<text x="100" y="52" font-size="13" fill="'+WM+'" font-weight="600">'+Jtxt+'</text>'
+  +'<line x1="90" y1="146" x2="350" y2="146" stroke="'+INK+'" stroke-width="1"/><line x1="90" y1="141" x2="90" y2="151" stroke="'+INK+'" stroke-width="1"/><line x1="350" y1="141" x2="350" y2="151" stroke="'+INK+'" stroke-width="1"/><text x="220" y="163" font-size="12" text-anchor="middle" fill="'+INK+'">'+Ltxt+'</text>'
+  +'<text x="220" y="100" font-size="11" text-anchor="middle" fill="'+INK+'">light rigid rod</text>'+(extra||'')},
+   'Top view on a smooth table. The impulse is at right angles to the rod and acts on the left mass only.',
+   'top view on a smooth table: two point masses ('+m1+' on the left, '+m2+' on the right) joined by a light rigid rod of length '+Ltxt+'. A sharp impulse '+Jtxt+' acts on the left mass at right angles to the rod.',
+   'Two masses joined by a light rigid rod, with an impulse at right angles to the rod on the left mass.');
+}
+var FIG_Q20 = dumbbellFig('m₁','m₂','L','impulse (m₁ gets speed v)');
+var FIG_P5  = dumbbellFig('1 kg','3 kg','L = 1.0 m','J = 2 N·s');
+
+/* worked example 3: rebuilt hinged rod on a dragged board */
+var FIG_HINGE = FIG({h:230, body:
+ '<line x1="20" y1="190" x2="420" y2="190" stroke="'+INK+'" stroke-width="1.5"/><text x="30" y="212" font-size="11" fill="'+INK+'">floor</text>'
++'<rect x="150" y="176" width="190" height="14" fill="var(--accent-soft)" stroke="'+INK+'" stroke-width="2"/><text x="245" y="187" font-size="11" text-anchor="middle" fill="'+INK+'">board</text>'
++ ARROW(330,166,230,166,WM,2.6)+'<text x="300" y="158" font-size="12" fill="'+WM+'" font-weight="600">board dragged left</text>'
++'<line x1="110" y1="20" x2="110" y2="176" stroke="'+INK+'" stroke-width="1" stroke-dasharray="4 4"/>'
++'<circle cx="110" cy="40" r="6" fill="var(--surface)" stroke="'+INK+'" stroke-width="2.4"/><text x="98" y="36" font-size="12" text-anchor="end" fill="'+INK+'" font-weight="600">A (hinge)</text>'
++'<line x1="110" y1="40" x2="230" y2="176" stroke="'+INK+'" stroke-width="5" stroke-linecap="round"/><circle cx="230" cy="176" r="4" fill="'+WM+'"/><text x="238" y="170" font-size="12" fill="'+INK+'" font-weight="600">B</text>'
++'<text x="150" y="96" font-size="12" fill="'+INK+'" transform="rotate(48 150 96)">rod 5 m</text>'
++'<line x1="90" y1="40" x2="90" y2="176" stroke="'+INK+'" stroke-width="1"/><text x="84" y="112" font-size="12" text-anchor="end" fill="'+INK+'">4 m</text>'
++'<line x1="110" y1="132" x2="110" y2="132" stroke="'+INK+'"/>'
++'<line x1="110" y1="203" x2="230" y2="203" stroke="'+INK+'" stroke-width="1"/><text x="170" y="222" font-size="12" text-anchor="middle" fill="'+INK+'">3 m</text>'},
+ 'Rebuilt from the two numbers in your record (a 5 m rod hinged 4 m up, so it leans at 37° to the vertical). The real figure and options were not captured, so this is a stand-in, not your Q27.',
+ 'a uniform rod AB of mass m and length 5 m is hinged at A, 4 m above a horizontal board. The lower end B rests on the board, 3 m horizontally from the point directly below A. The board is dragged to the left, under B, at constant speed. Friction coefficient between rod end and board is mu.',
+ 'A rod 5 m long hinged 4 m above a board, with its lower end on the board 3 m sideways, while the board is dragged left.');
+
+/* practice 1: plank on a rough floor */
+var FIG_P1 = FIG({h:190, body:
+ '<line x1="20" y1="150" x2="420" y2="150" stroke="'+INK+'" stroke-width="1.5"/>'
++'<g stroke="'+INK+'" stroke-width="1">'+[30,60,90,120,150,180,210,240,270,300,330,360,390].map(function(x){return '<line x1="'+x+'" y1="150" x2="'+(x-8)+'" y2="160"/>';}).join('')+'</g>'
++'<text x="30" y="180" font-size="11" fill="'+INK+'">rough floor, μ₂ = 0.10 (under the plank)</text>'
++'<rect x="70" y="116" width="290" height="30" fill="var(--accent-soft)" stroke="'+INK+'" stroke-width="2"/><text x="250" y="136" font-size="12" text-anchor="middle" fill="'+INK+'">plank, M = 2 kg</text>'
++'<rect x="78" y="76" width="44" height="40" fill="var(--surface-2)" stroke="'+INK+'" stroke-width="2"/><text x="100" y="100" font-size="12" text-anchor="middle" fill="'+INK+'" font-weight="600">1 kg</text>'
++ ARROW(130,96,215,96,WM,2.6)+'<text x="172" y="87" font-size="13" text-anchor="middle" fill="'+WM+'" font-weight="600">6 m/s</text>'
++'<text x="240" y="92" font-size="12" fill="'+INK+'">μ₁ = 0.50 block–plank</text>'},
+ 'The plank is long. Take g = 10 m/s².',
+ 'a 1 kg block moving right at 6 m/s on the left end of a long 2 kg plank. Friction coefficient between block and plank mu1 = 0.50. The plank rests on a rough floor with mu2 = 0.10, which acts on the plank with the full normal force from block plus plank.',
+ 'A 1 kg block moving at 6 m/s on a 2 kg plank. mu1 0.50 between them, mu2 0.10 under the plank.');
+
+/* practice 2: pulled spring */
+var FIG_P2 = FIG({h:130, body:
+ '<line x1="20" y1="100" x2="420" y2="100" stroke="'+INK+'" stroke-width="1.5"/><text x="30" y="120" font-size="11" fill="'+INK+'">smooth table</text>'
++'<rect x="70" y="62" width="40" height="38" fill="var(--surface-2)" stroke="'+INK+'" stroke-width="2"/><text x="90" y="85" font-size="12" text-anchor="middle" fill="'+INK+'" font-weight="600">1 kg</text>'
++'<path d="M110 81 L125 81 L132 69 L146 93 L160 69 L174 93 L188 69 L202 93 L216 69 L224 81 L240 81" fill="none" stroke="'+AC+'" stroke-width="2.4"/><text x="175" y="52" font-size="12" text-anchor="middle" fill="'+AC+'" font-weight="600">k = 60 N/m, natural length</text>'
++'<rect x="240" y="56" width="52" height="44" fill="var(--accent-soft)" stroke="'+INK+'" stroke-width="2"/><text x="266" y="83" font-size="12" text-anchor="middle" fill="'+INK+'" font-weight="600">2 kg</text>'
++ ARROW(300,78,380,78,WM,2.8)+'<text x="340" y="68" font-size="13" text-anchor="middle" fill="'+WM+'" font-weight="600">F = 12 N</text>'},
+ 'Both blocks start at rest with the spring at its natural length. F is constant and acts on the 2 kg block only.',
+ 'a 1 kg block and a 2 kg block on a smooth table joined by a light spring of constant 60 N/m at its natural length. A constant horizontal force of 12 N pulls the 2 kg block away from the 1 kg block. Both start at rest.',
+ 'Two blocks on a smooth table joined by a spring, a constant force of 12 N pulling the 2 kg block.');
+
+/* practice 3: boat with bag */
+var FIG_P3 = FIG({h:200, body:
+ '<path d="M0 150 Q 55 160 110 150 T 220 150 T 330 150 T 440 150" fill="none" stroke="'+AC+'" stroke-width="2.5"/>'
++'<path d="M60 120 L 380 120 L 350 150 L 90 150 Z" fill="var(--accent-soft)" stroke="'+INK+'" stroke-width="2"/><text x="220" y="141" font-size="12" text-anchor="middle" fill="'+INK+'">boat and both people: 56 kg</text>'
++'<circle cx="90" cy="100" r="8" fill="none" stroke="'+INK+'" stroke-width="2"/><line x1="90" y1="108" x2="90" y2="120" stroke="'+INK+'" stroke-width="2"/><text x="90" y="86" font-size="12" text-anchor="middle" fill="'+INK+'" font-weight="600">A</text>'
++'<circle cx="350" cy="100" r="8" fill="none" stroke="'+INK+'" stroke-width="2"/><line x1="350" y1="108" x2="350" y2="120" stroke="'+INK+'" stroke-width="2"/><text x="350" y="86" font-size="12" text-anchor="middle" fill="'+INK+'" font-weight="600">B</text>'
++'<circle cx="120" cy="60" r="9" fill="'+WM+'" stroke="'+INK+'" stroke-width="1.5"/><text x="120" y="44" font-size="12" text-anchor="middle" fill="'+WM+'" font-weight="600">bag, 16 kg</text>'
++'<path d="M132 56 Q 220 8 330 56" fill="none" stroke="'+WM+'" stroke-width="2" stroke-dasharray="5 4"/>'
++'<line x1="90" y1="178" x2="350" y2="178" stroke="'+INK+'" stroke-width="1"/><line x1="90" y1="173" x2="90" y2="183" stroke="'+INK+'" stroke-width="1"/><line x1="350" y1="173" x2="350" y2="183" stroke="'+INK+'" stroke-width="1"/><text x="220" y="193" font-size="12" text-anchor="middle" fill="'+INK+'">L = 3 m</text>'},
+ 'The bag starts with A. Each catcher keeps half of what arrives and throws the other half back.',
+ 'a boat with a person A at the left end and a person B at the right end, 3 m apart. Boat plus both people have mass 56 kg. A 16 kg bag starts with A. Still water.',
+ 'A boat of 56 kg with a person at each end, 3 m apart, and a 16 kg bag to be thrown between them.');
+
+/* practice 4: sand on a belt */
+var FIG_P4 = FIG({h:170, body:
+ '<rect x="70" y="100" width="300" height="16" rx="8" fill="var(--accent-soft)" stroke="'+INK+'" stroke-width="2"/><circle cx="82" cy="108" r="14" fill="none" stroke="'+INK+'" stroke-width="2"/><circle cx="358" cy="108" r="14" fill="none" stroke="'+INK+'" stroke-width="2"/>'
++ ARROW(220,134,320,134,WM,2.6)+'<text x="270" y="152" font-size="13" text-anchor="middle" fill="'+WM+'" font-weight="600">belt: 2 m/s</text>'
++'<path d="M60 24 L 120 24 L 100 56 L 80 56 Z" fill="var(--surface-2)" stroke="'+INK+'" stroke-width="2"/><text x="90" y="42" font-size="11" text-anchor="middle" fill="'+INK+'">chute</text>'
++'<g fill="'+WM+'"><circle cx="90" cy="68" r="3"/><circle cx="96" cy="78" r="3"/><circle cx="102" cy="88" r="3"/></g>'
++ ARROW(128,66,178,66,AC,2.2)+'<text x="153" y="58" font-size="12" text-anchor="middle" fill="'+AC+'" font-weight="600">1 m/s</text>'
++'<text x="190" y="84" font-size="12" fill="'+INK+'">sand: 4 kg/s, leaves the chute</text><text x="190" y="98" font-size="12" fill="'+INK+'">with 1 m/s along the belt, no vertical motion at the belt</text>'},
+ 'The motor keeps the belt at a steady 2 m/s while the sand arrives.',
+ 'a horizontal belt moving at a steady 2 m/s. A chute drops sand onto it at 4 kg/s. The sand arrives with a horizontal velocity of 1 m/s in the direction of the belt. A motor keeps the belt speed constant.',
+ 'A belt moving at 2 m/s with sand falling on it at 4 kg/s with a horizontal speed of 1 m/s.');
+
+/* practice 6: hinged rod and ball */
+var FIG_P6 = FIG({h:250, body:
+ '<line x1="140" y1="14" x2="240" y2="14" stroke="'+INK+'" stroke-width="5"/><circle cx="190" cy="30" r="6" fill="var(--surface)" stroke="'+INK+'" stroke-width="2.4"/><text x="204" y="26" font-size="12" fill="'+INK+'" font-weight="600">smooth hinge</text>'
++'<line x1="190" y1="30" x2="190" y2="220" stroke="'+INK+'" stroke-width="7" stroke-linecap="round"/><text x="150" y="130" font-size="12" text-anchor="end" fill="'+INK+'">rod: 3m, L</text>'
++'<circle cx="95" cy="172" r="9" fill="'+WM+'" stroke="'+INK+'" stroke-width="1.5"/><text x="95" y="196" font-size="12" text-anchor="middle" fill="'+INK+'" font-weight="600">putty m</text>'
++ ARROW(30,172,82,172,WM,2.4)+'<text x="48" y="162" font-size="13" fill="'+WM+'" font-weight="600">v</text><line x1="104" y1="172" x2="183" y2="172" stroke="'+INK+'" stroke-width="1" stroke-dasharray="4 4"/>'
++'<line x1="290" y1="30" x2="290" y2="172" stroke="'+INK+'" stroke-width="1"/><line x1="285" y1="30" x2="295" y2="30"/><line x1="285" y1="172" x2="295" y2="172" stroke="'+INK+'"/><text x="300" y="106" font-size="12" fill="'+INK+'">3L/4</text>'
++'<line x1="318" y1="30" x2="318" y2="220" stroke="'+INK+'" stroke-width="1"/><text x="328" y="128" font-size="12" fill="'+INK+'">L</text>'},
+ 'The rod hangs at rest. The putty ball moves horizontally and sticks to the rod 3L/4 below the hinge.',
+ 'a uniform rod of mass 3m and length L hangs at rest from a smooth hinge at its top end. A putty ball of mass m moving horizontally at speed v hits the rod 3L/4 below the hinge and sticks.',
+ 'A hanging rod of mass 3m and length L with a ball of mass m striking 3L/4 below the hinge.');
+
+/* practice 7: mobile (top beam x 20..300 = 100 cm at 2.8 px/cm; lower beam 168 px = 60 cm) */
+var FIG_P7 = FIG({h:296, body:
+ '<line x1="104" y1="10" x2="104" y2="56" stroke="'+INK+'" stroke-width="2"/><text x="114" y="30" font-size="12" fill="'+INK+'">ceiling string</text>'
++'<rect x="20" y="56" width="280" height="8" fill="var(--accent-soft)" stroke="'+INK+'" stroke-width="2"/><text x="190" y="82" font-size="11" text-anchor="middle" fill="'+INK+'">uniform beam, 100 cm, 300 g</text>'
++'<line x1="20" y1="64" x2="20" y2="110" stroke="'+INK+'" stroke-width="1.6"/><rect x="2" y="110" width="36" height="30" fill="var(--surface-2)" stroke="'+INK+'" stroke-width="2"/><text x="20" y="130" font-size="13" text-anchor="middle" fill="'+INK+'" font-weight="600">M</text>'
++'<line x1="300" y1="64" x2="300" y2="126" stroke="'+INK+'" stroke-width="1.6"/>'
++'<rect x="244" y="126" width="168" height="7" fill="var(--accent-soft)" stroke="'+INK+'" stroke-width="2"/><text x="328" y="150" font-size="11" text-anchor="middle" fill="'+INK+'">light beam, 60 cm</text>'
++'<line x1="244" y1="133" x2="244" y2="190" stroke="'+INK+'" stroke-width="1.6"/><rect x="224" y="190" width="40" height="32" fill="var(--surface-2)" stroke="'+INK+'" stroke-width="2"/><text x="244" y="211" font-size="12" text-anchor="middle" fill="'+INK+'" font-weight="600">400 g</text>'
++'<line x1="412" y1="133" x2="412" y2="190" stroke="'+INK+'" stroke-width="1.6"/><rect x="392" y="190" width="40" height="32" fill="var(--surface-2)" stroke="'+INK+'" stroke-width="2"/><text x="412" y="211" font-size="12" text-anchor="middle" fill="'+INK+'" font-weight="600">200 g</text>'
++'<line x1="20" y1="258" x2="104" y2="258" stroke="'+INK+'" stroke-width="1"/><line x1="104" y1="258" x2="300" y2="258" stroke="'+INK+'" stroke-width="1"/><text x="62" y="276" font-size="12" text-anchor="middle" fill="'+INK+'">30 cm</text><text x="202" y="276" font-size="12" text-anchor="middle" fill="'+INK+'">70 cm</text>'
++'<line x1="244" y1="243" x2="300" y2="243" stroke="'+INK+'" stroke-width="1"/><text x="272" y="240" font-size="11" text-anchor="middle" fill="'+INK+'">20 cm</text><line x1="300" y1="243" x2="412" y2="243" stroke="'+INK+'" stroke-width="1"/><text x="356" y="240" font-size="11" text-anchor="middle" fill="'+INK+'">40 cm</text>'},
+ 'Top beam: M end to ceiling string 30 cm, ceiling string to the right end 70 cm. The light beam hangs from the right end, 20 cm from its 400 g end and 40 cm from its 200 g end.',
+ 'a uniform horizontal beam, 100 cm long and 300 g, hangs from a ceiling string tied 30 cm from its left end. Mass M hangs from the left end. From the right end hangs a string to a light (massless) beam 60 cm long, tied 20 cm from the 400 g end and 40 cm from the 200 g end.',
+ 'A mobile: a 100 cm uniform beam with a mass M at one end and a light 60 cm beam carrying 400 g and 200 g hanging from the other.');
+
+/* practice 8: ladder */
+var FIG_P8 = FIG({h:250, body:
+ '<line x1="20" y1="210" x2="420" y2="210" stroke="'+INK+'" stroke-width="2"/><line x1="320" y1="20" x2="320" y2="210" stroke="'+INK+'" stroke-width="6"/>'
++'<g stroke="'+INK+'" stroke-width="1">'+[30,70,110,150,190,230,270].map(function(x){return '<line x1="'+x+'" y1="210" x2="'+(x-8)+'" y2="220"/>';}).join('')+'</g>'
++'<text x="30" y="240" font-size="11" fill="'+INK+'">floor: μ₁</text><text x="330" y="40" font-size="11" fill="'+INK+'">wall: μ₂</text>'
++'<line x1="170" y1="210" x2="320" y2="54" stroke="'+INK+'" stroke-width="6" stroke-linecap="round"/><text x="220" y="118" font-size="12" fill="'+INK+'" transform="rotate(-46 220 118)">uniform ladder, 5 m</text>'
++'<line x1="170" y1="228" x2="320" y2="228" stroke="'+INK+'" stroke-width="1"/><text x="245" y="244" font-size="12" text-anchor="middle" fill="'+INK+'">3 m</text>'
++'<line x1="352" y1="54" x2="352" y2="210" stroke="'+INK+'" stroke-width="1"/><text x="360" y="136" font-size="12" fill="'+INK+'">4 m</text>'},
+ 'The foot is 3 m from the wall and the top is 4 m up the wall. Both contacts are rough.',
+ 'a uniform ladder of length 5 m leans against a vertical wall. Its foot is 3 m from the wall on the floor and its top touches the wall 4 m up. Friction coefficient floor mu1, wall mu2.',
+ 'A 5 m ladder against a wall, foot 3 m out, top 4 m up, rough floor and rough wall.');
+
+/* ---------- content ---------- */
+var SECTIONS = [
+/* ================= 1 ================= */
+{ id:'s1', n:1, title:'Energy and momentum bookkeeping: which system, which frame, where the heat goes', chip:'c1', chipText:'Came back · Weak · 6 tests',
+  pattern:'energy-momentum-accounting-com-frame-external-work-heat', status:'This pattern is RECURRING (Weak, wrong or skipped in 6 tests, most recently CTA21).',
+  syl:'Syllabus: Mechanics (conservation of linear momentum and mechanical energy; systems of particles, centre of mass and its motion; work and energy; static and dynamic friction; inertial and uniformly accelerated frames)',
+  cb:{ label:'This one came back', prevH:'Your earlier misses on this pattern',
+    prev:'<ul style="margin:4px 0 0;padding-left:18px">'
+      +'<li><b>CTA16 Q20</b> wrong: spring with moving ends, sign of the work by the agent (you C, key A and B).</li>'
+      +'<li><b>CTA16 Q29</b> wrong: 3 kg and 6 kg blocks on a spring, used all the KE instead of the COM-frame KE (you 67, key 30).</li>'
+      +'<li><b>CTA17 Q29</b> wrong: 2D collision, maximum deflection (you 16, key 3.46).</li>'
+      +'<li><b>CTA18 Q32</b> wrong: plank and block, work by the agent = ΔKE + heat (you B, key A and C).</li>'
+      +'<li><b>CTA18 Q22, Q26 and CTA19 Q23</b> skipped.</li>'
+      +'<li>Also on the list, not shown here: CTA17 Q19 (partial, a variable-mass chain) and CTA17 Q20, CTA18 Q20 (wrong, both need a figure).</li>'
+      +'<li><b>CTA20 Q29</b> wrong: elastic collision then a 90° swing (you 1.5, key 150: a factor of 100, probably units, not confirmed).</li></ul>',
+    nowH:'CTA21 (Sunday 25 Oct)',
+    now:'<b>Q30</b> wrong: block m = αM on a plank M, friction μ, smooth floor; displacement of each when sliding stops. You marked <b>A</b>, the key is <b>A and C</b>.<br><b>Q31</b> skipped: watermelon thrown back and forth in a boat of mass M₀ (key A and B).',
+    verdict:'<b>Mostly a different error, which is partial progress.</b> Same as before: Q31 is a skip, and skips are now 4 of the 8 misses since CTA18 (Q26, Q22, Q23, Q31). Different: Q30 has the same set-up as CTA18 Q32 (a block on a plank with friction), but then the miss was a wrong number (the plank’s ΔKE taken as the work). On Q30 you got one of the two true options and missed the other. I cannot see your working, and the portal cut off the option text, so I cannot say which statement you missed.' },
+  why:'Every miss in the list has the same hole: nobody wrote down which system, which frame, and who does work before the arithmetic started. Two lines usually do it. (1) If no outside horizontal force acts, the momentum of the whole system is fixed and its centre of mass does not move. (2) Energy needs a ledger: work by outside agents = change in KE + heat, and heat = friction × the slide between the two surfaces.',
+  rule:[
+    'Smooth floor, still water, nothing outside pushing sideways: momentum is conserved and the COM stays put. Block on plank and boat with a melon are one line each.',
+    'Rough floor, a pulling hand, a wall: that is an external force. Momentum is <b>not</b> conserved; write F = ma on each body (practice 1).',
+    'Energy ledger: W<sub>outside</sub> = ΔKE + heat. Heat = friction × <b>relative</b> sliding distance. Each body has its own work: friction does f·s on the block and f·s on the plank, with different s. The difference is the heat.',
+    'Two bodies on a spring: only the KE of the motion relative to the COM can go into the spring. If a constant force pulls one of them, go to the COM frame, add the pseudo-force, and the spring stretches to <b>twice</b> its balance stretch (practice 2).',
+    'Several multi-correct options usually come from one calculation. In Q30 both displacements share the same common speed and time. Compute once, read both.'],
+  exs:[
+  { src:'CTA21 Q30 (real; the portal cut off the options)',
+    q:'A small block of mass m = αM moves with speed u₀ on a longer plank of mass M. The friction coefficient between block and plank is μ; the floor under the plank is smooth. Find the displacement of the block and of the plank at the instant sliding stops.',
+    yours:'A', correct:'A and C',
+    note:'The portal ticked A and C but cut the option text off. I derived both displacements by hand (checked by computer with a step-by-step simulation) and the two true statements should be the block’s and the plank’s displacement. I could not match them to the letters, so check them against the paper.',
+    fig:FIG_Q30,
+    diag:'The portal cut off the option text, so the two correct statements are my derived block and plank displacements.',
+    steps:[
+      {tag:'Step 1 · What is conserved', html:'The floor is smooth, so nothing outside pushes the block and plank sideways. Momentum is conserved: αM·u₀ = (αM + M)·V, so the common speed is <b>V = αu₀/(1 + α)</b>.'},
+      {tag:'Step 2 · When does sliding stop?', html:'Friction acts until the two speeds are equal, that is, until both are V. The block slows at μg. The plank speeds up at μ(αM)g/M = <b>αμg</b>.'},
+      {tag:'Step 3 · Block’s displacement', html:'s<sub>b</sub> = (u₀² − V²)/(2μg) = u₀²[1 − α²/(1+α)²]/(2μg) = <b>u₀²(1 + 2α) / [2μg(1 + α)²]</b>.'},
+      {tag:'Step 4 · Plank’s displacement', html:'It starts from rest and gains speed V at αμg, so s<sub>p</sub> = V²/(2αμg) = <b>αu₀² / [2μg(1 + α)²]</b>.'},
+      {tag:'Step 5 · Check with the energy ledger', html:'Heat = friction × slide = μαMg·(s<sub>b</sub> − s<sub>p</sub>) = αMu₀²/[2(1+α)]. KE lost = ½αMu₀² − ½(1+α)MV² = the same. ✓ Note s<sub>b</sub> − s<sub>p</sub> = u₀²/[2μg(1+α)] is the slide <i>relative to the plank</i>. It is neither answer.'},
+      {tag:'Step 6 · Finish, and a limit check', html:'<div class="final">Block: u₀²(1+2α)/[2μg(1+α)²] &nbsp;·&nbsp; Plank: αu₀²/[2μg(1+α)²]</div>For a very small block (α → 0): s<sub>b</sub> → u₀²/2μg, the block on a fixed floor, and s<sub>p</sub> → 0. ✓<div class="trap-note">The trap: both statements come out of the same two lines (V and the two accelerations). Finding one and stopping leaves a mark behind.</div>'}
+    ]},
+  { src:'CTA21 Q31 (skipped; the record has one line, so the reading below is mine)',
+    q:'Two people stand at the ends of a boat of length L on still water. A watermelon of mass M is thrown from one to the other and back, and the record says it is “halved at each throw”. Find the boat’s displacement for M₀ = 3M and M₀ = 5M.\n<span class="rebuilt">My reading (not from the paper): M₀ is the boat with both people. The catcher keeps half of what arrives, which stays at his end, and throws the other half back, for ever.</span>',
+    yours:'skipped', correct:'A and B (option text cut off); on my reading L/6 and L/9',
+    note:'Only one line of this question is in the record, so the numbers below are derived on the reading above. If the real wording differs, the numbers change but the method does not.',
+    fig:FIG_Q31,
+    diag:'The record has one line only; the answer L/6 and L/9 is derived on my reading, not from the key, which ticks A and B with the option text cut off.',
+    steps:[
+      {tag:'Step 1 · One idea', html:'Water pushes the boat sideways with no force, so the centre of mass of boat + people + melon stays where it was.'},
+      {tag:'Step 2 · Turn it into a formula', html:'Each piece of melon ends up at one end of the boat. Let r be how far a piece moved <i>relative to the boat</i>, and d the boat’s shift. COM fixed: M₀d + Σm(d + r) = 0, so <b>d = −Σmr / (M₀ + M)</b>.'},
+      {tag:'Step 3 · Where does the melon end up?', html:'M goes A to B: B keeps M/2, sends M/2 back; A keeps M/4, sends M/4 on; B keeps M/8, and so on. At B’s end: M/2 + M/8 + M/32 + … = <b>2M/3</b>. At A’s end: M/3. Pieces at A’s end have r = 0; pieces at B’s end have r = L.'},
+      {tag:'Step 4 · Numbers', html:'Σmr = (2M/3)·L, so d = −(2M/3)L/(M₀ + M), towards A. M₀ = 3M: (2/3)/4 = <b>L/6</b>. M₀ = 5M: (2/3)/6 = <b>L/9</b>.'},
+      {tag:'Step 5 · Sanity check', html:'<div class="final">On this reading: L/6 and L/9</div>If the melon were thrown once and kept whole, d = ML/(M₀ + M) gives L/4 and L/6. The number depends on how the throws are described. The method does not: <i>where did each piece of mass end up, relative to the boat?</i><div class="trap-note">The trap: adding up a shift for every throw. Only the final arrangement matters. And skipping because the story is long: this is a two-line question once you write the COM equation.</div>'}
+    ]}
+  ]},
+
+/* ================= 2 ================= */
+{ id:'s2', n:2, title:'Collisions with rigid bodies: choose the pivot, then conserve', chip:'c2', chipText:'New · Weak · mixed',
+  pattern:'rigid-body-collisions-angular-momentum-and-impulse', status:'This pattern is NEW (first seen in CTA21).',
+  syl:'Syllabus: Mechanics (rigid body; moment of inertia; angular momentum; torque; conservation of angular momentum; collision of point masses with rigid bodies; centre of mass; impulse)',
+  cb:{ label:'New in CTA21', prevH:'Before',
+    prev:'Nothing earlier on your tracker. Five questions, one test: Q22 right, Q28 wrong, Q20 skipped, Q35 and Q36 wrong.',
+    nowH:'What went right, and where it breaks',
+    now:'<b>Right: Q22</b>, a ball hits the centre of a hinged square plate. On a hinged body one equation does the job: angular momentum about the hinge. The unknown hinge impulse has zero arm and drops out, leaving one unknown, ω. (The numbers of Q22 are not in the record, so this is the method that must have been used.)<br><b>Breaks: Q28 and Q20</b>, nothing is pinned. Now momentum is conserved too and the centre moves, so you need the COM of the <i>combined</i> body (l/3 from the hit end, not l/2) and I about that point. The tracker records ω = v/2l for your Q28.<br><b>Q35 and Q36</b> (bar rotating ±2π/3 rad/s through 90°, ball bouncing, period 2 s): the record has no figure, so I cannot rebuild them and I have not invented numbers. Only this is certain: a 90° sweep at 2π/3 rad/s takes (π/2)/(2π/3) = 3/4 s. Paste the figure and I will add them.',
+    verdict:'<b>A new pattern, so no old mistake to compare.</b> The split is clear: right when something is pinned, wrong or skipped when nothing is. The fix is a two-question habit: <i>is anything pinned?</i> and <i>where is the COM of everything that moves together?</i>' },
+  why:'A collision that sticks or bounces gives few equations, so the pivot you choose decides whether it is solvable. A pin gives unknown impulses; take angular momentum about the pin and they vanish. A free body has no pin, so you conserve both momentum and angular momentum, and the rotation is about the COM of the combined body.',
+  rule:[
+    'Hinged or pivoted: angular momentum about the hinge only. Linear momentum is <b>not</b> conserved (the hinge pushes).',
+    'Free (nothing pinned): conserve linear momentum, and angular momentum about the COM of the combined body. Find that COM first: (m·0 + 2m·l/2)/(3m) = l/3 from the hit end.',
+    'Check with a second pivot. Take angular momentum about the fixed point where the end was hit: it is 0 before, so it must be 0 after. A wrong ω or I fails this check.',
+    'Light rigid rod, impulse at right angles to it: a light rod can only push along itself, so the far mass gets no impulse and is at rest just after. Then the motion is “COM drift + spin”, like a point on a rolling wheel.',
+    'KE after a free collision = ½MV²<sub>cm</sub> + ½I<sub>cm</sub>ω². The loss is the difference from the KE before.'],
+  exs:[
+  { src:'CTA21 Q28 (real; key A and C from the portal ticks)',
+    q:'A uniform rod of mass 2m and length l lies on a smooth table. A particle of mass m moving at speed v at right angles to the rod hits one end and sticks. Which are correct?\nA: ω = v/l. &nbsp; C: the KE lost is mv²/6. &nbsp; B: option text not captured (the tracker note says you took ω = v/2l).',
+    yours:'B and C', correct:'A and C',
+    note:'The statements A and C are as the record has them. All values below are my derivation, matching the key.',
+    fig:FIG_Q28,
+    diag:'Option B is not in the record; the tracker note says the student took omega = v/2l.',
+    steps:[
+      {tag:'Step 1 · Which equations?', html:'Nothing is pinned, so both momentum and angular momentum are conserved. Use the COM of the combined body.'},
+      {tag:'Step 2 · Momentum', html:'mv = 3m·V, so <b>V = v/3</b>.'},
+      {tag:'Step 3 · Where is the COM?', html:'From the hit end: (m·0 + 2m·l/2)/(3m) = <b>l/3</b>.'},
+      {tag:'Step 4 · I about that COM', html:'Particle: m(l/3)² = ml²/9. Rod: 2m·l²/12 + 2m(l/2 − l/3)² = ml²/6 + ml²/18 = 2ml²/9. Total <b>I = ml²/3</b>.'},
+      {tag:'Step 5 · Angular momentum about the COM', html:'Before: mv·(l/3) (the particle’s arm is l/3). After: Iω. So ω = (mvl/3)/(ml²/3) = <b>v/l</b>. A is true.'},
+      {tag:'Step 6 · KE lost', html:'After: ½(3m)(v/3)² + ½(ml²/3)(v/l)² = mv²/6 + mv²/6 = mv²/3. Before: mv²/2. Loss = <b>mv²/6</b>. C is true.'},
+      {tag:'Step 7 · Check with a second pivot', html:'About the point where the end was hit: 0 before. After: −(3m)(v/3)(l/3) + (ml²/3)ω = 0, so ω = v/l. ✓'},
+      {tag:'Step 8 · Why B and C cannot both be true', html:'<div class="final">Answer: A and C</div>If ω were v/2l, the KE after would be mv²/6 + mv²/24 and the loss 7mv²/24, not mv²/6. The KE-loss option itself needs ω = v/l. Two ticks that cannot both be true mean one tick is wrong.<div class="trap-note">The trap: using the rod’s own centre (l/2) as the lever arm, or the pivot of a hinged problem on a free body.</div>'}
+    ]},
+  { src:'CTA21 Q20 (skipped; key A ticked, option text not captured; derived)',
+    q:'Masses m₁ and m₂ are joined by a light rigid rod of length L on a smooth table. A sharp impulse at right angles to the rod gives m₁ the speed v. How long until m₂ is next at rest?',
+    yours:'skipped', correct:'2πL/v (my derivation; the key ticks A)',
+    note:'The record does not say the rod is light. I took it as light, which is the usual reading, and the answer is the same for any masses.',
+    fig:FIG_Q20,
+    diag:'I assumed a light rod. The key ticks A, but the option text was not captured, so 2 pi L / v is derived.',
+    steps:[
+      {tag:'Step 1 · What can a light rod do?', html:'It can only push or pull along itself. The impulse is at right angles, so m₂ gets <b>no</b> impulse: just after, m₂ is at rest and m₁ moves at v.'},
+      {tag:'Step 2 · Split into drift and spin', html:'V<sub>cm</sub> = m₁v/(m₁ + m₂). The relative speed v over the length L gives ω = v/L. The mass m₂ is r₂ = m₁L/(m₁ + m₂) from the COM, so its spin speed is ωr₂ = m₁v/(m₁ + m₂) = <b>V<sub>cm</sub></b>. Same size.'},
+      {tag:'Step 3 · When is m₂ at rest?', html:'The velocity of m₂ is V<sub>cm</sub> plus a spin velocity of the same size. At t = 0 they point opposite (sum 0). The sum is zero again only when the spin vector has turned a full circle: t = 2π/ω = <b>2πL/v</b>. It does not depend on the masses.'},
+      {tag:'Step 4 · A check you can use later', html:'<div class="final">2πL/v</div>After <i>half</i> a turn the two add: m₂ moves at 2V<sub>cm</sub>. Practice 5 uses exactly that.'}
+    ]}
+  ]},
+
+/* ================= 3 ================= */
+{ id:'s3', n:3, title:'Statics: take torques about the point that removes an unknown', chip:'c3', chipText:'New · Weak · mixed',
+  pattern:'statics-torque-equilibrium-beams-hinged-rods-friction', status:'This pattern is NEW (first seen in CTA21).',
+  syl:'Syllabus: Mechanics (equilibrium of rigid bodies; torque; static and dynamic friction)',
+  cb:{ label:'New in CTA21', prevH:'Before',
+    prev:'Nothing earlier on your tracker. Three questions, one test.',
+    nowH:'CTA21',
+    now:'<b>Q19</b> wrong: two massless cross beams on seven strings, M₁ = 400 g, M₂ = 200 g, M₄ = 500 g, find M₃. You marked 400 g; the key is not captured.<br><b>Q27</b> skipped: rod 5 m hinged 4 m up, blocking a dragged board; which (μ₁, μ₂) pairs work (C ticked, options cut off).<br><b>Q26</b> right: block inside a cylinder on a rough incline.',
+    verdict:'<b>A new pattern, with thin evidence (three questions, one test), so read this as a guess and not a diagnosis.</b> Q26 has one body and one friction contact. Q19 and Q27 have strings, a hinge or two bodies with several unknowns to remove. Both of those depend on a figure that is not in the record, so I could not derive their keys, and I did not guess a layout. The worked example below is a <b>stand-in</b> built from your real numbers (5 m rod, 4 m height). Paste the two figures and I will rebuild the real ones.' },
+  why:'A static problem is a list of unknown forces and three equations per body: two force balances and one torque balance. The skill is choosing the pivot so the biggest unknown drops out of the torque equation, and drawing friction in the direction the sliding is happening.',
+  rule:[
+    'Torque about the hinge, the foot of a ladder, or the string you are solving for. The unknown force there has zero arm and disappears.',
+    'A mobile: replace each lower beam and everything hanging from it by one weight at its string, then solve the beam above it. Work from the bottom up. A uniform beam’s weight acts at its middle; a massless beam has none.',
+    'Friction points along the sliding that is happening (or about to). A dragged board gives kinetic friction f = μN in the direction the board moves. Draw it before you write any torque.',
+    'Look at the boundary. When N goes to zero or infinity, or a denominator hits zero, the equilibrium breaks (slipping or jamming). That is the “which pairs work” answer.'],
+  exs:[
+  { src:'Stand-in for CTA21 Q27 (NOT your question; the real figure and options are not captured)',
+    q:'A uniform rod AB of mass m and length 5 m is hinged at A, 4 m above a horizontal board. The end B rests on the board, 3 m sideways from the point below A. The board is dragged to the left, at steady speed, under B. The friction coefficient between rod end and board is μ. Find the normal force at B, and the largest μ for which the rod can stay in equilibrium.',
+    yours:'skipped (the real Q27)', correct:'N = 3mg/[2(3 − 4μ)]; need μ < 3/4 (my derivation)',
+    note:'This is a rebuilt problem with a layout I chose. Your real Q27 asks about two coefficients (μ₁, μ₂) and its figure is not in the record.',
+    fig:FIG_HINGE,
+    diag:'This is a stand-in problem; the real figure is not in the record.',
+    steps:[
+      {tag:'Step 1 · Geometry', html:'5-4-3: the rod makes 37° with the vertical. B is 3 m to the right of the vertical through A. The weight mg acts at the middle, 1.5 m to the right of that vertical.'},
+      {tag:'Step 2 · Pick the pivot', html:'Take torques about A. The unknown hinge force has zero arm, so it is gone. What is left: the weight, N up at B, and the friction at B.'},
+      {tag:'Step 3 · Direction of friction', html:'The board moves left under B, so it drags B to the left: <b>f = μN to the left</b>, at B, 4 m below A.'},
+      {tag:'Step 4 · Torque equation', html:'Anticlockwise positive, with A as origin and B at (3, −4): weight −1.5mg; N up at 3 m: +3N; friction to the left at 4 m below: −4μN. Sum zero: −1.5mg + 3N − 4μN = 0, so <b>N = 1.5mg/(3 − 4μ)</b>.'},
+      {tag:'Step 5 · Check the boundary', html:'<div class="final">N = 3mg / [2(3 − 4μ)], valid for μ < 3/4</div>At μ = 0, N = mg/2 ✓ (the hinge carries the other half). N is positive only while 3 − 4μ > 0, so μ &lt; 3/4 = tan 37°. At μ ≥ 3/4 no finite N balances the torque: the rod wedges against the board. That is a rod “blocking” a board. Drag the board the other way and the denominator is 3 + 4μ, which never jams.<div class="trap-note">The trap: writing friction in the wrong direction. The sign of the 4μN term decides whether the rod can jam at all. Also: at the jam N is huge and the weight does not matter, so the contact force must point along the rod, and tan(friction angle) = μ = tan 37°. Same answer, from geometry.</div>'}
+    ]}
+  ]},
+
+/* ================= 4 ================= */
+{ id:'s4', n:4, title:'Skip drill: write the first equation, then sweep every option', chip:'c5', chipText:'Came back · Weak · two habits',
+  pattern:'skips-on-derivable-questions and multi-correct-stops-after-first-option', status:'Both habit patterns are RECURRING (Weak).',
+  syl:'Method only; no new syllabus topic. Every equation in the table below is from the Mechanics syllabus.',
+  cb:{ label:'This one came back', prevH:'Your record',
+    prev:'<b>Skips (Physics):</b> CTA16 1, CTA17 6, CTA18 4, WTA19 1, CTA19 3, WTA20 0, CTA20 3, WTA21 4, <b>CTA21 7</b>. That is 29 skipped questions in 9 tests.<br><b>Multi-correct:</b> 20 questions wrong or partial in 8 of the 9 tests (all but WTA20).',
+    nowH:'CTA21 and WTA21',
+    now:'<b>Skipped:</b> CTA21 Q20, Q21, Q23, Q24, Q27, Q29, Q31 and WTA21 Q19, Q20, Q21, Q23. The portal ticks showed most were derivable.<br><b>Multi-correct slips:</b> CTA21 Q28 wrong, CTA21 Q32 partial, WTA21 Q24 partial.',
+    verdict:'<b>Same errors, and the skips are rising:</b> 3, then 4, then 7, the highest count in your record. The 6 Oct session gave you a routine; this page makes it concrete by writing the first equation for each question you skipped.' },
+  why:'A skipped question scores zero for sure. A first line on paper often shows the next line. For a derivable question the first line is one conservation or balance equation, and it takes under a minute. For multi-correct, options that talk about the same quantity must agree with each other, so one calculation settles several options at once.',
+  rule:[
+    'Skip rule: before you skip anything, write <b>one</b> equation (momentum, energy, force balance, torque balance, or a constraint). If the next line is obvious, keep going. If not, skip with that equation written, and come back to it.',
+    'Which equation? Nothing pushes sideways: momentum and COM. Something pinned: torque about the pin. Something hangs or leans: torque plus two force balances. Accelerating frame: effective g. A quantity that changes along a rod or wire: slice it, dx.',
+    'Multi-correct sweep: (1) find the quantity each option is about; (2) compute each quantity once; (3) check every option against its quantity, even after you found a true one; (4) options that share a quantity must agree.'],
+  extra:'<h3 class="sub">Your 11 skipped questions: the first equation for each</h3>'
+   +'<div class="tblwrap"><table class="tbl"><thead><tr><th>Question</th><th>First equation to write</th></tr></thead><tbody>'
+   +'<tr><td>CTA21 Q20 (two masses on a rod, impulse on m₁)</td><td>Rigid-rod rule: the impulse is at right angles, so m₂ gets none, v₂ = 0 just after. Result 2πL/v (section 2).</td></tr>'
+   +'<tr><td>CTA21 Q21 (bob in a cart on a 45° incline)</td><td>In the cart’s frame, g<sub>eff</sub> = g − a<sub>cart</sub> = g cos 45°, at right angles to the incline. Then it is an ordinary vertical-circle rule with g<sub>eff</sub>. The figure and key are not captured.</td></tr>'
+   +'<tr><td>CTA21 Q23 (three masses and springs)</td><td>Newton’s second law on one mass for the displacement shown. The figure is not captured, so I have not solved it.</td></tr>'
+   +'<tr><td>CTA21 Q24 (helical groove)</td><td>Energy: ½v² = g·(n·h) after n turns, if the groove is smooth. Then the tangential part is g sin θ with tan θ = h/(2πR), and the centripetal part is v²cos²θ/R. Key A, text not captured.</td></tr>'
+   +'<tr><td>CTA21 Q27 (hinged rod, dragged board)</td><td>Torque about the hinge, so the hinge force drops out (section 3).</td></tr>'
+   +'<tr><td>CTA21 Q29 (sound through a temperature gradient)</td><td>v(x) = K√T(x), with T(x) = T₁ + (T₂ − T₁)x/L, and time = ∫dx/v.</td></tr>'
+   +'<tr><td>CTA21 Q31 (watermelon in a boat)</td><td>COM fixed: M₀d + Σm(d + r) = 0 (section 1).</td></tr>'
+   +'<tr><td>WTA21 Q19 (rod pulled by 3F and F)</td><td>a = (3F − F)/M = 2F/M. Take a piece of length x from the F end: T = F + 2Fx/L. (Figure not captured.)</td></tr>'
+   +'<tr><td>WTA21 Q20 (wire with Y rising linearly)</td><td>Slice dx: dℓ = W·dx/[A·Y(x)] with Y = Y₀ + kx, then integrate over the length.</td></tr>'
+   +'<tr><td>WTA21 Q21 (two wires and a block)</td><td>Force balance on the block, then stress = T/(πr²) for each wire. The figure is not captured.</td></tr>'
+   +'<tr><td>WTA21 Q23 (drag −kmv in water, density 2×)</td><td>Horizontal: dv<sub>x</sub>/dt = −kv<sub>x</sub>. Vertical: weight minus buoyancy is mg/2, so g/2 = kv<sub>y</sub> at terminal speed. The figure is not captured.</td></tr>'
+   +'</tbody></table></div>'
+   +'<h3 class="sub">Multi-correct slips, and what a sweep would have caught</h3>'
+   +'<ul class="slips">'
+   +'<li><b>CTA21 Q28 (wrong):</b> worked in full in the example below. Your two ticks could not both be true.</li>'
+   +'<li><b>CTA21 Q32 (partial; you B and D, key A, B and D):</b> the option text for A is not captured. One reflection coefficient gives every statement at once: with the string-2 density 4 times string 1, impedance Z ∝ √ρ doubles, r = (Z₁ − Z₂)/(Z₁ + Z₂) = −1/3 (phase change π), t = 2/3. Reflected intensity 1/9, transmitted 8/9, ratio 1 : 8. Going into the lighter string: r = +1/3, no phase change, same intensities. (Reflection and transmission at a junction were taught in class on 2 Oct.) Compute r once, then test all four options against it.</li>'
+   +'<li><b>WTA21 Q24 (partial; you B and C):</b> the correct set is not shown in the record, so I have not rebuilt it.</li>'
+   +'</ul>',
+  exs:[
+  { src:'CTA21 Q28 (real): the sweep that catches the slip',
+    q:'Same Q28 as in section 2. You ticked B (ω = v/2l, per the tracker note) and C (KE lost mv²/6). The key is A (ω = v/l) and C.',
+    yours:'B and C', correct:'A and C',
+    note:'The sweep below uses only the three statements the record has.',
+    diag:'Option B is only known from the tracker note (omega = v/2l).',
+    steps:[
+      {tag:'Step 1 · What is each option about?', html:'A and B are both about ω. C is about the KE lost. Two quantities, so two calculations.'},
+      {tag:'Step 2 · Compute ω once', html:'From section 2: ω = v/l. So A is true and B is false.'},
+      {tag:'Step 3 · Compute the loss with that ω', html:'The KE after is mv²/3 and the loss is mv²/6. C is true.'},
+      {tag:'Step 4 · Check that ticks agree', html:'<div class="final">A and C</div>If B were right (ω = v/2l), the loss would be 7mv²/24, so B and C cannot both be true. Whenever two ticks cannot both hold, one of them is wrong. That takes ten seconds and was the whole miss.'}
+    ]}
+  ]}
+];
+
+/* ---------- practice set ---------- */
+var PROBS = [
+{ sec:1, type:'multi', fig:FIG_P1,
+  q:'A 1 kg block moves at 6 m/s on the left end of a long 2 kg plank that rests on a rough floor. The friction coefficient between block and plank is 0.50, and between plank and floor 0.10 (acting with the full normal force from block and plank). g = 10 m/s². Select all correct statements.',
+  opts:['Block and plank reach a common speed of 1 m/s, 1 s after the block lands.','The heat produced at the block–plank contact is 15 J.','The heat produced at the floor, from the start until everything stops, is 3 J.','Momentum of block and plank is conserved while the block slides, so the common speed is 2 m/s.'], ans:[0,1,2],
+  first:'Write the two accelerations before anything else. Block: μ₁g = 5 m/s² (slowing). Plank: (5 N − 3 N)/2 kg = 1 m/s². Momentum is not an equation here, because the floor is an outside force.',
+  why:'Block: a = μ₁g = 5 m/s², slowing. Floor friction on the plank = 0.1 × 30 N = 3 N, and the block pushes the plank forward with 5 N, so the plank speeds up at (5 − 3)/2 = 1 m/s². Equal speeds when 6 − 5t = t, so t = 1 s and V = 1 m/s (A). The slide relative to the plank: relative speed 6, relative slowing 6, so 6²/(2·6) = 3 m, and the heat is 5 N × 3 m = 15 J (B). Then they move together (the block needs only 1 N of friction, at most 5 N), stopping in 1²/(2·1) = 0.5 m. The plank moves 0.5 m in the slide and 0.5 m after: 3 N × 1 m = 3 J at the floor (C). Check: 15 + 3 = 18 J = ½·1·6². ✓',
+  mistakes:{3:'D: used momentum conservation although the floor is an outside force. That gives V = 2 m/s and 12 J of heat. It would be right only on a smooth floor.'} },
+{ sec:1, type:'single', fig:FIG_P2,
+  q:'A 1 kg block and a 2 kg block lie on a smooth table, joined by a light spring (k = 60 N/m, at its natural length). A constant 12 N force pulls the 2 kg block directly away from the 1 kg block. Both start at rest. What is the largest extension of the spring?',
+  opts:['6.7 cm','13.3 cm','20 cm','40 cm'], ans:[1],
+  why:'Go to the COM frame. a<sub>cm</sub> = 12/3 = 4 m/s². In that frame the 2 kg block feels 12 − 2·4 = +4 N (away) and the 1 kg block feels −1·4 = −4 N. So the spring is pulled by an equal pair of 4 N from rest. It oscillates about a stretch of 4/60 = 1/15 m, and the turning point is twice that: 2/15 m = 13.3 cm. Energy check: the 4 N pair does work 4x while the spring stores ½·60x², so x = 8/60 = 2/15 m. Direct check: the relative coordinate obeys x″ = 6 − 90x, centre 1/15 m, amplitude 1/15 m.',
+  mistakes:{0:'6.7 cm: the balance stretch 1/15 m. The spring overshoots to twice that.',
+            2:'20 cm: F/k, which treats the 1 kg block as a wall and puts the whole 12 N on the spring.',
+            3:'40 cm: 2F/k, from W = Fx = ½kx² with the whole force and no KE of the blocks.'} },
+{ sec:1, type:'multi', fig:FIG_P3,
+  q:'A boat and its two passengers A and B have a total mass of 56 kg. A and B stand at the two ends, 3 m apart, on still water. A holds a 16 kg bag and throws it to B. B keeps half of it (8 kg, which stays at B’s end) and throws the other half back to A. A keeps half of that (4 kg, which stays at A’s end) and throws the last 4 kg to B, who keeps it. Select all correct statements.',
+  opts:['The boat ends 0.5 m from where it started.','The boat ends displaced towards B’s end.','If B had kept the whole bag after the first throw, the boat would have moved 2/3 m.','The final shift is the sum of the shifts of the three throws, about 1.17 m.'], ans:[0,2],
+  why:'No outside horizontal force, so the COM of boat + people + bag stays put. At the end, 12 kg of the bag (8 + 4) sit at B’s end, 3 m from where they started; the other 4 kg are back at A’s end. Σmr = 12 × 3 = 36 kg·m, so d = 36/(56 + 16) = 0.5 m (A), and the boat moves opposite to the bag’s net move, towards A (so B is false). One throw, kept whole: 16 × 3/72 = 2/3 m (C). D adds the three shifts as if they all pointed the same way; the second throw pushes the boat back, and only the final arrangement counts anyway.',
+  mistakes:{1:'B: direction reversed. The bag’s net move is towards B, so the boat goes the other way.',
+            3:'D: added the three throws’ shifts without signs (16 + 8 + 4)·3/72 = 1.17 m.'} },
+{ sec:1, type:'single', fig:FIG_P4,
+  q:'Sand drops from a chute onto a horizontal belt at 4 kg/s. It arrives moving 1 m/s horizontally, in the belt’s direction. A motor holds the belt at a steady 2 m/s. At what rate is heat produced as the sand slides on the belt?',
+  opts:['8 W','6 W','2 W','4 W'], ans:[2],
+  why:'The force on the sand (and so on the belt) is the rate of change of the sand’s momentum: 4 × (2 − 1) = 4 N. Motor power = F × belt speed = 4 × 2 = 8 W. KE gained by the sand each second = ½ × 4 × (2² − 1²) = 6 W. Heat = work done − KE gained = 8 − 6 = 2 W. Check: heat per kg is ½(2 − 1)², so ½ × 4 × 1 = 2 W. ✓',
+  mistakes:{0:'8 W: took all the motor power as heat, forgetting that the sand gains KE.',
+            1:'6 W: took the KE gain as the heat.',
+            3:'4 W: force × the starting relative speed (4 N × 1 m/s). The relative speed falls to zero as the sand speeds up, so this overcounts.'} },
+{ sec:2, type:'multi', fig:FIG_P5,
+  q:'Two point masses, 1 kg and 3 kg, are joined by a light rigid rod 1.0 m long and lie at rest on a smooth table. A sharp impulse J = 2 N·s at right angles to the rod acts on the 1 kg mass. Select all correct statements.',
+  opts:['Just after the impulse the 3 kg mass moves at 0.5 m/s, along with the centre of mass.','Just after the impulse the rod turns at 2 rad/s about the centre of mass.','The 3 kg mass is next at rest π/2 s after the impulse.','After half a turn the 3 kg mass moves at 1.0 m/s.'], ans:[1,3],
+  first:'Write the rigid-rod rule first: a light rod only pushes along itself. The impulse is at right angles, so the 3 kg mass gets no impulse: v₂ = 0 just after.',
+  why:'A light rod only pushes along its own length, so the 3 kg mass gets nothing just after, and the 1 kg mass moves at J/m₁ = 2 m/s. Split into drift and spin: V<sub>cm</sub> = J/4 = 0.5 m/s. The relative speed is 2 m/s over 1.0 m, so ω = 2 rad/s (B). The 3 kg mass is 0.25 m from the COM, so its spin speed is 2 × 0.25 = 0.5 m/s: equal to V<sub>cm</sub> and opposite at t = 0. Half a turn later (t = π/2 s) they add up to 1.0 m/s (D). It is at rest again after a full turn, 2π/ω = π s, not π/2 s (C).',
+  mistakes:{0:'A: treated both masses as one lump that gets J/(m₁ + m₂). A light rod cannot push sideways.',
+            2:'C: counted a half turn. At a half turn the 3 kg mass is at its fastest, not at rest.'} },
+{ sec:2, type:'single', fig:FIG_P6,
+  q:'A uniform rod of mass 3m and length L hangs at rest from a smooth hinge at its top end. A putty ball of mass m, moving horizontally at speed v, hits the rod 3L/4 below the hinge and sticks. What horizontal impulse does the hinge give the rod during the impact?',
+  opts:['2mv/25, in the direction of v','0','2mv/25, against the direction of v','11mv/16, in the direction of v'], ans:[0],
+  why:'The hinge gives an unknown impulse, so take angular momentum about the hinge. Before: mv·(3L/4). After: Iω with I = (3m)L²/3 + m(3L/4)² = mL² + 9mL²/16 = 25mL²/16. So ω = (3/4)(16/25)v/L = 12v/(25L). Momentum just after: the rod’s centre moves at ωL/2, so 3m·6v/25 = 18mv/25; the ball moves at ω·3L/4, so m·9v/25 = 9mv/25. Total 27mv/25. The ball brought mv, so the hinge supplied 27mv/25 − mv = +2mv/25, along v.',
+  mistakes:{1:'0: assumed momentum is conserved although the hinge pushes. (Hit at 2L/3 instead and the hinge impulse would be zero.)',
+            2:'2mv/25 against v: sign slip. The momentum after is larger than the ball brought, so the hinge pushes forward.',
+            3:'11mv/16: left out the ball’s own m(3L/4)² in I, so ω = 3v/(4L).'} },
+{ sec:3, type:'single', fig:FIG_P7,
+  q:'A uniform horizontal beam, 100 cm long and of mass 300 g, hangs from a ceiling string tied 30 cm from its left end. A mass M hangs from the left end. From the right end hangs a string to a light beam 60 cm long, tied 20 cm from its 400 g end; the light beam carries 400 g at that end and 200 g at the other. All is at rest in balance. Find M and the tension in the ceiling string. (g = 10 m/s²)',
+  opts:['M = 1.4 kg, T = 20 N','M = 1.2 kg, T = 21 N','M = 1.13 kg, T = 18.3 N','M = 1.6 kg, T = 25 N'], ans:[3],
+  why:'Work from the bottom up. Lower beam: 400 × 20 = 200 × 40, so it is balanced and its string carries 600 g. Top beam: its own 300 g acts at its middle, 50 cm from the left end, which is 20 cm to the right of the ceiling string. Torque about the ceiling string: M × 30 = 600 × 70 + 300 × 20 = 48 000, so M = 1600 g. T = (1600 + 300 + 600) g = 2.5 kg × 10 = 25 N.',
+  mistakes:{0:'M = 1.4 kg: treated the top beam as massless: M × 30 = 600 × 70.',
+            1:'M = 1.2 kg: put the beam’s weight on the wrong side of the ceiling string (−300 × 20).',
+            2:'M = 1.13 kg: counted only the 400 g of the lower group, forgetting the 200 g.'} },
+{ sec:3, type:'multi', fig:FIG_P8,
+  q:'A uniform ladder of length 5 m leans against a vertical wall, its foot 3 m from the wall and its top 4 m up. The friction coefficient is μ₁ at the floor and μ₂ at the wall. For which pairs (μ₁, μ₂) can the ladder stay at rest? Select all that apply.',
+  opts:['μ₁ = 0.36, μ₂ = 0.20','μ₁ = 0.30, μ₂ = 0.40','μ₁ = 0.28, μ₂ = 1.0','μ₁ = 0.25, μ₂ = 1.0'], ans:[0,2],
+  first:'Torque about the foot: 1.5W = 4N₂ + 3f₂. No floor force is in it, because both floor forces pass through the foot.',
+  why:'Let N₂ and f₂ be the wall’s push and upward friction, and N₁, f₁ the floor’s. Horizontal: f₁ = N₂. Vertical: N₁ = W − f₂. Torque about the foot: 1.5W = 4N₂ + 3f₂. At the limit both frictions are fully used: f₂ = μ₂N₂ and N₂ = μ₁N₁, which gives μ₁(4 + 1.5μ₂) = 1.5. So the ladder holds if μ₁ ≥ 1.5/(4 + 1.5μ₂). For μ₂ = 0.2 that is 0.349 (A: 0.36 passes); μ₂ = 0.4: 0.326 (B: 0.30 fails); μ₂ = 1.0: 0.273 (C: 0.28 passes; D: 0.25 fails).',
+  mistakes:{1:'B: took N₁ = W, forgetting that wall friction carries part of the weight. That gives μ₁ ≥ 1.5/(4 + 3μ₂) = 0.268, so B wrongly passes (and so does D: 0.214).',
+            3:'D: same slip as B. A smooth-wall answer (μ₁ ≥ 0.375) would wrongly reject A and C as well.'} }
+];
+
+/* ---------- helpers ---------- */
+var LET = ['A','B','C','D'];
+function plain(html){ var d=document.createElement('div'); d.innerHTML=html.replace(/<\/?(div|br|li|p|ul|ol|figure)[^>]*>/g,' '); return d.textContent.replace(/\s+/g,' ').trim(); }
+var SUP={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁻':'-','⁺':'+'};
+var SUB={'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9','₊':'+','₋':'-'};
+var GREEK={'θ':'theta','α':'alpha','μ':'mu','λ':'lambda','π':'pi','ℓ':'l','ω':'omega','Δ':'delta ','∫':'integral ','≤':'<=','≥':'>=','∝':'prop to','ρ':'rho','≪':'<<','ṡ':'s-dot','ẋ':'x-dot','₁':'1','₂':'2'};
+function ascii(s){
+  return s.replace(/[θαμλπℓωΔ∫≤≥∝ρ≪]|ṡ|ẋ/g,function(c){return GREEK[c];})
+          .replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]+/g,function(r){return '^'+r.split('').map(function(c){return SUP[c];}).join('');})
+          .replace(/[₀-₉₊₋]+/g,function(r){return r.split('').map(function(c){return SUB[c];}).join('');})
+          .replace(/×/g,'x').replace(/→/g,'->').replace(/√/g,'sqrt').replace(/≈/g,'~').replace(/−/g,'-')
+          .replace(/½/g,'1/2').replace(/¼/g,'1/4').replace(/÷/g,'/').replace(/°/g,' deg').replace(/·/g,'*').replace(/✓/g,'(checked)')
+          .replace(/Σ/g,'sum of ').replace(/″/g,"''").replace(/±/g,'+-').replace(/…/g,'...').replace(/≠/g,'!=').replace(/⟂/g,'perpendicular').replace(/√/g,'sqrt').replace(/[–—]/g,'-').replace(/[“”]/g,'"').replace(/[’‘]/g,"'");
+}
+var TUTOR = 'I am a JEE aspirant preparing for JEE Advanced. Act as a patient tutor: use simple language, reply in chunks of under 10 lines, explain why and not just how, and wait for my reply before moving on.';
+function askUrl(parts){
+  var ps = parts.map(function(p){ return ascii(p); });
+  function build(){ return 'https://claude.ai/new?q=' + encodeURIComponent(ps.join('\n\n')); }
+  var u = build(), guard = 0;
+  while(u.length > 3200 && guard++ < 200){
+    var li = -1, soft = /^(Steps:|For your reference|Why it matters|Shortcut rules)/;
+    for(var i=1;i<ps.length;i++){ if(soft.test(ps[i]) && ps[i].length > 120 && (li<0 || ps[i].length > ps[li].length)) li = i; }
+    if(li < 0){ li = 1; for(var j=2;j<ps.length;j++){ if(ps[j].length > ps[li].length) li = j; } }
+    ps[li] = ps[li].slice(0, Math.max(40, Math.floor(ps[li].length*0.9))) + '...';
+    u = build();
+  }
+  return u;
+}
+function askLink(parts, label){
+  var a = document.createElement('a');
+  a.className='ask'; a.target='_blank'; a.rel='noopener'; a.textContent = label || 'Ask Claude about this ↗';
+  a.href = askUrl([TUTOR].concat(parts));
+  return a;
+}
+function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
+
+
+/* ---------- build sections ---------- */
+function buildSections(){
+  var root = document.getElementById('sections');
+  SECTIONS.forEach(function(s){
+    var isNew = /NEW/.test(s.status);
+    var sec = el('section','pattern'); sec.id = s.id;
+    var head = el('div','pattern-head');
+    head.appendChild(el('h2',null, s.n+' · '+s.title));
+    head.appendChild(el('span','chip '+s.chip, s.chipText));
+    sec.appendChild(head);
+    sec.appendChild(el('div','syl', s.syl));
+    var cb = el('div','came-back');
+    cb.innerHTML = '<span class="lbl'+(isNew?' new':'')+'">'+s.cb.label+'</span>'
+      +'<div class="sbs"><div><span class="h">'+s.cb.prevH+'</span>'+s.cb.prev+'</div><div><span class="h">'+s.cb.nowH+'</span>'+s.cb.now+'</div></div>'
+      +'<div>'+s.cb.verdict+'</div>';
+    sec.appendChild(cb);
+    sec.appendChild(el('p','why', '<strong>Why this matters.</strong> '+s.why));
+    var rule = el('div','rule');
+    rule.innerHTML = '<span class="rule-label">'+(s.id==='s4'?'The routine':'Shortcut rules')+'</span><ul>'+s.rule.map(function(r){return '<li>'+r+'</li>';}).join('')+'</ul>';
+    sec.appendChild(rule);
+    if(s.extra){ var xt = el('div','extra'); xt.innerHTML = s.extra; sec.appendChild(xt); }
+
+    var row = el('div');
+    var secParts = ['Topic: '+s.title+' (JEE Advanced Physics, Mechanics). Pattern: '+s.pattern+'. '+s.status+' '+plain(s.cb.verdict),
+                    'Why it matters: '+plain(s.why),
+                    'Shortcut rules: '+s.rule.map(plain).join(' | ')];
+    row.appendChild(askLink(secParts, 'Ask Claude about this section ↗'));
+
+    s.exs.forEach(function(ex,k){
+      var st = el('div','stepper'); st.id = 'st-'+s.id+'-'+k;
+      st.appendChild(el('span','stepper-label','Worked example · '+ex.src));
+      st.appendChild(el('p',null, ex.q.replace(/\n/g,'<br>')));
+      st.appendChild(el('p','yours','Your answer: <strong>'+ex.yours+'</strong>. Correct answer: <strong>'+ex.correct+'</strong>.'));
+      st.appendChild(el('p','rebuilt', ex.note));
+      if(ex.fig){ var f = el('div'); f.innerHTML = ex.fig.svg; st.appendChild(f); }
+      ex.steps.forEach(function(sp,i){
+        var d = el('div','step'); d.innerHTML='<span class="tag">'+sp.tag+'</span>'+sp.html; if(i>0) d.hidden = true; st.appendChild(d);
+      });
+      var b = el('button','step-btn','Show next step →'); b.type='button'; b.onclick=function(){ stepNext(st); }; st.appendChild(b);
+      sec.appendChild(st);
+      var exParts = ['Worked example ('+ex.src+'). Question: '+plain(ex.q.replace(/\n/g,' '))+(ex.fig?ex.fig.text:''),
+                     'My real answer was '+ex.yours+' and the correct answer is '+ex.correct+'. '+ex.diag,
+                     'Steps: '+ex.steps.map(function(sp){ var t=plain(sp.tag+': '+sp.html); return t.length>230? t.slice(0,227)+'...' : t; }).join(' || ')];
+      row.appendChild(document.createTextNode(' '));
+      row.appendChild(askLink(exParts, s.exs.length>1 ? 'Ask Claude about worked example '+(k+1)+' ↗' : 'Ask Claude about the worked example ↗'));
+    });
+    sec.appendChild(row);
+    root.appendChild(sec);
+  });
+}
+
+/* ---------- build practice ---------- */
+function buildGrid(){
+  var grid = document.getElementById('grid');
+  PROBS.forEach(function(p,idx){
+    var sec = SECTIONS[p.sec-1];
+    var card = el('div','card'); card.id='p'+(idx+1);
+    var head = el('div','card-head');
+    head.appendChild(el('span','qnum', String(idx+1)));
+    head.appendChild(el('span','chip '+(p.type==='multi'?'c2':'c3'), p.type==='multi'?'Multi-correct':'Single-correct'));
+    head.appendChild(el('span','chip c4','Level 4'));
+    head.appendChild(el('span','chip '+sec.chip, 'Section '+sec.n));
+    if(p.first) head.appendChild(el('span','chip c5','Skip drill'));
+    card.appendChild(head);
+    card.appendChild(el('p',null,p.q));
+    if(p.fig){ var fg = el('div'); fg.innerHTML = p.fig.svg; card.appendChild(fg); }
+    if(p.type==='multi') card.appendChild(el('div','yours','Select all that apply.'));
+    var opts = el('div','opts'); var inputs=[];
+    p.opts.forEach(function(t,i){
+      var lab = el('label','opt');
+      var inp = document.createElement('input'); inp.type = p.type==='multi'?'checkbox':'radio'; inp.name='q'+idx; inp.id='q'+idx+'o'+i; inp.value=i;
+      lab.appendChild(inp); lab.appendChild(el('span','l',LET[i])); lab.appendChild(el('span','t',t));
+      opts.appendChild(lab); inputs.push(inp);
+    });
+    card.appendChild(opts);
+    var verdict = el('div'); verdict.hidden = true;
+    var actions = el('div');
+    function grade(){
+      var sel=[]; inputs.forEach(function(i){ if(i.checked) sel.push(+i.value); });
+      if(!sel.length){ return; }
+      var ok = sel.length===p.ans.length && sel.every(function(x){ return p.ans.indexOf(x)>-1; });
+      inputs.forEach(function(inp,i){
+        var lab = inp.parentNode; lab.classList.remove('is-right','is-wrong','is-miss');
+        var isAns = p.ans.indexOf(i)>-1;
+        if(inp.checked && isAns) lab.classList.add('is-right');
+        else if(inp.checked && !isAns) lab.classList.add('is-wrong');
+        else if(!inp.checked && isAns) lab.classList.add('is-miss');
+      });
+      verdict.className = 'verdict '+(ok?'ok':'no'); verdict.hidden=false;
+      verdict.textContent = (ok?'Correct. ':'Not quite. ')+'Correct option'+(p.ans.length>1?'s':'')+': '+p.ans.map(function(i){return LET[i];}).join(', ')+'.';
+    }
+    if(p.type==='multi'){
+      var chk = el('button','check-btn','Check answer'); chk.type='button'; chk.onclick=grade; actions.appendChild(chk);
+    } else {
+      inputs.forEach(function(i){ i.addEventListener('change', grade); });
+    }
+    if(p.first){
+      var fbtn = el('button','reveal-btn','First equation'); fbtn.type='button'; actions.appendChild(fbtn);
+      var fbox = el('div','first', '<b>Write your own first equation before you open this.</b> '+p.first); fbox.hidden = true;
+      fbtn.onclick = function(){ fbox.hidden = !fbox.hidden; fbtn.textContent = fbox.hidden ? 'First equation' : 'Hide first equation'; };
+    }
+    var rev = el('button','reveal-btn','Show why'); rev.type='button'; actions.appendChild(rev);
+    card.appendChild(actions); if(p.first) card.appendChild(fbox); card.appendChild(verdict);
+    var ans = el('div','answer'); ans.hidden = true;
+    var mk = Object.keys(p.mistakes).map(function(k){ return '<li>'+p.mistakes[k]+'</li>'; }).join('');
+    ans.innerHTML = '<div>'+p.why+'</div><ul>'+mk+'</ul>';
+    card.appendChild(ans);
+    rev.onclick = function(){ ans.hidden = !ans.hidden; rev.textContent = ans.hidden ? 'Show why' : 'Hide why'; };
+
+    var parts = ['Practice problem '+(idx+1)+' ('+(p.type==='multi'?'multi-correct: pick all correct options':'single-correct')+', level 4, topic: '+sec.title+').',
+                 'Problem: '+plain(p.q)+(p.fig?p.fig.text:''),
+                 'Options: '+p.opts.map(function(t,i){return LET[i]+') '+plain(t);}).join('  '),
+                 'For your reference only, do not reveal unless I ask or have made a real attempt. Correct: '+p.ans.map(function(i){return LET[i];}).join(', ')+'. Reasoning: '+plain(p.why),
+                 'Ask me what I have tried first, then give me one hint at a time.'];
+    card.appendChild(askLink(parts));
+    grid.appendChild(card);
+  });
+}
+
+
+function stepNext(st){
+  var steps = st.querySelectorAll('.step'), shown = 0;
+  steps.forEach(function(s){ if(!s.hidden) shown++; });
+  if(shown < steps.length){ steps[shown].hidden = false; shown++; }
+  if(shown >= steps.length){ st.querySelector('.step-btn').hidden = true; }
+}
+function setMode(mode, btn){
+  document.querySelectorAll('.mode-btn').forEach(function(b){ b.setAttribute('aria-pressed', b===btn?'true':'false'); });
+  document.getElementById('timerBar').hidden = (mode!=='timed');
+}
+var remaining = 40*60, timerId = null;
+function renderTime(){ var m=String(Math.floor(remaining/60)).padStart(2,'0'), s=String(remaining%60).padStart(2,'0'); document.getElementById('timeDisplay').textContent=m+':'+s; }
+function startTimer(){ if(timerId) return; timerId=setInterval(function(){ remaining--; if(remaining<=0){ clearInterval(timerId); timerId=null; document.getElementById('timeDisplay').textContent="Time's up"; } else renderTime(); },1000); }
+function resetTimer(){ clearInterval(timerId); timerId=null; remaining=40*60; renderTime(); }
+
+buildSections(); buildGrid(); renderTime();
+</script>
